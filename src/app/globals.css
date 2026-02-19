@@ -1,0 +1,120 @@
+@import "tailwindcss";
+
+/* ===========================
+   SoftCo Design Tokens
+   =========================== */
+
+@theme inline {
+  /* --- Font Families --- */
+  --font-heading: var(--font-erode);
+  --font-body: var(--font-plus-jakarta);
+
+  /* --- Brand Colors: Primary Palette --- */
+  --color-brand-blue: #047fe5;
+  --color-brand-dark: #060d2e;
+  --color-brand-orange: #f7931e;
+  --color-brand-light-blue: #e8f2fd;
+  --color-brand-grey: #f2f2f2;
+  --color-white: #ffffff;
+
+  /* --- Brand Colors: Blue Tints --- */
+  --color-brand-blue-80: #369be8;
+  --color-brand-blue-60: #68b6ee;
+  --color-brand-blue-40: #9bd2f3;
+  --color-brand-blue-20: #cde8f9;
+  --color-brand-blue-7: #edf6fd;
+
+  /* --- Brand Colors: Dark Tints --- */
+  --color-brand-dark-80: #383a58;
+  --color-brand-dark-60: #6a6b82;
+  --color-brand-dark-40: #9b9dab;
+  --color-brand-dark-20: #cdced5;
+  --color-brand-dark-7: #ededef;
+
+  /* --- Brand Colors: Orange Tints --- */
+  --color-brand-orange-80: #f9a94b;
+  --color-brand-orange-60: #fabe78;
+  --color-brand-orange-40: #fcd4a5;
+  --color-brand-orange-20: #fde9d2;
+  --color-brand-orange-7: #fef6ed;
+
+  /* --- Typography Scale --- */
+  --text-display: 4rem;        /* 64px */
+  --text-h1: 3.5rem;           /* 56px */
+  --text-h2: 3rem;             /* 48px */
+  --text-h3: 2rem;             /* 32px */
+  --text-h4: 0.875rem;         /* 14px */
+  --text-pullout: 1.5rem;      /* 24px */
+  --text-body-lg: 1.125rem;    /* 18px */
+  --text-body: 1rem;           /* 16px */
+  --text-body-sm: 0.875rem;    /* 14px */
+  --text-caption: 0.75rem;     /* 12px */
+
+  /* --- Line Heights --- */
+  --leading-display: 1.1;
+  --leading-h1: 1.1;
+  --leading-h2: 1.15;
+  --leading-h3: 1.25;
+  --leading-h4: 1.4;
+  --leading-pullout: 1.4;
+  --leading-body: 1.7;
+  --leading-caption: 1.5;
+}
+
+/* ===========================
+   Base Styles
+   =========================== */
+
+/* Global text color: #060D2E — overrides via utility classes when needed */
+html,
+body {
+  background: var(--color-white);
+  color: var(--color-brand-dark); /* #060D2E */
+  font-family: var(--font-body);
+}
+
+/* Ensure smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Reduced motion: disable smooth scroll + animations */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *:not(.marquee-track),
+  *:not(.marquee-track)::before,
+  *:not(.marquee-track)::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Focus visible — clear keyboard focus indicator */
+:focus-visible {
+  outline: 2px solid var(--color-brand-blue);
+  outline-offset: 2px;
+}
+
+/* ===========================
+   Marquee animation
+   =========================== */
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-25%);
+  }
+}
+
+.marquee-track {
+  display: inline-flex;
+  width: max-content;
+  animation: marquee-scroll var(--marquee-duration, 64s) linear infinite;
+}
