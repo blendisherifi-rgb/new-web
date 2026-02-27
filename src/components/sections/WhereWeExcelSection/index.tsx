@@ -2,6 +2,8 @@
 
 import { HeadlineWithHighlight } from "@/components/molecules/HeadlineWithHighlight";
 import { Paragraph } from "@/components/atoms/Paragraph";
+import { Overline } from "@/components/atoms/Overline";
+import { Heading } from "@/components/atoms/Heading";
 import { Button } from "@/components/atoms/Button";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
 import { AnimateOnScroll } from "@/components/molecules/AnimateOnScroll";
@@ -51,12 +53,7 @@ export function WhereWeExcelSection({
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-24">
           {/* Left column — sticky on desktop */}
           <div className="lg:sticky lg:top-24 lg:self-start">
-            <span
-              className="font-body text-xs font-extrabold uppercase tracking-wider text-brand-orange md:text-sm"
-              aria-hidden
-            >
-              {tag}
-            </span>
+            <Overline>{tag}</Overline>
             <HeadlineWithHighlight
               headingBefore={headingBefore}
               headingHighlight={headingHighlight}
@@ -89,12 +86,10 @@ export function WhereWeExcelSection({
                   i === 0 ? "border-t-0 pt-0" : ""
                 }`}
               >
-                <span className="font-body text-xs font-extrabold uppercase tracking-wider text-brand-blue md:text-sm">
-                  {item.category}
-                </span>
-                <p className="mt-2 font-heading text-xl font-semibold text-brand-dark md:text-2xl">
+                <Overline className="text-brand-blue">{item.category}</Overline>
+                <Heading level={5} className="mt-2 text-xl md:text-2xl">
                   {item.description}
-                </p>
+                </Heading>
               </AnimateOnScroll>
             ))}
           </div>

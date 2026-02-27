@@ -1,6 +1,8 @@
 "use client";
 
 import { Image } from "@/components/atoms/Image";
+import { Heading } from "@/components/atoms/Heading";
+import { Paragraph } from "@/components/atoms/Paragraph";
 
 export interface ReviewLogoCard {
   logoSrc?: string;
@@ -20,9 +22,9 @@ export function ReviewLogosSection({ heading, cards }: ReviewLogosSectionProps) 
   return (
     <section className="w-full bg-white">
       <div className="mx-auto w-full max-w-[1440px] px-6 py-20 md:py-24">
-        <h2 className="text-center font-heading text-[34px] font-semibold leading-tight text-brand-dark md:text-[48px]">
+        <Heading level={2} className="text-center text-[34px] md:text-[48px]">
           {heading}
-        </h2>
+        </Heading>
 
         <div className="mt-10 flex flex-wrap items-stretch justify-center gap-6">
           {cards.map((card, i) => {
@@ -48,9 +50,9 @@ export function ReviewLogosSection({ heading, cards }: ReviewLogosSectionProps) 
                     className="h-10 w-auto object-contain"
                   />
                 ) : (
-                  <span className="text-center font-body text-[18px] font-bold leading-tight">
+                  <Paragraph size="base" className="text-center text-[18px] font-bold leading-tight">
                     {card.logoLabel}
-                  </span>
+                  </Paragraph>
                 )}
                 <span className="mt-3 text-[16px] leading-none text-brand-orange" aria-hidden>
                   ★★★★★

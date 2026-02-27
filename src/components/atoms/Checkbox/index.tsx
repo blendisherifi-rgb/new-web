@@ -2,30 +2,38 @@
 
 import { type InputHTMLAttributes, forwardRef, useId } from "react";
 
+type CheckboxVariant = "default" | "dark" | "light";
+
 interface CheckboxProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "type"> {
-  /** Label text displayed next to the checkbox. */
   label: string;
-  /** Error message. */
   error?: string;
+  /** Visual variant: "default" for standard, "dark" for blue-bg form, "light" for white-bg form. */
+  variant?: CheckboxVariant;
 }
 
-/**
- * Checkbox atom.
- *
- * Styled checkbox with label. Comfortable touch size (44px tap target).
- */
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   function Checkbox(
-    { label, error, className = "", id: propId, ...rest },
+    { label, error, className = "", id: propId, variant = "default", ...rest },
     ref
   ) {
     const autoId = useId();
     const id = propId ?? autoId;
     const errorId = error ? `${id}-error` : undefined;
 
+    const isBrand = variant === "dark" || variant === "light";
+    const textColor = variant === "dark" ? "text-white" : "text-brand-dark";
+    const labelTag = isBrand
+      ? "font-body text-[11px] font-extrabold uppercase tracking-widest text-brand-orange"
+      : "";
+
     return (
       <div className="flex flex-col gap-1">
+        {isBrand && (
+          <span className={labelTag} aria-hidden="true">
+            Agree to terms
+          </span>
+        )}
         <label
           htmlFor={id}
           className="inline-flex cursor-pointer items-center gap-3 min-h-[44px]"
@@ -39,7 +47,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             className={`h-5 w-5 shrink-0 cursor-pointer rounded border-brand-dark-20 text-brand-blue accent-brand-blue focus:ring-2 focus:ring-brand-blue/20 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
             {...rest}
           />
-          <span className="font-body text-[0.875rem] text-brand-dark select-none">
+          <span className={`font-body text-[14px] ${textColor} select-none`}>
             {label}
           </span>
         </label>
@@ -48,7 +56,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           <p
             id={errorId}
             role="alert"
-            className="font-body text-[0.75rem] text-brand-orange pl-8"
+            className="font-body text-[12px] text-brand-orange pl-8"
           >
             {error}
           </p>

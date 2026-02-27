@@ -2,6 +2,8 @@
 
 import { HeadlineWithHighlight } from "@/components/molecules/HeadlineWithHighlight";
 import { Button } from "@/components/atoms/Button";
+import { Paragraph } from "@/components/atoms/Paragraph";
+import { Heading } from "@/components/atoms/Heading";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
 import { AnimateOnScroll } from "@/components/molecules/AnimateOnScroll";
 import { Image } from "@/components/atoms/Image";
@@ -60,9 +62,9 @@ export function InnovationSection({
             level={2}
             className="font-semibold text-brand-dark"
           />
-          <p className="mt-[50px] font-body text-[20px] leading-[1.7] text-brand-dark">
+          <Paragraph className="mt-[50px] leading-[1.7]">
             {subheading}
-          </p>
+          </Paragraph>
         </div>
 
         {/* Value boxes — 4-column grid: 120px below description, 60px between cards, center aligned */}
@@ -88,12 +90,12 @@ export function InnovationSection({
               ) : (
                 <ValueIconPlaceholder index={i} />
               )}
-              <h3 className="mt-[50px] font-heading text-[36px] font-semibold leading-tight text-brand-dark">
+              <Heading level={4} className="mt-[50px]">
                 {value.title}
-              </h3>
-              <p className="mt-[30px] font-body text-[16px] leading-[1.7] text-brand-dark">
+              </Heading>
+              <Paragraph size="sm" className="mt-[30px] leading-[1.7]">
                 {value.description}
-              </p>
+              </Paragraph>
             </AnimateOnScroll>
           ))}
         </div>

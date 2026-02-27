@@ -5,7 +5,10 @@ import { HeadlineWithHighlight } from "@/components/molecules/HeadlineWithHighli
 import { Button } from "@/components/atoms/Button";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
 import { Image } from "@/components/atoms/Image";
-import Link from "next/link";
+import { Overline } from "@/components/atoms/Overline";
+import { Blockquote } from "@/components/atoms/Blockquote";
+import { Paragraph } from "@/components/atoms/Paragraph";
+import { Heading } from "@/components/atoms/Heading";
 
 export interface TabbedContentMetric {
   value: string;
@@ -82,11 +85,7 @@ export function TabbedContentSection({
     <section className="w-full bg-white" aria-label={mainTitle || "Client success stories"}>
       <div className="mx-auto w-full max-w-[1440px] px-6 pt-16 pb-0 md:pt-24">
         {/* Overline — top left */}
-        {overline && (
-          <span className="block font-body text-[14px] font-extrabold uppercase tracking-wider text-brand-orange">
-            {overline}
-          </span>
-        )}
+        {overline && <Overline>{overline}</Overline>}
 
         {/* Title — centered, large */}
         {(hasHighlight || titleText) && (
@@ -100,9 +99,9 @@ export function TabbedContentSection({
                 className="font-heading text-[48px] font-semibold leading-[1.05] text-brand-dark md:text-[80px]"
               />
             ) : (
-              <h2 className="font-heading text-[48px] font-semibold leading-[1.05] text-brand-dark md:text-[80px]">
+              <Heading level={2} className="text-[48px] leading-[1.05] md:text-[80px]">
                 {titleText}
-              </h2>
+              </Heading>
             )}
           </div>
         )}
@@ -120,25 +119,12 @@ export function TabbedContentSection({
               <div>
                 {/* Review quote */}
                 {activeTab.review && (
-                  <blockquote className="font-body text-[28px] font-normal leading-[1.4] text-brand-dark md:text-[40px]">
-                    &ldquo;{activeTab.review}&rdquo;
-                  </blockquote>
-                )}
-
-                {/* Author + role */}
-                {(activeTab.reviewAuthor || activeTab.reviewAuthorPosition) && (
-                  <div className="mt-8">
-                    {activeTab.reviewAuthor && (
-                      <div className="font-body text-[16px] font-bold text-brand-dark">
-                        {activeTab.reviewAuthor}
-                      </div>
-                    )}
-                    {activeTab.reviewAuthorPosition && (
-                      <div className="font-body text-[16px] font-medium text-brand-dark">
-                        {activeTab.reviewAuthorPosition}
-                      </div>
-                    )}
-                  </div>
+                  <Blockquote
+                    quote={`\u201C${activeTab.review}\u201D`}
+                    authorName={activeTab.reviewAuthor}
+                    authorRole={activeTab.reviewAuthorPosition}
+                    size="large"
+                  />
                 )}
 
                 {/* Metrics + READ MORE row */}
@@ -146,13 +132,9 @@ export function TabbedContentSection({
                   {/* READ MORE link */}
                   {activeTab.ctaButtonText && activeTab.ctaButtonLink && (
                     <div className="shrink-0">
-                      <Link
-                        href={activeTab.ctaButtonLink}
-                        className="inline-flex items-center gap-1 font-body text-[14px] font-bold uppercase tracking-wider text-brand-orange underline decoration-2 underline-offset-4 transition-colors hover:text-brand-orange-80"
-                      >
+                      <Button variant="read-more" href={activeTab.ctaButtonLink}>
                         {activeTab.ctaButtonText}
-                        <ChevronRightIcon className="h-4 w-4" />
-                      </Link>
+                      </Button>
                     </div>
                   )}
 
@@ -163,9 +145,9 @@ export function TabbedContentSection({
                         <div className="font-body text-[48px] font-bold leading-tight text-brand-blue">
                           {m.value}
                         </div>
-                        <div className="mt-1 font-body text-[20px] font-bold text-brand-dark">
+                        <Paragraph size="base" className="mt-1 font-bold">
                           {m.label}
-                        </div>
+                        </Paragraph>
                       </div>
                     ))}
                 </div>

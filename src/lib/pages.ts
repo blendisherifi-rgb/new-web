@@ -347,6 +347,26 @@ function transformSection(node: Record<string, unknown>, index: number): Section
     ? "hero_section"
     : low.includes("whereweexcel") || low.includes("where_we_excel")
       ? "where_we_excel_section"
+      : low.includes("roleaccordion") || low.includes("role_accordion")
+        ? "role_accordion_section"
+        : low.includes("reviewlogos") || low.includes("review_logos")
+          ? "review_logos_section"
+          : low.includes("simplecta") || low.includes("simple_cta")
+            ? "simple_cta_section"
+            : low.includes("perfectfitframework") || low.includes("perfect_fit_framework")
+              ? "perfect_fit_framework_section"
+              : low.includes("richtext") || low.includes("rich_text")
+                ? "rich_text_section"
+                : low.includes("contactbanner") || low.includes("contact_banner")
+                  ? "contact_banner_section"
+                  : low.includes("contactwithform") || low.includes("contact_with_form")
+                    ? "contact_with_form_section"
+                    : low.includes("locations")
+                    ? "locations_section"
+                    : low.includes("clientlogosmarquee") || low.includes("client_logos_marquee")
+                      ? "client_logos_marquee_section"
+                    : low.includes("newsletterform") || low.includes("newsletter_form")
+                      ? "newsletter_form_section"
       : low.includes("platform")
         ? "platform_section"
         : low.includes("innovation")
@@ -410,17 +430,21 @@ function transformSection(node: Record<string, unknown>, index: number): Section
     });
   }
 
-  // Horizontal scroll: cards[].image.node (AcfMediaItemConnectionEdge) -> imageSrc, imageAlt
-  if (acfGroupName === "horizontal_scroll_section" && Array.isArray(normalized.cards)) {
-    normalized.cards = (normalized.cards as unknown[]).map((c) => {
-      const card = { ...(c as Record<string, unknown>) };
-      const img = card.image as Record<string, unknown> | undefined;
-      const node = img?.node as Record<string, unknown> | undefined;
-      card.imageSrc = node?.sourceUrl ?? img?.sourceUrl ?? "";
-      card.imageAlt = node?.altText ?? img?.altText ?? "";
-      delete card.image;
-      return card;
-    });
+  // Horizontal scroll: scrollCards[].image.node (AcfMediaItemConnectionEdge) -> imageSrc, imageAlt
+  if (acfGroupName === "horizontal_scroll_section") {
+    const rawCards = normalized.scrollCards ?? normalized.cards ?? [];
+    if (Array.isArray(rawCards)) {
+      normalized.cards = (rawCards as unknown[]).map((c) => {
+        const card = { ...(c as Record<string, unknown>) };
+        const img = card.image as Record<string, unknown> | undefined;
+        const node = img?.node as Record<string, unknown> | undefined;
+        card.imageSrc = node?.sourceUrl ?? img?.sourceUrl ?? "";
+        card.imageAlt = node?.altText ?? img?.altText ?? "";
+        delete card.image;
+        return card;
+      });
+    }
+    delete normalized.scrollCards;
   }
 
   // Tabbed content: tabs[].logo.node -> logoSrc, logoAlt; metrics stay as {value, label}[]
@@ -437,17 +461,128 @@ function transformSection(node: Record<string, unknown>, index: number): Section
     });
   }
 
+  // Role accordion: accordionItems[].image.node -> imageSrc, imageAlt
+  if (acfGroupName === "role_accordion_section") {
+    const rawItems = normalized.accordionItems ?? normalized.items ?? [];
+    if (Array.isArray(rawItems)) {
+      normalized.items = (rawItems as unknown[]).map((v) => {
+        const item = { ...(v as Record<string, unknown>) };
+        const image = item.image as Record<string, unknown> | undefined;
+        const imageNode = image?.node as Record<string, unknown> | undefined;
+        item.imageSrc = imageNode?.sourceUrl ?? image?.sourceUrl ?? "";
+        item.imageAlt = imageNode?.altText ?? image?.altText ?? "";
+        delete item.image;
+        return item;
+      });
+    }
+    delete normalized.accordionItems;
+  }
+
+  // Review logos: reviewLogosCards[].logo.node -> logoSrc, logoAlt
+  if (acfGroupName === "review_logos_section") {
+    const rawCards = normalized.reviewLogosCards ?? normalized.cards ?? [];
+    if (Array.isArray(rawCards)) {
+      normalized.cards = (rawCards as unknown[]).map((v) => {
+        const item = { ...(v as Record<string, unknown>) };
+        const logo = item.logo as Record<string, unknown> | undefined;
+        const logoNode = logo?.node as Record<string, unknown> | undefined;
+        item.logoSrc = logoNode?.sourceUrl ?? logo?.sourceUrl ?? "";
+        item.logoAlt = item.logoAlt ?? logoNode?.altText ?? logo?.altText ?? "";
+        delete item.logo;
+        return item;
+      });
+    }
+    delete normalized.reviewLogosCards;
+  }
+
+  // Perfect fit framework: perfectFitCards[].image.node -> imageSrc, imageAlt
+  if (acfGroupName === "perfect_fit_framework_section") {
+    const rawCards = normalized.perfectFitCards ?? normalized.cards ?? [];
+    if (Array.isArray(rawCards)) {
+      normalized.cards = (rawCards as unknown[]).map((v) => {
+        const item = { ...(v as Record<string, unknown>) };
+        const image = item.image as Record<string, unknown> | undefined;
+        const imageNode = image?.node as Record<string, unknown> | undefined;
+        item.imageSrc = imageNode?.sourceUrl ?? image?.sourceUrl ?? "";
+        item.imageAlt = imageNode?.altText ?? image?.altText ?? "";
+        delete item.image;
+        return item;
+      });
+    }
+    delete normalized.perfectFitCards;
+  }
+
   // Ensure required props have safe defaults (components may crash on undefined)
   if (acfGroupName === "hero_section") {
     normalized.title = normalized.title ?? "";
     normalized.ctaLabel = normalized.ctaLabel ?? "";
     normalized.ctaHref = normalized.ctaHref ?? "#";
   }
+  // Map unique GraphQL repeater names back to component props
   if (acfGroupName === "where_we_excel_section") {
-    normalized.items = Array.isArray(normalized.items) ? normalized.items : [];
+    normalized.items = Array.isArray(normalized.excelItems) ? normalized.excelItems : [];
+    delete normalized.excelItems;
   }
   if (acfGroupName === "tabbed_content_section") {
     normalized.tabs = Array.isArray(normalized.tabs) ? normalized.tabs : [];
+  }
+  if (acfGroupName === "role_accordion_section") {
+    normalized.items = Array.isArray(normalized.items) ? normalized.items : [];
+  }
+  if (acfGroupName === "review_logos_section") {
+    normalized.cards = Array.isArray(normalized.cards) ? normalized.cards : [];
+  }
+  if (acfGroupName === "perfect_fit_framework_section") {
+    normalized.cards = Array.isArray(normalized.cards) ? normalized.cards : [];
+    normalized.ctaCard = (normalized.ctaCard ?? {}) as Record<string, unknown>;
+  }
+
+  if (acfGroupName === "contact_banner_section") {
+    normalized.socialLinks = Array.isArray(normalized.contactBannerSocialLinks)
+      ? normalized.contactBannerSocialLinks
+      : [];
+    delete normalized.contactBannerSocialLinks;
+  }
+
+  if (acfGroupName === "contact_with_form_section") {
+    normalized.socialLinks = Array.isArray(normalized.contactWithFormSocialLinks)
+      ? normalized.contactWithFormSocialLinks
+      : [];
+    delete normalized.contactWithFormSocialLinks;
+  }
+
+  // Client logos marquee: clientLogosMarqueeLogos[].logo.node -> src, alt; map to logos
+  if (acfGroupName === "client_logos_marquee_section") {
+    const rawLogos = normalized.clientLogosMarqueeLogos ?? normalized.logos ?? [];
+    if (Array.isArray(rawLogos)) {
+      normalized.logos = (rawLogos as unknown[]).map((l) => {
+        const item = l as Record<string, unknown>;
+        const logo = item.logo as Record<string, unknown> | undefined;
+        const logoNode = logo?.node as Record<string, unknown> | undefined;
+        return {
+          src: (logoNode?.sourceUrl ?? logo?.sourceUrl ?? item.sourceUrl) ?? "",
+          alt: (logoNode?.altText ?? logo?.altText ?? item.altText) ?? "",
+        };
+      });
+    }
+    delete normalized.clientLogosMarqueeLogos;
+  }
+
+  // Locations: locationsItems[].image.node -> imageSrc, imageAlt; map to items
+  if (acfGroupName === "locations_section") {
+    const rawItems = normalized.locationsItems ?? normalized.items ?? [];
+    if (Array.isArray(rawItems)) {
+      normalized.items = (rawItems as unknown[]).map((v) => {
+        const item = { ...(v as Record<string, unknown>) };
+        const image = item.image as Record<string, unknown> | undefined;
+        const imageNode = image?.node as Record<string, unknown> | undefined;
+        item.imageSrc = imageNode?.sourceUrl ?? image?.sourceUrl ?? "";
+        item.imageAlt = imageNode?.altText ?? image?.altText ?? "";
+        delete item.image;
+        return item;
+      });
+    }
+    delete normalized.locationsItems;
   }
 
   return {
@@ -458,7 +593,10 @@ function transformSection(node: Record<string, unknown>, index: number): Section
   };
 }
 
-import { PAGE_SECTIONS_FRAGMENT } from "./graphql/page-sections-query";
+import {
+  PAGE_SECTIONS_FRAGMENT,
+  PAGE_SECTIONS_FRAGMENT_RESILIENT,
+} from "./graphql/page-sections-query";
 
 /**
  * Fetch page by URI/slug from WordPress.
@@ -498,8 +636,8 @@ export async function fetchPageData(
     }
   `;
 
-  const fullQuery = `
-    ${PAGE_SECTIONS_FRAGMENT}
+  const buildFullQuery = (fragment: string) => `
+    ${fragment}
     query GetPageFull($id: ID!, $idType: PageIdType!) {
       page(id: $id, idType: $idType) {
         id
@@ -516,6 +654,8 @@ export async function fetchPageData(
       }
     }
   `;
+  const fullQuery = buildFullQuery(PAGE_SECTIONS_FRAGMENT);
+  const resilientQuery = buildFullQuery(PAGE_SECTIONS_FRAGMENT_RESILIENT);
 
   type PageResponse = {
     page?: {
@@ -526,6 +666,8 @@ export async function fetchPageData(
       acfSections?: Array<Record<string, unknown>>;
       flexibleContent?: Array<Record<string, unknown>>;
       pageContentSections?: {
+        sections?: Array<Record<string, unknown>>;
+        sectionGroups?: Array<{ sections?: unknown[] }>;
         contentSections?: Array<Record<string, unknown>>;
       };
     };
@@ -534,18 +676,18 @@ export async function fetchPageData(
   const tryFetch = async (
     id: string,
     idType: "URI" | "SLUG",
-    useFull: boolean
+    query: string,
+    isFull: boolean
   ): Promise<PageResponse | null> => {
     try {
-      const query = useFull ? fullQuery : minimalQuery;
       return await fetchGraphQL<PageResponse>(query, {
         variables: { id, idType },
         tags: ["pages", `page-${locale}-${slug}`],
       });
     } catch (err) {
-      if (useFull && process.env.NODE_ENV === "development") {
+      if (isFull && process.env.NODE_ENV === "development") {
         console.warn(
-          "[pages] Full ACF query failed for %s — sections may be empty. If layout type names differ, set ACF_LAYOUT_TYPE_PREFIX in .env.local. See docs/graphql-schema-check.md",
+          "[pages] Full ACF query failed for %s — trying resilient query. Re-import acf-export-softco-sections.json in WP to fix schema mismatch.",
           id,
           err instanceof Error ? err.message : err
         );
@@ -554,18 +696,23 @@ export async function fetchPageData(
     }
   };
 
-  // Try URI (PageIdType only supports DATABASE_ID, ID, URI — not SLUG). Use full query first, fall back to minimal if ACF fields missing.
+  // Try full query first; if schema mismatch (e.g. ContactBanner/Locations fields missing in WP), fall back to resilient, then minimal.
   const uriVariants = isHome ? ["/"] : [`/${slug}`, `/${slug}/`, slug, `${slug}/`];
   let page: PageResponse["page"] | null = null;
   let data: PageResponse | null = null;
 
   for (const uri of uriVariants) {
-    data = await tryFetch(uri, "URI", true);
+    data = await tryFetch(uri, "URI", fullQuery, true);
     if (data?.page) {
       page = data.page;
       break;
     }
-    data = await tryFetch(uri, "URI", false);
+    data = await tryFetch(uri, "URI", resilientQuery, false);
+    if (data?.page) {
+      page = data.page;
+      break;
+    }
+    data = await tryFetch(uri, "URI", minimalQuery, false);
     if (data?.page) {
       page = data.page;
       break;
@@ -574,12 +721,23 @@ export async function fetchPageData(
 
   if (!page) return null;
 
-  const rawSections =
-    page.pageContentSections?.contentSections ??
-    page.contentSections ??
-    page.acfSections ??
-    page.flexibleContent ??
-    [];
+  const rawSections = (() => {
+    // Flat sections (default)
+    const flat = page.pageContentSections?.sections;
+    if (Array.isArray(flat) && flat.length > 0) return flat;
+    // Legacy: section groups
+    const groups = page.pageContentSections?.sectionGroups;
+    if (Array.isArray(groups) && groups.length > 0) {
+      return groups.flatMap((g: { sections?: unknown[] }) => g.sections ?? []);
+    }
+    return (
+      page.pageContentSections?.contentSections ??
+      page.contentSections ??
+      page.acfSections ??
+      page.flexibleContent ??
+      []
+    );
+  })();
 
   if (process.env.NODE_ENV === "development" && rawSections.length === 0 && !isHome) {
     const hasNested = !!page.pageContentSections;

@@ -10,10 +10,10 @@ interface ParagraphProps {
 }
 
 const sizeStyles: Record<ParagraphSize, string> = {
-  lg: "text-[1rem] leading-[1.7] md:text-[1.125rem]",
-  base: "text-[1rem] leading-[1.7]",
-  sm: "text-[0.875rem] leading-[1.6]",
-  caption: "text-[0.75rem] leading-[1.5] font-medium",
+  lg: "text-[20px] leading-[32px] font-normal",
+  base: "text-[20px] leading-[32px] font-normal",
+  sm: "text-[16px] leading-[24px] font-normal",
+  caption: "text-[14px] leading-[20px] font-medium",
 };
 
 /**

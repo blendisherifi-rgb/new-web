@@ -1,5 +1,7 @@
 export { Heading, Highlight } from "./Heading";
 export { Paragraph } from "./Paragraph";
+export { Overline } from "./Overline";
+export { Blockquote } from "./Blockquote";
 export { Button } from "./Button";
 export { Link } from "./Link";
 export { Input } from "./Input";

@@ -13,8 +13,9 @@
   --color-brand-blue: #047fe5;
   --color-brand-dark: #060d2e;
   --color-brand-orange: #f7931e;
+  --color-brand-pale-blue: #c0dff8;
   --color-brand-light-blue: #e8f2fd;
-  --color-brand-grey: #f2f2f2;
+  --color-brand-grey: #dadbe0;
   --color-white: #ffffff;
 
   /* --- Brand Colors: Blue Tints --- */
@@ -38,32 +39,30 @@
   --color-brand-orange-20: #fde9d2;
   --color-brand-orange-7: #fef6ed;
 
-  /* --- Typography Scale --- */
-  --text-display: 4rem;        /* 64px */
-  --text-h1: 3.5rem;           /* 56px */
-  --text-h2: 3rem;             /* 48px */
-  --text-h3: 2rem;             /* 32px */
-  --text-h4: 0.875rem;         /* 14px */
-  --text-pullout: 1.5rem;      /* 24px */
-  --text-body-lg: 1.125rem;    /* 18px */
-  --text-body: 1rem;           /* 16px */
-  --text-body-sm: 0.875rem;    /* 14px */
-  --text-caption: 0.75rem;     /* 12px */
-
-  /* --- Line Heights --- */
-  --leading-display: 1.1;
-  --leading-h1: 1.1;
-  --leading-h2: 1.15;
-  --leading-h3: 1.25;
-  --leading-h4: 1.4;
-  --leading-pullout: 1.4;
-  --leading-body: 1.7;
-  --leading-caption: 1.5;
+  /* --- Typography Scale (new styleguide) --- */
+  --text-overline: 0.875rem;   /* 14px */
+  --text-h1: 5rem;             /* 80px */
+  --text-h2: 3.75rem;          /* 60px */
+  --text-h3: 2.5rem;           /* 40px */
+  --text-h4: 2.25rem;          /* 36px */
+  --text-h5: 2rem;             /* 32px */
+  --text-h6: 1.75rem;          /* 28px */
+  --text-body: 1.25rem;        /* 20px */
+  --text-ol-number: 1rem;      /* 16px */
+  --text-quote: 1.75rem;       /* 28px */
+  --text-quote-lg: 2.5rem;     /* 40px */
 }
 
 /* ===========================
    Base Styles
    =========================== */
+
+/* Font aliases — next/font injects --font-erode, --font-plus-jakarta on body.
+   Define these on body so var(--font-heading) and var(--font-body) resolve. */
+body {
+  --font-heading: var(--font-erode);
+  --font-body: var(--font-plus-jakarta);
+}
 
 /* Global text color: #060D2E — overrides via utility classes when needed */
 html,
@@ -100,6 +99,199 @@ html {
   outline-offset: 2px;
 }
 
+/* Rich text list spec from styleguide — override Tailwind preflight list-style: none */
+.body-list ul,
+.body-list ol {
+  padding-inline-start: 24px;
+}
+
+.body-list ul {
+  list-style-type: disc;
+}
+
+.body-list ol {
+  list-style-type: decimal;
+}
+
+.body-list ul li,
+.body-list ol li {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 32px;
+  letter-spacing: 0;
+}
+
+.body-list ul li::marker,
+.body-list ol li::marker {
+  color: var(--color-brand-orange);
+}
+
+.body-list ol li::marker {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 32px;
+}
+
+/* ===========================
+   Rich text / Prose (policy pages, ACF WYSIWYG)
+   Applies styleguide typography to HTML from rich text fields.
+   =========================== */
+
+/* Override WordPress WYSIWYG inline font-family (e.g. Times New Roman) */
+.prose,
+.prose * {
+  font-family: var(--font-body)  ;
+}
+
+.prose {
+  color: var(--color-brand-dark);
+}
+
+.prose h1 {
+  font-family: var(--font-heading) !important;
+  font-weight: 600;
+  font-size: 80px;
+  line-height: 84px;
+  letter-spacing: 0;
+  margin-top: 0;
+  margin-bottom: 0.5em;
+}
+
+.prose h2 {
+  font-family: var(--font-heading) !important;
+  font-weight: 600;
+  font-size: 60px;
+  line-height: 64px;
+  letter-spacing: 0;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+.prose h3 {
+  font-family: var(--font-heading) !important;
+  font-weight: 600;
+  font-size: 40px;
+  line-height: 44px;
+  letter-spacing: 0;
+  margin-top: 1.25em;
+  margin-bottom: 0.5em;
+}
+
+.prose h4 {
+  font-family: var(--font-heading) !important;
+  font-weight: 600;
+  font-size: 36px;
+  line-height: 48px;
+  letter-spacing: -0.01em;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+.prose h5 {
+  font-family: var(--font-heading) !important;
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 36px;
+  letter-spacing: -0.01em;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+.prose h6 {
+  font-family: var(--font-heading) !important;
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 34px;
+  letter-spacing: -0.01em;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+.prose p {
+  font-size: 20px;
+  line-height: 32px;
+  font-weight: 400;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+.prose a {
+  color: var(--color-brand-blue);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.prose a:hover {
+  text-decoration: underline;
+}
+
+.prose blockquote {
+  border-left: 4px solid var(--color-brand-blue);
+  padding-left: 24px;
+  margin: 1.5em 0;
+  font-size: 28px;
+  line-height: 40px;
+  font-weight: 400;
+}
+
+.prose strong {
+  font-weight: 700;
+}
+
+.prose mark {
+  color: var(--color-brand-blue);
+  background: transparent;
+  font-weight: 600;
+}
+
+/* Override Tailwind preflight list-style: none so bullets/numbers show */
+.prose ul,
+.prose ol {
+  padding-inline-start: 24px;
+  margin: 1em 0;
+}
+
+.prose ul {
+  list-style-type: disc;
+}
+
+.prose ol {
+  list-style-type: decimal;
+}
+
+.prose ul li,
+.prose ol li {
+  font-size: 20px;
+  line-height: 32px;
+  font-weight: 400;
+  margin-bottom: 0.25em;
+}
+
+.prose ul li::marker,
+.prose ol li::marker {
+  color: var(--color-brand-orange);
+}
+
+.prose ol li::marker {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.prose hr {
+  border: none;
+  border-top: 1px solid var(--color-brand-dark-20);
+  margin: 2em 0;
+}
+
+.prose code {
+  font-family: ui-monospace, monospace !important;
+  font-size: 0.9em;
+  padding: 0.15em 0.4em;
+  background: var(--color-brand-dark-7);
+  border-radius: 4px;
+}
+
 /* ===========================
    Marquee animation
    =========================== */
@@ -117,4 +309,8 @@ html {
   display: inline-flex;
   width: max-content;
   animation: marquee-scroll var(--marquee-duration, 64s) linear infinite;
+}
+
+.marquee-track-reverse {
+  animation-direction: reverse;
 }

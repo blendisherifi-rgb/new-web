@@ -12,12 +12,12 @@ interface HeadingProps {
 }
 
 const levelStyles: Record<HeadingLevel, string> = {
-  1: "font-heading font-semibold text-[2.25rem] leading-[1.1] md:text-[3rem] lg:text-[3.5rem]",
-  2: "font-heading font-medium text-[1.75rem] leading-[1.15] md:text-[2.25rem] lg:text-[3rem]",
-  3: "font-heading font-medium text-[1.5rem] leading-[1.25] md:text-[1.75rem] lg:text-[2rem]",
-  4: "font-body font-extrabold text-[0.8125rem] leading-[1.4] uppercase tracking-wider lg:text-[0.875rem]",
-  5: "font-body font-bold text-[0.875rem] leading-[1.4] lg:text-[1rem]",
-  6: "font-body font-semibold text-[0.75rem] leading-[1.5] lg:text-[0.875rem]",
+  1: "font-heading font-semibold text-[80px] leading-[84px] tracking-[0em]",
+  2: "font-heading font-semibold text-[60px] leading-[64px] tracking-[0em]",
+  3: "font-heading font-semibold text-[40px] leading-[44px] tracking-[0em]",
+  4: "font-heading font-semibold text-[36px] leading-[48px] tracking-[-0.01em]",
+  5: "font-heading font-semibold text-[32px] leading-[36px] tracking-[-0.01em]",
+  6: "font-heading font-medium text-[28px] leading-[34px] tracking-[-0.01em]",
 };
 
 /**

@@ -1,5 +1,6 @@
 import { Link } from "@/components/atoms/Link";
 import { Image } from "@/components/atoms/Image";
+import { Paragraph } from "@/components/atoms/Paragraph";
 import type { FooterData } from "@/lib/globals";
 
 interface FooterProps {
@@ -141,9 +142,9 @@ export function Footer({ data }: FooterProps) {
         </div>
 
         <div className="flex flex-col gap-6 pb-6 pt-8 md:flex-row md:items-center md:justify-between">
-          <p className="font-body text-[14px] text-brand-dark-60 md:text-[15px]">
+          <Paragraph size="caption" className="font-normal text-brand-dark-60 md:text-[15px]">
             {data.copyright ?? "© SoftCo Group Ltd. All rights reserved."}
-          </p>
+          </Paragraph>
           {data.partnerBadges && data.partnerBadges.length > 0 ? (
             <ul className="flex flex-wrap items-center gap-6">
               {data.partnerBadges.map((badge, i) => (

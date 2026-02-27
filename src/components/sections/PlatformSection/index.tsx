@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import { Heading } from "@/components/atoms/Heading";
 import { Paragraph } from "@/components/atoms/Paragraph";
+import { Overline } from "@/components/atoms/Overline";
 import { Image } from "@/components/atoms/Image";
 import { Link } from "@/components/atoms/Link";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
@@ -81,12 +82,7 @@ export function PlatformSection({
       <div className="mx-auto w-full max-w-[1440px] px-6 pt-[96px] pb-[160px]">
         {/* Header */}
         <AnimateOnScroll variant="fadeUp" className="max-w-3xl">
-          <span
-            className="font-body text-xs font-extrabold uppercase tracking-wider text-white md:text-sm"
-            aria-hidden
-          >
-            {tag}
-          </span>
+          <Overline className="text-white">{tag}</Overline>
           <Heading level={1} className="mt-3 text-white">
             {headline}
           </Heading>
@@ -148,10 +144,12 @@ function PlatformContentRow({
 }: PlatformRow) {
   return (
     <div>
-      <h3 className="font-heading text-2xl font-semibold text-brand-orange md:text-3xl">
+      <Heading level={3} className="text-2xl text-brand-orange md:text-3xl">
         {title}
-      </h3>
-      <p className="mt-1 font-body text-lg text-white">{subtitle}</p>
+      </Heading>
+      <Paragraph size="lg" className="mt-1 text-white">
+        {subtitle}
+      </Paragraph>
       <Paragraph size="lg" className="mt-12 text-white">
         {description}
       </Paragraph>

@@ -4,7 +4,8 @@ import { useState } from "react";
 import { HeadlineWithHighlight } from "@/components/molecules/HeadlineWithHighlight";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Button } from "@/components/atoms/Button";
-import { ChevronRightIcon } from "@/components/atoms/Icon";
+import { Overline } from "@/components/atoms/Overline";
+import { Heading } from "@/components/atoms/Heading";
 import { Image } from "@/components/atoms/Image";
 
 export interface RoleAccordionItem {
@@ -43,9 +44,7 @@ export function RoleAccordionSection({
       <div className="mx-auto w-full max-w-[1440px] px-6 py-20 md:py-24">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1.05fr_1fr] lg:gap-8">
           <div>
-            <span className="font-body text-[14px] font-extrabold uppercase tracking-wider text-brand-orange">
-              {tag}
-            </span>
+            <Overline>{tag}</Overline>
             <HeadlineWithHighlight
               headingBefore={headingBefore}
               headingHighlight={headingHighlight}
@@ -66,9 +65,7 @@ export function RoleAccordionSection({
                       aria-controls={`role-accordion-panel-${i}`}
                       className="flex w-full items-center justify-between gap-4 py-4 text-left"
                     >
-                      <span className="font-body text-[14px] font-extrabold uppercase tracking-wider text-brand-orange">
-                        {item.tabTitle}
-                      </span>
+                      <Overline>{item.tabTitle}</Overline>
                       <span className="font-body text-[24px] leading-none text-brand-orange" aria-hidden>
                         {isActive ? "−" : "+"}
                       </span>
@@ -76,19 +73,12 @@ export function RoleAccordionSection({
 
                     {isActive ? (
                       <div id={`role-accordion-panel-${i}`} className="pb-6">
-                        <h3 className="font-heading text-[32px] font-semibold leading-[1.2] text-brand-dark">
-                          {item.title}
-                        </h3>
+                        <Heading level={5} className="mt-4">{item.title}</Heading>
                         <Paragraph size="lg" className="mt-4">
                           {item.content}
                         </Paragraph>
                         <div className="mt-6">
-                          <Button
-                            variant="text"
-                            href={item.ctaHref}
-                            iconAfter={<ChevronRightIcon />}
-                            className="px-0 py-0 font-bold uppercase tracking-wider text-brand-orange"
-                          >
+                          <Button variant="read-more" href={item.ctaHref}>
                             {item.ctaLabel}
                           </Button>
                         </div>

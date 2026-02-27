@@ -8,12 +8,14 @@ interface MegaMenuProps {
   items: NavItem[];
   /** Used to detect active page for highlighting */
   currentPath?: string;
+  /** Dark variant for use on dark backgrounds */
+  variant?: "light" | "dark";
 }
 
 /**
  * Desktop mega-menu — hover to open, keyboard accessible.
  */
-export function MegaMenu({ items, currentPath = "" }: MegaMenuProps) {
+export function MegaMenu({ items, currentPath = "", variant = "light" }: MegaMenuProps) {
   return (
     <nav aria-label="Primary navigation" className="flex items-center gap-8">
       {items.map((item) => (
@@ -21,17 +23,22 @@ export function MegaMenu({ items, currentPath = "" }: MegaMenuProps) {
           key={item.id}
           item={item}
           currentPath={currentPath}
+          variant={variant}
         />
       ))}
     </nav>
   );
 }
 
-function NavDropdown({ item, currentPath }: { item: NavItem; currentPath: string }) {
+function NavDropdown({ item, currentPath, variant = "light" }: { item: NavItem; currentPath: string; variant?: "light" | "dark" }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   const hasChildren = item.children && item.children.length > 0;
+  const isDark = variant === "dark";
+  const textColor = isDark ? "text-white" : "text-brand-dark";
+  const hoverColor = isDark ? "hover:text-brand-orange" : "hover:text-brand-blue";
+  const activeColor = isDark ? "text-brand-orange" : "text-brand-blue";
   const isActive =
     currentPath === item.href ||
     (hasChildren &&
@@ -51,12 +58,12 @@ function NavDropdown({ item, currentPath }: { item: NavItem; currentPath: string
 
   const content = (
     <>
-      <span className="font-body text-sm font-bold uppercase tracking-wider text-brand-dark">
+      <span className={`font-body text-sm font-bold uppercase tracking-wider ${textColor}`}>
         {item.label}
       </span>
       {hasChildren && (
         <svg
-          className={`ml-1 h-4 w-4 text-brand-dark transition-transform ${open ? "rotate-180" : ""}`}
+          className={`ml-1 h-4 w-4 ${textColor} transition-transform ${open ? "rotate-180" : ""}`}
           viewBox="0 0 16 16"
           fill="currentColor"
           aria-hidden
@@ -71,9 +78,9 @@ function NavDropdown({ item, currentPath }: { item: NavItem; currentPath: string
     return (
       <Link
         href={item.href}
-        className={`relative flex items-center py-6 transition-colors hover:text-brand-blue focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-blue ${
-          isActive ? "text-brand-blue" : ""
-        }`}
+        className={`relative flex items-center py-6 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-blue ${
+          isActive ? activeColor : textColor
+        } ${hoverColor}`}
       >
         {item.label}
       </Link>
@@ -88,9 +95,9 @@ function NavDropdown({ item, currentPath }: { item: NavItem; currentPath: string
         onMouseEnter={() => setOpen(true)}
         aria-expanded={open}
         aria-haspopup="true"
-        className={`flex items-center py-6 transition-colors hover:text-brand-blue focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-blue ${
-          isActive ? "text-brand-blue" : ""
-        }`}
+        className={`flex items-center py-6 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-blue ${
+          isActive ? activeColor : textColor
+        } ${hoverColor}`}
       >
         {content}
       </button>

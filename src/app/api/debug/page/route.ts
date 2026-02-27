@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
         id
         title
         pageContentSections {
-          contentSections {
+          sections {
             __typename
             fieldGroupName
           }
@@ -53,6 +53,6 @@ export async function GET(req: NextRequest) {
     slug,
     urisTried: uriVariants,
     results,
-    note: "Use __typename from contentSections to set ACF_LAYOUT_TYPE_PREFIX and ACF_LAYOUT_SUFFIX.",
+    note: "Use __typename from sections to set ACF_LAYOUT_TYPE_PREFIX and ACF_LAYOUT_SUFFIX.",
   });
 }

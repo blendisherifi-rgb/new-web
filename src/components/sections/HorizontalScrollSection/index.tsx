@@ -2,6 +2,8 @@
 
 import { useRef, useEffect, useState } from "react";
 import { Heading } from "@/components/atoms/Heading";
+import { Overline } from "@/components/atoms/Overline";
+import { Paragraph } from "@/components/atoms/Paragraph";
 import { shouldReduceMotion, registerGSAPPlugins } from "@/lib/animations";
 
 export interface HorizontalScrollCard {
@@ -47,13 +49,13 @@ function CardContent({ card }: { card: HorizontalScrollCard }) {
         </div>
       )}
       <div className="flex flex-1 flex-col p-4">
-        <h3 className="font-heading text-lg font-semibold text-brand-dark">
+        <Heading level={6} className="text-lg">
           {card.title}
-        </h3>
+        </Heading>
         {card.description && (
-          <p className="mt-1 font-body text-sm text-brand-dark">
+          <Paragraph size="sm" className="mt-1">
             {card.description}
-          </p>
+          </Paragraph>
         )}
       </div>
     </div>
@@ -112,12 +114,7 @@ export function HorizontalScrollSection({
     return (
       <section className="w-full bg-white">
         <div className="mx-auto max-w-[1440px] px-6 py-24">
-          <span
-            className="font-body text-xs font-extrabold uppercase tracking-wider text-brand-orange md:text-sm"
-            aria-hidden
-          >
-            {tag}
-          </span>
+          <Overline>{tag}</Overline>
           <Heading level={2} className="mt-3 text-brand-dark">
             {headline}
           </Heading>
@@ -136,12 +133,7 @@ export function HorizontalScrollSection({
       <div className="flex h-screen w-full flex-col justify-center overflow-hidden">
         {/* Header */}
         <div className="px-6 pt-12">
-          <span
-            className="font-body text-xs font-extrabold uppercase tracking-wider text-brand-orange md:text-sm"
-            aria-hidden
-          >
-            {tag}
-          </span>
+          <Overline>{tag}</Overline>
           <Heading level={2} className="mt-3 text-brand-dark">
             {headline}
           </Heading>

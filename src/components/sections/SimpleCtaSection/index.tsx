@@ -4,6 +4,8 @@ import { Button } from "@/components/atoms/Button";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
 import { HeadlineWithHighlight } from "@/components/molecules/HeadlineWithHighlight";
 import { Paragraph } from "@/components/atoms/Paragraph";
+import { Overline } from "@/components/atoms/Overline";
+import { Heading } from "@/components/atoms/Heading";
 
 interface SimpleCtaSectionProps {
   overline: string;
@@ -32,9 +34,7 @@ export function SimpleCtaSection({
     <section className="w-full bg-white">
       <div className="mx-auto w-full max-w-[1440px] px-6 py-24 md:py-28">
         <div className="mx-auto max-w-[760px] text-center">
-          <span className="font-body text-[16px] font-extrabold uppercase tracking-wider text-brand-orange">
-            {overline}
-          </span>
+          <Overline className="text-[16px]">{overline}</Overline>
 
           <div className="mt-[40px]">
             {hasHighlight ? (
@@ -46,20 +46,17 @@ export function SimpleCtaSection({
                 className="text-[80px] font-semibold leading-[1.05] text-brand-dark md:text-[80px] lg:text-[80px]"
               />
             ) : (
-              <h2 className="font-heading text-[80px] font-semibold leading-[1.05] text-brand-dark md:text-[80px] lg:text-[80px]">
+              <Heading level={2} className="text-[80px] leading-[1.05]">
                 {title}
-              </h2>
+              </Heading>
             )}
           </div>
 
-          <Paragraph
-            size="base"
-            className="mt-[40px] text-[20px] leading-[1.6] md:text-[20px] lg:text-[20px]"
-          >
+          <Paragraph size="base" className="mt-[40px] leading-[1.6]">
             {description}
           </Paragraph>
 
-          <div className="mt-8">
+          <div className="mt-[32px]">
             <Button variant="orange" href={ctaHref} iconAfter={<ChevronRightIcon />}>
               {ctaLabel}
             </Button>

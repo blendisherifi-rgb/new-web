@@ -3,6 +3,9 @@
 import { Image } from "@/components/atoms/Image";
 import { HeadlineWithHighlight } from "@/components/molecules/HeadlineWithHighlight";
 import { Button } from "@/components/atoms/Button";
+import { Overline } from "@/components/atoms/Overline";
+import { Paragraph } from "@/components/atoms/Paragraph";
+import { Heading } from "@/components/atoms/Heading";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
 
 export interface PerfectFitCard {
@@ -44,9 +47,7 @@ export function PerfectFitFrameworkSection({
     <section className="w-full bg-white">
       <div className="mx-auto w-full max-w-[1440px] px-6 py-20 md:py-24">
         <div className="border-t border-[#E7E7EB] pt-3">
-          <span className="font-body text-[14px] font-extrabold uppercase tracking-wider text-brand-orange">
-            {overline}
-          </span>
+          <Overline>{overline}</Overline>
         </div>
 
         <div className="mt-6 grid gap-10 lg:grid-cols-2 lg:gap-12">
@@ -59,11 +60,13 @@ export function PerfectFitFrameworkSection({
           />
 
           <div className="pt-2">
-            <p className="font-body text-[18px] leading-[1.55] text-brand-dark">{description}</p>
+            <Paragraph size="sm" className="text-[18px] leading-[1.55]">
+              {description}
+            </Paragraph>
             {emphasis ? (
-              <p className="mt-6 font-body text-[18px] font-bold leading-[1.55] text-brand-dark">
+              <Paragraph size="sm" className="mt-6 text-[18px] font-bold leading-[1.55]">
                 {emphasis}
-              </p>
+              </Paragraph>
             ) : null}
           </div>
         </div>
@@ -91,21 +94,21 @@ export function PerfectFitFrameworkSection({
                   <span className="inline-flex rounded-[4px] bg-brand-blue px-2 py-1 font-body text-[12px] font-bold text-white">
                     {card.step}
                   </span>
-                  <h3 className="font-heading text-[44px] font-semibold leading-[1.1] text-brand-dark">
+                  <Heading level={3} className="text-[44px] leading-[1.1]">
                     {card.title}
-                  </h3>
+                  </Heading>
                 </div>
-                <p className="mt-4 font-body text-[16px] leading-[1.6] text-brand-dark">
+                <Paragraph size="sm" className="mt-4 leading-[1.6]">
                   {card.description}
-                </p>
+                </Paragraph>
               </article>
             ))}
 
             <article className="w-[360px] shrink-0 snap-start rounded-[4px] bg-brand-dark p-6 text-white">
               <div className="flex h-full min-h-[360px] flex-col justify-between border-y border-white/30 py-14">
-                <h3 className="mx-auto max-w-[260px] text-center font-heading text-[52px] font-semibold leading-h2">
+                <Heading level={2} className="mx-auto max-w-[260px] text-center text-[52px] leading-[1.2] text-white">
                   {ctaCard.heading}
-                </h3>
+                </Heading>
                 <div className="mx-auto mt-8">
                   <Button variant="orange" href={ctaCard.ctaHref} iconAfter={<ChevronRightIcon />}>
                     {ctaCard.ctaLabel}

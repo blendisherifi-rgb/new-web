@@ -8,7 +8,8 @@ type ButtonVariant =
   | "dark-outline"
   | "orange"
   | "orange-outline"
-  | "text";
+  | "text"
+  | "read-more";
 
 interface ButtonBaseProps {
   /** Visual variant. */
@@ -83,6 +84,12 @@ const variantStyles: Record<ButtonVariant, string> = {
     "active:text-brand-blue-80",
     "focus-visible:outline-brand-blue",
     "disabled:text-brand-blue-40 disabled:cursor-not-allowed",
+  ].join(" "),
+  "read-more": [
+    "!p-0 !rounded-none bg-transparent text-brand-dark uppercase tracking-wider",
+    "border-b-2 border-brand-orange",
+    "focus-visible:outline-brand-orange",
+    "disabled:text-brand-dark-40 disabled:border-brand-dark-20 disabled:cursor-not-allowed",
   ].join(" "),
 };
 
@@ -165,13 +172,32 @@ export function Button(props: ButtonProps) {
     return <span className="shrink-0">{node}</span>;
   };
 
-  const content = (
-    <>
-      {icon && wrapIcon(icon)}
-      {children}
-      {iconAfter && wrapIconAfter(iconAfter)}
-    </>
+  const readMoreArrow = (
+    <span className="text-brand-orange" aria-hidden>
+      <svg width="8" height="12" viewBox="0 0 8 12" fill="currentColor">
+        <path d="M0 0l8 6-8 6V0z" />
+      </svg>
+    </span>
   );
+
+  const content =
+    variant === "read-more" ? (
+      <>
+        <span className="inline-flex opacity-0 -ml-[18px] transition-all duration-200 group-hover:opacity-100 group-hover:ml-0">
+          {readMoreArrow}
+        </span>
+        {children}
+        <span className="inline-flex transition-all duration-200 group-hover:opacity-0 group-hover:-mr-[18px]">
+          {readMoreArrow}
+        </span>
+      </>
+    ) : (
+      <>
+        {icon && wrapIcon(icon)}
+        {children}
+        {iconAfter && wrapIconAfter(iconAfter)}
+      </>
+    );
 
   // Link mode
   if (props.href !== undefined) {

@@ -2,32 +2,45 @@
 
 import { type TextareaHTMLAttributes, forwardRef, useId } from "react";
 
+type TextareaVariant = "default" | "dark" | "light";
+
 interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
-  /** Visible label text. */
   label: string;
-  /** Visually hide the label. */
   hideLabel?: boolean;
-  /** Error message. */
   error?: string;
-  /** Helper text. */
   helperText?: string;
+  /** Visual variant: "default" for standard, "dark" for blue-bg form, "light" for white-bg form. */
+  variant?: TextareaVariant;
 }
 
-const textareaBase = [
-  "w-full rounded-lg border px-4 py-3",
-  "font-body text-[0.875rem] text-brand-dark",
-  "bg-white placeholder:text-brand-dark-40",
-  "transition-colors duration-200",
-  "outline-none resize-y min-h-[120px]",
-  "focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20",
-  "disabled:bg-brand-grey disabled:text-brand-dark-40 disabled:cursor-not-allowed",
-].join(" ");
+const variantStyles: Record<TextareaVariant, string> = {
+  default: [
+    "w-full rounded-lg border px-4 py-3",
+    "font-body text-[14px] text-brand-dark",
+    "bg-white placeholder:text-brand-dark-40",
+    "transition-colors duration-200 outline-none resize-y min-h-[120px]",
+    "focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20",
+    "disabled:bg-brand-grey disabled:text-brand-dark-40 disabled:cursor-not-allowed",
+    "border-brand-dark-20",
+  ].join(" "),
+  dark: [
+    "w-full rounded-[5px] border border-brand-orange px-4 py-3",
+    "font-body text-[16px] text-white",
+    "bg-white/15 placeholder:text-white/60",
+    "transition-colors duration-200 outline-none resize-y min-h-[140px]",
+    "focus:ring-2 focus:ring-brand-orange/30",
+    "disabled:opacity-50 disabled:cursor-not-allowed",
+  ].join(" "),
+  light: [
+    "w-full rounded-[5px] border border-brand-orange px-4 py-3",
+    "font-body text-[16px] text-brand-dark",
+    "bg-[#F2F2F2] placeholder:text-brand-dark-40",
+    "transition-colors duration-200 outline-none resize-y min-h-[140px]",
+    "focus:ring-2 focus:ring-brand-orange/30",
+    "disabled:opacity-50 disabled:cursor-not-allowed",
+  ].join(" "),
+};
 
-/**
- * Textarea atom.
- *
- * Multi-line text input with label, error, and helper text.
- */
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   function Textarea(
     {
@@ -37,6 +50,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       helperText,
       className = "",
       id: propId,
+      variant = "default",
       ...rest
     },
     ref
@@ -45,7 +59,54 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     const id = propId ?? autoId;
     const errorId = error ? `${id}-error` : undefined;
     const helperId = helperText ? `${id}-helper` : undefined;
-    const describedBy = [errorId, helperId].filter(Boolean).join(" ") || undefined;
+    const describedBy =
+      [errorId, helperId].filter(Boolean).join(" ") || undefined;
+
+    const isBrand = variant === "dark" || variant === "light";
+
+    if (isBrand) {
+      return (
+        <div className="relative">
+          {!hideLabel && (
+            <label
+              htmlFor={id}
+              className="absolute -top-[10px] left-3 z-10 bg-transparent px-1 font-body text-[11px] font-extrabold uppercase tracking-widest text-brand-orange"
+            >
+              <span
+                className={`relative z-10 px-1 ${variant === "dark" ? "bg-brand-blue" : "bg-white"}`}
+              >
+                {label}
+                {rest.required && (
+                  <span className="ml-0.5" aria-hidden="true">
+                    *
+                  </span>
+                )}
+              </span>
+            </label>
+          )}
+
+          <textarea
+            ref={ref}
+            id={id}
+            aria-invalid={error ? true : undefined}
+            aria-describedby={describedBy}
+            className={`${variantStyles[variant]} ${className}`}
+            {...rest}
+          />
+
+          {error && (
+            <p id={errorId} role="alert" className="mt-1 font-body text-[12px] text-brand-orange">
+              {error}
+            </p>
+          )}
+          {helperText && !error && (
+            <p id={helperId} className="mt-1 font-body text-[12px] text-brand-dark-60">
+              {helperText}
+            </p>
+          )}
+        </div>
+      );
+    }
 
     return (
       <div className="flex flex-col gap-1.5">
@@ -54,7 +115,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           className={
             hideLabel
               ? "sr-only"
-              : "font-body text-[0.875rem] font-medium text-brand-dark"
+              : "font-body text-[14px] font-medium text-brand-dark"
           }
         >
           {label}
@@ -70,29 +131,21 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           id={id}
           aria-invalid={error ? true : undefined}
           aria-describedby={describedBy}
-          className={`${textareaBase} ${
+          className={`${variantStyles.default} ${
             error
-              ? "border-brand-orange focus:border-brand-orange focus:ring-brand-orange/20"
-              : "border-brand-dark-20"
+              ? "border-brand-orange! focus:border-brand-orange! focus:ring-brand-orange/20!"
+              : ""
           } ${className}`}
           {...rest}
         />
 
         {error && (
-          <p
-            id={errorId}
-            role="alert"
-            className="font-body text-[0.75rem] text-brand-orange"
-          >
+          <p id={errorId} role="alert" className="font-body text-[12px] text-brand-orange">
             {error}
           </p>
         )}
-
         {helperText && !error && (
-          <p
-            id={helperId}
-            className="font-body text-[0.75rem] text-brand-dark-60"
-          >
+          <p id={helperId} className="font-body text-[12px] text-brand-dark-60">
             {helperText}
           </p>
         )}
