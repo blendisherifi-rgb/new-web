@@ -39,7 +39,7 @@ export default async function SectionsPage({ params }: SectionsPageProps) {
                 </span>
               </div>
             ) : null}
-            <SectionRenderer sections={group.sections} />
+            <SectionRenderer sections={group.sections} showLabels />
           </div>
         ))}
       </div>

@@ -343,39 +343,64 @@ function transformSection(node: Record<string, unknown>, index: number): Section
   if (!typename) return null;
 
   const low = typename.toLowerCase();
-  const acfGroupName = low.includes("hero")
-    ? "hero_section"
+  const acfGroupName =
+    low.includes("meettheteam") || low.includes("meet_the_team")
+      ? "meet_the_team_section"
+    : low.includes("enterprisestats") || low.includes("enterprise_stats")
+      ? "enterprise_stats_section"
+    : low.includes("ourstory") || low.includes("our_story")
+      ? "our_story_section"
+    : low.includes("aboutushero") || low.includes("about_us_hero")
+      ? "about_us_hero_section"
+    : low.includes("whatmakesusdifferent") || low.includes("what_makes_us_different")
+      ? "what_makes_us_different_section"
+    : low.includes("financehero") || low.includes("finance_hero")
+      ? "finance_hero_section"
+    : low.includes("overlappingcards") || low.includes("overlapping_cards")
+      ? "overlapping_cards_section"
+    : low.includes("partnership")
+      ? "partnership_section"
+    : low.includes("outcomes")
+      ? "outcomes_section"
+    : low.includes("enginesection") || (low.includes("engine") && !low.includes("innovation"))
+      ? "engine_section"
+    : low.includes("esgsection") || (low.includes("esg") && !low.includes("horizontal"))
+      ? "esg_section"
+    : low.includes("culturesection") || low.includes("culture")
+      ? "culture_section"
+    : low.includes("hero")
+      ? "hero_section"
     : low.includes("whereweexcel") || low.includes("where_we_excel")
       ? "where_we_excel_section"
-      : low.includes("roleaccordion") || low.includes("role_accordion")
-        ? "role_accordion_section"
-        : low.includes("reviewlogos") || low.includes("review_logos")
-          ? "review_logos_section"
-          : low.includes("simplecta") || low.includes("simple_cta")
-            ? "simple_cta_section"
-            : low.includes("perfectfitframework") || low.includes("perfect_fit_framework")
-              ? "perfect_fit_framework_section"
-              : low.includes("richtext") || low.includes("rich_text")
-                ? "rich_text_section"
-                : low.includes("contactbanner") || low.includes("contact_banner")
-                  ? "contact_banner_section"
-                  : low.includes("contactwithform") || low.includes("contact_with_form")
-                    ? "contact_with_form_section"
-                    : low.includes("locations")
-                    ? "locations_section"
-                    : low.includes("clientlogosmarquee") || low.includes("client_logos_marquee")
-                      ? "client_logos_marquee_section"
-                    : low.includes("newsletterform") || low.includes("newsletter_form")
-                      ? "newsletter_form_section"
-      : low.includes("platform")
-        ? "platform_section"
-        : low.includes("innovation")
-          ? "innovation_section"
-          : low.includes("horizontalscroll") || low.includes("horizontal_scroll")
-            ? "horizontal_scroll_section"
-            : low.includes("tabbed") || low.includes("tabbed_content")
-              ? "tabbed_content_section"
-              : typenameToGroupName(typename);
+    : low.includes("roleaccordion") || low.includes("role_accordion")
+      ? "role_accordion_section"
+    : low.includes("reviewlogos") || low.includes("review_logos")
+      ? "review_logos_section"
+    : low.includes("simplecta") || low.includes("simple_cta")
+      ? "simple_cta_section"
+    : low.includes("perfectfitframework") || low.includes("perfect_fit_framework")
+      ? "perfect_fit_framework_section"
+    : low.includes("richtext") || low.includes("rich_text")
+      ? "rich_text_section"
+    : low.includes("contactbanner") || low.includes("contact_banner")
+      ? "contact_banner_section"
+    : low.includes("contactwithform") || low.includes("contact_with_form")
+      ? "contact_with_form_section"
+    : low.includes("locations")
+      ? "locations_section"
+    : low.includes("clientlogosmarquee") || low.includes("client_logos_marquee")
+      ? "client_logos_marquee_section"
+    : low.includes("newsletterform") || low.includes("newsletter_form")
+      ? "newsletter_form_section"
+    : low.includes("platform")
+      ? "platform_section"
+    : low.includes("innovation")
+      ? "innovation_section"
+    : low.includes("horizontalscroll") || low.includes("horizontal_scroll")
+      ? "horizontal_scroll_section"
+    : low.includes("tabbed") || low.includes("tabbed_content")
+      ? "tabbed_content_section"
+    : typenameToGroupName(typename);
 
   const { __typename, fieldGroupName, ...fields } = node;
 
@@ -568,6 +593,169 @@ function transformSection(node: Record<string, unknown>, index: number): Section
     delete normalized.clientLogosMarqueeLogos;
   }
 
+  // About Us Hero: galleryImages[].image.node -> {imageSrc, imageAlt}; ceoQuoteImage.node -> ceoQuoteImageSrc/Alt
+  if (acfGroupName === "about_us_hero_section") {
+    if (Array.isArray(normalized.galleryImages)) {
+      normalized.galleryImages = (normalized.galleryImages as unknown[]).map((g) => {
+        const item = g as Record<string, unknown>;
+        const img = item.image as Record<string, unknown> | undefined;
+        const n = img?.node as Record<string, unknown> | undefined;
+        return { src: n?.sourceUrl ?? img?.sourceUrl ?? "", alt: n?.altText ?? img?.altText ?? "" };
+      });
+    }
+    const cqImg = normalized.ceoQuoteImage as Record<string, unknown> | undefined;
+    const cqNode = cqImg?.node as Record<string, unknown> | undefined;
+    normalized.ceoQuote = {
+      imageSrc: (cqNode?.sourceUrl ?? cqImg?.sourceUrl ?? "") as string,
+      imageAlt: (cqNode?.altText ?? cqImg?.altText ?? "") as string,
+      quote: (normalized.ceoQuoteText ?? "") as string,
+      authorName: (normalized.ceoAuthorName ?? "") as string,
+      authorTitle: (normalized.ceoAuthorTitle ?? "") as string,
+    };
+    delete normalized.ceoQuoteImage;
+    delete normalized.ceoQuoteText;
+    delete normalized.ceoAuthorName;
+    delete normalized.ceoAuthorTitle;
+  }
+
+  // Enterprise stats: enterpriseStatsItems[].image.node -> imageSrc, imageAlt; remap to stats[]
+  if (acfGroupName === "enterprise_stats_section") {
+    const raw = normalized.enterpriseStatsItems ?? normalized.stats ?? [];
+    if (Array.isArray(raw)) {
+      normalized.stats = (raw as unknown[]).map((s) => {
+        const item = { ...(s as Record<string, unknown>) };
+        const img = item.image as Record<string, unknown> | undefined;
+        const n = img?.node as Record<string, unknown> | undefined;
+        item.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+        item.imageAlt = n?.altText ?? img?.altText ?? "";
+        delete item.image;
+        return item;
+      });
+    }
+    delete normalized.enterpriseStatsItems;
+  }
+
+  // Our Story: backgroundImage.node -> backgroundImageSrc/Alt
+  if (acfGroupName === "our_story_section") {
+    const bgImg = normalized.backgroundImage as Record<string, unknown> | undefined;
+    const bgNode = bgImg?.node as Record<string, unknown> | undefined;
+    normalized.backgroundImageSrc = bgNode?.sourceUrl ?? bgImg?.sourceUrl ?? "";
+    normalized.backgroundImageAlt = bgNode?.altText ?? bgImg?.altText ?? "";
+    delete normalized.backgroundImage;
+  }
+
+  // Meet the Team: members.nodes[] -> members[] with imageSrc/imageAlt
+  // nodes may be ContentNode union — title/content/featuredImage come via inline fragments
+  if (acfGroupName === "meet_the_team_section") {
+    const membersConn = normalized.members as Record<string, unknown> | undefined;
+    const rawNodes = (Array.isArray(membersConn) ? membersConn : membersConn?.nodes) as unknown[] | undefined;
+    if (Array.isArray(rawNodes)) {
+      normalized.members = rawNodes.map((m) => {
+        const member = m as Record<string, unknown>;
+        const fi = member.featuredImage as Record<string, unknown> | undefined;
+        const fiNode = fi?.node as Record<string, unknown> | undefined;
+        return {
+          name: (member.title ?? "") as string,
+          title: "",
+          imageSrc: (fiNode?.sourceUrl ?? fi?.sourceUrl ?? "") as string,
+          imageAlt: (fiNode?.altText ?? fi?.altText ?? "") as string,
+          bio: (member.content ?? undefined) as string | undefined,
+        };
+      });
+    } else {
+      normalized.members = [];
+    }
+  }
+
+  // ESG: image.node -> imageSrc/imageAlt
+  if (acfGroupName === "esg_section") {
+    const img = normalized.image as Record<string, unknown> | undefined;
+    const n = img?.node as Record<string, unknown> | undefined;
+    normalized.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+    normalized.imageAlt = n?.altText ?? img?.altText ?? "";
+    delete normalized.image;
+  }
+
+  // Culture: cultureItems[].image.node -> imageSrc/imageAlt; remap to items[]
+  if (acfGroupName === "culture_section") {
+    const raw = normalized.cultureItems ?? normalized.items ?? [];
+    if (Array.isArray(raw)) {
+      normalized.items = (raw as unknown[]).map((i) => {
+        const item = { ...(i as Record<string, unknown>) };
+        const img = item.image as Record<string, unknown> | undefined;
+        const n = img?.node as Record<string, unknown> | undefined;
+        item.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+        item.imageAlt = n?.altText ?? img?.altText ?? "";
+        delete item.image;
+        return item;
+      });
+    }
+    delete normalized.cultureItems;
+  }
+
+  // Partnership: testimonialImage/Logo.node -> Src/Alt
+  if (acfGroupName === "partnership_section") {
+    const ti = normalized.testimonialImage as Record<string, unknown> | undefined;
+    const tiNode = ti?.node as Record<string, unknown> | undefined;
+    const tl = normalized.testimonialLogo as Record<string, unknown> | undefined;
+    const tlNode = tl?.node as Record<string, unknown> | undefined;
+    normalized.testimonial = {
+      imageSrc: (tiNode?.sourceUrl ?? ti?.sourceUrl ?? "") as string,
+      imageAlt: (tiNode?.altText ?? ti?.altText ?? "") as string,
+      quote: (normalized.testimonialQuote ?? "") as string,
+      authorName: (normalized.testimonialAuthorName ?? "") as string,
+      authorTitle: (normalized.testimonialAuthorTitle ?? "") as string,
+      logoSrc: ((tlNode?.sourceUrl ?? tl?.sourceUrl) || undefined) as string | undefined,
+      logoAlt: ((tlNode?.altText ?? tl?.altText) || undefined) as string | undefined,
+    };
+    delete normalized.testimonialImage;
+    delete normalized.testimonialLogo;
+    delete normalized.testimonialQuote;
+    delete normalized.testimonialAuthorName;
+    delete normalized.testimonialAuthorTitle;
+  }
+
+  // Overlapping cards: overlappingCards[].image.node -> imageSrc/imageAlt; remap to cards[]
+  if (acfGroupName === "overlapping_cards_section") {
+    const raw = normalized.overlappingCards ?? normalized.cards ?? [];
+    if (Array.isArray(raw)) {
+      normalized.cards = (raw as unknown[]).map((c) => {
+        const card = { ...(c as Record<string, unknown>) };
+        const img = card.image as Record<string, unknown> | undefined;
+        const n = img?.node as Record<string, unknown> | undefined;
+        card.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+        card.imageAlt = n?.altText ?? img?.altText ?? "";
+        delete card.image;
+        return card;
+      });
+    }
+    delete normalized.overlappingCards;
+  }
+
+  // Finance hero: financeHeroCards -> cards
+  if (acfGroupName === "finance_hero_section" && normalized.financeHeroCards) {
+    normalized.cards = normalized.financeHeroCards;
+    delete normalized.financeHeroCards;
+  }
+
+  // Engine: engineCards -> cards
+  if (acfGroupName === "engine_section" && normalized.engineCards) {
+    normalized.cards = normalized.engineCards;
+    delete normalized.engineCards;
+  }
+
+  // Outcomes: outcomesStats -> stats
+  if (acfGroupName === "outcomes_section" && normalized.outcomesStats) {
+    normalized.stats = normalized.outcomesStats;
+    delete normalized.outcomesStats;
+  }
+
+  // What Makes Us Different: whatMakesItems -> items
+  if (acfGroupName === "what_makes_us_different_section" && normalized.whatMakesItems) {
+    normalized.items = normalized.whatMakesItems;
+    delete normalized.whatMakesItems;
+  }
+
   // Locations: locationsItems[].image.node -> imageSrc, imageAlt; map to items
   if (acfGroupName === "locations_section") {
     const rawItems = normalized.locationsItems ?? normalized.items ?? [];
@@ -719,7 +907,42 @@ export async function fetchPageData(
     }
   }
 
-  if (!page) return null;
+  if (!page) {
+    // Fallback placeholder for About Us when WP returns nothing
+    const isAboutPage = slug === "about-us" || slug === "who-we-are" || slug === "about";
+    if (isAboutPage) {
+      return {
+        title: "About Us | SoftCo",
+        sections: [
+          {
+            id: "about-us-hero-1",
+            acfGroupName: "about_us_hero_section",
+            order: 0,
+            fields: {
+              overline: "ABOUT US",
+              title: "Experts who make complex automation feel controlled",
+              galleryImages: [
+                { src: "/hero-platform-screenshot.png", alt: "Team celebration" },
+                { src: "/platform-p2p.png", alt: "Business team" },
+                { src: "/hero-platform-screenshot.png", alt: "Meeting" },
+                { src: "/platform-p2p.png", alt: "Collaboration" },
+                { src: "/hero-platform-screenshot.png", alt: "Office" },
+              ],
+              body: "In complex organizations, automation doesn't fail because invoices are messy. It fails because software isn't built to fit reality. We shape automation around you, not the other way around.",
+              ceoQuote: {
+                imageSrc: "/hero-platform-screenshot.png",
+                imageAlt: "Anton Scott, CEO",
+                quote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar, risus vitae placerat fermentum, tellus nisi rutrum lorem, et aliquet purus felis eget neque.",
+                authorName: "Anton Scott",
+                authorTitle: "CEO, SoftCo",
+              },
+            },
+          },
+        ],
+      };
+    }
+    return null;
+  }
 
   const rawSections = (() => {
     // Flat sections (default)

@@ -1,0 +1,755 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  SoftCo Team Members — WordPress WXR Import File
+  ================================================
+  IMPORT STEPS:
+  1. Register the `team_member` CPT in WordPress (see functions.php snippet below).
+  2. Import `acf-export-team-member-cpt.json` via ACF → Tools → Import Field Groups.
+  3. Go to WP Admin → Tools → Import → WordPress → Choose file → select this file.
+  4. On the import screen, check "Download and import file attachments" so photos
+     are pulled from softco.com into your media library automatically.
+  5. After import, run the one-time ACF photo sync snippet below so the ACF `photo`
+     field on each post is linked to the correct attachment.
+
+  ── CPT REGISTRATION (add to functions.php or a plugin) ───────────────────────
+  add_action('init', function() {
+    register_post_type('team_member', [
+      'label'               => 'Team Members',
+      'public'              => true,
+      'show_in_graphql'     => true,
+      'graphql_single_name' => 'teamMember',
+      'graphql_plural_name' => 'teamMembers',
+      'supports'            => ['title', 'thumbnail'],
+      'menu_icon'           => 'dashicons-groups',
+      'has_archive'         => false,
+      'rewrite'             => ['slug' => 'team'],
+    ]);
+  });
+
+  ── ONE-TIME ACF PHOTO SYNC (run via Code Snippets plugin, then remove) ────────
+  add_action('init', function() {
+    if ( ! isset($_GET['sync_team_photos']) || ! current_user_can('manage_options') ) return;
+    $posts = get_posts(['post_type' => 'team_member', 'posts_per_page' => -1, 'fields' => 'ids']);
+    foreach ($posts as $id) {
+      $thumb_id = get_post_thumbnail_id($id);
+      if ($thumb_id) update_field('photo', $thumb_id, $id);
+    }
+    wp_die('Team member photos synced: ' . count($posts) . ' posts updated.');
+  });
+  // Then visit: https://your-site.com/?sync_team_photos=1
+-->
+<rss version="2.0"
+  xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:wp="http://wordpress.org/export/1.2/"
+>
+<channel>
+  <title>SoftCo Team Members</title>
+  <link>https://softco.com</link>
+  <description>Team Member CPT import</description>
+  <pubDate>Thu, 06 Mar 2026 00:00:00 +0000</pubDate>
+  <language>en-US</language>
+  <wp:wxr_version>1.2</wp:wxr_version>
+  <wp:base_site_url>https://softco.com</wp:base_site_url>
+  <wp:base_blog_url>https://softco.com</wp:base_blog_url>
+
+  <!-- ═══════════════════════════════════════════════════
+       DEPARTMENT TAXONOMY TERMS
+       Edit these names/slugs to match your 5 departments.
+       You can also create/rename them in WP Admin →
+       Team Members → Departments after import.
+  ═══════════════════════════════════════════════════ -->
+  <wp:term>
+    <wp:term_id>101</wp:term_id>
+    <wp:term_taxonomy><![CDATA[team_department]]></wp:term_taxonomy>
+    <wp:term_slug><![CDATA[department-1]]></wp:term_slug>
+    <wp:term_parent><![CDATA[]]></wp:term_parent>
+    <wp:term_name><![CDATA[Department 1]]></wp:term_name>
+  </wp:term>
+  <wp:term>
+    <wp:term_id>102</wp:term_id>
+    <wp:term_taxonomy><![CDATA[team_department]]></wp:term_taxonomy>
+    <wp:term_slug><![CDATA[department-2]]></wp:term_slug>
+    <wp:term_parent><![CDATA[]]></wp:term_parent>
+    <wp:term_name><![CDATA[Department 2]]></wp:term_name>
+  </wp:term>
+  <wp:term>
+    <wp:term_id>103</wp:term_id>
+    <wp:term_taxonomy><![CDATA[team_department]]></wp:term_taxonomy>
+    <wp:term_slug><![CDATA[department-3]]></wp:term_slug>
+    <wp:term_parent><![CDATA[]]></wp:term_parent>
+    <wp:term_name><![CDATA[Department 3]]></wp:term_name>
+  </wp:term>
+  <wp:term>
+    <wp:term_id>104</wp:term_id>
+    <wp:term_taxonomy><![CDATA[team_department]]></wp:term_taxonomy>
+    <wp:term_slug><![CDATA[department-4]]></wp:term_slug>
+    <wp:term_parent><![CDATA[]]></wp:term_parent>
+    <wp:term_name><![CDATA[Department 4]]></wp:term_name>
+  </wp:term>
+  <wp:term>
+    <wp:term_id>105</wp:term_id>
+    <wp:term_taxonomy><![CDATA[team_department]]></wp:term_taxonomy>
+    <wp:term_slug><![CDATA[department-5]]></wp:term_slug>
+    <wp:term_parent><![CDATA[]]></wp:term_parent>
+    <wp:term_name><![CDATA[Department 5]]></wp:term_name>
+  </wp:term>
+
+  <wp:author>
+    <wp:author_id>1</wp:author_id>
+    <wp:author_login>admin</wp:author_login>
+    <wp:author_email>admin@softco.com</wp:author_email>
+    <wp:author_display_name><![CDATA[Admin]]></wp:author_display_name>
+    <wp:author_first_name><![CDATA[]]></wp:author_first_name>
+    <wp:author_last_name><![CDATA[]]></wp:author_last_name>
+  </wp:author>
+
+  <!-- ═══════════════════════════════════════════════════
+       PHOTO ATTACHMENTS (1001–1015)
+       These are parented to their team member post so WP
+       importer links them correctly.
+       NOTE: If photos still fail to download (hotlink protection),
+       you can upload them manually to Media Library and then
+       visit /wp-admin/?sync_team_photos=1 to sync to ACF.
+  ═══════════════════════════════════════════════════ -->
+
+  <item>
+    <title>Anton Scott – Photo</title>
+    <link>https://softco.com/?attachment_id=1001</link>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>1001</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_date_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_date_gmt>
+    <wp:post_modified><![CDATA[2026-03-06 00:00:00]]></wp:post_modified>
+    <wp:post_modified_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_modified_gmt>
+    <wp:comment_status><![CDATA[open]]></wp:comment_status>
+    <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+    <wp:post_name><![CDATA[anton-scott-photo]]></wp:post_name>
+    <wp:status><![CDATA[inherit]]></wp:status>
+    <wp:post_parent>2001</wp:post_parent>
+    <wp:menu_order>0</wp:menu_order>
+    <wp:post_type><![CDATA[attachment]]></wp:post_type>
+    <wp:post_password><![CDATA[]]></wp:post_password>
+    <wp:is_sticky>0</wp:is_sticky>
+    <wp:attachment_url><![CDATA[https://softco.com/wp-content/uploads/2022/03/Anton-BW.jpg]]></wp:attachment_url>
+  </item>
+
+  <item>
+    <title>Robert Hickey – Photo</title>
+    <link>https://softco.com/?attachment_id=1002</link>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>1002</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_date_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_date_gmt>
+    <wp:post_modified><![CDATA[2026-03-06 00:00:00]]></wp:post_modified>
+    <wp:post_modified_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_modified_gmt>
+    <wp:comment_status><![CDATA[open]]></wp:comment_status>
+    <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+    <wp:post_name><![CDATA[robert-hickey-photo]]></wp:post_name>
+    <wp:status><![CDATA[inherit]]></wp:status>
+    <wp:post_parent>2002</wp:post_parent>
+    <wp:menu_order>0</wp:menu_order>
+    <wp:post_type><![CDATA[attachment]]></wp:post_type>
+    <wp:post_password><![CDATA[]]></wp:post_password>
+    <wp:is_sticky>0</wp:is_sticky>
+    <wp:attachment_url><![CDATA[https://softco.com/wp-content/uploads/2022/03/Robert-BW.jpg]]></wp:attachment_url>
+  </item>
+
+  <item>
+    <title>Peter Brougham – Photo</title>
+    <link>https://softco.com/?attachment_id=1003</link>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>1003</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_date_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_date_gmt>
+    <wp:post_modified><![CDATA[2026-03-06 00:00:00]]></wp:post_modified>
+    <wp:post_modified_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_modified_gmt>
+    <wp:comment_status><![CDATA[open]]></wp:comment_status>
+    <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+    <wp:post_name><![CDATA[peter-brougham-photo]]></wp:post_name>
+    <wp:status><![CDATA[inherit]]></wp:status>
+    <wp:post_parent>2003</wp:post_parent>
+    <wp:menu_order>0</wp:menu_order>
+    <wp:post_type><![CDATA[attachment]]></wp:post_type>
+    <wp:post_password><![CDATA[]]></wp:post_password>
+    <wp:is_sticky>0</wp:is_sticky>
+    <wp:attachment_url><![CDATA[https://softco.com/wp-content/uploads/2025/03/Peter-Brougham-headshot-photo-bw-v5-scaled.jpg]]></wp:attachment_url>
+  </item>
+
+  <item>
+    <title>Martin Doran – Photo</title>
+    <link>https://softco.com/?attachment_id=1004</link>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>1004</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_date_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_date_gmt>
+    <wp:post_modified><![CDATA[2026-03-06 00:00:00]]></wp:post_modified>
+    <wp:post_modified_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_modified_gmt>
+    <wp:comment_status><![CDATA[open]]></wp:comment_status>
+    <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+    <wp:post_name><![CDATA[martin-doran-photo]]></wp:post_name>
+    <wp:status><![CDATA[inherit]]></wp:status>
+    <wp:post_parent>2004</wp:post_parent>
+    <wp:menu_order>0</wp:menu_order>
+    <wp:post_type><![CDATA[attachment]]></wp:post_type>
+    <wp:post_password><![CDATA[]]></wp:post_password>
+    <wp:is_sticky>0</wp:is_sticky>
+    <wp:attachment_url><![CDATA[https://softco.com/wp-content/uploads/2024/11/Martin-Doran-2-scaled.jpg]]></wp:attachment_url>
+  </item>
+
+  <item>
+    <title>Ann-Marie Ramsay – Photo</title>
+    <link>https://softco.com/?attachment_id=1005</link>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>1005</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_date_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_date_gmt>
+    <wp:post_modified><![CDATA[2026-03-06 00:00:00]]></wp:post_modified>
+    <wp:post_modified_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_modified_gmt>
+    <wp:comment_status><![CDATA[open]]></wp:comment_status>
+    <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+    <wp:post_name><![CDATA[ann-marie-ramsay-photo]]></wp:post_name>
+    <wp:status><![CDATA[inherit]]></wp:status>
+    <wp:post_parent>2005</wp:post_parent>
+    <wp:menu_order>0</wp:menu_order>
+    <wp:post_type><![CDATA[attachment]]></wp:post_type>
+    <wp:post_password><![CDATA[]]></wp:post_password>
+    <wp:is_sticky>0</wp:is_sticky>
+    <wp:attachment_url><![CDATA[https://softco.com/wp-content/uploads/2023/12/Ann-Marie_2.jpg]]></wp:attachment_url>
+  </item>
+
+  <item>
+    <title>Freda Donnelly – Photo</title>
+    <link>https://softco.com/?attachment_id=1006</link>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>1006</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_date_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_date_gmt>
+    <wp:post_modified><![CDATA[2026-03-06 00:00:00]]></wp:post_modified>
+    <wp:post_modified_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_modified_gmt>
+    <wp:comment_status><![CDATA[open]]></wp:comment_status>
+    <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+    <wp:post_name><![CDATA[freda-donnelly-photo]]></wp:post_name>
+    <wp:status><![CDATA[inherit]]></wp:status>
+    <wp:post_parent>2006</wp:post_parent>
+    <wp:menu_order>0</wp:menu_order>
+    <wp:post_type><![CDATA[attachment]]></wp:post_type>
+    <wp:post_password><![CDATA[]]></wp:post_password>
+    <wp:is_sticky>0</wp:is_sticky>
+    <wp:attachment_url><![CDATA[https://softco.com/wp-content/uploads/2022/07/Freda-BW.png]]></wp:attachment_url>
+  </item>
+
+  <item>
+    <title>Killian McCarthy – Photo</title>
+    <link>https://softco.com/?attachment_id=1007</link>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>1007</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_date_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_date_gmt>
+    <wp:post_modified><![CDATA[2026-03-06 00:00:00]]></wp:post_modified>
+    <wp:post_modified_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_modified_gmt>
+    <wp:comment_status><![CDATA[open]]></wp:comment_status>
+    <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+    <wp:post_name><![CDATA[killian-mccarthy-photo]]></wp:post_name>
+    <wp:status><![CDATA[inherit]]></wp:status>
+    <wp:post_parent>2007</wp:post_parent>
+    <wp:menu_order>0</wp:menu_order>
+    <wp:post_type><![CDATA[attachment]]></wp:post_type>
+    <wp:post_password><![CDATA[]]></wp:post_password>
+    <wp:is_sticky>0</wp:is_sticky>
+    <wp:attachment_url><![CDATA[https://softco.com/wp-content/uploads/2022/03/Killian-BW.jpg]]></wp:attachment_url>
+  </item>
+
+  <item>
+    <title>Neil Kelly – Photo</title>
+    <link>https://softco.com/?attachment_id=1008</link>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>1008</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_date_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_date_gmt>
+    <wp:post_modified><![CDATA[2026-03-06 00:00:00]]></wp:post_modified>
+    <wp:post_modified_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_modified_gmt>
+    <wp:comment_status><![CDATA[open]]></wp:comment_status>
+    <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+    <wp:post_name><![CDATA[neil-kelly-photo]]></wp:post_name>
+    <wp:status><![CDATA[inherit]]></wp:status>
+    <wp:post_parent>2008</wp:post_parent>
+    <wp:menu_order>0</wp:menu_order>
+    <wp:post_type><![CDATA[attachment]]></wp:post_type>
+    <wp:post_password><![CDATA[]]></wp:post_password>
+    <wp:is_sticky>0</wp:is_sticky>
+    <wp:attachment_url><![CDATA[https://softco.com/wp-content/uploads/2022/03/Neil-BW.jpg]]></wp:attachment_url>
+  </item>
+
+  <item>
+    <title>Garret Pearse – Photo</title>
+    <link>https://softco.com/?attachment_id=1009</link>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>1009</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_date_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_date_gmt>
+    <wp:post_modified><![CDATA[2026-03-06 00:00:00]]></wp:post_modified>
+    <wp:post_modified_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_modified_gmt>
+    <wp:comment_status><![CDATA[open]]></wp:comment_status>
+    <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+    <wp:post_name><![CDATA[garret-pearse-photo]]></wp:post_name>
+    <wp:status><![CDATA[inherit]]></wp:status>
+    <wp:post_parent>2009</wp:post_parent>
+    <wp:menu_order>0</wp:menu_order>
+    <wp:post_type><![CDATA[attachment]]></wp:post_type>
+    <wp:post_password><![CDATA[]]></wp:post_password>
+    <wp:is_sticky>0</wp:is_sticky>
+    <wp:attachment_url><![CDATA[https://softco.com/wp-content/uploads/2024/02/Garret-BW.jpg]]></wp:attachment_url>
+  </item>
+
+  <item>
+    <title>Harri Salmela – Photo</title>
+    <link>https://softco.com/?attachment_id=1010</link>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>1010</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_date_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_date_gmt>
+    <wp:post_modified><![CDATA[2026-03-06 00:00:00]]></wp:post_modified>
+    <wp:post_modified_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_modified_gmt>
+    <wp:comment_status><![CDATA[open]]></wp:comment_status>
+    <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+    <wp:post_name><![CDATA[harri-salmela-photo]]></wp:post_name>
+    <wp:status><![CDATA[inherit]]></wp:status>
+    <wp:post_parent>2010</wp:post_parent>
+    <wp:menu_order>0</wp:menu_order>
+    <wp:post_type><![CDATA[attachment]]></wp:post_type>
+    <wp:post_password><![CDATA[]]></wp:post_password>
+    <wp:is_sticky>0</wp:is_sticky>
+    <wp:attachment_url><![CDATA[https://softco.com/wp-content/uploads/2022/03/Harri-BW.jpg]]></wp:attachment_url>
+  </item>
+
+  <item>
+    <title>Adam McDonagh – Photo</title>
+    <link>https://softco.com/?attachment_id=1011</link>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>1011</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_date_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_date_gmt>
+    <wp:post_modified><![CDATA[2026-03-06 00:00:00]]></wp:post_modified>
+    <wp:post_modified_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_modified_gmt>
+    <wp:comment_status><![CDATA[open]]></wp:comment_status>
+    <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+    <wp:post_name><![CDATA[adam-mcdonagh-photo]]></wp:post_name>
+    <wp:status><![CDATA[inherit]]></wp:status>
+    <wp:post_parent>2011</wp:post_parent>
+    <wp:menu_order>0</wp:menu_order>
+    <wp:post_type><![CDATA[attachment]]></wp:post_type>
+    <wp:post_password><![CDATA[]]></wp:post_password>
+    <wp:is_sticky>0</wp:is_sticky>
+    <wp:attachment_url><![CDATA[https://softco.com/wp-content/uploads/2022/03/Adam-BW.jpg]]></wp:attachment_url>
+  </item>
+
+  <item>
+    <title>Aoife Ryan – Photo</title>
+    <link>https://softco.com/?attachment_id=1012</link>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>1012</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_date_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_date_gmt>
+    <wp:post_modified><![CDATA[2026-03-06 00:00:00]]></wp:post_modified>
+    <wp:post_modified_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_modified_gmt>
+    <wp:comment_status><![CDATA[open]]></wp:comment_status>
+    <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+    <wp:post_name><![CDATA[aoife-ryan-photo]]></wp:post_name>
+    <wp:status><![CDATA[inherit]]></wp:status>
+    <wp:post_parent>2012</wp:post_parent>
+    <wp:menu_order>0</wp:menu_order>
+    <wp:post_type><![CDATA[attachment]]></wp:post_type>
+    <wp:post_password><![CDATA[]]></wp:post_password>
+    <wp:is_sticky>0</wp:is_sticky>
+    <wp:attachment_url><![CDATA[https://softco.com/wp-content/uploads/2022/07/Aoife-BW-2.png]]></wp:attachment_url>
+  </item>
+
+  <item>
+    <title>Daniel Carroll – Photo</title>
+    <link>https://softco.com/?attachment_id=1013</link>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>1013</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_date_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_date_gmt>
+    <wp:post_modified><![CDATA[2026-03-06 00:00:00]]></wp:post_modified>
+    <wp:post_modified_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_modified_gmt>
+    <wp:comment_status><![CDATA[open]]></wp:comment_status>
+    <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+    <wp:post_name><![CDATA[daniel-carroll-photo]]></wp:post_name>
+    <wp:status><![CDATA[inherit]]></wp:status>
+    <wp:post_parent>2013</wp:post_parent>
+    <wp:menu_order>0</wp:menu_order>
+    <wp:post_type><![CDATA[attachment]]></wp:post_type>
+    <wp:post_password><![CDATA[]]></wp:post_password>
+    <wp:is_sticky>0</wp:is_sticky>
+    <wp:attachment_url><![CDATA[https://softco.com/wp-content/uploads/2022/07/Daniel-BW.png]]></wp:attachment_url>
+  </item>
+
+  <item>
+    <title>Andrew Martin – Photo</title>
+    <link>https://softco.com/?attachment_id=1014</link>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>1014</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_date_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_date_gmt>
+    <wp:post_modified><![CDATA[2026-03-06 00:00:00]]></wp:post_modified>
+    <wp:post_modified_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_modified_gmt>
+    <wp:comment_status><![CDATA[open]]></wp:comment_status>
+    <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+    <wp:post_name><![CDATA[andrew-martin-photo]]></wp:post_name>
+    <wp:status><![CDATA[inherit]]></wp:status>
+    <wp:post_parent>2014</wp:post_parent>
+    <wp:menu_order>0</wp:menu_order>
+    <wp:post_type><![CDATA[attachment]]></wp:post_type>
+    <wp:post_password><![CDATA[]]></wp:post_password>
+    <wp:is_sticky>0</wp:is_sticky>
+    <wp:attachment_url><![CDATA[https://softco.com/wp-content/uploads/2024/03/Andrew-Martin.jpg]]></wp:attachment_url>
+  </item>
+
+  <item>
+    <title>Matthew Jefferson – Photo</title>
+    <link>https://softco.com/?attachment_id=1015</link>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>1015</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_date_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_date_gmt>
+    <wp:post_modified><![CDATA[2026-03-06 00:00:00]]></wp:post_modified>
+    <wp:post_modified_gmt><![CDATA[2026-03-06 00:00:00]]></wp:post_modified_gmt>
+    <wp:comment_status><![CDATA[open]]></wp:comment_status>
+    <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+    <wp:post_name><![CDATA[matthew-jefferson-photo]]></wp:post_name>
+    <wp:status><![CDATA[inherit]]></wp:status>
+    <wp:post_parent>2015</wp:post_parent>
+    <wp:menu_order>0</wp:menu_order>
+    <wp:post_type><![CDATA[attachment]]></wp:post_type>
+    <wp:post_password><![CDATA[]]></wp:post_password>
+    <wp:is_sticky>0</wp:is_sticky>
+    <wp:attachment_url><![CDATA[https://softco.com/wp-content/uploads/2024/03/mattnew.jpg]]></wp:attachment_url>
+  </item>
+
+  <!-- ═══════════════════════════════════════════════════
+       TEAM MEMBER POSTS (2001–2015)
+       ACF field keys (e.g. field_tm_job_title) must match
+       what was imported from acf-export-team-member-cpt.json
+  ═══════════════════════════════════════════════════ -->
+
+  <item>
+    <title>Anton Scott</title>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>2001</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_status><![CDATA[publish]]></wp:post_status>
+    <wp:post_type><![CDATA[team_member]]></wp:post_type>
+    <wp:menu_order>1</wp:menu_order>
+    <wp:postmeta><wp:meta_key><![CDATA[_thumbnail_id]]></wp:meta_key><wp:meta_value><![CDATA[1001]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[job_title]]></wp:meta_key><wp:meta_value><![CDATA[CEO]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_job_title]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_job_title]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[https://www.linkedin.com/in/anton-scott-3338a02/]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_linkedin_url]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[display_order]]></wp:meta_key><wp:meta_value><![CDATA[1]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_display_order]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_order]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[photo]]></wp:meta_key><wp:meta_value><![CDATA[1001]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_photo]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_photo]]></wp:meta_value></wp:postmeta>
+  </item>
+
+  <item>
+    <title>Robert Hickey</title>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>2002</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_status><![CDATA[publish]]></wp:post_status>
+    <wp:post_type><![CDATA[team_member]]></wp:post_type>
+    <wp:menu_order>2</wp:menu_order>
+    <wp:postmeta><wp:meta_key><![CDATA[_thumbnail_id]]></wp:meta_key><wp:meta_value><![CDATA[1002]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[job_title]]></wp:meta_key><wp:meta_value><![CDATA[Chief Knowledge Officer]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_job_title]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_job_title]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[https://www.linkedin.com/in/robert-hickey-263788/]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_linkedin_url]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[display_order]]></wp:meta_key><wp:meta_value><![CDATA[2]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_display_order]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_order]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[photo]]></wp:meta_key><wp:meta_value><![CDATA[1002]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_photo]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_photo]]></wp:meta_value></wp:postmeta>
+  </item>
+
+  <item>
+    <title>Peter Brougham</title>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>2003</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_status><![CDATA[publish]]></wp:post_status>
+    <wp:post_type><![CDATA[team_member]]></wp:post_type>
+    <wp:menu_order>3</wp:menu_order>
+    <wp:postmeta><wp:meta_key><![CDATA[_thumbnail_id]]></wp:meta_key><wp:meta_value><![CDATA[1003]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[job_title]]></wp:meta_key><wp:meta_value><![CDATA[Head of Sales]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_job_title]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_job_title]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[https://www.linkedin.com/in/peterbrougham/]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_linkedin_url]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[display_order]]></wp:meta_key><wp:meta_value><![CDATA[3]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_display_order]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_order]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[photo]]></wp:meta_key><wp:meta_value><![CDATA[1003]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_photo]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_photo]]></wp:meta_value></wp:postmeta>
+  </item>
+
+  <item>
+    <title>Martin Doran</title>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>2004</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_status><![CDATA[publish]]></wp:post_status>
+    <wp:post_type><![CDATA[team_member]]></wp:post_type>
+    <wp:menu_order>4</wp:menu_order>
+    <wp:postmeta><wp:meta_key><![CDATA[_thumbnail_id]]></wp:meta_key><wp:meta_value><![CDATA[1004]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[job_title]]></wp:meta_key><wp:meta_value><![CDATA[Chief Financial Officer]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_job_title]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_job_title]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[https://www.linkedin.com/in/martin-doran/]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_linkedin_url]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[display_order]]></wp:meta_key><wp:meta_value><![CDATA[4]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_display_order]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_order]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[photo]]></wp:meta_key><wp:meta_value><![CDATA[1004]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_photo]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_photo]]></wp:meta_value></wp:postmeta>
+  </item>
+
+  <item>
+    <title>Ann-Marie Ramsay</title>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>2005</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_status><![CDATA[publish]]></wp:post_status>
+    <wp:post_type><![CDATA[team_member]]></wp:post_type>
+    <wp:menu_order>5</wp:menu_order>
+    <wp:postmeta><wp:meta_key><![CDATA[_thumbnail_id]]></wp:meta_key><wp:meta_value><![CDATA[1005]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[job_title]]></wp:meta_key><wp:meta_value><![CDATA[Head of Operations]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_job_title]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_job_title]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[https://www.linkedin.com/in/ann-marie-ramsay-irl/]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_linkedin_url]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[display_order]]></wp:meta_key><wp:meta_value><![CDATA[5]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_display_order]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_order]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[photo]]></wp:meta_key><wp:meta_value><![CDATA[1005]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_photo]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_photo]]></wp:meta_value></wp:postmeta>
+  </item>
+
+  <item>
+    <title>Freda Donnelly</title>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>2006</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_status><![CDATA[publish]]></wp:post_status>
+    <wp:post_type><![CDATA[team_member]]></wp:post_type>
+    <wp:menu_order>6</wp:menu_order>
+    <wp:postmeta><wp:meta_key><![CDATA[_thumbnail_id]]></wp:meta_key><wp:meta_value><![CDATA[1006]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[job_title]]></wp:meta_key><wp:meta_value><![CDATA[HR Manager]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_job_title]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_job_title]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[https://www.linkedin.com/in/freda-donnelly-82b4b22a/]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_linkedin_url]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[display_order]]></wp:meta_key><wp:meta_value><![CDATA[6]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_display_order]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_order]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[photo]]></wp:meta_key><wp:meta_value><![CDATA[1006]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_photo]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_photo]]></wp:meta_value></wp:postmeta>
+  </item>
+
+  <item>
+    <title>Killian McCarthy</title>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>2007</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_status><![CDATA[publish]]></wp:post_status>
+    <wp:post_type><![CDATA[team_member]]></wp:post_type>
+    <wp:menu_order>7</wp:menu_order>
+    <wp:postmeta><wp:meta_key><![CDATA[_thumbnail_id]]></wp:meta_key><wp:meta_value><![CDATA[1007]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[job_title]]></wp:meta_key><wp:meta_value><![CDATA[VP Sales Europe]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_job_title]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_job_title]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[https://www.linkedin.com/in/killian-mccarthy-819b176/]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_linkedin_url]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[display_order]]></wp:meta_key><wp:meta_value><![CDATA[7]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_display_order]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_order]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[photo]]></wp:meta_key><wp:meta_value><![CDATA[1007]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_photo]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_photo]]></wp:meta_value></wp:postmeta>
+  </item>
+
+  <item>
+    <title>Neil Kelly</title>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>2008</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_status><![CDATA[publish]]></wp:post_status>
+    <wp:post_type><![CDATA[team_member]]></wp:post_type>
+    <wp:menu_order>8</wp:menu_order>
+    <wp:postmeta><wp:meta_key><![CDATA[_thumbnail_id]]></wp:meta_key><wp:meta_value><![CDATA[1008]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[job_title]]></wp:meta_key><wp:meta_value><![CDATA[VP Products]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_job_title]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_job_title]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[https://www.linkedin.com/in/neil-thomas-kelly/]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_linkedin_url]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[display_order]]></wp:meta_key><wp:meta_value><![CDATA[8]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_display_order]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_order]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[photo]]></wp:meta_key><wp:meta_value><![CDATA[1008]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_photo]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_photo]]></wp:meta_value></wp:postmeta>
+  </item>
+
+  <item>
+    <title>Garret Pearse</title>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>2009</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_status><![CDATA[publish]]></wp:post_status>
+    <wp:post_type><![CDATA[team_member]]></wp:post_type>
+    <wp:menu_order>9</wp:menu_order>
+    <wp:postmeta><wp:meta_key><![CDATA[_thumbnail_id]]></wp:meta_key><wp:meta_value><![CDATA[1009]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[job_title]]></wp:meta_key><wp:meta_value><![CDATA[SVP Pre-Sales]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_job_title]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_job_title]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[https://www.linkedin.com/in/garret-pearse-a12495b/]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_linkedin_url]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[display_order]]></wp:meta_key><wp:meta_value><![CDATA[9]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_display_order]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_order]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[photo]]></wp:meta_key><wp:meta_value><![CDATA[1009]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_photo]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_photo]]></wp:meta_value></wp:postmeta>
+  </item>
+
+  <item>
+    <title>Harri Salmela</title>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>2010</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_status><![CDATA[publish]]></wp:post_status>
+    <wp:post_type><![CDATA[team_member]]></wp:post_type>
+    <wp:menu_order>10</wp:menu_order>
+    <wp:postmeta><wp:meta_key><![CDATA[_thumbnail_id]]></wp:meta_key><wp:meta_value><![CDATA[1010]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[job_title]]></wp:meta_key><wp:meta_value><![CDATA[VP R&D]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_job_title]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_job_title]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[https://www.linkedin.com/in/harri-salmela-6947a231/]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_linkedin_url]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[display_order]]></wp:meta_key><wp:meta_value><![CDATA[10]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_display_order]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_order]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[photo]]></wp:meta_key><wp:meta_value><![CDATA[1010]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_photo]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_photo]]></wp:meta_value></wp:postmeta>
+  </item>
+
+  <item>
+    <title>Adam McDonagh</title>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>2011</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_status><![CDATA[publish]]></wp:post_status>
+    <wp:post_type><![CDATA[team_member]]></wp:post_type>
+    <wp:menu_order>11</wp:menu_order>
+    <wp:postmeta><wp:meta_key><![CDATA[_thumbnail_id]]></wp:meta_key><wp:meta_value><![CDATA[1011]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[job_title]]></wp:meta_key><wp:meta_value><![CDATA[VP Sales North America]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_job_title]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_job_title]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[https://www.linkedin.com/in/adammcdonagh/]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_linkedin_url]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[display_order]]></wp:meta_key><wp:meta_value><![CDATA[11]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_display_order]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_order]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[photo]]></wp:meta_key><wp:meta_value><![CDATA[1011]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_photo]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_photo]]></wp:meta_value></wp:postmeta>
+  </item>
+
+  <item>
+    <title>Aoife Ryan</title>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>2012</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_status><![CDATA[publish]]></wp:post_status>
+    <wp:post_type><![CDATA[team_member]]></wp:post_type>
+    <wp:menu_order>12</wp:menu_order>
+    <wp:postmeta><wp:meta_key><![CDATA[_thumbnail_id]]></wp:meta_key><wp:meta_value><![CDATA[1012]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[job_title]]></wp:meta_key><wp:meta_value><![CDATA[Customer Services Mgr]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_job_title]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_job_title]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[https://www.linkedin.com/in/aoife-ryan-917b8a33/]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_linkedin_url]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[display_order]]></wp:meta_key><wp:meta_value><![CDATA[12]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_display_order]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_order]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[photo]]></wp:meta_key><wp:meta_value><![CDATA[1012]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_photo]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_photo]]></wp:meta_value></wp:postmeta>
+  </item>
+
+  <item>
+    <title>Daniel Carroll</title>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>2013</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_status><![CDATA[publish]]></wp:post_status>
+    <wp:post_type><![CDATA[team_member]]></wp:post_type>
+    <wp:menu_order>13</wp:menu_order>
+    <wp:postmeta><wp:meta_key><![CDATA[_thumbnail_id]]></wp:meta_key><wp:meta_value><![CDATA[1013]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[job_title]]></wp:meta_key><wp:meta_value><![CDATA[VP Finance]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_job_title]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_job_title]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[https://www.linkedin.com/in/daniel-carroll-255147108/]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_linkedin_url]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[display_order]]></wp:meta_key><wp:meta_value><![CDATA[13]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_display_order]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_order]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[photo]]></wp:meta_key><wp:meta_value><![CDATA[1013]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_photo]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_photo]]></wp:meta_value></wp:postmeta>
+  </item>
+
+  <item>
+    <title>Andrew Martin</title>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>2014</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_status><![CDATA[publish]]></wp:post_status>
+    <wp:post_type><![CDATA[team_member]]></wp:post_type>
+    <wp:menu_order>14</wp:menu_order>
+    <wp:postmeta><wp:meta_key><![CDATA[_thumbnail_id]]></wp:meta_key><wp:meta_value><![CDATA[1014]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[job_title]]></wp:meta_key><wp:meta_value><![CDATA[Customer Optimisation]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_job_title]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_job_title]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[https://www.linkedin.com/in/andrewjpmartin/]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_linkedin_url]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[display_order]]></wp:meta_key><wp:meta_value><![CDATA[14]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_display_order]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_order]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[photo]]></wp:meta_key><wp:meta_value><![CDATA[1014]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_photo]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_photo]]></wp:meta_value></wp:postmeta>
+  </item>
+
+  <item>
+    <title>Matthew Jefferson</title>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <content:encoded><![CDATA[]]></content:encoded>
+    <wp:post_id>2015</wp:post_id>
+    <wp:post_date><![CDATA[2026-03-06 00:00:00]]></wp:post_date>
+    <wp:post_status><![CDATA[publish]]></wp:post_status>
+    <wp:post_type><![CDATA[team_member]]></wp:post_type>
+    <wp:menu_order>15</wp:menu_order>
+    <wp:postmeta><wp:meta_key><![CDATA[_thumbnail_id]]></wp:meta_key><wp:meta_value><![CDATA[1015]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[job_title]]></wp:meta_key><wp:meta_value><![CDATA[Customer Onboarding Mgr]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_job_title]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_job_title]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[https://www.linkedin.com/in/mattjefferson1/]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_linkedin_url]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_linkedin_url]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[display_order]]></wp:meta_key><wp:meta_value><![CDATA[15]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_display_order]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_order]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[photo]]></wp:meta_key><wp:meta_value><![CDATA[1015]]></wp:meta_value></wp:postmeta>
+    <wp:postmeta><wp:meta_key><![CDATA[_photo]]></wp:meta_key><wp:meta_value><![CDATA[field_tm_photo]]></wp:meta_value></wp:postmeta>
+  </item>
+
+</channel>
+</rss>

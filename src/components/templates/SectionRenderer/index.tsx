@@ -2,15 +2,25 @@
 
 import { SECTION_MAP, type SectionData } from "@/lib/sections";
 
+/** Converts "finance_hero_section" → "Finance Hero" for the showcase badge. */
+function toReadableLabel(acfGroupName: string): string {
+  return acfGroupName
+    .replace(/_section$/, "")
+    .split("_")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
 interface SectionRendererProps {
   sections: SectionData[];
+  showLabels?: boolean;
 }
 
 /**
  * Renders ACF flexible sections in order.
  * Maps each section's acfGroupName to a React component from SECTION_MAP.
  */
-export function SectionRenderer({ sections }: SectionRendererProps) {
+export function SectionRenderer({ sections, showLabels = false }: SectionRendererProps) {
   const sorted = [...sections].sort((a, b) => a.order - b.order);
 
   if (sorted.length === 0) {
@@ -43,7 +53,19 @@ export function SectionRenderer({ sections }: SectionRendererProps) {
           ) : null;
         }
         return (
-          <Component key={section.id} {...(section.fields as Record<string, unknown>)} />
+          <div key={section.id} className={showLabels ? "relative" : undefined}>
+            {showLabels && (
+              <div className="pointer-events-none absolute left-0 top-0 z-50 flex items-center gap-2 rounded-br-lg bg-black/70 px-3 py-1.5 backdrop-blur-sm">
+                <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-brand-orange">
+                  {toReadableLabel(section.acfGroupName)}
+                </span>
+                <span className="font-mono text-[11px] text-white/50">
+                  {section.acfGroupName}
+                </span>
+              </div>
+            )}
+            <Component {...(section.fields as Record<string, unknown>)} />
+          </div>
         );
       })}
     </>

@@ -3,9 +3,19 @@
  * Add new ACF group → component mappings here when new section types are added.
  */
 
+import { EngineSection } from "@/components/sections/EngineSection";
+import { OutcomesSection } from "@/components/sections/OutcomesSection";
+import { EnterpriseStatsSection } from "@/components/sections/EnterpriseStatsSection";
+import { OverlappingCardsSection } from "@/components/sections/OverlappingCardsSection";
+import { AboutUsHeroSection } from "@/components/sections/AboutUsHeroSection";
+import { OurStorySection } from "@/components/sections/OurStorySection";
+import { MeetTheTeamSection } from "@/components/sections/MeetTheTeamSection";
+import { PartnershipSection } from "@/components/sections/PartnershipSection";
+import { FinanceHeroSection } from "@/components/sections/FinanceHeroSection";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { PlatformSection } from "@/components/sections/PlatformSection";
 import { WhereWeExcelSection } from "@/components/sections/WhereWeExcelSection";
+import { WhatMakesUsDifferentSection } from "@/components/sections/WhatMakesUsDifferentSection";
 import { InnovationSection } from "@/components/sections/InnovationSection";
 import { HorizontalScrollSection } from "@/components/sections/HorizontalScrollSection";
 import { TabbedContentSection } from "@/components/sections/TabbedContentSection";
@@ -20,6 +30,9 @@ import { ContactWithFormSection } from "@/components/sections/ContactWithFormSec
 import { LocationsSection } from "@/components/sections/LocationsSection";
 import { ClientLogosMarqueeSection } from "@/components/sections/ClientLogosMarqueeSection";
 import { NewsletterFormSection } from "@/components/sections/NewsletterFormSection";
+import { ESGSection } from "@/components/sections/ESGSection";
+import { CultureSection } from "@/components/sections/CultureSection";
+import { TeamArchiveSection } from "@/components/sections/TeamArchiveSection";
 
 export interface SectionData {
   id: string;
@@ -29,8 +42,18 @@ export interface SectionData {
 }
 
 export const SECTION_MAP: Record<string, React.ComponentType<Record<string, unknown>>> = {
+  engine_section: EngineSection as unknown as React.ComponentType<Record<string, unknown>>,
+  outcomes_section: OutcomesSection as unknown as React.ComponentType<Record<string, unknown>>,
+  enterprise_stats_section: EnterpriseStatsSection as unknown as React.ComponentType<Record<string, unknown>>,
+  overlapping_cards_section: OverlappingCardsSection as unknown as React.ComponentType<Record<string, unknown>>,
+  about_us_hero_section: AboutUsHeroSection as unknown as React.ComponentType<Record<string, unknown>>,
+  our_story_section: OurStorySection as unknown as React.ComponentType<Record<string, unknown>>,
+  meet_the_team_section: MeetTheTeamSection as unknown as React.ComponentType<Record<string, unknown>>,
+  partnership_section: PartnershipSection as unknown as React.ComponentType<Record<string, unknown>>,
+  finance_hero_section: FinanceHeroSection as unknown as React.ComponentType<Record<string, unknown>>,
   hero_section: HeroSection as unknown as React.ComponentType<Record<string, unknown>>,
   where_we_excel_section: WhereWeExcelSection as unknown as React.ComponentType<Record<string, unknown>>,
+  what_makes_us_different_section: WhatMakesUsDifferentSection as unknown as React.ComponentType<Record<string, unknown>>,
   platform_section: PlatformSection as unknown as React.ComponentType<Record<string, unknown>>,
   innovation_section: InnovationSection as unknown as React.ComponentType<Record<string, unknown>>,
   horizontal_scroll_section: HorizontalScrollSection as unknown as React.ComponentType<Record<string, unknown>>,
@@ -46,4 +69,7 @@ export const SECTION_MAP: Record<string, React.ComponentType<Record<string, unkn
   locations_section: LocationsSection as unknown as React.ComponentType<Record<string, unknown>>,
   client_logos_marquee_section: ClientLogosMarqueeSection as unknown as React.ComponentType<Record<string, unknown>>,
   newsletter_form_section: NewsletterFormSection as unknown as React.ComponentType<Record<string, unknown>>,
+  esg_section: ESGSection as unknown as React.ComponentType<Record<string, unknown>>,
+  culture_section: CultureSection as unknown as React.ComponentType<Record<string, unknown>>,
+  team_archive_section: TeamArchiveSection as unknown as React.ComponentType<Record<string, unknown>>,
 };

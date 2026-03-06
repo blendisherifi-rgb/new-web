@@ -30,6 +30,19 @@ const ContactWithFormLayout = `${LAYOUT_PREFIX}ContactWithFormSection${LAYOUT_SU
 const LocationsLayout = `${LAYOUT_PREFIX}LocationsSection${LAYOUT_SUFFIX}`;
 const ClientLogosMarqueeLayout = `${LAYOUT_PREFIX}ClientLogosMarqueeSection${LAYOUT_SUFFIX}`;
 const NewsletterFormLayout = `${LAYOUT_PREFIX}NewsletterFormSection${LAYOUT_SUFFIX}`;
+// About-page sections
+const FinanceHeroLayout = `${LAYOUT_PREFIX}FinanceHeroSection${LAYOUT_SUFFIX}`;
+const EngineLayout = `${LAYOUT_PREFIX}EngineSection${LAYOUT_SUFFIX}`;
+const OutcomesLayout = `${LAYOUT_PREFIX}OutcomesSection${LAYOUT_SUFFIX}`;
+const PartnershipLayout = `${LAYOUT_PREFIX}PartnershipSection${LAYOUT_SUFFIX}`;
+const OverlappingCardsLayout = `${LAYOUT_PREFIX}OverlappingCardsSection${LAYOUT_SUFFIX}`;
+const AboutUsHeroLayout = `${LAYOUT_PREFIX}AboutUsHeroSection${LAYOUT_SUFFIX}`;
+const WhatMakesUsDifferentLayout = `${LAYOUT_PREFIX}WhatMakesUsDifferentSection${LAYOUT_SUFFIX}`;
+const EnterpriseStatsLayout = `${LAYOUT_PREFIX}EnterpriseStatsSection${LAYOUT_SUFFIX}`;
+const OurStoryLayout = `${LAYOUT_PREFIX}OurStorySection${LAYOUT_SUFFIX}`;
+const MeetTheTeamLayout = `${LAYOUT_PREFIX}MeetTheTeamSection${LAYOUT_SUFFIX}`;
+const EsgLayout = `${LAYOUT_PREFIX}EsgSection${LAYOUT_SUFFIX}`;
+const CultureLayout = `${LAYOUT_PREFIX}CultureSection${LAYOUT_SUFFIX}`;
 
 function buildFragment(): string {
   const sectionsSelection = `
@@ -272,6 +285,150 @@ function buildFragment(): string {
       heading
       ctaLabel
     }
+    ... on ${FinanceHeroLayout} {
+      headlineLine1
+      headlineLine2
+      body
+      financeHeroCards {
+        number
+        title
+      }
+    }
+    ... on ${EngineLayout} {
+      overline
+      headingBefore
+      headingHighlight
+      headingAfter
+      body
+      engineCards {
+        title
+        description
+      }
+      ctaLabel
+      ctaHref
+    }
+    ... on ${OutcomesLayout} {
+      overline
+      title
+      body
+      ctaLabel
+      ctaHref
+      outcomesStats {
+        value
+        label
+      }
+    }
+    ... on ${PartnershipLayout} {
+      overline
+      headingBefore
+      headingHighlight
+      headingAfter
+      body
+      ctaLabel
+      ctaHref
+      testimonialImage { node { sourceUrl altText } }
+      testimonialQuote
+      testimonialAuthorName
+      testimonialAuthorTitle
+      testimonialLogo { node { sourceUrl altText } }
+    }
+    ... on ${OverlappingCardsLayout} {
+      overline
+      title
+      description
+      overlappingCards {
+        step
+        title
+        description
+        image { node { sourceUrl altText } }
+        detailsLabel
+        detailsHref
+      }
+    }
+    ... on ${AboutUsHeroLayout} {
+      overline
+      title
+      galleryImages {
+        image { node { sourceUrl altText } }
+      }
+      body
+      ceoQuoteImage { node { sourceUrl altText } }
+      ceoQuoteText
+      ceoAuthorName
+      ceoAuthorTitle
+    }
+    ... on ${WhatMakesUsDifferentLayout} {
+      tag
+      headingBefore
+      headingHighlight
+      body
+      ctaLabel
+      ctaHref
+      whatMakesItems {
+        step
+        title
+        description
+      }
+    }
+    ... on ${EnterpriseStatsLayout} {
+      title
+      enterpriseStatsItems {
+        image { node { sourceUrl altText } }
+        title
+      }
+    }
+    ... on ${OurStoryLayout} {
+      overline
+      headingBefore
+      headingHighlight
+      headingAfter
+      body
+      backgroundImage { node { sourceUrl altText } }
+      events {
+        year
+        title
+        description
+      }
+    }
+    ... on ${MeetTheTeamLayout} {
+      overline
+      title
+      members {
+        nodes {
+          id
+          ... on NodeWithTitle { title }
+          ... on NodeWithContentEditor { content }
+          ... on NodeWithFeaturedImage { featuredImage { node { sourceUrl altText } } }
+        }
+      }
+      ctaLabel
+      ctaHref
+    }
+    ... on ${EsgLayout} {
+      overline
+      headingBefore
+      headingHighlight
+      headingAfter
+      image { node { sourceUrl altText } }
+      body
+      ctaLabel
+      ctaHref
+    }
+    ... on ${CultureLayout} {
+      overline
+      headingBefore
+      headingHighlight
+      headingAfter
+      body
+      ctaLabel
+      ctaHref
+      cultureItems {
+        image { node { sourceUrl altText } }
+        stat
+        label
+        description
+      }
+    }
   `;
 
   if (SECTIONS_PATH === "pageContentSections.contentSections") {
@@ -409,6 +566,18 @@ function buildFragmentResilient(): string {
     ... on ${RichTextLayout} {
       content
     }
+    ... on ${FinanceHeroLayout} { headlineLine1 headlineLine2 body financeHeroCards { number title } }
+    ... on ${EngineLayout} { overline headingBefore headingHighlight headingAfter body engineCards { title description } ctaLabel ctaHref }
+    ... on ${OutcomesLayout} { overline title body ctaLabel ctaHref outcomesStats { value label } }
+    ... on ${PartnershipLayout} { overline headingBefore headingHighlight headingAfter body ctaLabel ctaHref testimonialImage { node { sourceUrl altText } } testimonialQuote testimonialAuthorName testimonialAuthorTitle testimonialLogo { node { sourceUrl altText } } }
+    ... on ${OverlappingCardsLayout} { overline title description overlappingCards { step title description image { node { sourceUrl altText } } detailsLabel detailsHref } }
+    ... on ${AboutUsHeroLayout} { overline title galleryImages { image { node { sourceUrl altText } } } body ceoQuoteImage { node { sourceUrl altText } } ceoQuoteText ceoAuthorName ceoAuthorTitle }
+    ... on ${WhatMakesUsDifferentLayout} { tag headingBefore headingHighlight body ctaLabel ctaHref whatMakesItems { step title description } }
+    ... on ${EnterpriseStatsLayout} { title enterpriseStatsItems { image { node { sourceUrl altText } } title } }
+    ... on ${OurStoryLayout} { overline headingBefore headingHighlight headingAfter body backgroundImage { node { sourceUrl altText } } events { year title description } }
+    ... on ${MeetTheTeamLayout} { overline title members { nodes { id ... on NodeWithTitle { title } ... on NodeWithContentEditor { content } ... on NodeWithFeaturedImage { featuredImage { node { sourceUrl altText } } } } } ctaLabel ctaHref }
+    ... on ${EsgLayout} { overline headingBefore headingHighlight headingAfter image { node { sourceUrl altText } } body ctaLabel ctaHref }
+    ... on ${CultureLayout} { overline headingBefore headingHighlight headingAfter body ctaLabel ctaHref cultureItems { image { node { sourceUrl altText } } stat label description } }
   `;
 
   if (SECTIONS_PATH === "pageContentSections.contentSections") {

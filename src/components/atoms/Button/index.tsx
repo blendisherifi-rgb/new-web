@@ -200,7 +200,7 @@ export function Button(props: ButtonProps) {
     );
 
   // Link mode
-  if (props.href !== undefined) {
+  if (props.href != null) {
     const isExternal =
       props.external ?? props.href.startsWith("http");
     if (isExternal) {

@@ -1,0 +1,110 @@
+[
+  {
+    "key": "group_team_member_fields",
+    "title": "Team Member Details",
+    "fields": [
+      {
+        "key": "field_tm_job_title",
+        "label": "Job Title",
+        "name": "job_title",
+        "aria-label": "",
+        "type": "text",
+        "instructions": "The member's role / job title (e.g. CEO, Head of Sales).",
+        "required": 1,
+        "wrapper": { "width": "", "class": "", "id": "" },
+        "default_value": "",
+        "show_in_graphql": 1,
+        "graphql_field_name": "jobTitle"
+      },
+      {
+        "key": "field_tm_photo",
+        "label": "Photo",
+        "name": "photo",
+        "aria-label": "",
+        "type": "image",
+        "instructions": "Portrait photo of the team member. Recommended: 332 × 515 px.",
+        "required": 0,
+        "wrapper": { "width": "", "class": "", "id": "" },
+        "return_format": "array",
+        "library": "all",
+        "min_width": "",
+        "min_height": "",
+        "min_size": "",
+        "max_width": "",
+        "max_height": "",
+        "max_size": "",
+        "mime_types": "",
+        "preview_size": "medium",
+        "show_in_graphql": 1,
+        "graphql_field_name": "photo"
+      },
+      {
+        "key": "field_tm_bio",
+        "label": "Bio",
+        "name": "bio",
+        "aria-label": "",
+        "type": "textarea",
+        "instructions": "Bio text. Separate paragraphs with a blank line.",
+        "required": 0,
+        "wrapper": { "width": "", "class": "", "id": "" },
+        "default_value": "",
+        "new_lines": "br",
+        "maxlength": "",
+        "rows": 6,
+        "show_in_graphql": 1,
+        "graphql_field_name": "bio"
+      },
+      {
+        "key": "field_tm_linkedin_url",
+        "label": "LinkedIn URL",
+        "name": "linkedin_url",
+        "aria-label": "",
+        "type": "url",
+        "instructions": "Full LinkedIn profile URL (e.g. https://www.linkedin.com/in/username/).",
+        "required": 0,
+        "wrapper": { "width": "", "class": "", "id": "" },
+        "default_value": "",
+        "show_in_graphql": 1,
+        "graphql_field_name": "linkedinUrl"
+      },
+      {
+        "key": "field_tm_order",
+        "label": "Display Order",
+        "name": "display_order",
+        "aria-label": "",
+        "type": "number",
+        "instructions": "Lower numbers appear first in the grid. Leave empty to use post date order.",
+        "required": 0,
+        "wrapper": { "width": "50", "class": "", "id": "" },
+        "default_value": "",
+        "min": 1,
+        "max": "",
+        "step": 1,
+        "show_in_graphql": 1,
+        "graphql_field_name": "displayOrder"
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "post_type",
+          "operator": "==",
+          "value": "team_member"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "Custom fields for the Team Member post type. Used by MeetTheTeamSection and the team archive page.",
+    "show_in_rest": 0,
+    "show_in_graphql": 1,
+    "graphql_field_name": "teamMemberFields",
+    "map_graphql_types_from_location_rules": 0,
+    "graphql_types": ["TeamMember"]
+  }
+]
