@@ -69,14 +69,15 @@ export function HorizontalScrollSection({
 }: HorizontalScrollSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const [reduceMotion, setReduceMotion] = useState(true);
+  const [useFallback, setUseFallback] = useState(true);
 
   useEffect(() => {
-    setReduceMotion(shouldReduceMotion());
+    const isMobile = window.innerWidth < 992;
+    setUseFallback(shouldReduceMotion() || isMobile);
   }, []);
 
   useEffect(() => {
-    if (reduceMotion) return;
+    if (useFallback) return;
 
     const init = async () => {
       const section = sectionRef.current;
@@ -107,20 +108,21 @@ export function HorizontalScrollSection({
     return () => {
       import("gsap/ScrollTrigger").then((m) => m.default.getAll().forEach((t) => t.kill()));
     };
-  }, [cards, reduceMotion]);
+  }, [cards, useFallback]);
 
-  /* Reduced motion: static grid */
-  if (reduceMotion) {
+  if (useFallback) {
     return (
       <section className="w-full bg-white">
-        <div className="mx-auto max-w-[1440px] px-6 py-24">
+        <div className="mx-auto max-w-[1440px] px-4 py-16 tablet-down:px-6 tablet-down:py-24">
           <Overline>{tag}</Overline>
           <Heading level={2} className="mt-3 text-brand-dark">
             {headline}
           </Heading>
-          <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 scrollbar-hide tablet-down:mt-12 tablet-down:grid tablet-down:grid-cols-3 tablet-down:gap-6 tablet-down:overflow-visible">
             {cards.map((card) => (
-              <CardContent key={card.id} card={card} />
+              <div key={card.id} className="shrink-0 snap-start tablet-down:shrink">
+                <CardContent card={card} />
+              </div>
             ))}
           </div>
         </div>

@@ -2,6 +2,7 @@
 
 import { HeadlineWithHighlight } from "@/components/molecules/HeadlineWithHighlight";
 import { Paragraph } from "@/components/atoms/Paragraph";
+import { Heading } from "@/components/atoms/Heading";
 import { Overline } from "@/components/atoms/Overline";
 import { Button } from "@/components/atoms/Button";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
@@ -50,10 +51,10 @@ export function WhatMakesUsDifferentSection({
 }: WhatMakesUsDifferentSectionProps) {
   return (
     <section className="w-full bg-white">
-      <div className="mx-auto w-full max-w-[1440px] px-6 py-24 md:py-32">
-        <div className="grid grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-24">
+      <div className="mx-auto w-full max-w-[1440px] px-4 py-16 tablet-down:px-6 tablet-down:py-32">
+        <div className="grid grid-cols-1 gap-12 tablet-down:grid-cols-2 tablet-down:gap-24">
           {/* Left column — sticky on desktop */}
-          <div className="lg:sticky lg:top-24 lg:self-start">
+          <div className="tablet-down:sticky tablet-down:top-24 tablet-down:self-start">
             <Overline>{tag}</Overline>
             <HeadlineWithHighlight
               headingBefore={headingBefore}
@@ -91,9 +92,9 @@ export function WhatMakesUsDifferentSection({
                   <span className="font-body text-[18px] font-bold leading-[32px] text-brand-orange">
                     {item.step}
                   </span>
-                  <h3 className="font-heading font-semibold text-[32px] leading-[36px] tracking-[-0.01em] text-brand-blue">
+                  <Heading level={5} className="text-brand-blue">
                     {item.title}
-                  </h3>
+                  </Heading>
                 </div>
                 <Paragraph size="base" className="mt-2 text-brand-dark">
                   {item.description}

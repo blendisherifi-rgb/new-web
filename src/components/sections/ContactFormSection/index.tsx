@@ -11,7 +11,7 @@ import Image from "next/image";
  */
 export function ContactFormSection() {
   return (
-    <section className="relative -mt-px min-h-[600px] w-full overflow-hidden pt-[300px] pb-16 md:pb-24">
+    <section className="relative -mt-px min-h-[600px] w-full overflow-hidden pt-32 pb-12 tablet-down:pt-[300px] tablet-down:pb-24">
       <Image
         src="/softco-gradient.jpg"
         alt=""
@@ -19,10 +19,10 @@ export function ContactFormSection() {
         className="object-cover object-[center_bottom]"
         sizes="100vw"
       />
-      <div className="relative mx-auto max-w-[800px] px-6">
+      <div className="relative mx-auto max-w-[800px] px-4 tablet-down:px-6">
         <form className="flex flex-col gap-6" onSubmit={(e) => e.preventDefault()}>
           {/* Two-column row: First name, Last name */}
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid gap-6 tablet-down:grid-cols-2">
             <div className="flex flex-col gap-1.5">
               <label htmlFor="first-name" className="font-body text-[14px] font-medium text-white">
                 First name <span className="text-brand-orange" aria-hidden>*</span>
@@ -50,7 +50,7 @@ export function ContactFormSection() {
           </div>
 
           {/* Two-column row: Email, Phone */}
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid gap-6 tablet-down:grid-cols-2">
             <div className="flex flex-col gap-1.5">
               <label htmlFor="email" className="font-body text-[14px] font-medium text-white">
                 Email <span className="text-brand-orange" aria-hidden>*</span>
@@ -77,7 +77,7 @@ export function ContactFormSection() {
           </div>
 
           {/* Two-column row: Company name, Role */}
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid gap-6 tablet-down:grid-cols-2">
             <div className="flex flex-col gap-1.5">
               <label htmlFor="company" className="font-body text-[14px] font-medium text-white">
                 Company name <span className="text-brand-orange" aria-hidden>*</span>

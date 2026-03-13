@@ -51,7 +51,7 @@ export function InnovationSection({
 }: InnovationSectionProps) {
   return (
     <section className="w-full bg-white">
-      <div className="mx-auto w-full max-w-[1440px] px-6 py-24 md:py-32">
+      <div className="mx-auto w-full max-w-[1440px] px-4 py-16 tablet-down:px-6 tablet-down:py-32">
         {/* Centered header */}
         <div className="mx-auto max-w-3xl text-center">
           <HeadlineWithHighlight
@@ -62,13 +62,13 @@ export function InnovationSection({
             level={2}
             className="font-semibold text-brand-dark"
           />
-          <Paragraph className="mt-[50px] leading-[1.7]">
+          <Paragraph className="mt-6 tablet-down:mt-[50px] leading-[1.7]">
             {subheading}
           </Paragraph>
         </div>
 
         {/* Value boxes — 4-column grid: 120px below description, 60px between cards, center aligned */}
-        <div className="mt-[120px] grid grid-cols-1 gap-[60px] sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-10 grid grid-cols-1 gap-10 tablet-down:mt-[120px] tablet-down:grid-cols-4 tablet-down:gap-[60px]">
           {values.map((value, i) => (
             <AnimateOnScroll
               key={i}
@@ -90,10 +90,10 @@ export function InnovationSection({
               ) : (
                 <ValueIconPlaceholder index={i} />
               )}
-              <Heading level={4} className="mt-[50px]">
+              <Heading level={4} className="mt-6 tablet-down:mt-[50px]">
                 {value.title}
               </Heading>
-              <Paragraph size="sm" className="mt-[30px] leading-[1.7]">
+              <Paragraph size="sm" className="mt-4 tablet-down:mt-[30px] leading-[1.7]">
                 {value.description}
               </Paragraph>
             </AnimateOnScroll>
@@ -101,7 +101,7 @@ export function InnovationSection({
         </div>
 
         {/* CTA — 80px below cards */}
-        <div className="mt-[80px] flex justify-center">
+        <div className="mt-10 tablet-down:mt-[80px] flex justify-center">
           <Button
             variant="orange"
             href={ctaHref}

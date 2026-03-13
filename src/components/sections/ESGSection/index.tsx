@@ -1,4 +1,5 @@
 import { Image } from "@/components/atoms/Image";
+import { Heading } from "@/components/atoms/Heading";
 import { Overline } from "@/components/atoms/Overline";
 import { Button } from "@/components/atoms/Button";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
@@ -46,21 +47,21 @@ export function ESGSection({
       className="w-full"
       style={{ backgroundColor: "#060D2E" }}
     >
-      <div className="mx-auto w-full max-w-[1440px] px-6 py-24 md:py-32">
+      <div className="mx-auto w-full max-w-[1440px] px-4 py-16 tablet-down:px-6 tablet-down:py-32">
         {/* Overline — top left */}
         <Overline>{overline}</Overline>
 
         {/* 80px centered title — highlight in orange for dark bg */}
-        <h2 className="mt-[60px] text-center font-heading text-[80px] font-semibold leading-[88px] tracking-[-0.02em] text-white">
+        <Heading level={1} className="mt-8 text-center tracking-[-0.02em] text-white tablet-down:mt-[60px]">
           {headingBefore && <>{headingBefore} </>}
           {headingHighlight && (
             <span className="text-brand-orange">{headingHighlight}</span>
           )}
           {headingAfter && <> {headingAfter}</>}
-        </h2>
+        </Heading>
 
         {/* Collage / montage image */}
-        <div className="mt-[60px] flex justify-center">
+        <div className="mt-8 flex justify-center tablet-down:mt-[60px]">
           <div className="relative w-full max-w-[860px] overflow-hidden rounded-xl">
             <Image
               src={imageSrc}
@@ -74,13 +75,13 @@ export function ESGSection({
         </div>
 
         {/* Body text */}
-        <p className="mx-auto mt-[60px] max-w-[660px] text-center font-body text-[18px] leading-[1.7] text-white/80">
+        <p className="mx-auto mt-8 max-w-[660px] text-center font-body text-[18px] leading-[1.7] text-white/80 tablet-down:mt-[60px]">
           {body}
         </p>
 
         {/* CTA */}
         {ctaLabel && ctaHref && (
-          <div className="mt-[60px] flex justify-center">
+          <div className="mt-8 flex justify-center tablet-down:mt-[60px]">
             <Button
               variant="orange"
               href={ctaHref}

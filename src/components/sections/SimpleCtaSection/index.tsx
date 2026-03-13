@@ -32,27 +32,27 @@ export function SimpleCtaSection({
 
   return (
     <section className="w-full bg-white">
-      <div className="mx-auto w-full max-w-[1440px] px-6 py-24 md:py-28">
+      <div className="mx-auto w-full max-w-[1440px] px-4 py-16 tablet-down:px-6 tablet-down:py-28">
         <div className="mx-auto max-w-[760px] text-center">
           <Overline className="text-[16px]">{overline}</Overline>
 
-          <div className="mt-[40px]">
+          <div className="mt-6 tablet-down:mt-[40px]">
             {hasHighlight ? (
               <HeadlineWithHighlight
                 headingBefore={headingBefore ?? ""}
                 headingHighlight={headingHighlight}
                 headingAfter={headingAfter ?? ""}
                 level={2}
-                className="text-[80px] font-semibold leading-[1.05] text-brand-dark md:text-[80px] lg:text-[80px]"
+                className="font-semibold leading-[1.05] text-brand-dark"
               />
             ) : (
-              <Heading level={2} className="text-[80px] leading-[1.05]">
+              <Heading level={2} className="leading-[1.05]">
                 {title}
               </Heading>
             )}
           </div>
 
-          <Paragraph size="base" className="mt-[40px] leading-[1.6]">
+          <Paragraph size="base" className="mt-6 tablet-down:mt-[40px] leading-[1.6]">
             {description}
           </Paragraph>
 

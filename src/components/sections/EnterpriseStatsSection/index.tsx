@@ -1,5 +1,6 @@
 "use client";
 
+import { Heading } from "@/components/atoms/Heading";
 import { Image } from "@/components/atoms/Image";
 
 export interface EnterpriseStat {
@@ -38,7 +39,7 @@ export function EnterpriseStatsSection({
 }: EnterpriseStatsSectionProps) {
   return (
     <section className="w-full bg-white">
-      <div className="mx-auto w-full max-w-[1440px] px-6 py-24 md:py-32">
+      <div className="mx-auto w-full max-w-[1440px] px-4 py-12 tablet-down:px-6 tablet-down:py-32">
         {/* Centered title */}
         <h2
           className="mx-auto max-w-3xl text-center font-body text-[40px] font-normal leading-[56px] tracking-[0] text-brand-dark"
@@ -61,15 +62,13 @@ export function EnterpriseStatsSection({
         )}
 
         {/* Stats grid: image, title below */}
-        <div className="mt-16 grid grid-cols-2 gap-x-4 gap-y-12 md:mt-20 md:grid-cols-4 md:gap-x-0 md:gap-y-0">
+        <div className="mt-10 grid grid-cols-1 gap-y-8 tablet-down:mt-20 tablet-down:grid-cols-4 tablet-down:gap-x-0 tablet-down:gap-y-0">
           {stats.map((stat, i) => (
             <div
               key={i}
-              className={`flex flex-col items-center md:border-l md:border-brand-grey md:px-8 first:md:border-l-0 first:md:pl-0 last:md:pr-0 ${
-                i < 2 ? "border-b border-brand-grey pb-12 md:border-b-0 md:pb-0" : "pt-12 md:pt-0"
-              }`}
+              className="flex flex-col items-center border-b border-brand-grey pb-8 last:border-b-0 last:pb-0 tablet-down:border-b-0 tablet-down:border-l tablet-down:border-brand-grey tablet-down:pb-0 tablet-down:px-8 first:tablet-down:border-l-0 first:tablet-down:pl-0 last:tablet-down:pr-0"
             >
-              <div className="relative aspect-square w-full max-w-[200px] overflow-hidden bg-brand-grey">
+              <div className="relative aspect-square w-full overflow-hidden bg-brand-grey tablet-down:max-w-[200px]">
                 <Image
                   src={stat.imageSrc}
                   alt={stat.imageAlt}
@@ -78,9 +77,9 @@ export function EnterpriseStatsSection({
                   sizes="200px"
                 />
               </div>
-              <h3 className="mt-4 max-w-[200px] text-center font-heading text-[32px] font-semibold leading-[36px] tracking-[0] text-brand-dark">
+              <Heading level={5} className="mt-4 w-full text-center tablet-down:max-w-[200px]">
                 {stat.title}
-              </h3>
+              </Heading>
             </div>
           ))}
         </div>

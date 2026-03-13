@@ -1,6 +1,7 @@
 "use client";
 
 import { Image } from "@/components/atoms/Image";
+import { Heading } from "@/components/atoms/Heading";
 import { Overline } from "@/components/atoms/Overline";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Button } from "@/components/atoms/Button";
@@ -57,19 +58,19 @@ export function CultureSection({
 }: CultureSectionProps) {
   return (
     <section className="w-full" style={{ backgroundColor: "#060D2E" }}>
-      <div className="mx-auto w-full max-w-[1440px] px-6 py-24 md:py-32">
-        <div className="grid grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-24">
+      <div className="mx-auto w-full max-w-[1440px] px-4 py-16 tablet-down:px-6 tablet-down:py-32">
+        <div className="grid grid-cols-1 gap-12 tablet-down:grid-cols-2 tablet-down:gap-24">
 
           {/* Left column — sticky */}
-          <div className="lg:sticky lg:top-24 lg:self-start">
+          <div className="tablet-down:sticky tablet-down:top-24 tablet-down:self-start">
             <Overline>{overline}</Overline>
-            <h2 className="mt-3 font-heading text-[60px] font-semibold leading-[64px] tracking-[0em] text-white">
+            <Heading level={2} className="mt-3 text-white">
               {headingBefore}
               {headingHighlight && (
                 <span className="text-brand-orange"> {headingHighlight}</span>
               )}
               {headingAfter && <span>{headingAfter}</span>}
-            </h2>
+            </Heading>
             <Paragraph size="lg" className="mt-6 text-white/70">
               {body}
             </Paragraph>
@@ -93,18 +94,18 @@ export function CultureSection({
                 key={i}
                 variant="slideLeft"
                 staggerIndex={i}
-                className={`flex gap-6 border-t border-white/10 pb-[80px] pt-[80px] last:pb-0 ${
+                className={`flex flex-col gap-4 border-t border-white/10 pb-10 pt-10 last:pb-0 tablet-down:flex-row tablet-down:gap-6 tablet-down:pb-[80px] tablet-down:pt-[80px] ${
                   i === 0 ? "border-t-0 pt-0" : ""
                 }`}
               >
                 {/* Image */}
-                <div className="relative h-[130px] w-[130px] shrink-0 overflow-hidden rounded-md bg-white/10">
+                <div className="relative w-full aspect-video shrink-0 overflow-hidden rounded-md bg-white/10 tablet-down:h-[130px] tablet-down:w-[130px] tablet-down:aspect-auto">
                   <Image
                     src={item.imageSrc}
                     alt={item.imageAlt ?? item.label}
                     fill
                     className="object-cover"
-                    sizes="130px"
+                    sizes="(max-width: 992px) 100vw, 130px"
                   />
                 </div>
 

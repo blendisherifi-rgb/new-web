@@ -43,18 +43,18 @@ export function ContactBannerSection({
         sizes="100vw"
         priority
       />
-      <div className="relative mx-auto flex max-w-[1440px] flex-col items-center px-6 py-16 text-center md:py-24">
+      <div className="relative mx-auto flex max-w-[1440px] flex-col items-center px-4 py-12 text-center tablet-down:px-6 tablet-down:py-24">
         {overline ? (
           <Overline className="text-brand-orange">{overline}</Overline>
         ) : null}
         <Heading
           level={1}
-          className="mt-[40px] max-w-[900px] text-white"
+          className="mt-6 max-w-[900px] text-white tablet-down:mt-[40px]"
         >
           {title ?? ""}
         </Heading>
         {links.length > 0 ? (
-          <ul className="mt-[64px] flex items-center justify-center gap-3">
+          <ul className="mt-8 flex items-center justify-center gap-3 tablet-down:mt-[64px]">
             {links.map((s, i) => (
               <li key={i}>
                 <a

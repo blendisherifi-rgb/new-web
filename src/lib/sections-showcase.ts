@@ -628,6 +628,41 @@ export const SECTIONS_SHOWCASE_GROUPS: SectionGroup[] = [
     ],
   },
   {
+    groupName: "Testimonials",
+    sections: [
+      {
+        id: "testimonial-slider-1",
+        acfGroupName: "testimonial_slider_section",
+        order: 9,
+        fields: {
+          testimonials: [
+            {
+              imageSrc: "/hero-platform-screenshot.png",
+              imageAlt: "Freda Donnelly",
+              quote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar, risus vitae placerat fermentum, tellus nisi rutrum lorem, et aliquet purus felis eget neque.",
+              authorName: "Freda Donnelly",
+              authorTitle: "HR Manager",
+            },
+            {
+              imageSrc: "/platform-p2p.png",
+              imageAlt: "John Carter",
+              quote: "Exceptional automation that transformed our entire AP process. We went from days of manual work to minutes of oversight. The SoftCo team understood our complexity from day one.",
+              authorName: "John Carter",
+              authorTitle: "CFO, Global Enterprises",
+            },
+            {
+              imageSrc: "/hero-platform-screenshot.png",
+              imageAlt: "Sarah Mitchell",
+              quote: "The implementation was seamless and the results were immediate. Our team adapted quickly and we've seen a significant reduction in errors and processing time.",
+              authorName: "Sarah Mitchell",
+              authorTitle: "VP Finance, Acme Corp",
+            },
+          ],
+        },
+      },
+    ],
+  },
+  {
     groupName: "Locations",
     sections: [
   {

@@ -79,7 +79,7 @@ export function PlatformSection({
 
   return (
     <section className="w-full bg-brand-dark">
-      <div className="mx-auto w-full max-w-[1440px] px-6 pt-[96px] pb-[160px]">
+      <div className="mx-auto w-full max-w-[1440px] px-4 pt-16 pb-20 tablet-down:px-6 tablet-down:pt-[96px] tablet-down:pb-[160px]">
         {/* Header */}
         <AnimateOnScroll variant="fadeUp" className="max-w-3xl">
           <Overline className="text-white">{tag}</Overline>
@@ -92,7 +92,7 @@ export function PlatformSection({
         </AnimateOnScroll>
 
         {/* Two-column content — 160px between intro and first row */}
-        <div className="mt-[160px] grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
+        <div className="mt-12 grid grid-cols-1 gap-10 tablet-down:mt-[160px] tablet-down:grid-cols-2 tablet-down:gap-16">
           {/* Left column — two rows with 200px gap */}
           <div className="flex flex-col">
             {/* Row 1 — swap triggers at 50% through this row */}
@@ -101,13 +101,13 @@ export function PlatformSection({
             </div>
 
             {/* 200px gap then Row 2 */}
-            <div className="mt-[200px]">
+            <div className="mt-12 tablet-down:mt-[200px]">
               <PlatformContentRow {...row2} />
             </div>
           </div>
 
           {/* Right column — sticky image with swap */}
-          <div className="relative lg:sticky lg:top-24 lg:self-start">
+          <div className="relative tablet-down:sticky tablet-down:top-24 tablet-down:self-start">
             <div className="relative aspect-video max-h-[50vh] w-full overflow-hidden rounded-lg">
               <Image
                 src={image1Src}
@@ -144,7 +144,7 @@ function PlatformContentRow({
 }: PlatformRow) {
   return (
     <div>
-      <Heading level={3} className="text-2xl text-brand-orange md:text-3xl">
+      <Heading level={3} className="text-xl text-brand-orange tablet-down:text-3xl">
         {title}
       </Heading>
       <Paragraph size="lg" className="mt-1 text-white">

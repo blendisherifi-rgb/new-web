@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import NextImage from "next/image";
 import { Image } from "@/components/atoms/Image";
+import { Heading } from "@/components/atoms/Heading";
 import { Overline } from "@/components/atoms/Overline";
 import { ChevronRightIcon, XIcon } from "@/components/atoms/Icon";
 import type { TeamMember } from "@/components/sections/MeetTheTeamSection";
@@ -177,7 +178,7 @@ function MemberCard({
   return (
     <div className="flex flex-col">
       <div className="relative overflow-hidden rounded-sm">
-        <div className="relative w-full bg-brand-blue-40" style={{ aspectRatio: "332 / 515" }}>
+        <div className="relative w-full aspect-square bg-brand-blue-40 tablet-down:aspect-[332/515]">
           <Image
             src={member.imageSrc}
             alt={member.imageAlt ?? member.name}
@@ -255,14 +256,14 @@ export function TeamArchiveSection({
           aria-hidden
         />
 
-        <div className="relative mx-auto w-full max-w-[1440px] px-6 pb-24 pt-24 md:pb-32 md:pt-32">
+        <div className="relative mx-auto w-full max-w-[1440px] px-4 pb-16 pt-16 tablet-down:px-6 tablet-down:pb-32 tablet-down:pt-32">
 
           {/* Header */}
           <div className="text-center">
             <Overline className="text-brand-orange">{overline}</Overline>
-            <h1 className="mt-6 font-heading text-[60px] font-semibold leading-[64px] tracking-[-0.01em] text-white">
+            <Heading level={1} as={2} className="mt-6 text-white">
               {title}
-            </h1>
+            </Heading>
             {body && (
               <p className="mx-auto mt-6 max-w-[640px] font-body text-[18px] leading-[1.7] text-white/80">
                 {body}
@@ -272,13 +273,13 @@ export function TeamArchiveSection({
 
           {/* Department groups */}
           {departments.map((dept, di) => (
-            <div key={di} className="mt-16 md:mt-24">
+            <div key={di} className="mt-10 tablet-down:mt-24">
               {/* Department overline + divider */}
               <Overline className="text-brand-orange">{dept.name}</Overline>
               <hr className="mt-3 border-0 border-t border-white/30" />
 
               {/* Members grid */}
-              <div className="mt-10 grid grid-cols-2 gap-x-[30px] gap-y-[50px] md:grid-cols-4 md:gap-x-[60px] md:gap-y-[100px]">
+              <div className="mt-8 grid grid-cols-1 gap-y-8 tablet-down:mt-10 tablet-down:grid-cols-4 tablet-down:gap-x-[60px] tablet-down:gap-y-[100px]">
                 {dept.members.map((member, mi) => (
                   <MemberCard
                     key={mi}

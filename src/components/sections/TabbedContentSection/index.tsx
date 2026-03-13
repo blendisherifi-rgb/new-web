@@ -83,7 +83,7 @@ export function TabbedContentSection({
 
   return (
     <section className="w-full bg-white" aria-label={mainTitle || "Client success stories"}>
-      <div className="mx-auto w-full max-w-[1440px] px-6 pt-16 pb-0 md:pt-24">
+      <div className="mx-auto w-full max-w-[1440px] px-4 pt-12 tablet-down:px-6 tablet-down:pt-24">
         {/* Overline — top left */}
         {overline && <Overline>{overline}</Overline>}
 
@@ -96,10 +96,10 @@ export function TabbedContentSection({
                 headingHighlight={headingHighlight}
                 headingAfter={headingAfter ?? ""}
                 level={2}
-                className="font-heading text-[48px] font-semibold leading-[1.05] text-brand-dark md:text-[80px]"
+                className="font-heading font-semibold leading-[1.05] text-brand-dark"
               />
             ) : (
-              <Heading level={2} className="text-[48px] leading-[1.05] md:text-[80px]">
+              <Heading level={2} className="leading-[1.05]">
                 {titleText}
               </Heading>
             )}
@@ -108,11 +108,11 @@ export function TabbedContentSection({
       </div>
 
       {/* Two-column area: content LEFT + logo tabs RIGHT */}
-      <div className="mx-auto w-full max-w-[1440px] px-6 py-12 md:py-16">
-        <div className="flex flex-col lg:flex-row lg:items-stretch lg:gap-0">
+      <div className="mx-auto w-full max-w-[1440px] px-4 py-8 tablet-down:px-6 tablet-down:py-16">
+        <div className="flex flex-col tablet-down:flex-row tablet-down:items-stretch tablet-down:gap-0">
           {/* LEFT — active content panel (light blue bg) */}
           <div
-            className="min-w-0 flex-1 rounded-2xl p-8 md:p-12"
+            className="min-w-0 flex-1 rounded-2xl p-6 tablet-down:rounded-none tablet-down:rounded-l-2xl tablet-down:p-12"
             style={{ backgroundColor: "#E8F2FD" }}
           >
             {activeTab && isContentTab(activeTab) && (
@@ -128,7 +128,7 @@ export function TabbedContentSection({
                 )}
 
                 {/* Metrics + READ MORE row */}
-                <div className="mt-10 flex flex-wrap items-end gap-x-12 gap-y-6">
+                <div className="mt-10 flex flex-wrap items-end gap-x-12 gap-y-6 tablet-down:justify-between">
                   {/* READ MORE link */}
                   {activeTab.ctaButtonText && activeTab.ctaButtonLink && (
                     <div className="shrink-0">
@@ -138,18 +138,21 @@ export function TabbedContentSection({
                     </div>
                   )}
 
-                  {/* Metrics */}
-                  {activeTab.metrics && activeTab.metrics.length > 0 &&
-                    activeTab.metrics.map((m, j) => (
-                      <div key={j}>
-                        <div className="font-body text-[48px] font-bold leading-tight text-brand-blue">
-                          {m.value}
+                  {/* Metrics — right-aligned on desktop */}
+                  {activeTab.metrics && activeTab.metrics.length > 0 && (
+                    <div className="flex flex-wrap gap-x-12 gap-y-4">
+                      {activeTab.metrics.map((m, j) => (
+                        <div key={j}>
+                          <div className="font-body text-[48px] font-bold leading-tight text-brand-blue">
+                            {m.value}
+                          </div>
+                          <Paragraph size="base" className="mt-1 font-bold">
+                            {m.label}
+                          </Paragraph>
                         </div>
-                        <Paragraph size="base" className="mt-1 font-bold">
-                          {m.label}
-                        </Paragraph>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -159,7 +162,7 @@ export function TabbedContentSection({
           <div
             role="tablist"
             aria-label="Client logos"
-            className="mt-8 flex flex-row flex-wrap justify-center gap-3 lg:mt-0 lg:ml-8 lg:w-52 lg:shrink-0 lg:flex-col lg:justify-start lg:gap-4"
+            className="mt-8 flex flex-row flex-wrap justify-center gap-3 tablet-down:mt-0 tablet-down:ml-0 tablet-down:w-52 tablet-down:shrink-0 tablet-down:flex-col tablet-down:justify-start tablet-down:gap-0"
             onKeyDown={(e) => {
               if (contentTabIndices.length === 0) return;
               const idx = contentTabIndices.indexOf(activeIndex);
@@ -176,13 +179,15 @@ export function TabbedContentSection({
             }}
           >
             {tabs.map((tab, i) => {
+              const isFirstContentTab = i === contentTabIndices[0];
               if (isCta(tab)) {
                 return (
-                  <div key={i} className="w-full lg:mt-auto lg:pt-4">
+                  <div key={i} className="w-full tablet-down:mt-auto tablet-down:rounded-br-2xl tablet-down:overflow-hidden">
                     <Button
                       variant="orange"
                       href={tab.ctaLink ?? "#"}
                       iconAfter={<ChevronRightIcon />}
+                      className="tablet-down:rounded-none!"
                     >
                       {tab.ctaText ?? "All success stories"}
                     </Button>
@@ -199,7 +204,9 @@ export function TabbedContentSection({
                   aria-controls={`panel-${i}`}
                   tabIndex={isActive ? 0 : -1}
                   onClick={() => setActiveIndex(i)}
-                  className={`flex h-16 w-full items-center justify-center rounded-xl px-4 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2 lg:h-20 ${
+                  className={`flex h-14 w-full items-center justify-center rounded-xl px-4 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2 tablet-down:h-20 tablet-down:rounded-none ${
+                    isFirstContentTab ? "tablet-down:rounded-tr-2xl" : ""
+                  } ${
                     isActive
                       ? "bg-[#E8F2FD]"
                       : "bg-brand-grey/30 hover:bg-brand-grey/50"
@@ -211,7 +218,7 @@ export function TabbedContentSection({
                       alt={tab.logoAlt ?? ""}
                       width={120}
                       height={48}
-                      className={`max-h-10 w-auto object-contain lg:max-h-12 ${
+                      className={`max-h-10 w-auto object-contain tablet-down:max-h-12 ${
                         !isActive ? "grayscale opacity-60" : ""
                       }`}
                     />

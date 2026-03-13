@@ -17,6 +17,8 @@ interface GalleryMarqueeProps {
   imageHeight?: number;
   /** Gap between images in pixels. */
   gap?: number;
+  /** When true, images render at full width instead of fixed dimensions. */
+  fullWidth?: boolean;
   className?: string;
 }
 
@@ -32,6 +34,7 @@ export function GalleryMarquee({
   pauseOnHover = true,
   imageHeight = 280,
   gap = 24,
+  fullWidth = false,
   className = "",
 }: GalleryMarqueeProps) {
   if (images.length === 0) return null;
@@ -54,18 +57,19 @@ export function GalleryMarquee({
           images.map((img, i) => (
             <div
               key={`${copy}-${i}`}
-              className="relative flex shrink-0 overflow-hidden shadow-none"
-              style={{
-                height: imageHeight,
-                width: imageHeight * (4 / 3),
-              }}
+              className={`relative flex shrink-0 overflow-hidden shadow-none ${fullWidth ? "w-full" : ""}`}
+              style={
+                fullWidth
+                  ? { width: "100%", aspectRatio: "4 / 3" }
+                  : { height: imageHeight, width: imageHeight * (4 / 3) }
+              }
             >
               <Image
                 src={img.src}
                 alt={img.alt}
                 fill
                 className="object-cover"
-                sizes={`${imageHeight * (4 / 3)}px`}
+                sizes={fullWidth ? "100vw" : `${imageHeight * (4 / 3)}px`}
               />
             </div>
           ))

@@ -30,6 +30,7 @@ import { ContactWithFormSection } from "@/components/sections/ContactWithFormSec
 import { LocationsSection } from "@/components/sections/LocationsSection";
 import { ClientLogosMarqueeSection } from "@/components/sections/ClientLogosMarqueeSection";
 import { NewsletterFormSection } from "@/components/sections/NewsletterFormSection";
+import { TestimonialSliderSection } from "@/components/sections/TestimonialSliderSection";
 import { ESGSection } from "@/components/sections/ESGSection";
 import { CultureSection } from "@/components/sections/CultureSection";
 import { TeamArchiveSection } from "@/components/sections/TeamArchiveSection";
@@ -69,6 +70,7 @@ export const SECTION_MAP: Record<string, React.ComponentType<Record<string, unkn
   locations_section: LocationsSection as unknown as React.ComponentType<Record<string, unknown>>,
   client_logos_marquee_section: ClientLogosMarqueeSection as unknown as React.ComponentType<Record<string, unknown>>,
   newsletter_form_section: NewsletterFormSection as unknown as React.ComponentType<Record<string, unknown>>,
+  testimonial_slider_section: TestimonialSliderSection as unknown as React.ComponentType<Record<string, unknown>>,
   esg_section: ESGSection as unknown as React.ComponentType<Record<string, unknown>>,
   culture_section: CultureSection as unknown as React.ComponentType<Record<string, unknown>>,
   team_archive_section: TeamArchiveSection as unknown as React.ComponentType<Record<string, unknown>>,

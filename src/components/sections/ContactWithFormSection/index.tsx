@@ -49,15 +49,15 @@ export function ContactWithFormSection({
       />
       <div className="relative">
         {/* Banner */}
-        <div className="mx-auto flex max-w-[1440px] flex-col items-center px-6 py-16 text-center md:py-24">
+        <div className="mx-auto flex max-w-[1440px] flex-col items-center px-4 py-12 text-center tablet-down:px-6 tablet-down:py-24">
           {overline ? (
             <Overline className="text-brand-orange">{overline}</Overline>
           ) : null}
-          <Heading level={1} className="mt-[40px] max-w-[900px] text-white">
+          <Heading level={1} className="mt-6 max-w-[900px] text-white tablet-down:mt-[40px]">
             {title ?? ""}
           </Heading>
           {links.length > 0 ? (
-            <ul className="mt-[64px] flex items-center justify-center gap-3">
+            <ul className="mt-8 flex items-center justify-center gap-3 tablet-down:mt-[64px]">
               {links.map((s, i) => (
                 <li key={i}>
                   <a
@@ -78,10 +78,10 @@ export function ContactWithFormSection({
         </div>
 
         {/* 300px gap + Form */}
-        <div className="pt-[300px] pb-16 md:pb-24">
-          <div className="mx-auto max-w-[800px] px-6">
+        <div className="pt-32 pb-12 tablet-down:pt-[300px] tablet-down:pb-24">
+          <div className="mx-auto max-w-[800px] px-4 tablet-down:px-6">
             <form className="flex flex-col gap-6" onSubmit={(e) => e.preventDefault()}>
-              <div className="grid gap-6 md:grid-cols-2">
+              <div className="grid gap-6 tablet-down:grid-cols-2">
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="cf-first-name" className="font-body text-[14px] font-medium text-white">
                     First name <span className="text-brand-orange" aria-hidden>*</span>
@@ -105,7 +105,7 @@ export function ContactWithFormSection({
                   />
                 </div>
               </div>
-              <div className="grid gap-6 md:grid-cols-2">
+              <div className="grid gap-6 tablet-down:grid-cols-2">
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="cf-email" className="font-body text-[14px] font-medium text-white">
                     Email <span className="text-brand-orange" aria-hidden>*</span>
@@ -129,7 +129,7 @@ export function ContactWithFormSection({
                   />
                 </div>
               </div>
-              <div className="grid gap-6 md:grid-cols-2">
+              <div className="grid gap-6 tablet-down:grid-cols-2">
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="cf-company" className="font-body text-[14px] font-medium text-white">
                     Company name <span className="text-brand-orange" aria-hidden>*</span>
