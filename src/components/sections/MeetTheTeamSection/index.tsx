@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import NextImage from "next/image";
 import { Image } from "@/components/atoms/Image";
+import { Heading } from "@/components/atoms/Heading";
 import { Overline } from "@/components/atoms/Overline";
 import { Button } from "@/components/atoms/Button";
 import { ChevronRightIcon, XIcon } from "@/components/atoms/Icon";
@@ -222,24 +223,23 @@ export function MeetTheTeamSection({
           style={{ backgroundColor: "rgba(255, 255, 255, 0.2)" }}
           aria-hidden
         />
-        <div className="relative mx-auto w-full max-w-[1440px] px-6 py-24 md:py-32">
+        <div className="relative mx-auto w-full max-w-[1440px] px-4 py-16 tablet-down:px-6 tablet-down:py-32">
           {/* Overline */}
           <Overline className="text-brand-orange">{overline}</Overline>
 
           {/* Centered title */}
-          <h2 className="mt-6 text-center font-heading text-[60px] font-semibold leading-[64px] tracking-[-0.01em] text-white">
+          <Heading level={2} className="mt-6 text-center text-white">
             {title}
-          </h2>
+          </Heading>
 
           {/* 4-column grid — 60px column gap, 100px row gap */}
-          <div className="mt-16 grid grid-cols-2 gap-x-[30px] gap-y-[50px] md:grid-cols-4 md:gap-x-[60px] md:gap-y-[100px]">
+          <div className="mt-10 grid grid-cols-1 gap-y-8 tablet-down:mt-16 tablet-down:grid-cols-4 tablet-down:gap-x-[60px] tablet-down:gap-y-[100px]">
             {visibleMembers.map((member, i) => (
               <div key={i} className="flex flex-col">
                 {/* Card image with "+" button — 332×515 */}
                 <div className="relative overflow-hidden rounded-sm">
                   <div
-                    className="relative w-full bg-brand-blue-40"
-                    style={{ aspectRatio: "332 / 515" }}
+                    className="relative w-full aspect-square bg-brand-blue-40 tablet-down:aspect-[332/515]"
                   >
                     <Image
                       src={member.imageSrc}

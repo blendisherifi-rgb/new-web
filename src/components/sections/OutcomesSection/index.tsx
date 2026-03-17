@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/atoms/Button";
 import { Paragraph } from "@/components/atoms/Paragraph";
+import { Heading } from "@/components/atoms/Heading";
 import { Overline } from "@/components/atoms/Overline";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
 
@@ -48,18 +49,18 @@ export function OutcomesSection({
 }: OutcomesSectionProps) {
   return (
     <section className="w-full bg-brand-dark">
-      <div className="mx-auto w-full max-w-[1440px] px-6 py-32 md:py-40">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-[160px] lg:items-start">
+      <div className="mx-auto w-full max-w-[1440px] px-4 py-16 tablet-down:px-6 tablet-down:py-40">
+        <div className="grid grid-cols-1 gap-10 tablet-down:grid-cols-2 tablet-down:gap-[160px] tablet-down:items-start">
           {/* Left column — 50px gap between each item, aligned to start */}
           <div className="flex w-full flex-col items-start text-left">
             <Overline className="text-brand-orange">{overline}</Overline>
-            <h2 className="mt-[50px] font-heading font-semibold text-[60px] leading-[64px] tracking-[0] text-white">
+            <Heading level={2} className="mt-6 text-white tablet-down:mt-[50px]">
               {title}
-            </h2>
-            <Paragraph className="mt-[50px] leading-[1.6] text-white">
+            </Heading>
+            <Paragraph className="mt-6 tablet-down:mt-[50px] leading-[1.6] text-white">
               {body}
             </Paragraph>
-            <div className="mt-[50px]">
+            <div className="mt-6 tablet-down:mt-[50px]">
               <Button
                 variant="orange"
                 href={ctaHref}
@@ -75,10 +76,10 @@ export function OutcomesSection({
             {stats.map((stat, i) => (
               <div
                 key={i}
-                className="py-[90px] first:pt-0 last:pb-0"
+                className="py-10 tablet-down:py-[90px] first:pt-0 last:pb-0"
               >
                 <span
-                  className="font-body font-bold text-[60px] leading-[48px] tracking-[0] text-brand-orange"
+                  className="font-body font-bold text-[40px] leading-[1.1] tracking-[0] text-brand-orange tablet-down:text-[60px] tablet-down:leading-[48px]"
                 >
                   {stat.value}
                 </span>

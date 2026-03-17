@@ -54,22 +54,22 @@ export function OurStorySection({
     <section className="w-full">
       {/* Part 1: Overline, title, body */}
       <div
-        className="w-full px-6 py-24 md:py-32"
+        className="w-full px-4 py-16 tablet-down:px-6 tablet-down:py-32"
         style={{ backgroundColor: "#E8F2FD" }}
       >
         <div className="mx-auto max-w-[1440px]">
           <Overline className="text-brand-dark">{overline}</Overline>
-          <div className="mx-auto mt-[50px] max-w-3xl text-center">
+          <div className="mx-auto mt-8 max-w-3xl text-center tablet-down:mt-[50px]">
             <HeadlineWithHighlight
               headingBefore={headingBefore}
               headingHighlight={headingHighlight}
               headingAfter={headingAfter}
               level={1}
-              className="font-body text-[80px] font-normal leading-[88px] tracking-[0] text-brand-dark"
+              className="font-body text-[40px] font-normal leading-[1.1] tracking-[0] text-brand-dark tablet-down:text-[80px] tablet-down:leading-[88px]"
             />
             <Paragraph
               size="lg"
-              className="mt-[50px] leading-[1.6] text-brand-dark"
+              className="mt-6 leading-[1.6] text-brand-dark tablet-down:mt-[50px]"
             >
               {body}
             </Paragraph>
@@ -78,7 +78,7 @@ export function OurStorySection({
       </div>
 
       {/* Part 2: Full-width bg image + timeline slider — no gap, 800px height */}
-      <div className="relative h-[800px] w-full overflow-hidden">
+      <div className="relative h-[600px] w-full overflow-hidden tablet-down:h-[800px]">
         {/* Background image — full screen wide */}
         <div className="absolute inset-0">
           <Image
@@ -97,9 +97,35 @@ export function OurStorySection({
           aria-hidden
         />
 
-        {/* Timeline slider — centered, 3 visible, active full, peeks at edges show year only */}
-        <div className="relative flex h-full min-h-0 items-center py-16 md:py-24">
-          {/* Left peek — previous card, year only, 100px from main, spans to left edge */}
+        {/* Mobile: swipeable horizontal scroll carousel */}
+        <div className="flex h-full w-full snap-x snap-mandatory items-center overflow-x-auto overscroll-x-contain scrollbar-hide px-4 py-8 tablet-down:hidden">
+          <div className="flex w-max items-center gap-4">
+            {events.map((event, i) => (
+              <div
+                key={i}
+                className="flex min-h-[320px] w-[300px] shrink-0 snap-center flex-col rounded-xl p-6"
+                style={{
+                  background: "#FFFFFF1A",
+                  backdropFilter: "blur(30px)",
+                  WebkitBackdropFilter: "blur(30px)",
+                }}
+              >
+                <span className="font-body text-[36px] font-bold leading-none tracking-[0] text-brand-orange">
+                  {event.year}
+                </span>
+                <h3 className="mt-4 font-heading text-[24px] font-semibold leading-[1.2] tracking-[0] text-white">
+                  {event.title}
+                </h3>
+                <Paragraph size="base" className="mt-4 leading-[1.6] text-white">
+                  {event.description}
+                </Paragraph>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Desktop: click-based slider with center card + peek buttons */}
+        <div className="relative hidden h-full min-h-0 items-center py-24 tablet-down:flex">
           {activeIndex > 0 && (
             <button
               type="button"
@@ -113,16 +139,15 @@ export function OurStorySection({
               }}
               aria-label={`Go to ${events[activeIndex - 1]?.year}`}
             >
-              <span className="font-body text-[28px] font-bold leading-none tracking-[0] text-brand-orange md:text-[36px]">
+              <span className="font-body text-[36px] font-bold leading-none tracking-[0] text-brand-orange">
                 {events[activeIndex - 1]?.year}
               </span>
             </button>
           )}
 
-          {/* Center — active card, full content with fade animation on change */}
           <div
             key={activeIndex}
-            className="mx-auto flex min-h-[400px] w-[500px] shrink-0 flex-col rounded-xl p-8 md:p-10 animate-slide-fade-in"
+            className="mx-auto flex min-h-[400px] w-[500px] shrink-0 flex-col rounded-xl p-10 animate-slide-fade-in"
             style={{
               background: "#FFFFFF1A",
               backdropFilter: "blur(30px)",
@@ -135,15 +160,11 @@ export function OurStorySection({
             <h3 className="mt-4 font-heading text-[32px] font-semibold leading-[36px] tracking-[0] text-white">
               {events[activeIndex]?.title}
             </h3>
-            <Paragraph
-              size="base"
-              className="mt-4 leading-[1.6] text-white"
-            >
+            <Paragraph size="base" className="mt-4 leading-[1.6] text-white">
               {events[activeIndex]?.description}
             </Paragraph>
           </div>
 
-          {/* Right peek — next card, year only, 100px from main, spans to right edge */}
           {activeIndex < events.length - 1 && (
             <button
               type="button"
@@ -157,7 +178,7 @@ export function OurStorySection({
               }}
               aria-label={`Go to ${events[activeIndex + 1]?.year}`}
             >
-              <span className="font-body text-[28px] font-bold leading-none tracking-[0] text-brand-orange md:text-[36px]">
+              <span className="font-body text-[36px] font-bold leading-none tracking-[0] text-brand-orange">
                 {events[activeIndex + 1]?.year}
               </span>
             </button>

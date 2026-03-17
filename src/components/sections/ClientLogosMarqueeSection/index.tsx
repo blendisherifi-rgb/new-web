@@ -35,10 +35,10 @@ export function ClientLogosMarqueeSection({
   if (normalized.length === 0) return null;
 
   return (
-    <section className="w-full bg-white py-16 md:py-20">
+    <section className="w-full bg-white py-12 tablet-down:py-20">
       {heading ? (
-        <div className="mx-auto max-w-[1440px] px-6">
-          <Heading level={2} className="mb-12 text-center md:mb-16">
+        <div className="mx-auto max-w-[1440px] px-4 tablet-down:px-6">
+          <Heading level={2} className="mb-8 text-center tablet-down:mb-16">
             {heading}
           </Heading>
         </div>

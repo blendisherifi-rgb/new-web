@@ -20,7 +20,7 @@ export function NewsletterFormSection({
   ctaLabel = "SIGN UP",
 }: NewsletterFormSectionProps) {
   return (
-    <section className="relative flex min-h-[800px] w-full flex-col items-center justify-center overflow-hidden py-16 md:py-24">
+    <section className="relative flex min-h-[600px] w-full flex-col items-center justify-center overflow-hidden py-12 tablet-down:min-h-[800px] tablet-down:py-24">
       <Image
         src="/dark-bg.jpg"
         alt=""
@@ -29,10 +29,10 @@ export function NewsletterFormSection({
         sizes="100vw"
         priority
       />
-      <div className="relative z-10 mx-auto flex w-[70%] min-w-[280px] max-w-[800px] flex-col items-center px-6">
+      <div className="relative z-10 mx-auto flex w-full flex-col items-center px-4 tablet-down:w-[70%] tablet-down:min-w-[280px] tablet-down:max-w-[800px] tablet-down:px-6">
         <Heading
           level={2}
-          className="mb-[60px] text-center text-white"
+          className="mb-8 text-center text-white tablet-down:mb-[60px]"
         >
           {heading}
         </Heading>
@@ -41,7 +41,7 @@ export function NewsletterFormSection({
           className="flex w-full flex-col gap-6"
           onSubmit={(e) => e.preventDefault()}
         >
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid gap-6 tablet-down:grid-cols-2">
             <div className="flex flex-col gap-1.5">
               <label
                 htmlFor="newsletter-first-name"

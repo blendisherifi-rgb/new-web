@@ -59,25 +59,25 @@ export function EngineSection({
 }: EngineSectionProps) {
   return (
     <section className="w-full bg-white">
-      <div className="mx-auto w-full max-w-[1440px] px-6 py-[150px]">
+      <div className="mx-auto w-full max-w-[1440px] px-4 py-16 tablet-down:px-6 tablet-down:py-[150px]">
         <Overline className="text-brand-dark">{overline}</Overline>
 
-        <div className="mx-auto mt-[90px] max-w-3xl text-center">
+        <div className="mx-auto mt-10 tablet-down:mt-[90px] max-w-3xl text-center">
           <HeadlineWithHighlight
             headingBefore={headingBefore}
             headingHighlight={headingHighlight}
             headingAfter={headingAfter}
             level={2}
-            className="font-heading font-semibold text-[80px] leading-[88px] tracking-[0] text-center text-brand-dark"
+            className="text-center text-brand-dark"
           />
 
-          <Paragraph className="mt-[40px] leading-[1.6] text-brand-dark">
+          <Paragraph className="mt-6 tablet-down:mt-[40px] leading-[1.6] text-brand-dark">
             {body}
           </Paragraph>
         </div>
 
         {/* 80px gap between body and cards, 60px between each card */}
-        <div className="mt-[80px] grid grid-cols-1 gap-[60px] md:grid-cols-3">
+        <div className="mt-10 grid grid-cols-1 gap-8 tablet-down:mt-[80px] tablet-down:grid-cols-3 tablet-down:gap-[60px]">
           {cards.map((card, i) => (
             <article key={i} className="flex flex-col items-center text-center">
               {/* 32px gap between each element in card */}
@@ -108,7 +108,7 @@ export function EngineSection({
         </div>
 
         {/* 60px gap between cards and button */}
-        <div className="mt-[60px] flex justify-center">
+        <div className="mt-10 tablet-down:mt-[60px] flex justify-center">
           <Button variant="orange" href={ctaHref} iconAfter={<ChevronRightIcon />}>
             {ctaLabel}
           </Button>

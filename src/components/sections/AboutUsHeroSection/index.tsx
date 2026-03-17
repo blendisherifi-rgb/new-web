@@ -1,5 +1,6 @@
 "use client";
 
+import { Heading } from "@/components/atoms/Heading";
 import { Overline } from "@/components/atoms/Overline";
 import { Image } from "@/components/atoms/Image";
 import { GalleryMarquee, type GalleryImage } from "@/components/molecules/GalleryMarquee";
@@ -50,21 +51,21 @@ export function AboutUsHeroSection({
         style={{ backgroundColor: "rgba(6, 13, 46, 0.15)" }}
         aria-hidden
       />
-      <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 pt-24 md:pt-32">
+      <div className="relative z-10 mx-auto w-full max-w-[1440px] px-4 pt-16 tablet-down:px-6 tablet-down:pt-32">
         <div className="flex w-full flex-col items-center text-center">
           {/* Overline */}
           <Overline className="text-brand-orange">{overline}</Overline>
 
           {/* 60px title — 50px gap */}
-          <h2 className="mt-[50px] max-w-4xl font-heading font-semibold text-[60px] leading-[64px] tracking-[-0.01em] text-white">
+          <Heading level={2} className="mt-6 max-w-4xl tracking-[-0.01em] text-white tablet-down:mt-[50px]">
             {title}
-          </h2>
+          </Heading>
         </div>
       </div>
 
       {/* Gallery marquee — full viewport width, outside constrained container */}
       {galleryImages.length > 0 && (
-        <div className="relative z-10 mt-[50px] w-full">
+        <div className="about-us-marquee relative z-10 mt-8 tablet-down:mt-[50px] w-full">
           <GalleryMarquee
             images={galleryImages}
             duration={40}
@@ -74,19 +75,19 @@ export function AboutUsHeroSection({
         </div>
       )}
 
-      <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 pb-24 md:pb-32">
+      <div className="relative z-10 mx-auto w-full max-w-[1440px] px-4 pb-16 tablet-down:px-6 tablet-down:pb-32">
         <div className="flex w-full flex-col items-center text-center">
           {/* Body text — 50px gap */}
-          <p className="mt-[50px] max-w-2xl font-body text-[20px] leading-[1.6] text-white">
+          <p className="mt-6 tablet-down:mt-[50px] max-w-2xl font-body text-[20px] leading-[1.6] text-white">
             {body}
           </p>
 
           {/* Divider — 50px gap, full width of content */}
-          <hr className="mt-[50px] w-full border-0 border-t border-white/30" />
+          <hr className="mt-6 tablet-down:mt-[50px] w-full border-0 border-t border-white/30" />
 
           {/* CEO quote — 50px gap */}
-          <div className="mt-[50px] flex w-full max-w-4xl flex-row items-start gap-[60px] text-left">
-            <div className="relative h-[320px] w-[280px] shrink-0 overflow-hidden rounded-lg">
+          <div className="mt-6 flex w-full max-w-4xl flex-col items-start gap-6 tablet-down:mt-[50px] tablet-down:flex-row tablet-down:gap-[60px] text-left">
+            <div className="relative aspect-square w-full shrink-0 overflow-hidden rounded-lg tablet-down:h-[320px] tablet-down:w-[280px] tablet-down:aspect-auto">
               <Image
                 src={ceoQuote.imageSrc}
                 alt={ceoQuote.imageAlt}
@@ -96,15 +97,15 @@ export function AboutUsHeroSection({
               />
             </div>
             <div className="flex min-w-0 flex-1 flex-col justify-center">
-              <blockquote className="relative">
+              <blockquote className="relative pl-12 tablet-down:pl-0">
                 <span
-                  className="absolute -left-1 -top-1 font-heading text-[48px] leading-none text-brand-orange"
+                  className="absolute left-0 top-0 font-heading text-[48px] leading-none text-brand-orange tablet-down:-left-1 tablet-down:-top-1"
                   aria-hidden
                 >
                   "
                 </span>
                 <p
-                  className="font-body font-normal text-[32px] leading-[48px] tracking-[0] text-white"
+                  className="font-body font-normal text-[24px] leading-[1.5] tracking-[0] text-white tablet-down:text-[32px] tablet-down:leading-[48px]"
                   style={{ fontFamily: "var(--font-plus-jakarta), sans-serif" }}
                 >
                   {ceoQuote.quote}

@@ -45,12 +45,12 @@ export function PerfectFitFrameworkSection({
 }: PerfectFitFrameworkSectionProps) {
   return (
     <section className="w-full bg-white">
-      <div className="mx-auto w-full max-w-[1440px] px-6 py-20 md:py-24">
+      <div className="mx-auto w-full max-w-[1440px] px-4 py-12 tablet-down:px-6 tablet-down:py-24">
         <div className="border-t border-[#E7E7EB] pt-3">
           <Overline>{overline}</Overline>
         </div>
 
-        <div className="mt-6 grid gap-10 lg:grid-cols-2 lg:gap-12">
+        <div className="mt-6 grid gap-8 tablet-down:grid-cols-2 tablet-down:gap-12">
           <HeadlineWithHighlight
             headingBefore={headingBefore}
             headingHighlight={headingHighlight}
@@ -72,12 +72,12 @@ export function PerfectFitFrameworkSection({
         </div>
 
         {/* Non-looping slider: native horizontal scroll with snap */}
-        <div className="mt-12 overflow-x-auto pb-4">
-          <div className="flex w-max snap-x snap-mandatory gap-5 pr-6">
+        <div className="mt-8 overflow-x-auto tablet-down:mt-12 pb-4">
+          <div className="flex w-max snap-x snap-mandatory gap-4 pr-4 tablet-down:gap-5 tablet-down:pr-6">
             {cards.map((card, i) => (
               <article
                 key={`${card.step}-${i}`}
-                className="w-[360px] shrink-0 snap-start rounded-[4px] border border-[#E7E7EB] bg-white p-5"
+                className="w-[300px] tablet-down:w-[360px] shrink-0 snap-start rounded-[4px] border border-[#E7E7EB] bg-white p-4 tablet-down:p-5"
               >
                 {card.imageSrc ? (
                   <Image
@@ -104,7 +104,7 @@ export function PerfectFitFrameworkSection({
               </article>
             ))}
 
-            <article className="w-[360px] shrink-0 snap-start rounded-[4px] bg-brand-dark p-6 text-white">
+            <article className="w-[300px] tablet-down:w-[360px] shrink-0 snap-start rounded-[4px] bg-brand-dark p-5 tablet-down:p-6 text-white">
               <div className="flex h-full min-h-[360px] flex-col justify-between border-y border-white/30 py-14">
                 <Heading level={2} className="mx-auto max-w-[260px] text-center text-[52px] leading-[1.2] text-white">
                   {ctaCard.heading}

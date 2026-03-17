@@ -39,8 +39,8 @@ export function LocationsSection({
 
   return (
     <section className="w-full bg-white">
-      <div className="mx-auto w-full max-w-[1440px] px-6 py-20 md:py-24">
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1.05fr_1fr] lg:gap-8">
+      <div className="mx-auto w-full max-w-[1440px] px-4 py-16 tablet-down:px-6 tablet-down:py-24">
+        <div className="grid grid-cols-1 gap-8 tablet-down:grid-cols-[1.05fr_1fr] tablet-down:gap-8">
           {/* Left: H2 title */}
           <div>
             <HeadlineWithHighlight
@@ -76,7 +76,7 @@ export function LocationsSection({
                       <Heading level={5} className="mb-6">
                         {activeItem.title}
                       </Heading>
-                      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                      <div className="grid grid-cols-1 gap-6 tablet-down:grid-cols-2">
                         {/* Left: Image */}
                         <div>
                           {activeItem.imageSrc ? (

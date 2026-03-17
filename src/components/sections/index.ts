@@ -1,4 +1,8 @@
 export {
+  TestimonialSliderSection,
+  type Testimonial,
+} from "./TestimonialSliderSection";
+export {
   EngineSection,
   type EngineCard,
 } from "./EngineSection";

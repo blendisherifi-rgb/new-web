@@ -19,8 +19,8 @@ export function Blockquote({
 }: BlockquoteProps) {
   const quoteClass =
     size === "large"
-      ? "text-[40px] leading-[56px] font-normal"
-      : "text-[28px] leading-[40px] font-normal";
+      ? "text-[24px] leading-[1.5] font-normal tablet-down:text-[40px] tablet-down:leading-[56px]"
+      : "text-[24px] leading-[1.5] font-normal tablet-down:text-[28px] tablet-down:leading-[40px]";
 
   return (
     <blockquote

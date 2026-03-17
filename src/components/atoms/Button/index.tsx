@@ -95,11 +95,12 @@ const variantStyles: Record<ButtonVariant, string> = {
 
 const baseStyles = [
   "group inline-flex items-center justify-center gap-[24px]",
-  "py-[15px]",
-  "font-body font-bold text-[14px]",
+  "p-[19px]",
+  "font-body font-bold text-[13px]",
   "rounded-[5px]",
   "transition-colors duration-200",
   "cursor-pointer",
+  "tablet-down:py-[15px] tablet-down:text-[14px]",
 ].join(" ");
 
 /**
@@ -120,7 +121,7 @@ export function Button(props: ButtonProps) {
   } = props;
 
   const hasIcon = icon ?? iconAfter;
-  const paddingX = hasIcon ? "pl-[30px] pr-[15px]" : "px-[30px]";
+  const paddingX = hasIcon ? "tablet-down:pl-[30px] tablet-down:pr-[15px]" : "tablet-down:px-[30px]";
 
   const classes = `${baseStyles} ${paddingX} ${variantStyles[variant]} ${className}`;
 
@@ -128,7 +129,7 @@ export function Button(props: ButtonProps) {
     if (variant === "orange" && iconAfter) {
       return (
         <span
-          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-[1.5px] border-brand-dark text-brand-dark transition-colors duration-200 group-hover:bg-brand-dark group-hover:text-brand-orange disabled:group-hover:bg-transparent disabled:group-hover:text-brand-dark"
+          className="inline-flex h-[30px] w-[30px] tablet-down:h-10 tablet-down:w-10 shrink-0 items-center justify-center rounded-full border-[1.5px] border-brand-dark text-brand-dark transition-colors duration-200 group-hover:bg-brand-dark group-hover:text-brand-orange disabled:group-hover:bg-transparent disabled:group-hover:text-brand-dark"
           aria-hidden
         >
           {node}
@@ -138,7 +139,7 @@ export function Button(props: ButtonProps) {
     if (variant === "dark" && iconAfter) {
       return (
         <span
-          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-[1.5px] border-white text-white transition-colors duration-200 group-hover:bg-white group-hover:text-brand-dark disabled:group-hover:bg-transparent disabled:group-hover:text-white"
+          className="inline-flex h-[30px] w-[30px] tablet-down:h-10 tablet-down:w-10 shrink-0 items-center justify-center rounded-full border-[1.5px] border-white text-white transition-colors duration-200 group-hover:bg-white group-hover:text-brand-dark disabled:group-hover:bg-transparent disabled:group-hover:text-white"
           aria-hidden
         >
           {node}
@@ -152,7 +153,7 @@ export function Button(props: ButtonProps) {
     if (variant === "orange" && icon) {
       return (
         <span
-          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-[1.5px] border-brand-dark text-brand-dark transition-colors duration-200 group-hover:bg-brand-dark group-hover:text-brand-orange disabled:group-hover:bg-transparent disabled:group-hover:text-brand-dark"
+          className="inline-flex h-[30px] w-[30px] tablet-down:h-10 tablet-down:w-10 shrink-0 items-center justify-center rounded-full border-[1.5px] border-brand-dark text-brand-dark transition-colors duration-200 group-hover:bg-brand-dark group-hover:text-brand-orange disabled:group-hover:bg-transparent disabled:group-hover:text-brand-dark"
           aria-hidden
         >
           {node}
@@ -162,7 +163,7 @@ export function Button(props: ButtonProps) {
     if (variant === "dark" && icon) {
       return (
         <span
-          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-[1.5px] border-white text-white transition-colors duration-200 group-hover:bg-white group-hover:text-brand-dark disabled:group-hover:bg-transparent disabled:group-hover:text-white"
+          className="inline-flex h-[30px] w-[30px] tablet-down:h-10 tablet-down:w-10 shrink-0 items-center justify-center rounded-full border-[1.5px] border-white text-white transition-colors duration-200 group-hover:bg-white group-hover:text-brand-dark disabled:group-hover:bg-transparent disabled:group-hover:text-white"
           aria-hidden
         >
           {node}

@@ -5,6 +5,10 @@
    =========================== */
 
 @theme inline {
+  /* --- Breakpoints --- */
+  /* tablet-down: 992px and below share the same responsive design */
+  --breakpoint-tablet-down: 62rem; /* 992px */
+
   /* --- Font Families --- */
   --font-heading: var(--font-erode);
   --font-body: var(--font-plus-jakarta);
@@ -217,6 +221,16 @@ html {
   margin-bottom: 0.5em;
 }
 
+@media (max-width: 62rem) {
+  .prose h1 { font-size: 46px; line-height: 1.1; }
+  .prose h2 { font-size: 40px; line-height: 1.1; }
+  .prose h3 { font-size: 32px; line-height: 1.1; }
+  .prose h4 { font-size: 29px; line-height: 1.2; }
+  .prose h5 { font-size: 24px; line-height: 1.2; }
+  .prose h6 { font-size: 24px; line-height: 1.2; }
+  .prose p { font-size: 16px; line-height: 28px; }
+}
+
 .prose p {
   font-size: 20px;
   line-height: 32px;
@@ -242,6 +256,12 @@ html {
   font-size: 28px;
   line-height: 40px;
   font-weight: 400;
+}
+@media (max-width: 62rem) {
+  .prose blockquote {
+    font-size: 24px;
+    line-height: 1.5;
+  }
 }
 
 .prose strong {
@@ -314,6 +334,12 @@ html {
   }
 }
 
+@media (max-width: 62rem) {
+  .about-us-marquee .marquee-track {
+    animation-duration: 70s !important;
+  }
+}
+
 .marquee-track {
   display: inline-flex;
   width: max-content;
@@ -343,5 +369,22 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .animate-slide-fade-in {
     animation-duration: 0.01ms;
+  }
+}
+
+/* Styleguide: desktop = original sizes, tablet-down = 24px */
+.styleguide-blockquote-base blockquote > p {
+  font-size: 28px;
+  line-height: 40px;
+}
+.styleguide-blockquote-large blockquote > p {
+  font-size: 40px;
+  line-height: 56px;
+}
+@media (max-width: 62rem) {
+  .styleguide-blockquote-base blockquote > p,
+  .styleguide-blockquote-large blockquote > p {
+    font-size: 24px;
+    line-height: 1.5;
   }
 }

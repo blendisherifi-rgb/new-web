@@ -32,7 +32,7 @@ export default async function GlossaryPage({ params }: GlossaryPageProps) {
   return (
     <>
       {/* Banner: #060D2E, overline → h1 (40px) → body (24px) */}
-      <section className="w-full bg-brand-dark px-6 py-16 md:py-24">
+      <section className="w-full bg-brand-dark px-4 py-12 tablet-down:px-6 tablet-down:py-24">
         <div className="mx-auto flex max-w-[1440px] flex-col items-center text-center">
           <Overline className="text-brand-orange">Resources</Overline>
           <Heading level={1} className="mt-10 text-white">
@@ -46,7 +46,7 @@ export default async function GlossaryPage({ params }: GlossaryPageProps) {
 
       {/* Main content: sticky sidebar (25%) + 2-col glossary (75%) */}
       <section className="w-full bg-white">
-        <div className="mx-auto flex max-w-[1440px] gap-12 px-6 py-16 md:py-24">
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-8 px-4 py-12 tablet-down:flex-row tablet-down:gap-12 tablet-down:px-6 tablet-down:py-24">
           <GlossaryContent terms={terms} byLetter={byLetter} locale={locale} />
         </div>
       </section>

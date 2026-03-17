@@ -48,7 +48,7 @@ export function GlossaryContent({ terms, byLetter, locale }: GlossaryContentProp
   return (
     <>
       {/* Left: sticky JUMP TO SECTION (~25%) */}
-      <aside className="w-full shrink-0 lg:w-1/4">
+      <aside className="w-full shrink-0 tablet-down:w-1/4">
         <div className="sticky top-24 rounded-lg bg-brand-light-blue/30 p-6">
           {/* Jump to section: Plus Jakarta Sans, 700, 12px, 12px line, 10% letter-spacing, uppercase, #060D2E */}
           <span className="font-body text-[12px] font-bold leading-[12px] tracking-[0.1em] uppercase text-[#060D2E]">
@@ -120,7 +120,7 @@ export function GlossaryContent({ terms, byLetter, locale }: GlossaryContentProp
       </aside>
 
       {/* Right: 2-column glossary listing (~75%) */}
-      <div className="min-w-0 flex-1 lg:w-3/4">
+      <div className="min-w-0 flex-1 tablet-down:w-3/4">
         {!hasAnyResults ? (
           <p className="font-body text-brand-dark">
             {query.trim()
@@ -139,15 +139,15 @@ export function GlossaryContent({ terms, byLetter, locale }: GlossaryContentProp
                   id={`letter-${letter}`}
                   className="scroll-mt-24"
                 >
-                  <h2 className="font-heading text-[80px] font-semibold leading-[88px] tracking-[0] text-[#047FE5]">
+                  <h2 className="font-heading text-[46px] font-semibold leading-[1.1] tracking-[0] text-[#047FE5] tablet-down:text-[80px] tablet-down:leading-[88px]">
                     {letter}
                   </h2>
-                  <ul className="mt-6 grid gap-4 pl-[70px] sm:grid-cols-2">
+                  <ul className="mt-4 grid gap-4 pl-0 tablet-down:mt-6 tablet-down:pl-[70px] tablet-down:grid-cols-2">
                     {letterTerms.map((term) => (
                       <li key={term.id}>
                         <Link
                           href={glossaryTermUrl(term.slug, locale)}
-                          className="font-heading text-[28px] font-semibold leading-[34px] tracking-[-0.01em] text-brand-dark no-underline transition-colors hover:text-[#1077D7] hover:no-underline cursor-pointer"
+                          className="font-heading text-[20px] font-semibold leading-[1.3] tracking-[-0.01em] text-brand-dark no-underline transition-colors hover:text-[#1077D7] hover:no-underline cursor-pointer tablet-down:text-[28px] tablet-down:leading-[34px]"
                         >
                           {term.title}
                         </Link>
@@ -160,10 +160,10 @@ export function GlossaryContent({ terms, byLetter, locale }: GlossaryContentProp
 
             {(filteredByLetter["#"]?.length ?? 0) > 0 && (
               <section id="letter-num" className="scroll-mt-24">
-                <h2 className="font-heading text-[80px] font-semibold leading-[88px] tracking-[0] text-[#047FE5]">
+                <h2 className="font-heading text-[46px] font-semibold leading-[1.1] tracking-[0] text-[#047FE5] tablet-down:text-[80px] tablet-down:leading-[88px]">
                   #
                 </h2>
-                <ul className="mt-6 grid gap-4 pl-[70px] sm:grid-cols-2">
+                <ul className="mt-4 grid gap-4 pl-0 tablet-down:mt-6 tablet-down:pl-[70px] tablet-down:grid-cols-2">
                   {filteredByLetter["#"].map((term) => (
                     <li key={term.id}>
                       <Link

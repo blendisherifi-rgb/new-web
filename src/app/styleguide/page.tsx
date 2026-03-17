@@ -53,7 +53,7 @@ function Label({ children }: { children: React.ReactNode }) {
 
 export default function StyleguidePage() {
   return (
-    <div className="mx-auto max-w-[1280px] px-6 py-16 md:px-12 lg:px-20">
+    <div className="mx-auto max-w-[1280px] px-4 py-12 tablet-down:px-6 tablet-down:py-16">
       <div className="mb-16">
         <Heading level={1}>SoftCo Styleguide</Heading>
         <Paragraph className="mt-4 max-w-2xl">
@@ -66,14 +66,14 @@ export default function StyleguidePage() {
         {/* ——— COLORS ——— */}
         <Section title="Colors">
           <SubSection title="Primary">
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 gap-4 tablet-down:grid-cols-3">
               <ColorSwatch color="#060D2E" name="Dark Blue" token="brand-dark" />
               <ColorSwatch color="#047FE5" name="SoftCo Blue" token="brand-blue" />
               <ColorSwatch color="#F7931E" name="Orange" token="brand-orange" />
             </div>
           </SubSection>
           <SubSection title="Secondary">
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 gap-4 tablet-down:grid-cols-3">
               <ColorSwatch color="#C0DFF8" name="Pale Blue" token="brand-pale-blue" dark />
               <ColorSwatch color="#E8F2FD" name="Light Blue" token="brand-light-blue" dark />
               <ColorSwatch color="#DADBE0" name="Grey" token="brand-grey" dark />
@@ -231,8 +231,8 @@ export default function StyleguidePage() {
         {/* ——— FORM FIELDS ——— */}
         <Section title="Form Fields">
           <SubSection title="Dark Variant (Blue Background)">
-            <div className="max-w-2xl rounded-xl bg-brand-blue p-8 md:p-12">
-              <div className="grid grid-cols-2 gap-x-4 gap-y-6">
+            <div className="max-w-2xl rounded-xl bg-brand-blue p-6 tablet-down:p-12">
+              <div className="grid grid-cols-1 gap-x-4 gap-y-6 tablet-down:grid-cols-2">
                 <Input
                   variant="dark"
                   label="Enter first name"
@@ -245,7 +245,7 @@ export default function StyleguidePage() {
                   placeholder="Donlon"
                 />
               </div>
-              <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-6">
+              <div className="mt-6 grid grid-cols-1 gap-x-4 gap-y-6 tablet-down:grid-cols-2">
                 <Input
                   variant="dark"
                   label="Email"
@@ -281,8 +281,8 @@ export default function StyleguidePage() {
           </SubSection>
 
           <SubSection title="Light Variant (White Background)">
-            <div className="max-w-2xl rounded-xl bg-white p-8 md:p-12">
-              <div className="grid grid-cols-2 gap-x-4 gap-y-6">
+            <div className="max-w-2xl rounded-xl bg-white p-6 tablet-down:p-12">
+              <div className="grid grid-cols-1 gap-x-4 gap-y-6 tablet-down:grid-cols-2">
                 <Input
                   variant="light"
                   label="Enter first name"
@@ -295,7 +295,7 @@ export default function StyleguidePage() {
                   placeholder="Donlon"
                 />
               </div>
-              <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-6">
+              <div className="mt-6 grid grid-cols-1 gap-x-4 gap-y-6 tablet-down:grid-cols-2">
                 <Input
                   variant="light"
                   label="Email"

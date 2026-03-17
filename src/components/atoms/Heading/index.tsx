@@ -12,12 +12,12 @@ interface HeadingProps {
 }
 
 const levelStyles: Record<HeadingLevel, string> = {
-  1: "font-heading font-semibold text-[80px] leading-[84px] tracking-[0em]",
-  2: "font-heading font-semibold text-[60px] leading-[64px] tracking-[0em]",
-  3: "font-heading font-semibold text-[40px] leading-[44px] tracking-[0em]",
-  4: "font-heading font-semibold text-[36px] leading-[48px] tracking-[-0.01em]",
-  5: "font-heading font-semibold text-[32px] leading-[36px] tracking-[-0.01em]",
-  6: "font-heading font-medium text-[28px] leading-[34px] tracking-[-0.01em]",
+  1: "font-heading font-semibold text-[46px] leading-[1.1] tracking-[0em] tablet-down:text-[80px] tablet-down:leading-[84px]",
+  2: "font-heading font-semibold text-[40px] leading-[1.1] tracking-[0em] tablet-down:text-[60px] tablet-down:leading-[64px]",
+  3: "font-heading font-semibold text-[32px] leading-[1.1] tracking-[0em] tablet-down:text-[40px] tablet-down:leading-[44px]",
+  4: "font-heading font-semibold text-[29px] leading-[1.2] tracking-[-0.01em] tablet-down:text-[36px] tablet-down:leading-[48px]",
+  5: "font-heading font-semibold text-[24px] leading-[1.2] tracking-[-0.01em] tablet-down:text-[32px] tablet-down:leading-[36px]",
+  6: "font-heading font-medium text-[24px] leading-[1.2] tracking-[-0.01em] tablet-down:text-[28px] tablet-down:leading-[34px]",
 };
 
 /**

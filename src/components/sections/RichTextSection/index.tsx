@@ -14,7 +14,7 @@ export function RichTextSection({ content }: RichTextSectionProps) {
 
   return (
     <section className="w-full bg-white">
-      <div className="mx-auto max-w-[800px] px-6 py-16 md:py-24">
+      <div className="mx-auto max-w-[800px] px-4 py-12 tablet-down:px-6 tablet-down:py-24">
         <div
           className="prose max-w-none"
           dangerouslySetInnerHTML={{ __html: content }}

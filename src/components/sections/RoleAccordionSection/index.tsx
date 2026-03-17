@@ -41,8 +41,8 @@ export function RoleAccordionSection({
 
   return (
     <section className="w-full bg-white">
-      <div className="mx-auto w-full max-w-[1440px] px-6 py-20 md:py-24">
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1.05fr_1fr] lg:gap-8">
+      <div className="mx-auto w-full max-w-[1440px] px-4 py-12 tablet-down:px-6 tablet-down:py-24">
+        <div className="grid grid-cols-1 gap-8 tablet-down:grid-cols-[1.05fr_1fr] tablet-down:gap-8">
           <div>
             <Overline>{tag}</Overline>
             <HeadlineWithHighlight

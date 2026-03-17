@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { Heading } from "@/components/atoms/Heading";
 import { Paragraph } from "@/components/atoms/Paragraph";
 
 export interface FinanceHeroCard {
@@ -45,25 +46,17 @@ export function FinanceHeroSection({
         sizes="100vw"
         priority
       />
-      <div className="relative mx-auto w-full max-w-[1440px] px-6">
+      <div className="relative mx-auto w-full max-w-[1440px] px-4 tablet-down:px-6">
         <div className="relative flex flex-col items-center text-center">
           {/* 230px gap from top */}
-          <div className="pt-[230px]">
-            {/* Line 1: orange, 60px */}
-            <h1
-              className="font-heading font-semibold text-brand-orange"
-              style={{ fontSize: "60px", lineHeight: "64px" }}
-            >
+          <div className="pt-24 tablet-down:pt-[230px]">
+            <Heading level={2} className="text-brand-orange">
               {headlineLine1}
-            </h1>
+            </Heading>
 
-            {/* 16px gap between lines */}
-            <h2
-              className="mt-[16px] font-heading font-semibold text-white"
-              style={{ fontSize: "80px", lineHeight: "84px" }}
-            >
+            <Heading level={1} className="mt-[16px] text-white">
               {headlineLine2}
-            </h2>
+            </Heading>
           </div>
 
           {/* 40px gap to body text */}
@@ -75,16 +68,16 @@ export function FinanceHeroSection({
           </Paragraph>
 
           {/* 140px gap to cards */}
-          <div className="mt-[140px] flex w-full max-w-[1200px] flex-row flex-wrap gap-4 pb-24">
+          <div className="mt-10 flex w-full max-w-[1200px] flex-col gap-3 pb-16 tablet-down:mt-[140px] tablet-down:flex-row tablet-down:flex-wrap tablet-down:gap-4 tablet-down:pb-24">
             {cards.map((card, i) => (
               <article
                 key={`${card.number}-${i}`}
-                className="flex min-w-[200px] flex-1 items-center gap-4 rounded-lg border border-brand-dark-40/40 bg-brand-dark-80/50 p-6 text-left transition-colors hover:border-brand-dark-40"
+                className="flex w-full min-w-0 flex-1 items-center gap-3 rounded-lg border border-brand-dark-40/40 bg-brand-dark-80/50 p-4 text-left transition-colors hover:border-brand-dark-40 tablet-down:min-w-[200px] tablet-down:gap-4 tablet-down:p-6"
               >
-                <Paragraph className="!font-extrabold text-[49.59px] leading-[41.32px] text-brand-orange">
+                <Paragraph className="font-extrabold! text-[36px] tablet-down:text-[49.59px]! leading-[41.32px] text-brand-orange">
                   {card.number}
                 </Paragraph>
-                <Paragraph className="!font-semibold text-[20px] leading-[24px] text-white">
+                <Paragraph className="font-semibold! text-[16px] tablet-down:text-[20px]! leading-[24px] text-white">
                   {card.title}
                 </Paragraph>
               </article>

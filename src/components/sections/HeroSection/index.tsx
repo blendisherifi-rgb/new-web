@@ -76,15 +76,15 @@ export function HeroSection({
           />
         </div>
       )}
-      <div className="mx-auto w-full max-w-[1440px] px-6 pt-[180px] pb-[120px]">
+      <div className="mx-auto w-full max-w-[1440px] px-4 pt-[120px] pb-[80px] tablet-down:pt-[180px] tablet-down:pb-[120px] tablet-down:px-6">
         <div className="flex flex-col items-center text-center">
           {/* H1 - 48px gap to button */}
-          <Heading level={1} className="text-white max-w-4xl">
+          <Heading level={1} className="max-w-full text-white tablet-down:max-w-4xl">
             {title}
           </Heading>
 
           {/* Button - 100px gap to marquee */}
-          <div className="mt-12">
+          <div className="mt-8 tablet-down:mt-12">
             <Button variant="dark" href={ctaHref} iconAfter={<ChevronRightIcon />}>
               {ctaLabel}
             </Button>
@@ -92,13 +92,13 @@ export function HeroSection({
 
           {/* Marquee - 48px gap to image */}
           {logos.length > 0 && (
-            <div className="mt-[100px] w-full">
+            <div className="mt-12 tablet-down:mt-[100px] w-full">
               <LogoMarquee logos={logos} duration={25} light />
             </div>
           )}
 
           {/* Platform screenshot - 48px from marquee */}
-          <div className="mt-12 w-full">
+          <div className="mt-8 tablet-down:mt-12 w-full">
             <div className="overflow-hidden rounded-lg shadow-2xl">
               <Image
                 src={imageSrc}

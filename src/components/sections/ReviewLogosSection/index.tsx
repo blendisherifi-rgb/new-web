@@ -21,19 +21,19 @@ export function ReviewLogosSection({ heading, cards }: ReviewLogosSectionProps) 
 
   return (
     <section className="w-full bg-white">
-      <div className="mx-auto w-full max-w-[1440px] px-6 py-20 md:py-24">
+      <div className="mx-auto w-full max-w-[1440px] px-4 py-12 tablet-down:px-6 tablet-down:py-24">
         <Heading level={2} className="text-center text-[34px] md:text-[48px]">
           {heading}
         </Heading>
 
-        <div className="mt-10 flex flex-wrap items-stretch justify-center gap-6">
+        <div className="mt-8 flex flex-wrap items-stretch justify-center gap-4 tablet-down:mt-10 tablet-down:gap-6">
           {cards.map((card, i) => {
             const featured = !!card.featured;
 
             return (
               <div
                 key={i}
-                className={`flex min-h-[142px] w-full max-w-[190px] flex-col items-center justify-center rounded-[4px] ${
+                className={`flex min-h-[120px] w-full max-w-[160px] tablet-down:min-h-[142px] tablet-down:max-w-[190px] flex-col items-center justify-center rounded-[4px] ${
                   featured ? "bg-brand-dark text-white" : "bg-white text-brand-dark"
                 }`}
                 style={{
