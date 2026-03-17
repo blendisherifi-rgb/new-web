@@ -219,6 +219,35 @@ export const SECTIONS_SHOWCASE_GROUPS: SectionGroup[] = [
     },
   },
   {
+    id: "automation-engine-1",
+    acfGroupName: "automation_engine_section",
+    order: 1.5,
+    fields: {
+      overline: "BUILT FOR COMPLEXITY",
+      heading: "The engine behind tailored automation",
+      imageSrc: "/hero-platform-screenshot.png",
+      imageAlt: "SoftCo automation engine interface",
+      softcoAiImageSrc: "/softco-ai-logo.png",
+      softcoAiImageAlt: "SoftCoAI",
+      body:
+        "SoftCoAI is a cloud-native platform that connects your systems, secures your process end to end, and scales as volume and complexity grow. Smart configuration and embedded AI deliver a custom-fit outcome without brittle one-off builds.",
+      ctaLabel: "BOOK A DEMO",
+      ctaHref: "#",
+      metrics: [
+        { value: "200+", label: "ERP integrations" },
+        { value: "1M+", label: "users globally" },
+        { value: "9.9/10", label: "audited security rating" },
+      ],
+      logos: [
+        { src: "/next.svg", alt: "SuperDry" },
+        { src: "/vercel.svg", alt: "Aer Lingus" },
+        { src: "/globe.svg", alt: "Bridgepoint" },
+        { src: "/window.svg", alt: "Grafton Group plc" },
+        { src: "/file.svg", alt: "Logitech" },
+      ],
+    },
+  },
+  {
     id: "contact-with-form-1",
     acfGroupName: "contact_with_form_section",
     order: 2,

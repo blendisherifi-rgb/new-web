@@ -33,6 +33,7 @@ import { NewsletterFormSection } from "@/components/sections/NewsletterFormSecti
 import { ESGSection } from "@/components/sections/ESGSection";
 import { CultureSection } from "@/components/sections/CultureSection";
 import { TeamArchiveSection } from "@/components/sections/TeamArchiveSection";
+import { AutomationEngineSection } from "@/components/sections/AutomationEngineSection";
 
 export interface SectionData {
   id: string;
@@ -72,4 +73,5 @@ export const SECTION_MAP: Record<string, React.ComponentType<Record<string, unkn
   esg_section: ESGSection as unknown as React.ComponentType<Record<string, unknown>>,
   culture_section: CultureSection as unknown as React.ComponentType<Record<string, unknown>>,
   team_archive_section: TeamArchiveSection as unknown as React.ComponentType<Record<string, unknown>>,
+  automation_engine_section: AutomationEngineSection as unknown as React.ComponentType<Record<string, unknown>>,
 };
