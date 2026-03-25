@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 120" width="900" height="120" role="img" aria-hidden="true">
+  <defs>
+    <linearGradient id="competition" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#F58A1F" />
+      <stop offset="100%" stop-color="#f7931e" />
+    </linearGradient>
+  </defs>
+  <!-- 0% label -->
+  <text x="0" y="55" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#001A33">0%</text>
+  <!-- 100% label -->
+  <text x="868" y="55" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#001A33">100%</text>
+  <!-- Vertical tick left -->
+  <line x1="28" y1="40" x2="28" y2="90" stroke="#001A33" stroke-width="1" opacity="0.6" />
+  <!-- Vertical tick right -->
+  <line x1="872" y1="40" x2="872" y2="90" stroke="#001A33" stroke-width="1" opacity="0.6" />
+  <!-- Bar container (from ~40 to ~860, height ~50) -->
+  <!-- Competition 30% -->
+  <rect x="40" y="45" width="246" height="50" fill="#F58A1F" stroke="#001A33" stroke-width="1" rx="0" />
+  <text x="163" y="77" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="white" text-anchor="middle">Competition 30%</text>
+  <!-- SoftCo 90% STP -->
+  <rect x="286" y="45" width="492" height="50" fill="#047FE5" stroke="#001A33" stroke-width="1" rx="0" />
+  <text x="532" y="77" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="white" text-anchor="middle">SoftCo: 90% STP</text>
+  <!-- Exceptions -->
+  <rect x="778" y="45" width="82" height="50" fill="white" stroke="#001A33" stroke-width="1" rx="0" />
+  <text x="819" y="77" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#001A33" text-anchor="middle">Exceptions</text>
+</svg>

@@ -47,9 +47,9 @@ interface AutomationEngineSectionProps {
  * - 60px gap between heading and image row
  * - 110px gap between left image and right content
  * - 150px gap between image row and metrics
- * - 180px gap between individual metrics
+ * - Wide horizontal gap between individual metrics (see flex gap classes)
  * - 160px gap between metrics row and logo carousel
- * - Metric value: 48px, label: 20px
+ * - Metric value: Plus Jakarta Sans 800, 48px / 48px, brand orange (#F7931E); label: 20px, lowercase
  */
 export function AutomationEngineSection({
   overline,
@@ -127,15 +127,15 @@ export function AutomationEngineSection({
         {/* 150px gap between image/content row and metrics */}
         {metrics.length > 0 && (
           <div className="mt-[150px] flex flex-col items-center">
-            <div className="flex flex-col gap-[40px] text-center md:flex-row md:gap-[180px]">
+            <div className="flex flex-col gap-[56px] text-center md:flex-row md:justify-center md:gap-[280px]">
               {metrics.map((metric, index) => (
                 <div key={`${metric.value}-${index}`} className="flex flex-col items-center">
-                  <span className="font-heading text-[48px] leading-[52px] text-white">
+                  <span className="font-body text-[48px] font-extrabold leading-[48px] tracking-normal text-brand-orange">
                     {metric.value}
                   </span>
                   <Paragraph
                     size="base"
-                    className="mt-2 text-[20px] leading-[28px] text-white/90"
+                    className="mt-2 text-[20px] leading-[28px] text-white/90 lowercase"
                   >
                     {metric.label}
                   </Paragraph>
