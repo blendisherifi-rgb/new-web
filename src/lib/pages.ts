@@ -390,6 +390,16 @@ function transformSection(node: Record<string, unknown>, index: number): Section
       ? "locations_section"
     : low.includes("clientlogosmarquee") || low.includes("client_logos_marquee")
       ? "client_logos_marquee_section"
+    : low.includes("bookademo") || low.includes("book_a_demo")
+      ? "book_a_demo_section"
+    : low.includes("lifeatsoftco") || low.includes("life_at_softco")
+      ? "life_at_softco_section"
+    : low.includes("peoplefirstproof") || low.includes("people_first_proof")
+      ? "people_first_proof_section"
+    : low.includes("openroles") || low.includes("open_roles")
+      ? "open_roles_section"
+    : low.includes("featuremodal") || low.includes("feature_modal")
+      ? "feature_modal_section"
     : low.includes("newsletterform") || low.includes("newsletter_form")
       ? "newsletter_form_section"
     : low.includes("platform")
@@ -591,6 +601,89 @@ function transformSection(node: Record<string, unknown>, index: number): Section
       });
     }
     delete normalized.clientLogosMarqueeLogos;
+  }
+
+  // Open roles: jobs[] manually, or hireHiveLive to use public HireHive Jobs API v2
+  if (acfGroupName === "open_roles_section") {
+    if (typeof normalized.hireHiveLive === "string") {
+      normalized.hireHiveLive =
+        normalized.hireHiveLive === "true" || normalized.hireHiveLive === "1";
+    }
+    const raw = normalized.jobs ?? normalized.openRolesJobs ?? [];
+    if (Array.isArray(raw)) {
+      normalized.jobs = (raw as unknown[]).map((j) => {
+        const item = j as Record<string, unknown>;
+        return {
+          title: String(item.title ?? ""),
+          location: String(item.location ?? ""),
+          department: String(item.department ?? ""),
+          excerpt: String(item.excerpt ?? item.description ?? ""),
+          readMoreHref: String(
+            item.readMoreHref ?? item.href ?? item.link ?? ""
+          ),
+        };
+      });
+    } else {
+      normalized.jobs = [];
+    }
+    delete normalized.openRolesJobs;
+  }
+
+  // Feature modal: featureModalItems[] -> items[]
+  if (acfGroupName === "feature_modal_section") {
+    const raw = normalized.featureModalItems ?? normalized.items ?? [];
+    normalized.items = Array.isArray(raw) ? raw : [];
+    delete normalized.featureModalItems;
+  }
+
+  // People first proof: benefits[] as strings or { label | text | title }
+  if (acfGroupName === "people_first_proof_section") {
+    const raw = normalized.benefits ?? [];
+    if (Array.isArray(raw)) {
+      normalized.benefits = raw
+        .map((b) => {
+          if (typeof b === "string") return b;
+          const item = b as Record<string, unknown>;
+          return String(item.label ?? item.text ?? item.title ?? "").trim();
+        })
+        .filter((s) => s.length > 0);
+    } else {
+      normalized.benefits = [];
+    }
+  }
+
+  // Life at SoftCo: testimonials[].image.node -> imageSrc / imageAlt
+  if (acfGroupName === "life_at_softco_section") {
+    const raw = normalized.testimonials ?? normalized.lifeAtSoftCoTestimonials ?? [];
+    if (Array.isArray(raw)) {
+      normalized.testimonials = (raw as unknown[]).map((t) => {
+        const item = { ...(t as Record<string, unknown>) };
+        const img = item.image as Record<string, unknown> | undefined;
+        const n = img?.node as Record<string, unknown> | undefined;
+        item.imageSrc = (n?.sourceUrl ?? img?.sourceUrl ?? item.imageSrc) ?? "";
+        item.imageAlt = (n?.altText ?? img?.altText ?? item.imageAlt) ?? "";
+        delete item.image;
+        return item;
+      });
+    }
+    delete normalized.lifeAtSoftCoTestimonials;
+  }
+
+  // Book a Demo: same logo shape as client logos marquee (optional bookADemoLogos from WP)
+  if (acfGroupName === "book_a_demo_section") {
+    const rawLogos = normalized.bookADemoLogos ?? normalized.logos ?? [];
+    if (Array.isArray(rawLogos)) {
+      normalized.logos = (rawLogos as unknown[]).map((l) => {
+        const item = l as Record<string, unknown>;
+        const logo = item.logo as Record<string, unknown> | undefined;
+        const logoNode = logo?.node as Record<string, unknown> | undefined;
+        return {
+          src: (logoNode?.sourceUrl ?? logo?.sourceUrl ?? item.sourceUrl) ?? "",
+          alt: (logoNode?.altText ?? logo?.altText ?? item.altText) ?? "",
+        };
+      });
+    }
+    delete normalized.bookADemoLogos;
   }
 
   // About Us Hero: galleryImages[].image.node -> {imageSrc, imageAlt}; ceoQuoteImage.node -> ceoQuoteImageSrc/Alt

@@ -223,28 +223,499 @@ export const SECTIONS_SHOWCASE_GROUPS: SectionGroup[] = [
     acfGroupName: "automation_engine_section",
     order: 1.5,
     fields: {
-      overline: "BUILT FOR COMPLEXITY",
-      heading: "The engine behind tailored automation",
-      imageSrc: "/hero-platform-screenshot.png",
-      imageAlt: "SoftCo automation engine interface",
-      softcoAiImageSrc: "/softco-ai-logo.png",
-      softcoAiImageAlt: "SoftCoAI",
+      overline: "AUTOMATION FOR FINANCE",
+      heading: "Finance may be complex. Your automation shouldn't be",
+      imageSrc: "/automation-finance-hero.png",
+      imageAlt: "Commercial aviation at dusk — metaphor for precision and scale",
       body:
-        "SoftCoAI is a cloud-native platform that connects your systems, secures your process end to end, and scales as volume and complexity grow. Smart configuration and embedded AI deliver a custom-fit outcome without brittle one-off builds.",
-      ctaLabel: "BOOK A DEMO",
+        "Your finance operation is complex. Your AP process sits at the centre of cash flow, compliance, and supplier relationships. SoftCo gives you the visibility to see what is happening, the controls to govern it, and the confidence that automation fits your reality, not a template.",
+      ctaLabel: "CALCULATE YOUR ROI",
       ctaHref: "#",
       metrics: [
-        { value: "200+", label: "ERP integrations" },
-        { value: "1M+", label: "users globally" },
-        { value: "9.9/10", label: "audited security rating" },
+        { value: "-84%", label: "average processing cost reduction per invoice" },
+        { value: "1 year", label: "typical return on investment timeline" },
+        { value: "9.9/10", label: "Mastercard RiskRecon for data security" },
+        { value: "100%", label: "project success rate" },
       ],
+    },
+  },
+  {
+    id: "challenge-1",
+    acfGroupName: "challenge_section",
+    order: 1.55,
+    fields: {
+      overline: "THE CHALLENGE",
+      headingHighlight: "Stop funding",
+      headingAfter: " your own inefficiencies",
+      intro:
+        "As a CFO, you are balancing competing demands across visibility, risk, cost, and growth, often with fragmented systems and manual processes that limit what your team can deliver. Relying on fragmented systems and manual intervention creates dangerous financial blindspots. Without a unified, real-time view of your liabilities, your business is leaking margin through missed early payment discounts, late payment penalties, duplicate invoices, and inaccurate month-end accruals.",
+      columns: [
+        {
+          icon: "maverick_spend",
+          titleLineBlue: "Maverick spend",
+          titleLineDark: "& lost discounts",
+          body:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent accumsan, quam in ornare ultricies, justo neque scelerisque lacus.",
+        },
+        {
+          icon: "fraud_threat",
+          titleLineBlue: "The fraud",
+          titleLineDark: "threat",
+          body:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent accumsan, quam in ornare ultricies, justo neque scelerisque lacus.",
+          showCta: true,
+          ctaLabel: "SEE HOW WE SOLVE THIS",
+          ctaHref: "#",
+        },
+        {
+          icon: "ma_spaghetti",
+          titleLineBlue: "The M&A",
+          titleLineDark: "spaghetti",
+          body:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent accumsan, quam in ornare ultricies, justo neque scelerisque lacus.",
+        },
+      ],
+    },
+  },
+  {
+    id: "strategic-priorities-1",
+    acfGroupName: "strategic_priorities_section",
+    order: 1.6,
+    fields: {
+      overline: "WHAT YOU GAIN",
+      intro:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      leftColumnLabel: "YOUR PRIORITY",
+      rightColumnLabel: "WHAT SOFTCO DELIVERS",
+      rows: [
+        {
+          priority: "Visibility and reporting",
+          deliverable:
+            "Real-time AP analytics, natural language queries, and outcome-driven dashboards embedded in the workflow",
+        },
+        {
+          priority: "Control and compliance",
+          deliverable:
+            "Automated audit trails, policy enforcement, fraud detection, and tamper-proof archiving (SOC 1&2, ISO 27001)",
+        },
+        {
+          priority: "Cost management and profitability",
+          deliverable:
+            "80–89% reduction in processing costs, 70% reduction in payment transaction costs, automated surcharge handling",
+        },
+        {
+          priority: "Scalability",
+          deliverable:
+            "Modular platform. Adopt what you need now, expand as you grow. No rebuilds.",
+        },
+        {
+          priority: "ERP integration",
+          deliverable:
+            "Certified connectors for 200+ ERP systems. Multi-ERP, multi-entity, multi-jurisdiction as standard.",
+        },
+      ],
+    },
+  },
+  {
+    id: "smart-matching-banner-1",
+    acfGroupName: "smart_matching_challenge_banner_section",
+    order: 1.62,
+    fields: {
+      overline: "AI SMART MATCHING CHALLENGE",
+      headingLine1: "Put our matching technology",
+      headingLine2: "to the test",
+      body:
+        "In complex organisations, automation doesn’t fail because invoices are messy. It fails because software isn’t built to fit reality. The Smart Matching Challenge lets you test our technology using your own invoices, so you can see how tailored automation performs in the real world, not in a demo.",
+      ctaLabel: "START THE CHALLENGE",
+      ctaHref: "#",
+    },
+  },
+  {
+    id: "smart-matching-challenge-1",
+    acfGroupName: "smart_matching_challenge_section",
+    order: 1.65,
+    fields: {
+      overline: "AI SMART MATCHING CHALLENGE",
+      headingLine1: "Put our matching technology",
+      headingLine2: "to the test",
+      imageSrc: "/smart-matching-challenge.png",
+      imageAlt:
+        "SoftCo10 AP Automation dashboard with sidebar favourites and invoice table",
+      body:
+        "In complex organisations, automation doesn’t fail because invoices are messy. It fails because software isn’t built to fit reality. The Smart Matching Challenge lets you test our technology using your own invoices, so you can see how tailored automation performs in the real world, not in a demo.",
+      ctaLabel: "START THE CHALLENGE",
+      ctaHref: "#",
+    },
+  },
+  {
+    id: "start-challenge-form-1",
+    acfGroupName: "start_challenge_form_section",
+    order: 1.7,
+    fields: {
+      overline: "START THE CHALLENGE",
+      headingLine1: "Take our matching",
+      headingHighlight: "challenge",
+      formPlaceholderImageSrc: "/start-challenge-form-placeholder.png",
+      formPlaceholderImageAlt:
+        "Placeholder: matching challenge lead form — replace with HubSpot embed",
+    },
+  },
+  {
+    id: "matching-challenge-form-blue-1",
+    acfGroupName: "matching_challenge_form_section",
+    order: 1.71,
+    fields: {
+      overline: "MATCHING CHALLENGE",
+      headingBefore: "Take our matching ",
+      headingHighlight: "challenge",
+      formPlaceholderImageSrc: "/matching-challenge-form-placeholder.png",
+      formPlaceholderImageAlt:
+        "Placeholder: matching challenge form — replace with HubSpot embed",
+    },
+  },
+  {
+    id: "partner-programme-hero-1",
+    acfGroupName: "partner_programme_hero_section",
+    order: 1.75,
+    fields: {
+      overline: "PARTNER PROGRAMME",
+      headingLine1: "Partnerships built to deliver",
+      headingLine2: "automation that works",
+      body:
+        "Plug-and-play AP and P2P automation fails in complex organisations. SoftCo partners with technology and advisory firms who understand that reality and want to deliver AI-powered automation, tailored to perfection",
+      ctaLabel: "ENQUIRE ABOUT PARTNERSHIP",
+      ctaHref: "#",
+      navCards: [
+        { number: "01", label: "Who it is for" },
+        { number: "02", label: "Benefits" },
+        { number: "03", label: "How it works" },
+        { number: "04", label: "Partner ecosystem" },
+      ],
+    },
+  },
+  {
+    id: "how-it-works-1",
+    acfGroupName: "how_it_works_section",
+    order: 1.85,
+    fields: {
+      overline: "HOW IT WORKS",
+      heading: "A simple path to partnership",
+      intro:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
+      steps: [
+        {
+          stepNumberImageSrc: "/how-it-works-step-01.svg",
+          stepNumberImageAlt: "Step 01",
+          titleHighlight: "Start",
+          titleRest: " a conversation",
+          description:
+            "Tell us about your practice, your clients, and what you want to deliver. We align on fit, scope, and how partnership could work.",
+        },
+        {
+          stepNumberImageSrc: "/how-it-works-step-02.svg",
+          stepNumberImageAlt: "Step 02",
+          titleHighlight: "Explore",
+          titleRest: " the opportunity",
+          description:
+            "Review enablement, commercial models, and technical alignment so you can see clearly what engagement looks like before you commit.",
+        },
+        {
+          stepNumberImageSrc: "/how-it-works-step-03.svg",
+          stepNumberImageAlt: "Step 03",
+          titleHighlight: "Deliver",
+          titleRest: " together",
+          description:
+            "Joint delivery with presales support, implementation guidance, and ongoing partnership so your clients get automation that fits.",
+        },
+      ],
+    },
+  },
+  {
+    id: "feature-modal-1",
+    acfGroupName: "feature_modal_section",
+    order: 1.86,
+    fields: {
+      overline: "HOW IT WORKS",
+      headingBefore: "Because ",
+      headingHighlight: '"good enough"',
+      headingAfter: " never survived an audit",
+      body:
+        "Most tools handle the easy invoices. SoftCo handles the easy ones and the exceptions that take 80% of your team's time.",
+      ctaLabel: "PUT OUR AP AUTOMATION TO THE TEST",
+      ctaHref: "#",
+      items: [
+        {
+          title: "Capture+",
+          description:
+            "Eliminate paper and fully automate invoice data capture from any source and in any format, including e-invoicing.",
+          modalLabel: "LABEL",
+          modalTitle: "Capture+",
+          modalDescription:
+            "Praesent a enim nec ante sagittis molestie fermentum in arcu. Cras viverra ac mauris eget tristique. Vestibulum pulvinar justo eu nulla convallis molestie. Vestibulum ante dui, varius vitae fermentum ac, bibendum eget risus. Quisque sed hendrerit odio.",
+          imageSrc: "/hero-platform-screenshot.png",
+          imageAlt: "Capture+ dashboard",
+        },
+        {
+          title: "AI Smart Matching",
+          description:
+            "90% touchless straight-through processing for PO invoices and contract compliance for recurring ones.",
+          modalLabel: "LABEL",
+          modalTitle: "AI Smart Matching",
+          modalDescription:
+            "Automatically match invoices to POs, GRNs, and contracts using flexible tolerances and AI-assisted rules tuned to your controls.",
+          imageSrc: "/platform-p2p.png",
+          imageAlt: "AI Smart Matching view",
+        },
+        {
+          title: "AI Smart coding & routing",
+          description: "Process non-PO invoices 89% faster",
+          modalLabel: "LABEL",
+          modalTitle: "AI Smart coding & routing",
+          modalDescription:
+            "Route and code invoices automatically based on supplier, entity, cost center, and historical patterns while preserving auditability.",
+          imageSrc: "/hero-platform-screenshot.png",
+          imageAlt: "Smart coding and routing",
+        },
+        {
+          title: "Exception handling & automated surcharges",
+          description: "Transform the two biggest manual bottlenecks of your AP process",
+          modalLabel: "LABEL",
+          modalTitle: "Exception handling",
+          modalDescription:
+            "Give AP teams a guided queue for exceptions, with policy-aware actions and full traceability from detection to resolution.",
+          imageSrc: "/platform-p2p.png",
+          imageAlt: "Exception handling panel",
+        },
+        {
+          title: "Payments",
+          description: "Simplify supplier payments and turn them into a strategic control point.",
+          modalLabel: "LABEL",
+          modalTitle: "Payments",
+          modalDescription:
+            "Approve and execute supplier payments with tighter controls, reduced friction, and stronger visibility across entities.",
+          imageSrc: "/hero-platform-screenshot.png",
+          imageAlt: "Payments overview",
+        },
+      ],
+    },
+  },
+  {
+    id: "cfo-series-1",
+    acfGroupName: "cfo_series_section",
+    order: 1.9,
+    fields: {
+      overline: "THE CFO SERIES",
+      headingLine1: "Why standard automation fails",
+      headingLine2: "in complex environments",
+      imageSrc: "/tall-bg.png",
+      imageAlt: "Evening view of a rooftop lounge at dusk",
+      eventDetails: "25th April, 9am–1pm | The Dean Hotel, Dublin",
+      body:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      ctaLabel: "REGISTER NOW",
+      ctaHref: "#",
+    },
+  },
+  {
+    id: "why-attend-1",
+    acfGroupName: "why_attend_section",
+    order: 1.95,
+    fields: {
+      overline: "WHY ATTEND",
+      headingLine1: "Real-world practical insights",
+      headingLine2: "for complex finance operations",
+      intro:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      columns: [
+        {
+          iconImageSrc: "/why-attend-check-icon.svg",
+          iconImageAlt: "Checkmark",
+          titleBefore: "Exclusive ",
+          titleHighlight: "peer networking",
+          description:
+            "Suspendisse pharetra mi in sodales suscipit, aenean dapibus bibendum",
+        },
+        {
+          iconImageSrc: "/why-attend-check-icon.svg",
+          iconImageAlt: "Checkmark",
+          titleBefore: "Actionable ",
+          titleHighlight: "next steps",
+          description:
+            "Suspendisse pharetra mi in sodales suscipit, aenean dapibus bibendum",
+        },
+        {
+          iconImageSrc: "/why-attend-check-icon.svg",
+          iconImageAlt: "Checkmark",
+          titleBefore: "The true ROI of ",
+          titleHighlight: "AI in automation",
+          description:
+            "Suspendisse pharetra mi in sodales suscipit, aenean dapibus bibendum",
+        },
+        {
+          iconImageSrc: "/why-attend-check-icon.svg",
+          iconImageAlt: "Checkmark",
+          titleBefore: "Exclusive ",
+          titleHighlight: "peer networking",
+          description:
+            "Suspendisse pharetra mi in sodales suscipit, aenean dapibus bibendum",
+        },
+      ],
+    },
+  },
+  {
+    id: "meet-speakers-1",
+    acfGroupName: "meet_speakers_section",
+    order: 1.96,
+    fields: {
+      overline: "SPEAKERS",
+      headingBefore: "Meet our",
+      headingHighlight: "speakers",
+      intro:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      speakers: [
+        {
+          imageSrc: "/tall-bg.png",
+          imageAlt: "Speaker portrait",
+          name: "Alex Morgan",
+          jobTitle: "Chief Knowledge Officer",
+          company: "XY company",
+        },
+        {
+          imageSrc: "/office-bg.png",
+          imageAlt: "Speaker portrait",
+          name: "Sam Taylor",
+          jobTitle: "VP Finance Transformation",
+          company: "Acme Corp",
+        },
+        {
+          imageSrc: "/softco-gradient.jpg",
+          imageAlt: "Speaker portrait",
+          name: "Jordan Lee",
+          jobTitle: "Head of P2P",
+          company: "Northwind Ltd",
+        },
+        {
+          imageSrc: "/dark-bg.jpg",
+          imageAlt: "Speaker portrait",
+          name: "Casey Quinn",
+          jobTitle: "Director of Operations",
+          company: "Contoso",
+        },
+      ],
+    },
+  },
+  {
+    id: "event-register-1",
+    acfGroupName: "event_register_section",
+    order: 1.97,
+    fields: {
+      overline: "REGISTER",
+      headingLine1: "Secure your",
+      headingLine2Before: "place ",
+      headingLine2Highlight: "today",
+      formPlaceholderImageSrc: "/matching-challenge-form-placeholder.png",
+      formPlaceholderImageAlt: "Registration form (placeholder — replace with HubSpot embed)",
+    },
+  },
+  {
+    id: "book-a-demo-1",
+    acfGroupName: "book_a_demo_section",
+    order: 1.98,
+    fields: {
+      overline: "BOOK A DEMO",
+      headingLine1: "See what a perfect fit",
+      headingLine2: "automation looks like",
+      intro:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      formPlaceholderImageSrc: "/matching-challenge-form-placeholder.png",
+      formPlaceholderImageAlt: "Book a demo form (placeholder — replace with HubSpot embed)",
+      marqueeHeading: "Trusted by finance teams who can't afford good enough",
+      marqueeDuration: 25,
       logos: [
-        { src: "/next.svg", alt: "SuperDry" },
-        { src: "/vercel.svg", alt: "Aer Lingus" },
-        { src: "/globe.svg", alt: "Bridgepoint" },
+        { src: "/next.svg", alt: "Aer Lingus" },
+        { src: "/vercel.svg", alt: "Bridgepoint" },
+        { src: "/globe.svg", alt: "Capita" },
         { src: "/window.svg", alt: "Grafton Group plc" },
         { src: "/file.svg", alt: "Logitech" },
+        { src: "/next.svg", alt: "PwC" },
+        { src: "/vercel.svg", alt: "Superdry" },
+        { src: "/globe.svg", alt: "Volkswagen" },
       ],
+    },
+  },
+  {
+    id: "life-at-softco-1",
+    acfGroupName: "life_at_softco_section",
+    order: 1.99,
+    fields: {
+      title: "Life at SoftCo",
+      stats: [
+        { value: "15 years", label: "average employee tenure" },
+        { value: "150+", label: "experienced finance & technology experts" },
+        { value: "6", label: "global offices" },
+        { value: "35 years", label: "of stability" },
+      ],
+      youtubeVideoId: "jNQXAC9IVRw",
+      videoTitle: "Life at SoftCo",
+      testimonials: [
+        {
+          imageSrc: "/hero-platform-screenshot.png",
+          imageAlt: "Freda Donnelly",
+          quote:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent accumsan, quam in ornare ultricies, justo neque scelerisque lacus, et mattis ante tortor at tellus.",
+          authorName: "Freda Donnelly",
+          authorTitle: "HR Manager",
+        },
+        {
+          imageSrc: "/platform-p2p.png",
+          imageAlt: "Alex Morgan",
+          quote:
+            "Second testimonial. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+          authorName: "Alex Morgan",
+          authorTitle: "Engineering Lead",
+        },
+      ],
+    },
+  },
+  {
+    id: "people-first-proof-1",
+    acfGroupName: "people_first_proof_section",
+    order: 1.995,
+    fields: {
+      overline: 'THE "PEOPLE FIRST" PROOF',
+      headingBefore: "Serious about outcomes. ",
+      headingHighlight: "Human",
+      headingAfter: " about everything else",
+      body:
+        "Perks matter. They are not the point, but they do help. What matters more is the kind of team you join: people-first, clear with each other, and serious about doing the work properly. The benefits below are part of that, practical support for good work and a life outside it.",
+      benefits: [
+        "Market-aligned pay",
+        "Comprehensive health cover",
+        "Flexible hours",
+        "Remote-friendly roles",
+        "Learning and upskilling",
+        "Clear growth paths",
+        "Well-being support",
+        "People-first work-life balance",
+        "Fair hiring and progression",
+        "Opportunities across global teams",
+      ],
+    },
+  },
+  {
+    id: "open-roles-1",
+    acfGroupName: "open_roles_section",
+    order: 1.997,
+    fields: {
+      overline: "OPEN ROLES",
+      headingLine1: "Your next career move",
+      headingLine2: "starts here",
+      locationFilterLabel: "- All locations -",
+      departmentFilterLabel: "- All departments -",
+      viewAllHref: "https://softco.hirehive.com/",
+      viewAllLabel: "VIEW ALL OPEN ROLES",
+      hireHiveLive: true,
+      jobs: [],
     },
   },
   {
@@ -435,6 +906,69 @@ export const SECTIONS_SHOWCASE_GROUPS: SectionGroup[] = [
       ],
       ctaLabel: "Talk to an expert",
       ctaHref: "#",
+    },
+  },
+  {
+    id: "partner-benefits-1",
+    acfGroupName: "partner_benefits_section",
+    order: 3.05,
+    fields: {
+      overline: "PARTNER BENEFITS",
+      headingBefore: "Four steps. ",
+      headingHighlight: "No obligation.",
+      headingAfter: " You control the inputs.",
+      subheading:
+        "Test our matching engine with your own invoices in a structured, low-risk process designed to show real-world performance.",
+      steps: [
+        {
+          stepNumberImageSrc: "/partner-benefits-step-01.svg",
+          stepNumberImageAlt: "Step 01",
+          line1Before: "",
+          line1Highlight: "Register",
+          line1After: "",
+          line2Before: "your interest",
+          line2Highlight: "",
+          line2After: "",
+          description:
+            "Fill out the form, and our team will contact you to securely receive your sample data.",
+        },
+        {
+          stepNumberImageSrc: "/partner-benefits-step-02.svg",
+          stepNumberImageAlt: "Step 02",
+          line1Before: "",
+          line1Highlight: "Bring",
+          line1After: "",
+          line2Before: "your toughest invoices",
+          line2Highlight: "",
+          line2After: "",
+          description:
+            "Submit the formats, variations and edge cases your team deals with every day.",
+        },
+        {
+          stepNumberImageSrc: "/partner-benefits-step-03.svg",
+          stepNumberImageAlt: "Step 03",
+          line1Before: "We ",
+          line1Highlight: "run them",
+          line1After: "",
+          line2Before: "live",
+          line2Highlight: "",
+          line2After: "",
+          description:
+            "Invoices are processed by our Smart Matching engine in real time without manual tuning.",
+        },
+        {
+          stepNumberImageSrc: "/partner-benefits-step-04.svg",
+          stepNumberImageAlt: "Step 04",
+          line1Before: "",
+          line1Highlight: "Review",
+          line1After: "",
+          line2Before: "the results",
+          line2Highlight: "",
+          line2After: "",
+          description:
+            "See match rates and use the results to assess fit, risk, and readiness before making a decision.",
+        },
+      ],
     },
   },
   {

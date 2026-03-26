@@ -35,6 +35,24 @@ import { ESGSection } from "@/components/sections/ESGSection";
 import { CultureSection } from "@/components/sections/CultureSection";
 import { TeamArchiveSection } from "@/components/sections/TeamArchiveSection";
 import { AutomationEngineSection } from "@/components/sections/AutomationEngineSection";
+import { ChallengeSection } from "@/components/sections/ChallengeSection";
+import { StrategicPrioritiesSection } from "@/components/sections/StrategicPrioritiesSection";
+import { SmartMatchingChallengeSection } from "@/components/sections/SmartMatchingChallengeSection";
+import { SmartMatchingChallengeBannerSection } from "@/components/sections/SmartMatchingChallengeBannerSection";
+import { StartChallengeFormSection } from "@/components/sections/StartChallengeFormSection";
+import { PartnerProgrammeHeroSection } from "@/components/sections/PartnerProgrammeHeroSection";
+import { PartnerBenefitsSection } from "@/components/sections/PartnerBenefitsSection";
+import { MatchingChallengeFormSection } from "@/components/sections/MatchingChallengeFormSection";
+import { HowItWorksSection } from "@/components/sections/HowItWorksSection";
+import { CfoSeriesSection } from "@/components/sections/CfoSeriesSection";
+import { WhyAttendSection } from "@/components/sections/WhyAttendSection";
+import { MeetSpeakersSection } from "@/components/sections/MeetSpeakersSection";
+import { EventRegisterSection } from "@/components/sections/EventRegisterSection";
+import { BookADemoSection } from "@/components/sections/BookADemoSection";
+import { LifeAtSoftCoSection } from "@/components/sections/LifeAtSoftCoSection";
+import { PeopleFirstProofSection } from "@/components/sections/PeopleFirstProofSection";
+import { OpenRolesSection } from "@/components/sections/OpenRolesSection";
+import { FeatureModalSection } from "@/components/sections/FeatureModalSection";
 
 export interface SectionData {
   id: string;
@@ -76,4 +94,22 @@ export const SECTION_MAP: Record<string, React.ComponentType<Record<string, unkn
   culture_section: CultureSection as unknown as React.ComponentType<Record<string, unknown>>,
   team_archive_section: TeamArchiveSection as unknown as React.ComponentType<Record<string, unknown>>,
   automation_engine_section: AutomationEngineSection as unknown as React.ComponentType<Record<string, unknown>>,
+  challenge_section: ChallengeSection as unknown as React.ComponentType<Record<string, unknown>>,
+  strategic_priorities_section: StrategicPrioritiesSection as unknown as React.ComponentType<Record<string, unknown>>,
+  smart_matching_challenge_section: SmartMatchingChallengeSection as unknown as React.ComponentType<Record<string, unknown>>,
+  smart_matching_challenge_banner_section: SmartMatchingChallengeBannerSection as unknown as React.ComponentType<Record<string, unknown>>,
+  start_challenge_form_section: StartChallengeFormSection as unknown as React.ComponentType<Record<string, unknown>>,
+  partner_programme_hero_section: PartnerProgrammeHeroSection as unknown as React.ComponentType<Record<string, unknown>>,
+  partner_benefits_section: PartnerBenefitsSection as unknown as React.ComponentType<Record<string, unknown>>,
+  matching_challenge_form_section: MatchingChallengeFormSection as unknown as React.ComponentType<Record<string, unknown>>,
+  how_it_works_section: HowItWorksSection as unknown as React.ComponentType<Record<string, unknown>>,
+  cfo_series_section: CfoSeriesSection as unknown as React.ComponentType<Record<string, unknown>>,
+  why_attend_section: WhyAttendSection as unknown as React.ComponentType<Record<string, unknown>>,
+  meet_speakers_section: MeetSpeakersSection as unknown as React.ComponentType<Record<string, unknown>>,
+  event_register_section: EventRegisterSection as unknown as React.ComponentType<Record<string, unknown>>,
+  book_a_demo_section: BookADemoSection as unknown as React.ComponentType<Record<string, unknown>>,
+  life_at_softco_section: LifeAtSoftCoSection as unknown as React.ComponentType<Record<string, unknown>>,
+  people_first_proof_section: PeopleFirstProofSection as unknown as React.ComponentType<Record<string, unknown>>,
+  open_roles_section: OpenRolesSection as unknown as React.ComponentType<Record<string, unknown>>,
+  feature_modal_section: FeatureModalSection as unknown as React.ComponentType<Record<string, unknown>>,
 };

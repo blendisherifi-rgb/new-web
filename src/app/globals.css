@@ -388,3 +388,10 @@ html {
     line-height: 1.5;
   }
 }
+
+/* Open Roles filters: native <option> lists use the OS dropdown; inherited
+   text-white from the <select> would render invisible labels (white on white). */
+.open-roles-filter-select option {
+  color: var(--color-brand-dark);
+  background-color: var(--color-white);
+}

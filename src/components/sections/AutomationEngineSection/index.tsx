@@ -9,154 +9,130 @@ import { Image } from "@/components/atoms/Image";
 import { LogoMarquee, type LogoItem } from "@/components/molecules/LogoMarquee";
 
 export interface AutomationMetric {
-  /** Metric value, e.g. "200+". */
+  /** Metric value, e.g. "-84%" or "9.9/10". */
   value: string;
-  /** Label below the metric, e.g. "ERP integrations". */
+  /** Label below the metric. */
   label: string;
 }
 
 interface AutomationEngineSectionProps {
-  /** Small label above the main heading (e.g. "BUILT FOR COMPLEXITY"). */
+  /** Small label above the main heading (e.g. "AUTOMATION FOR FINANCE"). */
   overline: string;
-  /** Main heading text. */
+  /** Main heading text (Erode / H1). */
   heading: string;
-  /** Left-hand product image (platform UI). */
+  /** Hero image below the headline (e.g. photography). */
   imageSrc: string;
   imageAlt: string;
-  /** SoftCoAI lockup image shown above the right-side copy. */
-  softcoAiImageSrc: string;
-  softcoAiImageAlt: string;
-  /** Supporting body copy on the right. */
+  /** Supporting body copy below the image; kept narrower than the image for readability. */
   body: string;
   /** CTA button label + href. */
   ctaLabel: string;
   ctaHref: string;
-  /** Metrics row beneath the image/content. */
+  /** Four stats in a row with dividers (desktop). */
   metrics: AutomationMetric[];
-  /** Logos for the carousel beneath the metrics. */
-  logos: LogoItem[];
+  /** Optional logo strip below the stats. */
+  logos?: LogoItem[];
 }
 
 /**
- * Automation engine section.
+ * Automation / finance hero section.
  *
- * Layout based on SoftCo AI "engine behind tailored automation" hero.
- *
- * Spacing (styleguide, desktop):
- * - 80px heading size (Heading level 1)
- * - 60px gap between heading and image row
- * - 110px gap between left image and right content
- * - 150px gap between image row and metrics
- * - 180px gap between individual metrics
- * - 160px gap between metrics row and logo carousel
- * - Metric value: 48px, label: 20px
+ * Full-width brand blue, subtle geometric depth, centered stack:
+ * overline → H1 → image → body → orange CTA → metrics row with vertical dividers.
+ * Matches SoftCo tokens: --color-brand-blue, --color-brand-orange, Erode + Plus Jakarta.
  */
 export function AutomationEngineSection({
   overline,
   heading,
   imageSrc,
   imageAlt,
-  softcoAiImageSrc,
-  softcoAiImageAlt,
   body,
   ctaLabel,
   ctaHref,
   metrics,
-  logos,
+  logos = [],
 }: AutomationEngineSectionProps) {
   return (
-    <section className="w-full bg-[linear-gradient(180deg,#1F99F2,#0D72D4)]">
-      <div className="mx-auto w-full max-w-[1440px] px-6 py-[150px] text-white">
-        {/* Overline + main heading */}
-        <div className="flex flex-col items-center text-center">
-          <Overline className="text-brand-orange">
-            {overline}
-          </Overline>
-          <Heading
-            level={1}
-            className="mt-6 text-white"
+    <section className="relative w-full overflow-hidden bg-brand-blue">
+      {/* Subtle darker triangles / depth — low contrast on blue */}
+      <div className="pointer-events-none absolute inset-0" aria-hidden>
+        <div
+          className="absolute -left-[20%] -top-[10%] h-[70%] w-[65%] rotate-[12deg] bg-gradient-to-br from-brand-dark/20 to-transparent"
+        />
+        <div
+          className="absolute -bottom-[15%] -right-[25%] h-[65%] w-[55%] -rotate-[8deg] bg-gradient-to-tl from-brand-dark/15 to-transparent"
+        />
+      </div>
+
+      <div className="relative mx-auto w-full max-w-[1440px] px-4 py-16 text-center text-white tablet-down:px-6 tablet-down:py-24">
+        <Overline className="text-brand-orange">{overline}</Overline>
+
+        <Heading
+          level={1}
+          className="mx-auto mt-6 max-w-[920px] text-white tablet-down:mt-8"
+        >
+          {heading}
+        </Heading>
+
+        {/* Hero image — rounded, max width ~860px like ESG collage */}
+        <div className="mx-auto mt-10 flex w-full max-w-[860px] justify-center tablet-down:mt-[60px]">
+          <div className="relative w-full overflow-hidden rounded-xl shadow-2xl">
+            <Image
+              src={imageSrc}
+              alt={imageAlt}
+              width={860}
+              height={540}
+              className="h-auto w-full object-cover"
+              sizes="(max-width: 992px) 100vw, 860px"
+            />
+          </div>
+        </div>
+
+        {/* Body — narrower than image */}
+        <Paragraph
+          size="base"
+          className="mx-auto mt-10 max-w-[660px] text-white/90 tablet-down:mt-[60px]"
+        >
+          {body}
+        </Paragraph>
+
+        <div className="mt-10 flex justify-center tablet-down:mt-[60px]">
+          <Button
+            variant="orange"
+            href={ctaHref}
+            iconAfter={<ChevronRightIcon size="sm" />}
           >
-            {heading}
-          </Heading>
+            {ctaLabel}
+          </Button>
         </div>
 
-        {/* 60px gap between heading and image/content row */}
-        <div className="mt-[60px] grid grid-cols-1 items-center gap-[40px] md:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] md:gap-[110px]">
-          {/* Left: main product image */}
-          <div className="w-full">
-            <div className="overflow-hidden rounded-lg shadow-2xl">
-              <Image
-                src={imageSrc}
-                alt={imageAlt}
-                width={900}
-                height={600}
-                className="h-auto w-full"
-              />
-            </div>
-          </div>
-
-          {/* Right: SoftCoAI lockup + copy + CTA */}
-          <div className="flex flex-col items-start text-left">
-            <div className="relative h-[44px] w-auto">
-              <Image
-                src={softcoAiImageSrc}
-                alt={softcoAiImageAlt}
-                width={220}
-                height={44}
-                className="h-[44px] w-auto object-contain"
-              />
-            </div>
-            <Paragraph
-              size="base"
-              className="mt-6 max-w-[460px] text-white/90"
-            >
-              {body}
-            </Paragraph>
-            <div className="mt-10">
-              <Button
-                variant="dark"
-                href={ctaHref}
-                iconAfter={<ChevronRightIcon />}
-              >
-                {ctaLabel}
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        {/* 150px gap between image/content row and metrics */}
+        {/* Metrics row — top rule + dividers between cells (pale blue on brand blue) */}
         {metrics.length > 0 && (
-          <div className="mt-[150px] flex flex-col items-center">
-            <div className="flex flex-col gap-[40px] text-center md:flex-row md:gap-[180px]">
+          <div className="mt-16 border-t border-brand-pale-blue/35 tablet-down:mt-20">
+            <div className="grid grid-cols-1 divide-y divide-brand-pale-blue/30 tablet-down:grid-cols-4 tablet-down:divide-x tablet-down:divide-y-0">
               {metrics.map((metric, index) => (
-                <div key={`${metric.value}-${index}`} className="flex flex-col items-center">
-                  <span className="font-heading text-[48px] leading-[52px] text-white">
+                <div
+                  key={`${metric.value}-${index}`}
+                  className="flex flex-col items-center justify-center px-4 py-8 tablet-down:py-10"
+                >
+                  <span className="font-heading text-[40px] font-semibold leading-[1.1] text-brand-orange tablet-down:text-[48px] tablet-down:leading-[52px]">
                     {metric.value}
                   </span>
-                  <Paragraph
-                    size="base"
-                    className="mt-2 text-[20px] leading-[28px] text-white/90"
-                  >
+                  <p className="mt-3 max-w-[240px] font-body text-[16px] leading-[24px] text-white tablet-down:text-[18px] tablet-down:leading-[26px]">
                     {metric.label}
-                  </Paragraph>
+                  </p>
                 </div>
               ))}
             </div>
           </div>
         )}
 
-        {/* 160px gap between metrics and logo carousel */}
         {logos.length > 0 && (
-          <div className="mt-[160px]">
-            <LogoMarquee
-              logos={logos}
-              duration={25}
-              light
-            />
+          <div className="mt-16 tablet-down:mt-20">
+            <LogoMarquee logos={logos} duration={25} light />
           </div>
         )}
       </div>
     </section>
   );
 }
-
