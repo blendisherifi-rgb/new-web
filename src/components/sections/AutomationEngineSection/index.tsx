@@ -39,7 +39,13 @@ interface AutomationEngineSectionProps {
  *
  * Full-width brand blue, subtle geometric depth, centered stack:
  * overline → H1 → image → body → orange CTA → metrics row with vertical dividers.
- * Matches SoftCo tokens: --color-brand-blue, --color-brand-orange, Erode + Plus Jakarta.
+ *
+ * Spacing (styleguide, desktop):
+ * - 80px heading size (Heading level 1)
+ * - 60px gap between heading and image row
+ * - 110px gap between left image and right content
+ * - 150px gap between image row and metrics
+ * - Metric value: Plus Jakarta Sans 800, 48px / 48px, brand orange (#F7931E); label: 20px, lowercase
  */
 export function AutomationEngineSection({
   overline,
@@ -108,17 +114,17 @@ export function AutomationEngineSection({
 
         {/* Metrics row — top rule + dividers between cells (pale blue on brand blue) */}
         {metrics.length > 0 && (
-          <div className="mt-16 border-t border-brand-pale-blue/35 tablet-down:mt-20">
+          <div className="mt-16 border-t border-brand-pale-blue/35 tablet-down:mt-[150px]">
             <div className="grid grid-cols-1 divide-y divide-brand-pale-blue/30 tablet-down:grid-cols-4 tablet-down:divide-x tablet-down:divide-y-0">
               {metrics.map((metric, index) => (
                 <div
                   key={`${metric.value}-${index}`}
                   className="flex flex-col items-center justify-center px-4 py-8 tablet-down:py-10"
                 >
-                  <span className="font-heading text-[40px] font-semibold leading-[1.1] text-brand-orange tablet-down:text-[48px] tablet-down:leading-[52px]">
+                  <span className="font-body text-[40px] font-extrabold leading-[48px] tracking-normal text-brand-orange tablet-down:text-[48px] tablet-down:leading-[48px]">
                     {metric.value}
                   </span>
-                  <p className="mt-3 max-w-[240px] font-body text-[16px] leading-[24px] text-white tablet-down:text-[18px] tablet-down:leading-[26px]">
+                  <p className="mt-3 max-w-[240px] font-body text-[16px] leading-[24px] lowercase text-white/90 tablet-down:text-[20px] tablet-down:leading-[28px]">
                     {metric.label}
                   </p>
                 </div>

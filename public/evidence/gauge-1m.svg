@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-hidden="true">
+  <circle cx="100" cy="100" r="90" fill="#D4EBFB" stroke="#f7931e" stroke-width="2"/>
+  <circle
+    transform="rotate(-90 100 100)"
+    cx="100"
+    cy="100"
+    r="78"
+    fill="none"
+    stroke="#047fe5"
+    stroke-width="14"
+    stroke-linecap="round"
+    stroke-dasharray="489.84"
+    stroke-dashoffset="196"
+  />
+  <text x="100" y="112" text-anchor="middle" font-family="system-ui, sans-serif" font-size="26" font-weight="700" fill="#0f172a">1M+</text>
+</svg>

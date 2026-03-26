@@ -53,6 +53,24 @@ import { LifeAtSoftCoSection } from "@/components/sections/LifeAtSoftCoSection";
 import { PeopleFirstProofSection } from "@/components/sections/PeopleFirstProofSection";
 import { OpenRolesSection } from "@/components/sections/OpenRolesSection";
 import { FeatureModalSection } from "@/components/sections/FeatureModalSection";
+import { ApAutomationSection } from "@/components/sections/ApAutomationSection";
+import { ArchitectureSection } from "@/components/sections/ArchitectureSection";
+import { AiEngineSection } from "@/components/sections/AiEngineSection";
+import { ErpIntegrationSection } from "@/components/sections/ErpIntegrationSection";
+import { AnalyticsDashboardsSection } from "@/components/sections/AnalyticsDashboardsSection";
+import { SecurityComplianceSection } from "@/components/sections/SecurityComplianceSection";
+import { PartnerEcosystemSection } from "@/components/sections/PartnerEcosystemSection";
+import { EvidenceSection } from "@/components/sections/EvidenceSection";
+import { StpComparisonSection } from "@/components/sections/StpComparisonSection";
+import { InvoiceLifecycleSection } from "@/components/sections/InvoiceLifecycleSection";
+import { ApAnalyticsSection } from "@/components/sections/ApAnalyticsSection";
+import { FaqSection } from "@/components/sections/FaqSection";
+import { EsgPoliciesSection } from "@/components/sections/EsgPoliciesSection";
+import { EnvironmentalSection } from "@/components/sections/EnvironmentalSection";
+import { SocialSection } from "@/components/sections/SocialSection";
+import { GovernanceSection } from "@/components/sections/GovernanceSection";
+import { TrustBarSection } from "@/components/sections/TrustBarSection";
+import { CommunitySupportSection } from "@/components/sections/CommunitySupportSection";
 
 export interface SectionData {
   id: string;
@@ -112,4 +130,22 @@ export const SECTION_MAP: Record<string, React.ComponentType<Record<string, unkn
   people_first_proof_section: PeopleFirstProofSection as unknown as React.ComponentType<Record<string, unknown>>,
   open_roles_section: OpenRolesSection as unknown as React.ComponentType<Record<string, unknown>>,
   feature_modal_section: FeatureModalSection as unknown as React.ComponentType<Record<string, unknown>>,
+  ap_automation_section: ApAutomationSection as unknown as React.ComponentType<Record<string, unknown>>,
+  architecture_section: ArchitectureSection as unknown as React.ComponentType<Record<string, unknown>>,
+  ai_engine_section: AiEngineSection as unknown as React.ComponentType<Record<string, unknown>>,
+  erp_integration_section: ErpIntegrationSection as unknown as React.ComponentType<Record<string, unknown>>,
+  analytics_dashboards_section: AnalyticsDashboardsSection as unknown as React.ComponentType<Record<string, unknown>>,
+  security_compliance_section: SecurityComplianceSection as unknown as React.ComponentType<Record<string, unknown>>,
+  partner_ecosystem_section: PartnerEcosystemSection as unknown as React.ComponentType<Record<string, unknown>>,
+  evidence_section: EvidenceSection as unknown as React.ComponentType<Record<string, unknown>>,
+  stp_comparison_section: StpComparisonSection as unknown as React.ComponentType<Record<string, unknown>>,
+  invoice_lifecycle_section: InvoiceLifecycleSection as unknown as React.ComponentType<Record<string, unknown>>,
+  ap_analytics_section: ApAnalyticsSection as unknown as React.ComponentType<Record<string, unknown>>,
+  faq_section: FaqSection as unknown as React.ComponentType<Record<string, unknown>>,
+  esg_policies_section: EsgPoliciesSection as unknown as React.ComponentType<Record<string, unknown>>,
+  environmental_section: EnvironmentalSection as unknown as React.ComponentType<Record<string, unknown>>,
+  social_section: SocialSection as unknown as React.ComponentType<Record<string, unknown>>,
+  governance_section: GovernanceSection as unknown as React.ComponentType<Record<string, unknown>>,
+  trust_bar_section: TrustBarSection as unknown as React.ComponentType<Record<string, unknown>>,
+  community_support_section: CommunitySupportSection as unknown as React.ComponentType<Record<string, unknown>>,
 };

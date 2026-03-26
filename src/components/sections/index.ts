@@ -70,3 +70,17 @@ export {
   type PerfectFitCard,
   type PerfectFitCtaCard,
 } from "./PerfectFitFrameworkSection";
+export {
+  EnvironmentalSection,
+  type EnvironmentalInitiative,
+} from "./EnvironmentalSection";
+export { SocialSection } from "./SocialSection";
+export { GovernanceSection } from "./GovernanceSection";
+export {
+  TrustBarSection,
+  type TrustBarLogo,
+} from "./TrustBarSection";
+export {
+  CommunitySupportSection,
+  type CommunitySupportSlide,
+} from "./CommunitySupportSection";

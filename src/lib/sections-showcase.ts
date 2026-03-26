@@ -703,6 +703,102 @@ export const SECTIONS_SHOWCASE_GROUPS: SectionGroup[] = [
     },
   },
   {
+    id: "ap-automation-1",
+    acfGroupName: "ap_automation_section",
+    order: 1.52,
+    fields: {
+      headingLine1: "AI-powered AP automation,",
+      headingLine2: "tailored to perfection",
+      imageSrc: "/hero-platform-screenshot.png",
+      imageAlt: "SoftCo AP software interface",
+      softcoApImageSrc: "/next.svg",
+      softcoApImageAlt: "SoftCo AP",
+      body:
+        "Modular, AI-native AP automation that fits the first time. Our team of finance professionals delivers implementation within 10–12 weeks—without major disruption to your operations.",
+      ctaLabel: "PUT OUR AP AUTOMATION TO THE TEST",
+      ctaHref: "#",
+      metrics: [
+        { value: "90%", label: "straight-through processing for PO invoices" },
+        { value: "3–5 months", label: "average time-to-value" },
+        { value: "80%", label: "reduction in processing costs" },
+        { value: "scale", label: "AP operations without adding headcount" },
+      ],
+      gartnerLogoSrc: "/vercel.svg",
+      gartnerLogoAlt: "Gartner",
+      endorsementText:
+        "Featured in the 2025 Magic Quadrant for Accounts Payable Applications",
+    },
+  },
+  {
+    id: "architecture-1",
+    acfGroupName: "architecture_section",
+    order: 1.55,
+    fields: {
+      overline: "ARCHITECTURE",
+      headingLine1: "Built modular.",
+      headingLine2: "Designed to scale.",
+      body: "Instead of forcing you into rigid templates, SoftCoAI+ adapts to your processes. Our modular architecture lets you deploy AI where it matters most—without overhauling your entire stack.",
+      imageSrc: "/hero-platform-screenshot.png",
+      imageAlt: "SoftCo platform architecture diagram",
+    },
+  },
+  {
+    id: "ai-engine-1",
+    acfGroupName: "ai_engine_section",
+    order: 1.57,
+    fields: {
+      overline: "AI ENGINE",
+      headingLine1: "AI built in",
+      headingLine2: "where it matters",
+      introBody:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
+      ctaLabel: "BOOK A DEMO",
+      ctaHref: "#",
+      tabs: [
+        {
+          label: "AI Data capture & validation",
+          title: "AI Data capture & validation",
+          body:
+            "Automatically extract and enrich data from any source and format. Reduce manual entry and errors with intelligent capture and validation built for complex finance environments.",
+          imageSrc: "/hero-platform-screenshot.png",
+          imageAlt: "SoftCo dashboard — capture and validation",
+        },
+        {
+          label: "AutoML matching engine",
+          title: "AutoML matching engine",
+          body:
+            "Machine learning models trained on your invoice patterns deliver high straight-through processing rates with continuous improvement.",
+          imageSrc: "/hero-platform-screenshot.png",
+          imageAlt: "SoftCo dashboard — matching",
+        },
+        {
+          label: "Intelligent workflow & routing",
+          title: "Intelligent workflow & routing",
+          body:
+            "Route exceptions and approvals to the right people with configurable rules and full visibility.",
+          imageSrc: "/hero-platform-screenshot.png",
+          imageAlt: "SoftCo dashboard — workflow",
+        },
+        {
+          label: "GenAI & analytics",
+          title: "GenAI & analytics",
+          body:
+            "Insights and natural-language support across your finance operations so teams can act faster.",
+          imageSrc: "/hero-platform-screenshot.png",
+          imageAlt: "SoftCo dashboard — analytics",
+        },
+        {
+          label: "AI fraud prevention",
+          title: "AI fraud prevention",
+          body:
+            "Detect anomalies and suspicious patterns before they impact your business with embedded fraud signals.",
+          imageSrc: "/hero-platform-screenshot.png",
+          imageAlt: "SoftCo dashboard — fraud prevention",
+        },
+      ],
+    },
+  },
+  {
     id: "open-roles-1",
     acfGroupName: "open_roles_section",
     order: 1.997,
@@ -716,6 +812,210 @@ export const SECTIONS_SHOWCASE_GROUPS: SectionGroup[] = [
       viewAllLabel: "VIEW ALL OPEN ROLES",
       hireHiveLive: true,
       jobs: [],
+    },
+  },
+  {
+    id: "erp-integration-1",
+    acfGroupName: "erp_integration_section",
+    order: 1.58,
+    fields: {
+      overline: "ERP INTEGRATION",
+      headingLine1: "Seamless integration",
+      headingLine2: "with 200+ ERP systems",
+      body:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent accumsan, quam in ornare ultricies, justo neque scelerisque lacus, et mattis ante tortor at tellus.",
+      ctaLabel: "WHAT STAYS IN YOUR ERP",
+      ctaHref: "#",
+      logos: [
+        { logoSrc: "/next.svg", logoAlt: "SAP" },
+        { logoSrc: "/vercel.svg", logoAlt: "Microsoft Dynamics 365" },
+        { logoSrc: "/globe.svg", logoAlt: "Infor" },
+        { logoSrc: "/window.svg", logoAlt: "Oracle" },
+        { logoSrc: "/file.svg", logoAlt: "Sage" },
+      ],
+      moreCountHighlight: "+200",
+      moreCountRest: "more",
+    },
+  },
+  {
+    id: "analytics-dashboards-1",
+    acfGroupName: "analytics_dashboards_section",
+    order: 1.59,
+    fields: {
+      overline: "ANALYTICS",
+      mainTitle: "Analytics that turn your data into defensible finance operations",
+      introBody:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      ctaLabel: "SEE ANALYTICS IN ACTION",
+      ctaHref: "#",
+      headingBefore: "Outcome-driven",
+      headingHighlight: "dashboards",
+      body:
+        "Move beyond reactive reporting. Track Straight-Through Processing (STP) rates, monitor Work-In-Progress (WIP), and gain 100% visibility over liabilities, commitments, and spend across multiple global entities in real-time.",
+      slides: [
+        { imageSrc: "/hero-platform-screenshot.png", imageAlt: "Analytics dashboard view 1" },
+        { imageSrc: "/platform-p2p.png", imageAlt: "Analytics dashboard view 2" },
+        { imageSrc: "/hero-platform-screenshot.png", imageAlt: "Analytics dashboard view 3" },
+      ],
+    },
+  },
+  {
+    id: "security-compliance-1",
+    acfGroupName: "security_compliance_section",
+    order: 1.65,
+    fields: {
+      overline: "SECURITY AND COMPLIANCE",
+      headingLine1: "The highest",
+      headingLine2: "security rating in the industry",
+      body:
+        "SoftCoAI+ holds an audited security rating of 9.9/10, placing it in the 100th percentile for software publishers globally (Mastercard RiskRecon). Risk reduction is not a feature we added. It is embedded in the architecture: single-tenant security, data isolation, tamper-proof archiving, and compliance controls designed for enterprise finance.",
+      certifications: [
+        { imageSrc: "/next.svg", imageAlt: "ISO/IEC 27001 Certified" },
+        { imageSrc: "/vercel.svg", imageAlt: "AICPA SOC" },
+        { imageSrc: "/globe.svg", imageAlt: "Peppol Access Point Certified Provider" },
+        { imageSrc: "/window.svg", imageAlt: "RiskRecon Mastercard" },
+        { imageSrc: "/file.svg", imageAlt: "Kiwa certified SÄHKE2" },
+        {},
+      ],
+    },
+  },
+  {
+    id: "partner-ecosystem-1",
+    acfGroupName: "partner_ecosystem_section",
+    order: 1.66,
+    fields: {
+      overline: "PARTNER ECOSYSTEM",
+      headingBlue1: "Backed by",
+      headingDark: "leading technology and advisory",
+      headingBlue2: "partners",
+      body:
+        "To deliver automation that fits the first time, SoftCo collaborates with a trusted network of world-class technology platforms and expert delivery firms. Our partner ecosystem ensures your solution scales flawlessly within your complex environment.",
+      logos: [
+        { imageSrc: "/next.svg", imageAlt: "Microsoft" },
+        { imageSrc: "/vercel.svg", imageAlt: "AWS" },
+        { imageSrc: "/globe.svg", imageAlt: "Xelix" },
+        { imageSrc: "/window.svg", imageAlt: "PwC" },
+        { imageSrc: "/file.svg", imageAlt: "Sage" },
+        { imageSrc: "/next.svg", imageAlt: "Corpay" },
+        { imageSrc: "/vercel.svg", imageAlt: "Interpath" },
+        { imageSrc: "/globe.svg", imageAlt: "Tungsten Automation" },
+      ],
+    },
+  },
+  {
+    id: "evidence-1",
+    acfGroupName: "evidence_section",
+    order: 1.67,
+    fields: {
+      overline: "THE EVIDENCE",
+      headingBefore: "More than a software.",
+      headingHighlight: "A partnership",
+      headingAfter: "proven at enterprise scale",
+      body:
+        "We're not only technology experts; our team is made of finance professionals with an average tenure of 15 years that deliver automation that fits the first time. All this happen within 10–12 weeks and without any major disruption to your finance operations.",
+      metrics: [
+        {
+          imageSrc: "/evidence/gauge-100.svg",
+          imageAlt: "100% project success rate",
+          label: "project success rate",
+        },
+        {
+          imageSrc: "/evidence/gauge-98.svg",
+          imageAlt: "98% client retention",
+          label: "client retention",
+        },
+        {
+          imageSrc: "/evidence/gauge-80nps.svg",
+          imageAlt: "80 NPS highest independent ranking",
+          label: "highest independent ranking",
+        },
+        {
+          imageSrc: "/evidence/gauge-1m.svg",
+          imageAlt: "1M+ users globally",
+          label: "users globally",
+        },
+      ],
+    },
+  },
+  {
+    id: "stp-comparison-1",
+    acfGroupName: "stp_comparison_section",
+    order: 1.68,
+    fields: {
+      headingBefore: "Why settle for ",
+      headingHighlight: "'good enough'",
+      headingLine2: "30% automation",
+      imageSrc: "/comparison/stp-bar.svg",
+      imageAlt: "Competition 30% vs SoftCo 90% STP comparison bar",
+      body:
+        "Competitor average for touchless invoice processing stalls at 30%. SoftCo delivers 90% straight-through processing (STP) on PO invoices, eliminating significant manual FTE costs.",
+    },
+  },
+  {
+    id: "invoice-lifecycle-1",
+    acfGroupName: "invoice_lifecycle_section",
+    order: 1.69,
+    fields: {
+      overline: "INVOICE LIFECYCLE",
+      headingBefore: "From manual bottlenecks to ",
+      headingHighlight: "90% straight-through",
+      headingAfter: " processing",
+      imageWithSoftCo: "/comparison/stp-bar.svg",
+      imageWithSoftCoAlt: "Invoice lifecycle with SoftCo — 90% straight-through processing",
+      imageWithoutSoftCo: "/ai-model.svg",
+      imageWithoutSoftCoAlt: "Invoice lifecycle without SoftCo",
+    },
+  },
+  {
+    id: "ap-analytics-1",
+    acfGroupName: "ap_analytics_section",
+    order: 1.7,
+    fields: {
+      overline: "ANALYTICS",
+      headingLine1: "Turn your Accounts Payable into",
+      headingLine2: "a measurable operation",
+      introBody:
+        "SoftCo AP Analytics gives finance leaders visibility, control, and evidence. Track outcomes, spot exceptions, and drive decisions with data that fits your organisation.",
+      cards: [
+        {
+          iconSrc: "/globe.svg",
+          iconAlt: "Outcome-driven dashboards",
+          titleLine1: "Outcome-driven",
+          titleLine2: "dashboards",
+        },
+        {
+          iconSrc: "/next.svg",
+          iconAlt: "Exception intelligence",
+          titleLine1: "Exception",
+          titleLine2: "intelligence",
+        },
+        {
+          iconSrc: "/vercel.svg",
+          iconAlt: "Anti-fraud technology",
+          titleLine1: "Anti-fraud",
+          titleLine2: "technology",
+        },
+        {
+          iconSrc: "/window.svg",
+          iconAlt: "Audit-ready archiving",
+          titleLine1: "Audit-ready",
+          titleLine2: "archiving",
+        },
+        {
+          iconSrc: "/file.svg",
+          iconAlt: "Supplier lifecycle Management",
+          titleLine1: "Supplier lifecycle",
+          titleLine2: "Management",
+        },
+        {
+          iconSrc: "/ai-model.svg",
+          iconAlt: "SoftCo copilot",
+          titleLine1: "SoftCo copilot",
+          titleLine2: "(Gen-AI Assistant)",
+        },
+      ],
+      ctaLabel: "TALK TO OUR AP EXPERTS",
+      ctaHref: "#",
     },
   },
   {
@@ -1081,6 +1381,179 @@ export const SECTIONS_SHOWCASE_GROUPS: SectionGroup[] = [
         { tabTitle: "Financial Controller", title: "Financial controller", content: "Get faster close cycles and stronger controls with less manual admin across your finance team.", ctaLabel: "Read more", ctaHref: "#", imageSrc: "/hero-platform-screenshot.png", imageAlt: "Financial controller in office" },
         { tabTitle: "Role", title: "Operations leader", content: "Drive consistent process quality while reducing friction between purchasing, operations, and finance.", ctaLabel: "Read more", ctaHref: "#", imageSrc: "/hero-platform-screenshot.png", imageAlt: "Operations leader in office" },
       ],
+    },
+  },
+  {
+    id: "faq-1",
+    acfGroupName: "faq_section",
+    order: 7.5,
+    fields: {
+      overline: "FAQ",
+      headingLine1: "Frequently asked",
+      headingLine2: "questions",
+      items: [
+        {
+          question: "What is SoftCo AP Analytics?",
+          answer:
+            "SoftCo AP Analytics is a purpose-built intelligence suite that transforms Accounts Payable from a reactive cost centre into a defensible finance operation. We deliver real-time operational visibility and objective metrics embedded directly within your AP workflow.",
+        },
+        {
+          question: "How does SoftCo integrate with our ERP?",
+          answer:
+            "SoftCo supports seamless integration with over 200 ERP systems including SAP, Oracle, and Microsoft Dynamics. Our modular architecture ensures data synchronises live across all your entities without brittle custom builds.",
+        },
+        {
+          question: "What is your implementation timeframe?",
+          answer:
+            "Most implementations complete within 10–12 weeks. Our team of finance professionals with an average tenure of 15 years delivers automation that fits the first time, without major disruption to your operations.",
+        },
+      ],
+    },
+  },
+  {
+    id: "esg-policies-1",
+    acfGroupName: "esg_policies_section",
+    order: 7.6,
+    fields: {
+      overline: "ESG POLICIES",
+      headingBefore: "Committed to a ",
+      headingHighlight1: "sustainable",
+      headingHighlight2: "and inclusive",
+      headingAfter: " future",
+      slides: [
+        { imageSrc: "/hero-platform-screenshot.png", imageAlt: "ESG team" },
+        { imageSrc: "/platform-p2p.png", imageAlt: "Going for Growth" },
+        { imageSrc: "/hero-platform-screenshot.png", imageAlt: "Tungsten Network awards" },
+      ],
+      body:
+        "ESG principles are woven into how we build our software and operate our business.",
+      cards: [
+        { number: "01", label: "Environmental" },
+        { number: "02", label: "Social" },
+        { number: "03", label: "Governance" },
+        { number: "04", label: "Policies & reports" },
+      ],
+    },
+  },
+  {
+    id: "environmental-1",
+    acfGroupName: "environmental_section",
+    order: 7.7,
+    fields: {
+      overline: "ENVIRONMENTAL",
+      headingBefore: "Committed to a ",
+      headingHighlight: "sustainable",
+      headingAfter: " and inclusive future",
+      ctaLabel: "VIEW OUR ENVIRONMENTAL POLICY",
+      ctaHref: "#",
+      body:
+        "SoftCo is committed to minimising our environmental impact and supporting our customers' sustainability goals. Our automation solutions help finance teams eliminate paper-based processes, reduce carbon footprint, and operate more efficiently.",
+      statNumber: "25 Mil",
+      statLabel: "Sheets of paper saved annually thanks to automation",
+      initiatives: [
+        {
+          bold: "Carbon footprint",
+          text: " assessment underway with clear reduction targets (Scope 1, 2, and 3).",
+        },
+        {
+          bold: "Cloud-first policy",
+          text: " leveraging providers committed to 100% renewable energy.",
+        },
+        {
+          bold: "Paperless",
+          text: " finance processes enabled by SoftCo solutions, reducing customer emissions.",
+        },
+        {
+          bold: "Remote and hybrid work",
+          text: " policies to reduce travel-related emissions.",
+        },
+        {
+          bold: "Environmental Policy",
+          text: " governing operations, procurement, and waste.",
+        },
+      ],
+    },
+  },
+  {
+    id: "social-1",
+    acfGroupName: "social_section",
+    order: 7.75,
+    fields: {
+      overline: "SOCIAL",
+      headingHighlight: "People-first",
+      headingAfter: " culture and community engagement",
+      body:
+        "We believe businesses thrive when people do. Our social initiatives focus on creating a safe, diverse, and inclusive environment for our employees while also supporting the communities we serve. We are proud of our culture of continuous learning, employee wellbeing, and commitment to fairness and equity in hiring and promotions.",
+      ctaLabel: "VIEW OUR DE&I STATEMENT",
+      ctaHref: "#",
+      imageSrc: "/hero-platform-screenshot.png",
+      imageAlt: "SoftCo employees",
+      statNumber: "45 Mil",
+      statLabel: "Of new technical and leadership hires were women (2024)",
+      initiatives: [
+        "Diversity, Equity & Inclusion (DE&I) strategy in place",
+        "Ongoing employee engagement and wellbeing programs",
+        "Volunteering days and partnerships with local charities",
+        "Commitment to fair pay, equal opportunity, and safe working conditions",
+      ],
+    },
+  },
+  {
+    id: "governance-1",
+    acfGroupName: "governance_section",
+    order: 7.8,
+    fields: {
+      overline: "GOVERNANCE",
+      heading: "Built on integrity, guided by accountability",
+      ctaLabel: "VIEW OUR CODE OF CONDUCT",
+      ctaHref: "#",
+      body:
+        "Good governance is the foundation of our business. Our policies and practices ensure we uphold the highest standards of compliance, transparency, and ethical behavior.",
+      statNumber: "9.9/10",
+      statLabel: "Audited security and SOC 1&2 compliance",
+      initiatives: [
+        "ESG oversight by Executive Leadership Team",
+        "Comprehensive Code of Business Conduct",
+        "Anti-corruption and anti-bribery policies",
+        "Strict data privacy, cybersecurity, and GDPR compliance protocols",
+        "Whistleblower program and regular risk assessments",
+      ],
+    },
+  },
+  {
+    id: "trust-bar-1",
+    acfGroupName: "trust_bar_section",
+    order: 7.85,
+    fields: {
+      heading: "Built on integrity. Guided by accountability.",
+      logos: [
+        { imageSrc: "/next.svg", imageAlt: "ISO 27001" },
+        { imageSrc: "/vercel.svg", imageAlt: "AICPA SOC" },
+        { imageSrc: "/globe.svg", imageAlt: "Peppol" },
+        { imageSrc: "/window.svg", imageAlt: "Riskrecon" },
+        { imageSrc: "/file.svg", imageAlt: "Kiwa" },
+      ],
+    },
+  },
+  {
+    id: "community-support-1",
+    acfGroupName: "community_support_section",
+    order: 7.9,
+    fields: {
+      overline: "COMMUNITY SUPPORT",
+      headingBefore: "Championing potential in the",
+      headingHighlight: "communities we work in",
+      bodyTop:
+        "We believe in giving back to the communities where we live and work. Through our leadership series, volunteering, and partnerships with local charities, we support initiatives that help people reach their potential.",
+      slides: [
+        { imageSrc: "/hero-platform-screenshot.png", imageAlt: "Community event" },
+        { imageSrc: "/platform-p2p.png", imageAlt: "Leadership series" },
+        { imageSrc: "/hero-platform-screenshot.png", imageAlt: "Volunteering" },
+      ],
+      bodyBottom:
+        "Our commitment extends beyond our products. We invest in people, education, and local growth to create lasting positive impact.",
+      ctaLabel: "EXPLORE OUR LEADERSHIP SERIES",
+      ctaHref: "#",
     },
   },
     ],
