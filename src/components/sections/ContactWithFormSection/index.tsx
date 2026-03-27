@@ -26,9 +26,12 @@ function socialIconLabel(platform: string, fallback?: string): string {
   return (fallback ?? platform).slice(0, 2);
 }
 
+const contactFieldClass =
+  "w-full rounded-[5px] border border-white/25 bg-[#E8EEF8]/35 px-4 py-3 font-body text-[16px] text-brand-dark shadow-inner backdrop-blur-sm placeholder:text-brand-dark/50 focus:border-brand-orange focus:outline-none focus:ring-2 focus:ring-brand-orange/25";
+
 /**
- * Contact banner + form as one section with tall-bg.png spanning both.
- * 300px gap between banner and form.
+ * Contact hero + form on one gradient section (matches Contact Us 2 comp).
+ * Background: softco-gradient; form uses semi-transparent light fields on blue.
  */
 export function ContactWithFormSection({
   overline = "Contact Us",
@@ -40,7 +43,7 @@ export function ContactWithFormSection({
   return (
     <section className="relative w-full overflow-hidden">
       <Image
-        src="/tall-bg.png"
+        src="/softco-gradient.jpg"
         alt=""
         fill
         className="object-cover object-top"
@@ -77,8 +80,8 @@ export function ContactWithFormSection({
           ) : null}
         </div>
 
-        {/* 300px gap + Form */}
-        <div className="pt-32 pb-12 tablet-down:pt-[300px] tablet-down:pb-24">
+        {/* Gap + Form */}
+        <div className="pb-16 pt-12 tablet-down:pb-24 tablet-down:pt-[120px]">
           <div className="mx-auto max-w-[800px] px-4 tablet-down:px-6">
             <form className="flex flex-col gap-6" onSubmit={(e) => e.preventDefault()}>
               <div className="grid gap-6 tablet-down:grid-cols-2">
@@ -90,7 +93,8 @@ export function ContactWithFormSection({
                     id="cf-first-name"
                     type="text"
                     required
-                    className="w-full rounded-[5px] border border-brand-dark-20 bg-[#ECECF1] px-4 py-3 font-body text-[16px] text-brand-dark placeholder:text-brand-dark-40 focus:border-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-blue/20"
+                    autoComplete="given-name"
+                    className={contactFieldClass}
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
@@ -101,7 +105,8 @@ export function ContactWithFormSection({
                     id="cf-last-name"
                     type="text"
                     required
-                    className="w-full rounded-[5px] border border-brand-dark-20 bg-[#ECECF1] px-4 py-3 font-body text-[16px] text-brand-dark placeholder:text-brand-dark-40 focus:border-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-blue/20"
+                    autoComplete="family-name"
+                    className={contactFieldClass}
                   />
                 </div>
               </div>
@@ -114,18 +119,20 @@ export function ContactWithFormSection({
                     id="cf-email"
                     type="email"
                     required
-                    className="w-full rounded-[5px] border border-brand-dark-20 bg-[#ECECF1] px-4 py-3 font-body text-[16px] text-brand-dark placeholder:text-brand-dark-40 focus:border-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-blue/20"
+                    autoComplete="email"
+                    className={contactFieldClass}
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="cf-phone" className="font-body text-[14px] font-medium text-white">
-                    Phone Number
+                  <label htmlFor="cf-job-title" className="font-body text-[14px] font-medium text-white">
+                    Job title <span className="text-brand-orange" aria-hidden>*</span>
                   </label>
                   <input
-                    id="cf-phone"
-                    type="tel"
-                    className="w-full rounded-[5px] border border-brand-dark-20 bg-[#ECECF1] px-4 py-3 font-body text-[16px] text-brand-dark placeholder:text-brand-dark-40 focus:border-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-blue/20"
-                    placeholder="555–458 52"
+                    id="cf-job-title"
+                    type="text"
+                    required
+                    autoComplete="organization-title"
+                    className={contactFieldClass}
                   />
                 </div>
               </div>
@@ -138,18 +145,24 @@ export function ContactWithFormSection({
                     id="cf-company"
                     type="text"
                     required
-                    className="w-full rounded-[5px] border border-brand-dark-20 bg-[#ECECF1] px-4 py-3 font-body text-[16px] text-brand-dark placeholder:text-brand-dark-40 focus:border-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-blue/20"
+                    autoComplete="organization"
+                    className={contactFieldClass}
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="cf-role" className="font-body text-[14px] font-medium text-white">
                     Role
                   </label>
-                  <input
-                    id="cf-role"
-                    type="text"
-                    className="w-full rounded-[5px] border border-brand-dark-20 bg-[#ECECF1] px-4 py-3 font-body text-[16px] text-brand-dark placeholder:text-brand-dark-40 focus:border-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-blue/20"
-                  />
+                  <select id="cf-role" defaultValue="" className={`${contactFieldClass} cursor-pointer`}>
+                    <option value="" disabled>
+                      Select your role
+                    </option>
+                    <option value="cfo">CFO / Finance leader</option>
+                    <option value="ap">Accounts Payable Manager</option>
+                    <option value="procurement">Procurement / P2P</option>
+                    <option value="it">IT / Digital transformation</option>
+                    <option value="other">Other</option>
+                  </select>
                 </div>
               </div>
               <div className="flex flex-col gap-1.5">
@@ -160,7 +173,7 @@ export function ContactWithFormSection({
                   id="cf-message"
                   required
                   rows={5}
-                  className="w-full resize-y rounded-[5px] border border-brand-dark-20 bg-[#ECECF1] px-4 py-3 font-body text-[16px] text-brand-dark placeholder:text-brand-dark-40 focus:border-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-blue/20"
+                  className={contactFieldClass}
                 />
               </div>
               <div className="flex flex-col gap-4">
@@ -168,7 +181,7 @@ export function ContactWithFormSection({
                   <input
                     type="checkbox"
                     defaultChecked
-                    className="h-5 w-5 shrink-0 cursor-pointer rounded border-brand-dark-20 text-brand-orange accent-brand-orange focus:ring-2 focus:ring-brand-orange/30"
+                    className="h-5 w-5 shrink-0 cursor-pointer rounded border-white/30 text-brand-orange accent-brand-orange focus:ring-2 focus:ring-brand-orange/30"
                   />
                   <span className="font-body text-[14px] text-white/90">
                     I agree my information can be used to contact me regarding my enquiry
@@ -177,7 +190,7 @@ export function ContactWithFormSection({
                 <label className="inline-flex cursor-pointer items-center gap-3">
                   <input
                     type="checkbox"
-                    className="h-5 w-5 shrink-0 cursor-pointer rounded border-brand-dark-20 text-brand-orange accent-brand-orange focus:ring-2 focus:ring-brand-orange/30"
+                    className="h-5 w-5 shrink-0 cursor-pointer rounded border-white/30 text-brand-orange accent-brand-orange focus:ring-2 focus:ring-brand-orange/30"
                   />
                   <span className="font-body text-[14px] text-white/90">
                     I would like to receive occasional updates with technology insights from SoftCo
@@ -186,7 +199,7 @@ export function ContactWithFormSection({
               </div>
               <div className="flex justify-center pt-4">
                 <Button type="submit" variant="orange" iconAfter={<ChevronRightIcon />}>
-                  Send message
+                  SEND MESSAGE
                 </Button>
               </div>
             </form>

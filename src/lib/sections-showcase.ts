@@ -1913,3 +1913,136 @@ export const SECTIONS_SHOWCASE_GROUPS: SectionGroup[] = [
 export const SECTIONS_SHOWCASE_DATA: SectionData[] = SECTIONS_SHOWCASE_GROUPS.flatMap(
   (g) => g.sections
 );
+
+/**
+ * Contact Us 2 — hero + form, locations accordion, client logos marquee, newsletter.
+ * Mirror this order in WordPress flexible content. Preview: /us/contact-us-2
+ */
+export const CONTACT_US_2_SECTIONS: SectionData[] = [
+  {
+    id: "contact-us-2-hero-form",
+    acfGroupName: "contact_with_form_section",
+    order: 0,
+    fields: {
+      overline: "CONTACT US",
+      title:
+        "Talk to the team that makes complex P2P and AP automation fit the first time",
+      socialLinks: [
+        { platform: "X", url: "https://x.com/softco", label: "X (Twitter)" },
+        { platform: "LinkedIn", url: "https://linkedin.com/company/softco", label: "LinkedIn" },
+        { platform: "YouTube", url: "https://youtube.com/@softco", label: "YouTube" },
+      ],
+    },
+  },
+  {
+    id: "contact-us-2-locations",
+    acfGroupName: "locations_section",
+    order: 1,
+    fields: {
+      headingBefore: "Our",
+      headingHighlight: "locations",
+      headingAfter: "",
+      items: [
+        {
+          tabTitle: "BOSTON - SOFTCO USA",
+          title: "Boston — SoftCo USA",
+          imageSrc: "/hero-platform-screenshot.png",
+          imageAlt: "Boston office",
+          address: "Boston, MA",
+          phone: "+1 617 555 0100",
+          email: "boston@softco.com",
+          mapUrl: "https://maps.google.com/?q=Boston+SoftCo",
+          mapLabel: "View on map",
+        },
+        {
+          tabTitle: "DUBLIN - SOFTCO EU",
+          title: "Dublin — SoftCo EU",
+          imageSrc: "/hero-platform-screenshot.png",
+          imageAlt: "Dublin office",
+          address:
+            "South County Business Park, Leopardstown, Dublin D18RR97, Ireland.",
+          phone: "+353 1 294 2420",
+          email: "dublin@softco.com",
+          mapUrl: "https://maps.google.com/?q=SoftCo+Dublin",
+          mapLabel: "View on map",
+        },
+        {
+          tabTitle: "MANCHESTER - SOFTCO UK",
+          title: "Manchester — SoftCo UK",
+          imageSrc: "/hero-platform-screenshot.png",
+          imageAlt: "Manchester office",
+          address: "Manchester, United Kingdom",
+          phone: "+44 161 555 0100",
+          email: "manchester@softco.com",
+          mapUrl: "https://maps.google.com/?q=Manchester+SoftCo",
+          mapLabel: "View on map",
+        },
+        {
+          tabTitle: "HELSINKI - SOFTCO NORDICS",
+          title: "Helsinki — SoftCo Nordics",
+          imageSrc: "/hero-platform-screenshot.png",
+          imageAlt: "Helsinki office",
+          address: "Helsinki, Finland",
+          phone: "+358 9 555 0100",
+          email: "helsinki@softco.com",
+          mapUrl: "https://maps.google.com/?q=Helsinki+SoftCo",
+          mapLabel: "View on map",
+        },
+        {
+          tabTitle: "SYDNEY - SOFTCO PACIFIC",
+          title: "Sydney — SoftCo Pacific",
+          imageSrc: "/hero-platform-screenshot.png",
+          imageAlt: "Sydney office",
+          address: "Sydney, Australia",
+          phone: "+61 2 5550 0100",
+          email: "sydney@softco.com",
+          mapUrl: "https://maps.google.com/?q=Sydney+SoftCo",
+          mapLabel: "View on map",
+        },
+        {
+          tabTitle: "MUMBAI - SOFTCO INDIA",
+          title: "Mumbai — SoftCo India",
+          imageSrc: "/hero-platform-screenshot.png",
+          imageAlt: "Mumbai office",
+          address: "Mumbai, India",
+          phone: "+91 22 5550 0100",
+          email: "mumbai@softco.com",
+          mapUrl: "https://maps.google.com/?q=Mumbai+SoftCo",
+          mapLabel: "View on map",
+        },
+      ],
+    },
+  },
+  {
+    id: "contact-us-2-logos",
+    acfGroupName: "client_logos_marquee_section",
+    order: 2,
+    fields: {
+      heading: "Trusted by enterprises who can't afford 'good enough'",
+      logos: [
+        { src: "/next.svg", alt: "JD Sports" },
+        { src: "/vercel.svg", alt: "Primark" },
+        { src: "/globe.svg", alt: "Bridgepoint" },
+        { src: "/window.svg", alt: "Logitech" },
+        { src: "/file.svg", alt: "PwC" },
+        { src: "/next.svg", alt: "Volkswagen" },
+        { src: "/vercel.svg", alt: "Dole" },
+        { src: "/globe.svg", alt: "Siemens" },
+        { src: "/window.svg", alt: "Enterprise client" },
+        { src: "/file.svg", alt: "Enterprise client" },
+        { src: "/next.svg", alt: "Enterprise client" },
+        { src: "/vercel.svg", alt: "Enterprise client" },
+      ],
+      duration: 40,
+    },
+  },
+  {
+    id: "contact-us-2-newsletter",
+    acfGroupName: "newsletter_form_section",
+    order: 3,
+    fields: {
+      heading: "Sign up for finance automation updates",
+      ctaLabel: "SIGN UP",
+    },
+  },
+];

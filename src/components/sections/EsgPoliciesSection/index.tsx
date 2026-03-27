@@ -49,14 +49,13 @@ export function EsgPoliciesSection({
 }: EsgPoliciesSectionProps) {
   const [index, setIndex] = useState(0);
 
-  if (!slides.length) return null;
-
+  const hasSlides = slides.length > 0;
   const len = slides.length;
-  const prevIdx = (index - 1 + len) % len;
-  const nextIdx = (index + 1) % len;
-  const center = slides[index];
-  const left = slides[prevIdx];
-  const right = slides[nextIdx];
+  const prevIdx = hasSlides ? (index - 1 + len) % len : 0;
+  const nextIdx = hasSlides ? (index + 1) % len : 0;
+  const center = hasSlides ? slides[index] : undefined;
+  const left = hasSlides ? slides[prevIdx] : undefined;
+  const right = hasSlides ? slides[nextIdx] : undefined;
 
   const go = (delta: number) => {
     setIndex((i) => (i + delta + len) % len);
@@ -111,6 +110,7 @@ export function EsgPoliciesSection({
         </div>
 
         {/* Slider — rule lines above/below side images only; clear gaps; no numbers on images */}
+        {hasSlides && center && left && right && (
         <div className="mt-12 tablet-down:mt-16">
           <div className="relative mx-auto flex items-center justify-center gap-4 px-12 tablet-down:mt-4 tablet-down:gap-6 tablet-down:px-14">
             <button
@@ -205,6 +205,7 @@ export function EsgPoliciesSection({
             </button>
           </div>
         </div>
+        )}
 
         <p className="mx-auto mt-8 max-w-[700px] text-center font-body text-[16px] leading-[28px] text-white/70 tablet-down:mt-10 tablet-down:text-[18px]">
           {body}

@@ -3,8 +3,8 @@ import NextLink from "next/link";
 
 interface LinkProps
   extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> {
-  /** URL. Internal paths use Next.js Link; external URLs use native <a>. */
-  href: string;
+  /** URL. Internal paths use Next.js Link; external URLs use native <a>. CMS fields may be empty. */
+  href: string | null | undefined;
   /** Force open in new tab (defaults: internal=same tab, external=new tab). */
   external?: boolean;
   children: ReactNode;
@@ -28,6 +28,12 @@ export function Link({
   className = "",
   ...rest
 }: LinkProps) {
+  if (!href) {
+    return (
+      <span className={`${baseStyles} ${className}`}>{children}</span>
+    );
+  }
+
   const isExternal = external ?? href.startsWith("http");
 
   if (isExternal) {
