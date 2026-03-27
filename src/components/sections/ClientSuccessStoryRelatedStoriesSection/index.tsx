@@ -39,13 +39,13 @@ function normalizeStories(
 ): ClientSuccessStoryRelatedStoryCard[] {
   if (!Array.isArray(input)) return [];
   return input
-    .map((row) => {
+    .map((row): ClientSuccessStoryRelatedStoryCard | null => {
       if (!row || typeof row !== "object") return null;
       const r = row as Record<string, unknown>;
       return {
         imageSrc: typeof r.imageSrc === "string" ? r.imageSrc : "",
         imageAlt: typeof r.imageAlt === "string" ? r.imageAlt : "",
-        tags: r.tags,
+        tags: normalizeTags(r.tags),
         cardTitle: typeof r.cardTitle === "string" ? r.cardTitle : "",
         ctaHref: typeof r.ctaHref === "string" ? r.ctaHref : "#",
       };

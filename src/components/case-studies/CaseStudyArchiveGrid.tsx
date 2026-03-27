@@ -28,6 +28,7 @@ export function CaseStudyArchiveGrid({ items, locale }: CaseStudyArchiveGridProp
   return (
     <ContentArchiveGrid
       items={gridItems}
+      locale={locale}
       hrefForSlug={(slug) => caseStudyUrl(slug, locale)}
       readMoreAriaNoun="case study"
     />

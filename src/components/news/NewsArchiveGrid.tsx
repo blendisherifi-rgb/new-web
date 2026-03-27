@@ -35,6 +35,7 @@ export function NewsArchiveGrid({ items, locale }: NewsArchiveGridProps) {
   return (
     <ContentArchiveGrid
       items={gridItems}
+      locale={locale}
       hrefForSlug={(slug) => newsUrl(slug, locale)}
       readMoreAriaNoun="news article"
     />

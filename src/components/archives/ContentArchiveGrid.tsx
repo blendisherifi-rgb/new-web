@@ -1,5 +1,6 @@
 "use client";
 
+import type { Locale } from "@/lib/i18n";
 import { Heading } from "@/components/atoms/Heading";
 import { Image } from "@/components/atoms/Image";
 import { Link } from "@/components/atoms/Link";
@@ -32,6 +33,7 @@ const tagPillClass =
  */
 export function ContentArchiveGrid({
   items,
+  locale: _locale,
   hrefForSlug,
   readMoreAriaNoun,
 }: ContentArchiveGridProps) {
