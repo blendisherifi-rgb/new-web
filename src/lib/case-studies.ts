@@ -4,7 +4,7 @@
 
 import { fetchGraphQL } from "./wordpress";
 import type { Locale } from "./i18n";
-import { localePath } from "./i18n";
+import { localePath, getWpmlLanguage, getWpmlLanguageEnum } from "./i18n";
 
 export interface CaseStudyListItem {
   id: string;
@@ -42,6 +42,8 @@ export async function fetchCaseStudiesArchive(
 ): Promise<CaseStudiesArchiveData> {
   const page = options?.page ?? 1;
   const perPage = options?.perPage ?? 12;
+  const language = getWpmlLanguage(locale);
+  const languageEnum = getWpmlLanguageEnum(locale);
 
   try {
     const data = await fetchGraphQL<{
@@ -58,8 +60,8 @@ export async function fetchCaseStudiesArchive(
       caseStudy?: { nodes?: unknown[] };
     }>(
       `
-      query GetCaseStudies($first: Int!, $after: String) {
-        caseStudies(first: $first, after: $after, where: { status: PUBLISH }) {
+      query GetCaseStudies($first: Int!, $after: String, $language: LanguageCodeEnum) {
+        caseStudies(first: $first, after: $after, where: { status: PUBLISH, language: $language }) {
           nodes {
             id
             slug
@@ -75,6 +77,7 @@ export async function fetchCaseStudiesArchive(
         variables: {
           first: perPage,
           after: page > 1 ? undefined : null,
+          language: languageEnum,
         },
         tags: ["case-studies", `case-studies-${locale}`],
       }
@@ -108,6 +111,8 @@ export async function fetchCaseStudyBySlug(
   slug: string,
   locale: Locale
 ): Promise<CaseStudyDetail | null> {
+  const language = getWpmlLanguage(locale);
+
   try {
     const data = await fetchGraphQL<{
       caseStudy?: {
@@ -118,6 +123,16 @@ export async function fetchCaseStudyBySlug(
         content?: string;
         featuredImage?: { node?: { sourceUrl?: string; altText?: string } };
         seo?: Record<string, unknown>;
+        translations?: Array<{
+          id: string;
+          slug?: string;
+          title?: string;
+          excerpt?: string;
+          content?: string;
+          language?: { code?: string };
+          featuredImage?: { node?: { sourceUrl?: string; altText?: string } };
+          seo?: Record<string, unknown>;
+        }> | null;
       };
       caseStudyBy?: Record<string, unknown>;
     }>(
@@ -131,6 +146,16 @@ export async function fetchCaseStudyBySlug(
           content
           featuredImage { node { sourceUrl altText } }
           seo { title metaDesc opengraphImage { sourceUrl } }
+          translations {
+            id
+            slug
+            title
+            excerpt
+            content
+            language { code }
+            featuredImage { node { sourceUrl altText } }
+            seo { title metaDesc opengraphImage { sourceUrl } }
+          }
         }
       }
     `,
@@ -140,9 +165,15 @@ export async function fetchCaseStudyBySlug(
       }
     );
 
-    const post = data?.caseStudy ?? data?.caseStudyBy;
-    if (!post) return null;
+    const raw = data?.caseStudy ?? data?.caseStudyBy;
+    if (!raw) return null;
 
+    // Prefer WPML translation matching this locale when available
+    const typedRaw = raw as typeof data.caseStudy;
+    const match = typedRaw?.translations?.find(
+      (t) => t.language?.code === language
+    );
+    const post = match ?? raw;
     const p = post as Record<string, unknown>;
     return {
       id: p.id as string,

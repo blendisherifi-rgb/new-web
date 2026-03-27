@@ -4,7 +4,7 @@
 
 import { fetchGraphQL } from "./wordpress";
 import type { Locale } from "@/lib/i18n";
-import { localePath } from "@/lib/i18n";
+import { localePath, getWpmlLanguage, getWpmlLanguageEnum } from "@/lib/i18n";
 
 export interface NewsListItem {
   id: string;
@@ -36,6 +36,8 @@ export async function fetchNewsArchive(
   options?: { page?: number; perPage?: number }
 ): Promise<NewsArchiveData> {
   const perPage = options?.perPage ?? 12;
+  const language = getWpmlLanguage(locale);
+  const languageEnum = getWpmlLanguageEnum(locale);
 
   try {
     const data = await fetchGraphQL<{
@@ -53,8 +55,8 @@ export async function fetchNewsArchive(
       newsItems?: { nodes?: unknown[] };
     }>(
       `
-      query GetNews($first: Int!) {
-        news(first: $first, where: { status: PUBLISH }) {
+      query GetNews($first: Int!, $language: LanguageCodeEnum) {
+        news(first: $first, where: { status: PUBLISH, language: $language }) {
           nodes {
             id
             slug
@@ -68,7 +70,7 @@ export async function fetchNewsArchive(
       }
     `,
       {
-        variables: { first: perPage },
+        variables: { first: perPage, language: languageEnum },
         tags: ["news", `news-${locale}`],
       }
     );
@@ -102,6 +104,8 @@ export async function fetchNewsBySlug(
   slug: string,
   locale: Locale
 ): Promise<NewsDetail | null> {
+  const language = getWpmlLanguage(locale);
+
   try {
     const data = await fetchGraphQL<{
       newsItem?: {
@@ -113,6 +117,17 @@ export async function fetchNewsBySlug(
         content?: string;
         featuredImage?: { node?: { sourceUrl?: string; altText?: string } };
         seo?: Record<string, unknown>;
+        translations?: Array<{
+          id: string;
+          slug?: string;
+          title?: string;
+          excerpt?: string;
+          date?: string;
+          content?: string;
+          language?: { code?: string };
+          featuredImage?: { node?: { sourceUrl?: string; altText?: string } };
+          seo?: Record<string, unknown>;
+        }> | null;
       };
       newsItemBy?: Record<string, unknown>;
     }>(
@@ -127,6 +142,17 @@ export async function fetchNewsBySlug(
           content
           featuredImage { node { sourceUrl altText } }
           seo { title metaDesc opengraphImage { sourceUrl } }
+          translations {
+            id
+            slug
+            title
+            excerpt
+            date
+            content
+            language { code }
+            featuredImage { node { sourceUrl altText } }
+            seo { title metaDesc opengraphImage { sourceUrl } }
+          }
         }
       }
     `,
@@ -136,9 +162,15 @@ export async function fetchNewsBySlug(
       }
     );
 
-    const post = data?.newsItem ?? data?.newsItemBy;
-    if (!post) return null;
+    const raw = data?.newsItem ?? data?.newsItemBy;
+    if (!raw) return null;
 
+    // Prefer WPML translation matching this locale when available
+    const typedRaw = raw as typeof data.newsItem;
+    const match = typedRaw?.translations?.find(
+      (t) => t.language?.code === language
+    );
+    const post = match ?? raw;
     const p = post as Record<string, unknown>;
     return {
       id: p.id as string,

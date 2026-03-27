@@ -30,7 +30,9 @@ const ContactWithFormLayout = `${LAYOUT_PREFIX}ContactWithFormSection${LAYOUT_SU
 const LocationsLayout = `${LAYOUT_PREFIX}LocationsSection${LAYOUT_SUFFIX}`;
 const ClientLogosMarqueeLayout = `${LAYOUT_PREFIX}ClientLogosMarqueeSection${LAYOUT_SUFFIX}`;
 const NewsletterFormLayout = `${LAYOUT_PREFIX}NewsletterFormSection${LAYOUT_SUFFIX}`;
+const TrustBarLayout = `${LAYOUT_PREFIX}TrustBarSection${LAYOUT_SUFFIX}`;
 // About-page sections
+const AiEngineLayout = `${LAYOUT_PREFIX}AiEngineSection${LAYOUT_SUFFIX}`;
 const FinanceHeroLayout = `${LAYOUT_PREFIX}FinanceHeroSection${LAYOUT_SUFFIX}`;
 const EngineLayout = `${LAYOUT_PREFIX}EngineSection${LAYOUT_SUFFIX}`;
 const OutcomesLayout = `${LAYOUT_PREFIX}OutcomesSection${LAYOUT_SUFFIX}`;
@@ -43,6 +45,44 @@ const OurStoryLayout = `${LAYOUT_PREFIX}OurStorySection${LAYOUT_SUFFIX}`;
 const MeetTheTeamLayout = `${LAYOUT_PREFIX}MeetTheTeamSection${LAYOUT_SUFFIX}`;
 const EsgLayout = `${LAYOUT_PREFIX}EsgSection${LAYOUT_SUFFIX}`;
 const CultureLayout = `${LAYOUT_PREFIX}CultureSection${LAYOUT_SUFFIX}`;
+const TestimonialSliderLayout = `${LAYOUT_PREFIX}TestimonialSliderSection${LAYOUT_SUFFIX}`;
+const TeamArchiveLayout = `${LAYOUT_PREFIX}TeamArchiveSection${LAYOUT_SUFFIX}`;
+const AutomationEngineLayout = `${LAYOUT_PREFIX}AutomationEngineSection${LAYOUT_SUFFIX}`;
+const ChallengeLayout = `${LAYOUT_PREFIX}ChallengeSection${LAYOUT_SUFFIX}`;
+const StrategicPrioritiesLayout = `${LAYOUT_PREFIX}StrategicPrioritiesSection${LAYOUT_SUFFIX}`;
+const SmartMatchingChallengeLayout = `${LAYOUT_PREFIX}SmartMatchingChallengeSection${LAYOUT_SUFFIX}`;
+const SmartMatchingChallengeBannerLayout = `${LAYOUT_PREFIX}SmartMatchingChallengeBannerSection${LAYOUT_SUFFIX}`;
+const StartChallengeFormLayout = `${LAYOUT_PREFIX}StartChallengeFormSection${LAYOUT_SUFFIX}`;
+const PartnerProgrammeHeroLayout = `${LAYOUT_PREFIX}PartnerProgrammeHeroSection${LAYOUT_SUFFIX}`;
+const PartnerBenefitsLayout = `${LAYOUT_PREFIX}PartnerBenefitsSection${LAYOUT_SUFFIX}`;
+const MatchingChallengeFormLayout = `${LAYOUT_PREFIX}MatchingChallengeFormSection${LAYOUT_SUFFIX}`;
+const HowItWorksLayout = `${LAYOUT_PREFIX}HowItWorksSection${LAYOUT_SUFFIX}`;
+const CfoSeriesLayout = `${LAYOUT_PREFIX}CfoSeriesSection${LAYOUT_SUFFIX}`;
+const WhyAttendLayout = `${LAYOUT_PREFIX}WhyAttendSection${LAYOUT_SUFFIX}`;
+const MeetSpeakersLayout = `${LAYOUT_PREFIX}MeetSpeakersSection${LAYOUT_SUFFIX}`;
+const EventRegisterLayout = `${LAYOUT_PREFIX}EventRegisterSection${LAYOUT_SUFFIX}`;
+const BookADemoLayout = `${LAYOUT_PREFIX}BookADemoSection${LAYOUT_SUFFIX}`;
+const LifeAtSoftCoLayout = `${LAYOUT_PREFIX}LifeAtSoftcoSection${LAYOUT_SUFFIX}`;
+const PeopleFirstProofLayout = `${LAYOUT_PREFIX}PeopleFirstProofSection${LAYOUT_SUFFIX}`;
+const OpenRolesLayout = `${LAYOUT_PREFIX}OpenRolesSection${LAYOUT_SUFFIX}`;
+const FeatureModalLayout = `${LAYOUT_PREFIX}FeatureModalSection${LAYOUT_SUFFIX}`;
+const ApAutomationLayout = `${LAYOUT_PREFIX}ApAutomationSection${LAYOUT_SUFFIX}`;
+const ArchitectureLayout = `${LAYOUT_PREFIX}ArchitectureSection${LAYOUT_SUFFIX}`;
+const ErpIntegrationLayout = `${LAYOUT_PREFIX}ErpIntegrationSection${LAYOUT_SUFFIX}`;
+const AnalyticsDashboardsLayout = `${LAYOUT_PREFIX}AnalyticsDashboardsSection${LAYOUT_SUFFIX}`;
+const SecurityComplianceLayout = `${LAYOUT_PREFIX}SecurityComplianceSection${LAYOUT_SUFFIX}`;
+const PartnerEcosystemLayout = `${LAYOUT_PREFIX}PartnerEcosystemSection${LAYOUT_SUFFIX}`;
+const EvidenceLayout = `${LAYOUT_PREFIX}EvidenceSection${LAYOUT_SUFFIX}`;
+const StpComparisonLayout = `${LAYOUT_PREFIX}StpComparisonSection${LAYOUT_SUFFIX}`;
+const InvoiceLifecycleLayout = `${LAYOUT_PREFIX}InvoiceLifecycleSection${LAYOUT_SUFFIX}`;
+const ApAnalyticsLayout = `${LAYOUT_PREFIX}ApAnalyticsSection${LAYOUT_SUFFIX}`;
+const FaqLayout = `${LAYOUT_PREFIX}FaqSection${LAYOUT_SUFFIX}`;
+const EsgPoliciesLayout = `${LAYOUT_PREFIX}EsgPoliciesSection${LAYOUT_SUFFIX}`;
+const EnvironmentalLayout = `${LAYOUT_PREFIX}EnvironmentalSection${LAYOUT_SUFFIX}`;
+const SocialLayout = `${LAYOUT_PREFIX}SocialSection${LAYOUT_SUFFIX}`;
+const GovernanceLayout = `${LAYOUT_PREFIX}GovernanceSection${LAYOUT_SUFFIX}`;
+const CommunitySupportLayout = `${LAYOUT_PREFIX}CommunitySupportSection${LAYOUT_SUFFIX}`;
+const ContactFormLayout = `${LAYOUT_PREFIX}ContactFormSection${LAYOUT_SUFFIX}`;
 
 function buildFragment(): string {
   const sectionsSelection = `
@@ -285,6 +325,27 @@ function buildFragment(): string {
       heading
       ctaLabel
     }
+    ... on ${TrustBarLayout} {
+      heading
+      trustBarLogos {
+        image { node { sourceUrl altText } }
+        imageAlt
+      }
+    }
+    ... on ${AiEngineLayout} {
+      overline
+      headingLine1
+      headingLine2
+      introBody
+      ctaLabel
+      ctaHref
+      aiEngineTabs {
+        label
+        title
+        body
+        image { node { sourceUrl altText } }
+      }
+    }
     ... on ${FinanceHeroLayout} {
       headlineLine1
       headlineLine2
@@ -429,6 +490,401 @@ function buildFragment(): string {
         description
       }
     }
+    ... on ${TestimonialSliderLayout} {
+      testimonials {
+        image { node { sourceUrl altText } }
+        quote
+        authorName
+        authorTitle
+      }
+    }
+    ... on ${TeamArchiveLayout} {
+      overline
+      title
+      body
+      departments {
+        name
+        members {
+          name
+          title
+          bio
+          image { node { sourceUrl altText } }
+        }
+      }
+    }
+    ... on ${AutomationEngineLayout} {
+      overline
+      heading
+      image { node { sourceUrl altText } }
+      body
+      ctaLabel
+      ctaHref
+      metrics { value label }
+      logos { logo { node { sourceUrl altText } } }
+    }
+    ... on ${ChallengeLayout} {
+      overline
+      headingHighlight
+      headingAfter
+      intro
+      challengeColumns {
+        icon
+        titleLineBlue
+        titleLineDark
+        body
+        showCta
+        ctaLabel
+        ctaHref
+      }
+    }
+    ... on ${StrategicPrioritiesLayout} {
+      overline
+      intro
+      leftColumnLabel
+      rightColumnLabel
+      priorityRows { priority deliverable }
+    }
+    ... on ${SmartMatchingChallengeLayout} {
+      overline
+      headingLine1
+      headingLine2
+      image { node { sourceUrl altText } }
+      body
+      ctaLabel
+      ctaHref
+    }
+    ... on ${SmartMatchingChallengeBannerLayout} {
+      overline
+      headingLine1
+      headingLine2
+      body
+      ctaLabel
+      ctaHref
+    }
+    ... on ${StartChallengeFormLayout} {
+      overline
+      headingLine1
+      headingHighlight
+      formPlaceholderImage { node { sourceUrl altText } }
+    }
+    ... on ${PartnerProgrammeHeroLayout} {
+      overline
+      headingLine1
+      headingLine2
+      body
+      ctaLabel
+      ctaHref
+      navCards { number label }
+    }
+    ... on ${PartnerBenefitsLayout} {
+      overline
+      headingBefore
+      headingHighlight
+      headingAfter
+      subheading
+      ctaLabel
+      ctaHref
+      steps {
+        stepNumberImage { node { sourceUrl altText } }
+        line1Before
+        line1Highlight
+        line1After
+        line2Before
+        line2Highlight
+        line2After
+        description
+      }
+    }
+    ... on ${MatchingChallengeFormLayout} {
+      overline
+      headingBefore
+      headingHighlight
+      headingAfter
+      formPlaceholderImage { node { sourceUrl altText } }
+    }
+    ... on ${HowItWorksLayout} {
+      overline
+      heading
+      intro
+      howItWorksSteps {
+        stepNumberImage { node { sourceUrl altText } }
+        titleHighlight
+        titleRest
+        description
+      }
+    }
+    ... on ${CfoSeriesLayout} {
+      overline
+      headingLine1
+      headingLine2
+      image { node { sourceUrl altText } }
+      eventDetails
+      body
+      ctaLabel
+      ctaHref
+    }
+    ... on ${WhyAttendLayout} {
+      overline
+      headingLine1
+      headingLine2
+      intro
+      attendColumns {
+        iconImage { node { sourceUrl altText } }
+        titleBefore
+        titleHighlight
+        titleAfter
+        description
+      }
+    }
+    ... on ${MeetSpeakersLayout} {
+      overline
+      headingBefore
+      headingHighlight
+      intro
+      speakers {
+        image { node { sourceUrl altText } }
+        name
+        jobTitle
+        company
+      }
+    }
+    ... on ${EventRegisterLayout} {
+      overline
+      headingLine1
+      headingLine2Before
+      headingLine2Highlight
+      formPlaceholderImage { node { sourceUrl altText } }
+    }
+    ... on ${BookADemoLayout} {
+      overline
+      headingLine1
+      headingLine2
+      intro
+      formPlaceholderImage { node { sourceUrl altText } }
+      marqueeHeading
+      bookADemoLogos { logo { node { sourceUrl altText } } }
+    }
+    ... on ${LifeAtSoftCoLayout} {
+      title
+      youtubeVideoId
+      videoPoster { node { sourceUrl altText } }
+      videoTitle
+      stats { value label }
+      lifeAtSoftCoTestimonials {
+        image { node { sourceUrl altText } }
+        quote
+        authorName
+        authorTitle
+      }
+    }
+    ... on ${PeopleFirstProofLayout} {
+      overline
+      headingBefore
+      headingHighlight
+      headingAfter
+      body
+      benefits { label }
+    }
+    ... on ${OpenRolesLayout} {
+      overline
+      headingLine1
+      headingLine2
+      locationFilterLabel
+      departmentFilterLabel
+      hireHiveLive
+      viewAllHref
+      viewAllLabel
+      openRolesJobs {
+        title
+        location
+        department
+        excerpt
+        readMoreHref
+      }
+    }
+    ... on ${FeatureModalLayout} {
+      overline
+      headingBefore
+      headingHighlight
+      headingAfter
+      body
+      ctaLabel
+      ctaHref
+      featureModalItems {
+        title
+        description
+        modalLabel
+        modalTitle
+        modalDescription
+        image { node { sourceUrl altText } }
+      }
+    }
+    ... on ${ApAutomationLayout} {
+      overline
+      headingLine1
+      headingLine2
+      image { node { sourceUrl altText } }
+      softcoApImage { node { sourceUrl altText } }
+      body
+      ctaLabel
+      ctaHref
+      gartnerLogo { node { sourceUrl altText } }
+      endorsementText
+      metrics { value label }
+    }
+    ... on ${ArchitectureLayout} {
+      overline
+      headingLine1
+      headingLine2
+      body
+      image { node { sourceUrl altText } }
+    }
+    ... on ${ErpIntegrationLayout} {
+      overline
+      headingLine1
+      headingLine2
+      body
+      ctaLabel
+      ctaHref
+      moreCountHighlight
+      moreCountRest
+      erpLogos {
+        logoImg { node { sourceUrl altText } }
+        logoAlt
+        href
+      }
+    }
+    ... on ${AnalyticsDashboardsLayout} {
+      overline
+      mainTitle
+      introBody
+      ctaLabel
+      ctaHref
+      headingBefore
+      headingHighlight
+      body
+      slides { image { node { sourceUrl altText } } }
+    }
+    ... on ${SecurityComplianceLayout} {
+      overline
+      headingLine1
+      headingLine2
+      body
+      certifications { image { node { sourceUrl altText } } }
+    }
+    ... on ${PartnerEcosystemLayout} {
+      overline
+      headingBlue1
+      headingDark
+      headingBlue2
+      body
+      partnerLogos {
+        image { node { sourceUrl altText } }
+        imageAlt
+      }
+    }
+    ... on ${EvidenceLayout} {
+      overline
+      headingBefore
+      headingHighlight
+      headingAfter
+      body
+      evidenceMetrics {
+        image { node { sourceUrl altText } }
+        label
+      }
+    }
+    ... on ${StpComparisonLayout} {
+      headingBefore
+      headingHighlight
+      headingLine2
+      image { node { sourceUrl altText } }
+      body
+    }
+    ... on ${InvoiceLifecycleLayout} {
+      overline
+      headingBefore
+      headingHighlight
+      headingAfter
+      imageWithSoftCo { node { sourceUrl altText } }
+      imageWithoutSoftCo { node { sourceUrl altText } }
+    }
+    ... on ${ApAnalyticsLayout} {
+      overline
+      headingLine1
+      headingLine2
+      introBody
+      ctaLabel
+      ctaHref
+      analyticsCards {
+        icon { node { sourceUrl altText } }
+        titleLine1
+        titleLine2
+      }
+    }
+    ... on ${FaqLayout} {
+      overline
+      headingLine1
+      headingLine2
+      items { question answer }
+    }
+    ... on ${EsgPoliciesLayout} {
+      overline
+      headingBefore
+      headingHighlight1
+      headingHighlight2
+      headingAfter
+      body
+      slides { image { node { sourceUrl altText } } }
+      esgPolicyCards { number label }
+    }
+    ... on ${EnvironmentalLayout} {
+      overline
+      headingBefore
+      headingHighlight
+      headingAfter
+      ctaLabel
+      ctaHref
+      body
+      statNumber
+      statLabel
+      envInitiatives { bold text }
+    }
+    ... on ${SocialLayout} {
+      overline
+      headingHighlight
+      headingAfter
+      body
+      ctaLabel
+      ctaHref
+      image { node { sourceUrl altText } }
+      statNumber
+      statLabel
+      socialInitiatives { initiative }
+    }
+    ... on ${GovernanceLayout} {
+      overline
+      heading
+      ctaLabel
+      ctaHref
+      body
+      statNumber
+      statLabel
+      govInitiatives { initiative }
+    }
+    ... on ${CommunitySupportLayout} {
+      overline
+      headingBefore
+      headingHighlight
+      bodyTop
+      bodyBottom
+      ctaLabel
+      ctaHref
+      slides { image { node { sourceUrl altText } } }
+    }
+    ... on ${ContactFormLayout} {
+      __typename
+    }
   `;
 
   if (SECTIONS_PATH === "pageContentSections.contentSections") {
@@ -566,6 +1022,8 @@ function buildFragmentResilient(): string {
     ... on ${RichTextLayout} {
       content
     }
+    ... on ${TrustBarLayout} { heading trustBarLogos { image { node { sourceUrl altText } } imageAlt } }
+    ... on ${AiEngineLayout} { overline headingLine1 headingLine2 introBody ctaLabel ctaHref aiEngineTabs { label title body image { node { sourceUrl altText } } } }
     ... on ${FinanceHeroLayout} { headlineLine1 headlineLine2 body financeHeroCards { number title } }
     ... on ${EngineLayout} { overline headingBefore headingHighlight headingAfter body engineCards { title description } ctaLabel ctaHref }
     ... on ${OutcomesLayout} { overline title body ctaLabel ctaHref outcomesStats { value label } }
@@ -578,6 +1036,44 @@ function buildFragmentResilient(): string {
     ... on ${MeetTheTeamLayout} { overline title members { nodes { id ... on NodeWithTitle { title } ... on NodeWithContentEditor { content } ... on NodeWithFeaturedImage { featuredImage { node { sourceUrl altText } } } } } ctaLabel ctaHref }
     ... on ${EsgLayout} { overline headingBefore headingHighlight headingAfter image { node { sourceUrl altText } } body ctaLabel ctaHref }
     ... on ${CultureLayout} { overline headingBefore headingHighlight headingAfter body ctaLabel ctaHref cultureItems { image { node { sourceUrl altText } } stat label description } }
+    ... on ${TestimonialSliderLayout} { testimonials { image { node { sourceUrl altText } } quote authorName authorTitle } }
+    ... on ${TeamArchiveLayout} { overline title body departments { name members { name title bio image { node { sourceUrl altText } } } } }
+    ... on ${AutomationEngineLayout} { overline heading image { node { sourceUrl altText } } body ctaLabel ctaHref metrics { value label } logos { logo { node { sourceUrl altText } } } }
+    ... on ${ChallengeLayout} { overline headingHighlight headingAfter intro challengeColumns { icon titleLineBlue titleLineDark body showCta ctaLabel ctaHref } }
+    ... on ${StrategicPrioritiesLayout} { overline intro leftColumnLabel rightColumnLabel priorityRows { priority deliverable } }
+    ... on ${SmartMatchingChallengeLayout} { overline headingLine1 headingLine2 image { node { sourceUrl altText } } body ctaLabel ctaHref }
+    ... on ${SmartMatchingChallengeBannerLayout} { overline headingLine1 headingLine2 body ctaLabel ctaHref }
+    ... on ${StartChallengeFormLayout} { overline headingLine1 headingHighlight formPlaceholderImage { node { sourceUrl altText } } }
+    ... on ${PartnerProgrammeHeroLayout} { overline headingLine1 headingLine2 body ctaLabel ctaHref navCards { number label } }
+    ... on ${PartnerBenefitsLayout} { overline headingBefore headingHighlight headingAfter subheading ctaLabel ctaHref steps { stepNumberImage { node { sourceUrl altText } } line1Before line1Highlight line1After line2Before line2Highlight line2After description } }
+    ... on ${MatchingChallengeFormLayout} { overline headingBefore headingHighlight headingAfter formPlaceholderImage { node { sourceUrl altText } } }
+    ... on ${HowItWorksLayout} { overline heading intro howItWorksSteps { stepNumberImage { node { sourceUrl altText } } titleHighlight titleRest description } }
+    ... on ${CfoSeriesLayout} { overline headingLine1 headingLine2 image { node { sourceUrl altText } } eventDetails body ctaLabel ctaHref }
+    ... on ${WhyAttendLayout} { overline headingLine1 headingLine2 intro attendColumns { iconImage { node { sourceUrl altText } } titleBefore titleHighlight titleAfter description } }
+    ... on ${MeetSpeakersLayout} { overline headingBefore headingHighlight intro speakers { image { node { sourceUrl altText } } name jobTitle company } }
+    ... on ${EventRegisterLayout} { overline headingLine1 headingLine2Before headingLine2Highlight formPlaceholderImage { node { sourceUrl altText } } }
+    ... on ${BookADemoLayout} { overline headingLine1 headingLine2 intro formPlaceholderImage { node { sourceUrl altText } } marqueeHeading bookADemoLogos { logo { node { sourceUrl altText } } } }
+    ... on ${LifeAtSoftCoLayout} { title youtubeVideoId videoPoster { node { sourceUrl altText } } videoTitle stats { value label } lifeAtSoftCoTestimonials { image { node { sourceUrl altText } } quote authorName authorTitle } }
+    ... on ${PeopleFirstProofLayout} { overline headingBefore headingHighlight headingAfter body benefits { label } }
+    ... on ${OpenRolesLayout} { overline headingLine1 headingLine2 locationFilterLabel departmentFilterLabel hireHiveLive viewAllHref viewAllLabel openRolesJobs { title location department excerpt readMoreHref } }
+    ... on ${FeatureModalLayout} { overline headingBefore headingHighlight headingAfter body ctaLabel ctaHref featureModalItems { title description modalLabel modalTitle modalDescription image { node { sourceUrl altText } } } }
+    ... on ${ApAutomationLayout} { overline headingLine1 headingLine2 image { node { sourceUrl altText } } softcoApImage { node { sourceUrl altText } } body ctaLabel ctaHref gartnerLogo { node { sourceUrl altText } } endorsementText metrics { value label } }
+    ... on ${ArchitectureLayout} { overline headingLine1 headingLine2 body image { node { sourceUrl altText } } }
+    ... on ${ErpIntegrationLayout} { overline headingLine1 headingLine2 body ctaLabel ctaHref moreCountHighlight moreCountRest erpLogos { logoImg { node { sourceUrl altText } } logoAlt href } }
+    ... on ${AnalyticsDashboardsLayout} { overline mainTitle introBody ctaLabel ctaHref headingBefore headingHighlight body slides { image { node { sourceUrl altText } } } }
+    ... on ${SecurityComplianceLayout} { overline headingLine1 headingLine2 body certifications { image { node { sourceUrl altText } } } }
+    ... on ${PartnerEcosystemLayout} { overline headingBlue1 headingDark headingBlue2 body partnerLogos { image { node { sourceUrl altText } } imageAlt } }
+    ... on ${EvidenceLayout} { overline headingBefore headingHighlight headingAfter body evidenceMetrics { image { node { sourceUrl altText } } label } }
+    ... on ${StpComparisonLayout} { headingBefore headingHighlight headingLine2 image { node { sourceUrl altText } } body }
+    ... on ${InvoiceLifecycleLayout} { overline headingBefore headingHighlight headingAfter imageWithSoftCo { node { sourceUrl altText } } imageWithoutSoftCo { node { sourceUrl altText } } }
+    ... on ${ApAnalyticsLayout} { overline headingLine1 headingLine2 introBody ctaLabel ctaHref analyticsCards { icon { node { sourceUrl altText } } titleLine1 titleLine2 } }
+    ... on ${FaqLayout} { overline headingLine1 headingLine2 items { question answer } }
+    ... on ${EsgPoliciesLayout} { overline headingBefore headingHighlight1 headingHighlight2 headingAfter body slides { image { node { sourceUrl altText } } } esgPolicyCards { number label } }
+    ... on ${EnvironmentalLayout} { overline headingBefore headingHighlight headingAfter ctaLabel ctaHref body statNumber statLabel envInitiatives { bold text } }
+    ... on ${SocialLayout} { overline headingHighlight headingAfter body ctaLabel ctaHref image { node { sourceUrl altText } } statNumber statLabel socialInitiatives { initiative } }
+    ... on ${GovernanceLayout} { overline heading ctaLabel ctaHref body statNumber statLabel govInitiatives { initiative } }
+    ... on ${CommunitySupportLayout} { overline headingBefore headingHighlight bodyTop bodyBottom ctaLabel ctaHref slides { image { node { sourceUrl altText } } } }
+    ... on ${ContactFormLayout} { __typename }
   `;
 
   if (SECTIONS_PATH === "pageContentSections.contentSections") {

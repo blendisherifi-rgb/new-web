@@ -79,6 +79,9 @@ body {
 /* Ensure smooth scrolling for anchor links */
 html {
   scroll-behavior: smooth;
+  /* Reserve scrollbar gutter so the layout doesn't shift when a scrollbar
+     appears/disappears (prevents the fixed header from jumping sideways). */
+  scrollbar-gutter: stable;
 }
 
 /* Reduced motion: disable smooth scroll + animations */

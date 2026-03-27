@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { PromoBar, UtilityBar, Header, Footer, CookieConsent } from "@/components/globals";
+import { PromoBar, Header, Footer, CookieConsent } from "@/components/globals";
 import { fetchMenus } from "@/lib/menus";
 import { fetchGlobalFields } from "@/lib/globals";
 import type { Locale } from "@/lib/i18n";
@@ -21,9 +21,23 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
 
   return (
     <>
+      {/* PromoBar scrolls naturally out of view */}
       <PromoBar data={globals.promoBar} />
-      <UtilityBar data={globals.utilityBar} locale={locale} />
-      <Header menus={menus} cta={globals.headerCta} locale={locale} />
+
+      {/* Header is fixed — utility bar + nav bar as one unit */}
+      <Header
+        menus={menus}
+        cta={globals.headerCta}
+        utilityBar={globals.utilityBar}
+        locale={locale}
+      />
+
+      {/*
+        Pages that start with a full-bleed hero (e.g. homepage) should set
+        their hero to min-h-screen so it fills behind the transparent header.
+        Inner pages without a hero get a top padding spacer here so content
+        isn't hidden under the fixed header (~72px tall when scrolled).
+      */}
       <main data-locale={locale} id="main-content">
         {children}
       </main>

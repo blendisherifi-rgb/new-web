@@ -4,7 +4,7 @@
 
 import { fetchGraphQL } from "./wordpress";
 import type { Locale } from "@/lib/i18n";
-import { localePath } from "@/lib/i18n";
+import { localePath, getWpmlLanguage, getWpmlLanguageEnum } from "@/lib/i18n";
 
 export interface ResourceListItem {
   id: string;
@@ -43,6 +43,8 @@ export async function fetchResourcesArchive(
 ): Promise<ResourcesArchiveData> {
   const page = options?.page ?? 1;
   const perPage = options?.perPage ?? 12;
+  const language = getWpmlLanguage(locale);
+  const languageEnum = getWpmlLanguageEnum(locale);
 
   try {
     const data = await fetchGraphQL<{
@@ -60,8 +62,8 @@ export async function fetchResourcesArchive(
       posts?: { nodes?: unknown[] };
     }>(
       `
-      query GetResources($first: Int!, $after: String) {
-        resources(first: $first, after: $after, where: { status: PUBLISH }) {
+      query GetResources($first: Int!, $after: String, $language: LanguageCodeEnum) {
+        resources(first: $first, after: $after, where: { status: PUBLISH, language: $language }) {
           nodes {
             id
             slug
@@ -75,7 +77,7 @@ export async function fetchResourcesArchive(
       }
     `,
       {
-        variables: { first: perPage, after: null },
+        variables: { first: perPage, after: null, language: languageEnum },
         tags: ["resources", `resources-${locale}`],
       }
     );
@@ -109,6 +111,8 @@ export async function fetchResourceBySlug(
   slug: string,
   locale: Locale
 ): Promise<ResourceDetail | null> {
+  const language = getWpmlLanguage(locale);
+
   try {
     const data = await fetchGraphQL<{
       resource?: {
@@ -120,6 +124,17 @@ export async function fetchResourceBySlug(
         content?: string;
         featuredImage?: { node?: { sourceUrl?: string; altText?: string } };
         seo?: Record<string, unknown>;
+        translations?: Array<{
+          id: string;
+          slug?: string;
+          title?: string;
+          excerpt?: string;
+          date?: string;
+          content?: string;
+          language?: { code?: string };
+          featuredImage?: { node?: { sourceUrl?: string; altText?: string } };
+          seo?: Record<string, unknown>;
+        }> | null;
       };
       resourceBy?: Record<string, unknown>;
     }>(
@@ -134,6 +149,17 @@ export async function fetchResourceBySlug(
           content
           featuredImage { node { sourceUrl altText } }
           seo { title metaDesc opengraphImage { sourceUrl } }
+          translations {
+            id
+            slug
+            title
+            excerpt
+            date
+            content
+            language { code }
+            featuredImage { node { sourceUrl altText } }
+            seo { title metaDesc opengraphImage { sourceUrl } }
+          }
         }
       }
     `,
@@ -143,9 +169,15 @@ export async function fetchResourceBySlug(
       }
     );
 
-    const post = data?.resource ?? data?.resourceBy;
-    if (!post) return null;
+    const raw = data?.resource ?? data?.resourceBy;
+    if (!raw) return null;
 
+    // Prefer WPML translation matching this locale when available
+    const typedRaw = raw as typeof data.resource;
+    const match = typedRaw?.translations?.find(
+      (t) => t.language?.code === language
+    );
+    const post = match ?? raw;
     const p = post as Record<string, unknown>;
     return {
       id: p.id as string,
