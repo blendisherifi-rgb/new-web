@@ -71,6 +71,30 @@ import { SocialSection } from "@/components/sections/SocialSection";
 import { GovernanceSection } from "@/components/sections/GovernanceSection";
 import { TrustBarSection } from "@/components/sections/TrustBarSection";
 import { CommunitySupportSection } from "@/components/sections/CommunitySupportSection";
+import {
+  ClientSuccessStoryHeroSection,
+} from "@/components/sections/ClientSuccessStoryHeroSection";
+import {
+  ClientSuccessStoryProjectAtAGlanceSection,
+} from "@/components/sections/ClientSuccessStoryProjectAtAGlanceSection";
+import {
+  ClientSuccessStoryVideoSection,
+} from "@/components/sections/ClientSuccessStoryVideoSection";
+import {
+  ClientSuccessStoryChallengeSection,
+} from "@/components/sections/ClientSuccessStoryChallengeSection";
+import {
+  ClientSuccessStoryPerfectFitAutomationSection,
+} from "@/components/sections/ClientSuccessStoryPerfectFitAutomationSection";
+import {
+  ClientSuccessStoryResultsSection,
+} from "@/components/sections/ClientSuccessStoryResultsSection";
+import {
+  ClientSuccessStoryTestimonialCardSection,
+} from "@/components/sections/ClientSuccessStoryTestimonialCardSection";
+import {
+  ClientSuccessStoryRelatedStoriesSection,
+} from "@/components/sections/ClientSuccessStoryRelatedStoriesSection";
 
 export interface SectionData {
   id: string;
@@ -148,4 +172,36 @@ export const SECTION_MAP: Record<string, React.ComponentType<Record<string, unkn
   governance_section: GovernanceSection as unknown as React.ComponentType<Record<string, unknown>>,
   trust_bar_section: TrustBarSection as unknown as React.ComponentType<Record<string, unknown>>,
   community_support_section: CommunitySupportSection as unknown as React.ComponentType<Record<string, unknown>>,
+  client_success_story_hero_section:
+    ClientSuccessStoryHeroSection as unknown as React.ComponentType<
+      Record<string, unknown>
+    >,
+  client_success_story_project_at_a_glance_section:
+    ClientSuccessStoryProjectAtAGlanceSection as unknown as React.ComponentType<
+      Record<string, unknown>
+    >,
+  client_success_story_video_section:
+    ClientSuccessStoryVideoSection as unknown as React.ComponentType<
+      Record<string, unknown>
+    >,
+  client_success_story_challenge_section:
+    ClientSuccessStoryChallengeSection as unknown as React.ComponentType<
+      Record<string, unknown>
+    >,
+  client_success_story_perfect_fit_automation_section:
+    ClientSuccessStoryPerfectFitAutomationSection as unknown as React.ComponentType<
+      Record<string, unknown>
+    >,
+  client_success_story_results_section:
+    ClientSuccessStoryResultsSection as unknown as React.ComponentType<
+      Record<string, unknown>
+    >,
+  client_success_story_testimonial_card_section:
+    ClientSuccessStoryTestimonialCardSection as unknown as React.ComponentType<
+      Record<string, unknown>
+    >,
+  client_success_story_related_stories_section:
+    ClientSuccessStoryRelatedStoriesSection as unknown as React.ComponentType<
+      Record<string, unknown>
+    >,
 };

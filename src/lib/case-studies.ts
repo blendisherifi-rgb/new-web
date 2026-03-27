@@ -1,10 +1,15 @@
 /**
- * Fetch Case Study CPT data from WordPress.
+ * Case studies from WordPress: either child pages under the parent "Case Studies" page
+ * (hierarchical Pages — typical in WP admin) or the Case Study CPT when registered.
  */
 
-import { fetchGraphQL } from "./wordpress";
+import { fetchGraphQL, getWordPressRestBaseUrl } from "./wordpress";
 import type { Locale } from "./i18n";
 import { localePath } from "./i18n";
+
+/** Parent page slug in WP (Pages → Case Studies). Override if your parent slug differs. */
+const CASE_STUDIES_PARENT_SLUG =
+  process.env.WP_CASE_STUDIES_PARENT_SLUG ?? "case-studies";
 
 export interface CaseStudyListItem {
   id: string;
@@ -12,11 +17,10 @@ export interface CaseStudyListItem {
   title: string;
   excerpt?: string | null;
   featuredImage?: { sourceUrl?: string; altText?: string } | null;
-  /** ACF: client logo */
-  clientLogo?: { sourceUrl?: string } | null;
-  /** Taxonomies */
-  solutions?: { nodes?: Array<{ name?: string }> };
-  industries?: { nodes?: Array<{ name?: string }> };
+  /** Up to 3 uppercase tag labels for archive cards (from tags/categories in WP). */
+  tags?: string[];
+  /** Optional client logo over the featured image (WP field `clientLogo` when exposed). */
+  clientLogoOverlay?: { sourceUrl?: string; altText?: string } | null;
 }
 
 export interface CaseStudyDetail extends CaseStudyListItem {
@@ -36,149 +40,1028 @@ export interface CaseStudiesArchiveData {
   totalCount?: number;
 }
 
-export async function fetchCaseStudiesArchive(
-  locale: Locale,
-  options?: { page?: number; perPage?: number; solution?: string; industry?: string }
-): Promise<CaseStudiesArchiveData> {
-  const page = options?.page ?? 1;
-  const perPage = options?.perPage ?? 12;
+const CASE_STUDY_ARCHIVE_NODE_FIELDS = `
+  id
+  slug
+  title
+  excerpt
+  featuredImage { node { sourceUrl altText } }
+`;
 
-  try {
-    const data = await fetchGraphQL<{
-      caseStudies?: {
-        nodes?: Array<{
-          id: string;
-          slug?: string;
-          title?: string;
-          excerpt?: string;
-          featuredImage?: { node?: { sourceUrl?: string; altText?: string } };
-        }>;
-        pageInfo?: { hasNextPage?: boolean; endCursor?: string };
-      };
-      caseStudy?: { nodes?: unknown[] };
-    }>(
-      `
-      query GetCaseStudies($first: Int!, $after: String) {
-        caseStudies(first: $first, after: $after, where: { status: PUBLISH }) {
-          nodes {
+/** WPGraphQL default max is often 100; larger `first` makes every archive query fail silently. */
+const CASE_STUDIES_GRAPHQL_CHUNK = 100;
+
+type PageIdPair = { id: string; idType: "SLUG" | "URI" };
+
+/** Try these until the parent "Case Studies" page resolves (slug/permalink varies by site). */
+function caseStudiesParentIdVariants(): PageIdPair[] {
+  const s = CASE_STUDIES_PARENT_SLUG.replace(/^\/+|\/+$/g, "");
+  return [
+    { id: s, idType: "SLUG" },
+    { id: `/${s}/`, idType: "URI" },
+    { id: `/${s}`, idType: "URI" },
+    { id: `${s}/`, idType: "URI" },
+    { id: s, idType: "URI" },
+  ];
+}
+
+async function resolveCaseStudiesParentPage(
+  cacheTags: string[],
+): Promise<{ id: string; slug: string; databaseId?: number } | null> {
+  for (const { id, idType } of caseStudiesParentIdVariants()) {
+    try {
+      const data = await fetchGraphQL<{
+        page?: { id?: string; slug?: string; databaseId?: number } | null;
+      }>(
+        `
+        query CaseStudiesParent($id: ID!, $idType: PageIdType!) {
+          page(id: $id, idType: $idType) {
             id
             slug
-            title
-            excerpt
-            featuredImage { node { sourceUrl altText } }
+            databaseId
+          }
+        }
+      `,
+        { variables: { id, idType }, tags: cacheTags },
+      );
+      if (data?.page?.id) {
+        const slug =
+          data.page.slug?.trim() ||
+          CASE_STUDIES_PARENT_SLUG.replace(/^\/+|\/+$/g, "");
+        return {
+          id: data.page.id,
+          slug,
+          databaseId: data.page.databaseId,
+        };
+      }
+    } catch {
+      /* try next */
+    }
+  }
+  return null;
+}
+
+/**
+ * Published child pages of the Case Studies parent (WP admin hierarchy).
+ * Returns `null` only if the parent page could not be resolved (fall back to CPT).
+ * If the parent exists but no strategy returns rows, returns `{ nodes: [], hasMore: false }`.
+ *
+ * Important: `pages(where: { parent })` often returns [] on some WPGraphQL setups even when
+ * child pages exist; the parent's `children` connection must be tried too (order: children first).
+ */
+async function fetchCaseStudyArchiveNodesFromPages(
+  cacheTags: string[],
+  maxItems: number,
+): Promise<{
+  nodes: Array<Record<string, unknown>>;
+  hasMore: boolean;
+} | null> {
+  const parent = await resolveCaseStudiesParentPage(cacheTags);
+  if (!parent) return null;
+
+  const paginateChildren = async (
+    parentSlug: string,
+    childrenWhere: "publish" | "none",
+  ): Promise<{
+    nodes: Array<Record<string, unknown>>;
+    hasMore: boolean;
+  }> => {
+    const whereArg =
+      childrenWhere === "publish" ? `, where: { status: PUBLISH }` : "";
+    const query = `
+      query CaseStudiesPageChildren($id: ID!, $first: Int!, $after: String) {
+        page(id: $id, idType: SLUG) {
+          children(first: $first, after: $after${whereArg}) {
+            nodes {
+              ... on Page {
+                ${CASE_STUDY_ARCHIVE_NODE_FIELDS}
+              }
+            }
+            pageInfo { hasNextPage endCursor }
+          }
+        }
+      }
+    `;
+    const nodes: Array<Record<string, unknown>> = [];
+    let after: string | null = null;
+    let lastHasNext = false;
+
+    while (nodes.length < maxItems) {
+      const first = Math.min(CASE_STUDIES_GRAPHQL_CHUNK, maxItems - nodes.length);
+      const data = await fetchGraphQL<{
+        page?: {
+          children?: {
+            nodes?: Array<Record<string, unknown>>;
+            pageInfo?: { hasNextPage?: boolean; endCursor?: string | null };
+          };
+        } | null;
+      }>(query, {
+        variables: { id: parentSlug, first, after },
+        tags: cacheTags,
+      });
+      const ch = data?.page?.children;
+      const batch = (ch?.nodes ?? []).filter((n) => n && typeof (n as { slug?: string }).slug === "string");
+      const pageInfo = ch?.pageInfo;
+      lastHasNext = pageInfo?.hasNextPage ?? false;
+      nodes.push(...batch);
+      if (batch.length === 0 || !lastHasNext) {
+        break;
+      }
+      const endCursor = pageInfo?.endCursor;
+      if (!endCursor) {
+        break;
+      }
+      after = endCursor;
+    }
+
+    return {
+      nodes: nodes.slice(0, maxItems),
+      hasMore: lastHasNext,
+    };
+  };
+
+  const paginatePagesWhere = async (
+    parentId: string,
+    mode: "parent" | "parentIn",
+  ): Promise<{
+    nodes: Array<Record<string, unknown>>;
+    hasMore: boolean;
+  }> => {
+    const whereFragment =
+      mode === "parent"
+        ? `where: { parent: $parentId, status: PUBLISH }`
+        : `where: { parentIn: [$parentId], status: PUBLISH }`;
+    const query = `
+      query CaseStudiesChildPages($parentId: ID!, $first: Int!, $after: String) {
+        pages(first: $first, after: $after, ${whereFragment}) {
+          nodes {
+            ${CASE_STUDY_ARCHIVE_NODE_FIELDS}
           }
           pageInfo { hasNextPage endCursor }
         }
       }
-    `,
-      {
-        variables: {
-          first: perPage,
-          after: page > 1 ? undefined : null,
-        },
-        tags: ["case-studies", `case-studies-${locale}`],
+    `;
+    const nodes: Array<Record<string, unknown>> = [];
+    let after: string | null = null;
+    let lastHasNext = false;
+
+    while (nodes.length < maxItems) {
+      const first = Math.min(CASE_STUDIES_GRAPHQL_CHUNK, maxItems - nodes.length);
+      const data = await fetchGraphQL<{
+        pages?: {
+          nodes?: Array<Record<string, unknown>>;
+          pageInfo?: { hasNextPage?: boolean; endCursor?: string | null };
+        };
+      }>(query, {
+        variables: { parentId, first, after },
+        tags: cacheTags,
+      });
+      const batch = data?.pages?.nodes ?? [];
+      const pageInfo = data?.pages?.pageInfo;
+      lastHasNext = pageInfo?.hasNextPage ?? false;
+      nodes.push(...batch);
+      if (batch.length === 0 || !lastHasNext) {
+        break;
       }
-    );
-
-    const nodes = data?.caseStudies?.nodes ?? data?.caseStudy?.nodes ?? [];
-
-    const items: CaseStudyListItem[] = (nodes as Array<Record<string, unknown>>).map((n) => ({
-      id: n.id as string,
-      slug: (n.slug as string) ?? "",
-      title: (n.title as string) ?? "",
-      excerpt: (n.excerpt as string) ?? null,
-      featuredImage: (n.featuredImage as { node?: { sourceUrl?: string; altText?: string } })?.node
-        ? {
-            sourceUrl: (n.featuredImage as { node?: { sourceUrl?: string } }).node?.sourceUrl,
-            altText: (n.featuredImage as { node?: { altText?: string } }).node?.altText,
-          }
-        : null,
-    }));
+      const endCursor = pageInfo?.endCursor;
+      if (!endCursor) {
+        break;
+      }
+      after = endCursor;
+    }
 
     return {
-      items,
-      hasMore: (data?.caseStudies?.pageInfo?.hasNextPage as boolean) ?? false,
+      nodes: nodes.slice(0, maxItems),
+      hasMore: lastHasNext,
     };
-  } catch {
-    return { items: [], hasMore: false };
+  };
+
+  const tryRun = async (
+    fn: () => Promise<{ nodes: Array<Record<string, unknown>>; hasMore: boolean }>,
+  ): Promise<{ nodes: Array<Record<string, unknown>>; hasMore: boolean } | null> => {
+    try {
+      return await fn();
+    } catch {
+      return null;
+    }
+  };
+
+  const strategies: Array<() => Promise<{ nodes: Array<Record<string, unknown>>; hasMore: boolean }>> = [
+    () => paginateChildren(parent.slug, "publish"),
+    () => paginateChildren(parent.slug, "none"),
+    () => paginatePagesWhere(parent.id, "parent"),
+    () => paginatePagesWhere(parent.id, "parentIn"),
+  ];
+
+  for (const run of strategies) {
+    const result = await tryRun(run);
+    if (result && result.nodes.length > 0) {
+      return result;
+    }
   }
+
+  return { nodes: [], hasMore: false };
 }
 
-export async function fetchCaseStudyBySlug(
-  slug: string,
-  locale: Locale
-): Promise<CaseStudyDetail | null> {
-  try {
-    const data = await fetchGraphQL<{
-      caseStudy?: {
-        id: string;
-        slug?: string;
-        title?: string;
-        excerpt?: string;
-        content?: string;
-        featuredImage?: { node?: { sourceUrl?: string; altText?: string } };
-        seo?: Record<string, unknown>;
-      };
-      caseStudyBy?: Record<string, unknown>;
-    }>(
-      `
-      query GetCaseStudy($slug: ID!) {
-        caseStudy(id: $slug, idType: SLUG) {
-          id
-          slug
-          title
-          excerpt
-          content
-          featuredImage { node { sourceUrl altText } }
-          seo { title metaDesc opengraphImage { sourceUrl } }
+/** WordPress REST `/wp/v2/pages` item (subset). */
+interface WpRestPage {
+  id: number;
+  slug: string;
+  title: { rendered: string };
+  excerpt?: { rendered: string };
+  content?: { rendered: string };
+  _embedded?: {
+    "wp:featuredmedia"?: Array<{ source_url?: string; alt_text?: string }>;
+  };
+}
+
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+}
+
+/** Maps REST page JSON into the same shape {@link mapCaseStudyArchiveNode} expects. */
+function mapWpRestPageToArchiveNode(p: WpRestPage): Record<string, unknown> {
+  const media = p._embedded?.["wp:featuredmedia"]?.[0];
+  return {
+    id: `rest-page-${p.id}`,
+    slug: p.slug,
+    title: stripHtml(p.title?.rendered ?? ""),
+    excerpt: p.excerpt?.rendered ? stripHtml(p.excerpt.rendered) : null,
+    featuredImage: media?.source_url
+      ? {
+          node: {
+            sourceUrl: media.source_url,
+            altText: media.alt_text ?? "",
+          },
         }
-      }
-    `,
-      {
-        variables: { slug },
-        tags: ["case-studies", `case-study-${locale}-${slug}`],
-      }
-    );
+      : null,
+  };
+}
 
-    const post = data?.caseStudy ?? data?.caseStudyBy;
-    if (!post) return null;
+function wpRestPageToGraphqlDetailShape(p: WpRestPage): Record<string, unknown> {
+  const media = p._embedded?.["wp:featuredmedia"]?.[0];
+  return {
+    id: `rest-page-${p.id}`,
+    slug: p.slug,
+    title: stripHtml(p.title?.rendered ?? ""),
+    excerpt: p.excerpt?.rendered ?? null,
+    content: p.content?.rendered ?? null,
+    featuredImage: media?.source_url
+      ? {
+          node: {
+            sourceUrl: media.source_url,
+            altText: media.alt_text ?? "",
+          },
+        }
+      : null,
+    seo: null,
+  };
+}
 
-    const p = post as Record<string, unknown>;
+/**
+ * Loads child pages via WordPress REST API (`/wp/v2/pages?parent=…`).
+ * Use when WPGraphQL returns nothing (common with WPML, caching, or schema limits).
+ */
+async function fetchCaseStudyArchiveNodesFromWpRest(
+  cacheTags: string[],
+  maxItems: number,
+): Promise<{
+  nodes: Array<Record<string, unknown>>;
+  hasMore: boolean;
+} | null> {
+  const base = getWordPressRestBaseUrl();
+  if (!base) return null;
+
+  const parentSlug = CASE_STUDIES_PARENT_SLUG.replace(/^\/+|\/+$/g, "");
+  const nextOpts = { next: { tags: cacheTags } };
+
+  try {
+    const parentUrl = `${base}/wp/v2/pages?slug=${encodeURIComponent(parentSlug)}&per_page=1`;
+    const parentRes = await fetch(parentUrl, nextOpts);
+    if (!parentRes.ok) return null;
+    const parents = (await parentRes.json()) as Array<{ id: number }>;
+    if (!Array.isArray(parents) || parents.length === 0) return null;
+    const parentDbId = parents[0].id;
+
+    const nodes: Array<Record<string, unknown>> = [];
+    let pageNum = 1;
+    let hasMore = false;
+
+    while (nodes.length < maxItems) {
+      const perPage = Math.min(100, maxItems - nodes.length);
+      const url = `${base}/wp/v2/pages?parent=${parentDbId}&per_page=${perPage}&page=${pageNum}&status=publish&_embed`;
+      const res = await fetch(url, nextOpts);
+      if (!res.ok) break;
+      const batch = (await res.json()) as WpRestPage[];
+      if (!Array.isArray(batch) || batch.length === 0) break;
+      for (const p of batch) {
+        nodes.push(mapWpRestPageToArchiveNode(p));
+      }
+      const totalPages = parseInt(res.headers.get("X-WP-TotalPages") || "1", 10);
+      if (pageNum >= totalPages || batch.length < perPage) {
+        hasMore = pageNum < totalPages;
+        break;
+      }
+      pageNum += 1;
+      hasMore = pageNum < totalPages;
+    }
+
     return {
-      id: p.id as string,
-      slug: (p.slug as string) ?? "",
-      title: (p.title as string) ?? "",
-      excerpt: (p.excerpt as string) ?? null,
-      content: (p.content as string) ?? null,
-      featuredImage: (p.featuredImage as { node?: { sourceUrl?: string; altText?: string } })?.node
-        ? {
-            sourceUrl: (p.featuredImage as { node?: { sourceUrl?: string } }).node?.sourceUrl,
-            altText: (p.featuredImage as { node?: { altText?: string } }).node?.altText,
-          }
-        : null,
-      seo: p.seo as CaseStudyDetail["seo"],
+      nodes: nodes.slice(0, maxItems),
+      hasMore,
     };
   } catch {
     return null;
   }
 }
 
+function mapPageNodeToDetail(p: Record<string, unknown>): CaseStudyDetail {
+  const fi = p.featuredImage as { node?: { sourceUrl?: string; altText?: string } } | undefined;
+  const rawContent = p.content;
+  const contentHtml =
+    typeof rawContent === "string"
+      ? rawContent
+      : (rawContent as { rendered?: string } | undefined)?.rendered ?? null;
+  return {
+    id: p.id as string,
+    slug: (p.slug as string) ?? "",
+    title: (p.title as string) ?? "",
+    excerpt: (p.excerpt as string) ?? null,
+    content: contentHtml,
+    featuredImage: fi?.node?.sourceUrl
+      ? {
+          sourceUrl: fi.node.sourceUrl,
+          altText: fi.node.altText,
+        }
+      : null,
+    seo: p.seo as CaseStudyDetail["seo"],
+  };
+}
+
+function mapCaseStudyArchiveNode(n: Record<string, unknown>): CaseStudyListItem {
+  const tagConn =
+    (n.tags as { nodes?: Array<{ name?: string }> } | undefined)?.nodes ??
+    (n.categories as { nodes?: Array<{ name?: string }> } | undefined)?.nodes ??
+    [];
+  const tagNames = tagConn
+    .map((x) => x.name)
+    .filter(Boolean)
+    .slice(0, 3)
+    .map((t) => String(t).toUpperCase());
+
+  const cl = n.clientLogo as { node?: { sourceUrl?: string; altText?: string } } | undefined;
+  const clientLogoOverlay = cl?.node?.sourceUrl
+    ? {
+        sourceUrl: cl.node.sourceUrl,
+        altText: cl.node.altText,
+      }
+    : null;
+
+  const fi = n.featuredImage as { node?: { sourceUrl?: string; altText?: string } } | undefined;
+  const featuredImage = fi?.node?.sourceUrl
+    ? {
+        sourceUrl: fi.node.sourceUrl,
+        altText: fi.node.altText,
+      }
+    : null;
+
+  return {
+    id: n.id as string,
+    slug: (n.slug as string) ?? "",
+    title: (n.title as string) ?? "",
+    excerpt: (n.excerpt as string) ?? null,
+    featuredImage,
+    tags: tagNames.length > 0 ? tagNames : undefined,
+    clientLogoOverlay,
+  };
+}
+
+function buildCaseStudiesConnectionQuery(extraNodeFields: string): string {
+  return `
+    query CaseStudiesArchive($first: Int!, $after: String) {
+      caseStudies(first: $first, after: $after, where: { status: PUBLISH }) {
+        nodes {
+          ${CASE_STUDY_ARCHIVE_NODE_FIELDS}
+          ${extraNodeFields}
+        }
+        pageInfo { hasNextPage endCursor }
+      }
+    }
+  `;
+}
+
+/**
+ * Fetches published case studies for the archive (up to `maxItems` per request).
+ * 1) Child **pages** via WPGraphQL (parent `children` / `pages(where: { parent })`).
+ * 2) Same hierarchy via **WordPress REST** (`/wp/v2/pages?parent=…`) if GraphQL yields no rows.
+ * 3) **caseStudies** CPT (tags/clientLogo variants, chunked).
+ * 4) `posts` + `... on CaseStudy`.
+ */
+async function fetchCaseStudyArchiveNodes(
+  locale: Locale,
+  maxItems: number,
+): Promise<{
+  nodes: Array<Record<string, unknown>>;
+  hasMore: boolean;
+}> {
+  const cacheTags = ["case-studies", `case-studies-${locale}`];
+
+  const fromPages = await fetchCaseStudyArchiveNodesFromPages(cacheTags, maxItems);
+  if (fromPages && fromPages.nodes.length > 0) {
+    return fromPages;
+  }
+
+  const fromRest = await fetchCaseStudyArchiveNodesFromWpRest(cacheTags, maxItems);
+  if (fromRest && fromRest.nodes.length > 0) {
+    return fromRest;
+  }
+
+  const caseStudiesQueryVariants = [
+    buildCaseStudiesConnectionQuery(`
+          tags { nodes { name } }
+          clientLogo { node { sourceUrl altText } }
+    `),
+    buildCaseStudiesConnectionQuery(`
+          tags { nodes { name } }
+    `),
+    buildCaseStudiesConnectionQuery(`
+          categories { nodes { name } }
+    `),
+    buildCaseStudiesConnectionQuery(""),
+  ];
+
+  async function paginateCaseStudies(query: string): Promise<{
+    nodes: Array<Record<string, unknown>>;
+    hasMore: boolean;
+  }> {
+    const nodes: Array<Record<string, unknown>> = [];
+    let after: string | null = null;
+    let lastHasNext = false;
+
+    while (nodes.length < maxItems) {
+      const first = Math.min(CASE_STUDIES_GRAPHQL_CHUNK, maxItems - nodes.length);
+      const data = await fetchGraphQL<{
+        caseStudies?: {
+          nodes?: Array<Record<string, unknown>>;
+          pageInfo?: { hasNextPage?: boolean; endCursor?: string | null };
+        };
+      }>(query, {
+        variables: { first, after },
+        tags: cacheTags,
+      });
+      const batch = data?.caseStudies?.nodes ?? [];
+      const pageInfo = data?.caseStudies?.pageInfo;
+      lastHasNext = pageInfo?.hasNextPage ?? false;
+      nodes.push(...batch);
+      if (batch.length === 0 || !lastHasNext) {
+        break;
+      }
+      const endCursor = pageInfo?.endCursor;
+      if (!endCursor) {
+        break;
+      }
+      after = endCursor;
+    }
+
+    return {
+      nodes: nodes.slice(0, maxItems),
+      hasMore: lastHasNext,
+    };
+  }
+
+  for (const query of caseStudiesQueryVariants) {
+    try {
+      const result = await paginateCaseStudies(query);
+      if (result.nodes.length > 0) {
+        return result;
+      }
+      /* Successful response with 0 nodes: CPT has no published items. */
+      return { nodes: [], hasMore: false };
+    } catch {
+      /* try next query shape */
+    }
+  }
+
+  /** Last resort: some schemas expose CPT only via `posts` + inline fragment. */
+  const postsQuery = `
+    query CaseStudiesViaPosts($first: Int!, $after: String) {
+      posts(first: $first, after: $after, where: { postTypeIn: [CASE_STUDY], status: PUBLISH }) {
+        nodes {
+          ... on CaseStudy {
+            id
+            slug
+            title
+            excerpt
+            featuredImage { node { sourceUrl altText } }
+          }
+        }
+        pageInfo { hasNextPage endCursor }
+      }
+    }
+  `;
+
+  try {
+    const nodes: Array<Record<string, unknown>> = [];
+    let after: string | null = null;
+    let lastHasNext = false;
+
+    while (nodes.length < maxItems) {
+      const first = Math.min(CASE_STUDIES_GRAPHQL_CHUNK, maxItems - nodes.length);
+      const data = await fetchGraphQL<{
+        posts?: {
+          nodes?: Array<Record<string, unknown>>;
+          pageInfo?: { hasNextPage?: boolean; endCursor?: string | null };
+        };
+      }>(postsQuery, {
+        variables: { first, after },
+        tags: cacheTags,
+      });
+      const raw = data?.posts?.nodes ?? [];
+      const batch = raw.filter((n) => n && typeof (n as { slug?: string }).slug === "string");
+      const pageInfo = data?.posts?.pageInfo;
+      lastHasNext = pageInfo?.hasNextPage ?? false;
+      nodes.push(...batch);
+      if (batch.length === 0 || !lastHasNext) {
+        break;
+      }
+      const endCursor = pageInfo?.endCursor;
+      if (!endCursor) {
+        break;
+      }
+      after = endCursor;
+    }
+
+    return {
+      nodes: nodes.slice(0, maxItems),
+      hasMore: lastHasNext,
+    };
+  } catch {
+    return { nodes: [], hasMore: false };
+  }
+}
+
+export async function fetchCaseStudiesArchive(
+  locale: Locale,
+  options?: { page?: number; perPage?: number; solution?: string; industry?: string }
+): Promise<CaseStudiesArchiveData> {
+  const perPage = Math.min(500, Math.max(1, options?.perPage ?? 500));
+
+  try {
+    const { nodes, hasMore } = await fetchCaseStudyArchiveNodes(locale, perPage);
+    const items: CaseStudyListItem[] = nodes.map((n) =>
+      mapCaseStudyArchiveNode(n as Record<string, unknown>),
+    );
+
+    return {
+      items,
+      hasMore,
+    };
+  } catch {
+    return { items: [], hasMore: false };
+  }
+}
+
+const CASE_STUDY_PAGE_DETAIL_FIELDS = `
+  id
+  slug
+  title
+  excerpt
+  content(format: RENDERED)
+  featuredImage { node { sourceUrl altText } }
+  seo { title metaDesc opengraphImage { sourceUrl } }
+`;
+
+export async function fetchCaseStudyBySlug(
+  slug: string,
+  locale: Locale
+): Promise<CaseStudyDetail | null> {
+  const tags = ["case-studies", `case-study-${locale}-${slug}`];
+
+  const tryPageBySlug = async (): Promise<CaseStudyDetail | null> => {
+    try {
+      const data = await fetchGraphQL<{ page?: Record<string, unknown> | null }>(
+        `
+        query CaseStudyPageBySlug($slug: ID!) {
+          page(id: $slug, idType: SLUG) {
+            ${CASE_STUDY_PAGE_DETAIL_FIELDS}
+          }
+        }
+      `,
+        { variables: { slug }, tags },
+      );
+      if (data?.page) return mapPageNodeToDetail(data.page);
+    } catch {
+      /* Yoast `seo` or `content(format:)` may be missing — retry minimal page fields */
+    }
+    try {
+      const data = await fetchGraphQL<{ page?: Record<string, unknown> | null }>(
+        `
+        query CaseStudyPageBySlugMinimal($slug: ID!) {
+          page(id: $slug, idType: SLUG) {
+            id
+            slug
+            title
+            excerpt
+            content
+            featuredImage { node { sourceUrl altText } }
+          }
+        }
+      `,
+        { variables: { slug }, tags },
+      );
+      if (data?.page) return mapPageNodeToDetail(data.page);
+    } catch {
+      /* not a page by this slug */
+    }
+    return null;
+  };
+
+  const tryCpt = async (): Promise<CaseStudyDetail | null> => {
+    try {
+      const data = await fetchGraphQL<{
+        caseStudy?: Record<string, unknown>;
+        caseStudyBy?: Record<string, unknown>;
+      }>(
+        `
+        query GetCaseStudyCpt($slug: ID!) {
+          caseStudy(id: $slug, idType: SLUG) {
+            id
+            slug
+            title
+            excerpt
+            content
+            featuredImage { node { sourceUrl altText } }
+            seo { title metaDesc opengraphImage { sourceUrl } }
+          }
+        }
+      `,
+        { variables: { slug }, tags },
+      );
+      const post = data?.caseStudy ?? data?.caseStudyBy;
+      if (!post) return null;
+      const p = post as Record<string, unknown>;
+      return {
+        id: p.id as string,
+        slug: (p.slug as string) ?? "",
+        title: (p.title as string) ?? "",
+        excerpt: (p.excerpt as string) ?? null,
+        content: (p.content as string) ?? null,
+        featuredImage: (p.featuredImage as { node?: { sourceUrl?: string; altText?: string } })?.node
+          ? {
+              sourceUrl: (p.featuredImage as { node?: { sourceUrl?: string } }).node?.sourceUrl,
+              altText: (p.featuredImage as { node?: { altText?: string } }).node?.altText,
+            }
+          : null,
+        seo: p.seo as CaseStudyDetail["seo"],
+      };
+    } catch {
+      return null;
+    }
+  };
+
+  const tryPageByUri = async (): Promise<CaseStudyDetail | null> => {
+    const parent = CASE_STUDIES_PARENT_SLUG.replace(/^\/+|\/+$/g, "");
+    const uriVariants = [
+      `${parent}/${slug}`,
+      `/${parent}/${slug}/`,
+      `/${parent}/${slug}`,
+      `${parent}/${slug}/`,
+    ];
+    for (const uri of uriVariants) {
+      try {
+        const data = await fetchGraphQL<{ page?: Record<string, unknown> | null }>(
+          `
+          query CaseStudyPageByUri($id: ID!) {
+            page(id: $id, idType: URI) {
+              ${CASE_STUDY_PAGE_DETAIL_FIELDS}
+            }
+          }
+        `,
+          { variables: { id: uri }, tags },
+        );
+        if (data?.page) return mapPageNodeToDetail(data.page);
+      } catch {
+        try {
+          const data = await fetchGraphQL<{ page?: Record<string, unknown> | null }>(
+            `
+            query CaseStudyPageByUriMinimal($id: ID!) {
+              page(id: $id, idType: URI) {
+                id
+                slug
+                title
+                excerpt
+                content
+                featuredImage { node { sourceUrl altText } }
+              }
+            }
+          `,
+            { variables: { id: uri }, tags },
+          );
+          if (data?.page) return mapPageNodeToDetail(data.page);
+        } catch {
+          /* next URI */
+        }
+      }
+    }
+    return null;
+  };
+
+  const tryRestPage = async (): Promise<CaseStudyDetail | null> => {
+    const base = getWordPressRestBaseUrl();
+    if (!base) return null;
+    try {
+      const url = `${base}/wp/v2/pages?slug=${encodeURIComponent(slug)}&_embed`;
+      const res = await fetch(url, { next: { tags } });
+      if (!res.ok) return null;
+      const arr = (await res.json()) as WpRestPage[];
+      if (!Array.isArray(arr) || arr.length === 0) return null;
+      return mapPageNodeToDetail(wpRestPageToGraphqlDetailShape(arr[0]));
+    } catch {
+      return null;
+    }
+  };
+
+  return (
+    (await tryPageBySlug()) ??
+    (await tryCpt()) ??
+    (await tryPageByUri()) ??
+    (await tryRestPage())
+  );
+}
+
 export function caseStudyUrl(slug: string, locale: Locale): string {
   return localePath(`/case-studies/${slug}`, locale);
 }
 
-/** Fetch all case study slugs for sitemap */
+/** Fetch all case study slugs for sitemap (child pages under Case Studies parent, else CPT). */
 export async function fetchCaseStudySlugs(): Promise<string[]> {
+  const cacheTags = ["sitemap"];
+
+  const parent = await resolveCaseStudiesParentPage(cacheTags);
+  if (parent) {
+    const parentId = parent.id;
+
+    const collectSlugsFromChildren = async (
+      parentSlug: string,
+      childrenWhere: "publish" | "none",
+    ): Promise<string[]> => {
+      const whereArg =
+        childrenWhere === "publish" ? `, where: { status: PUBLISH }` : "";
+      const slugs: string[] = [];
+      let after: string | null = null;
+      const maxSlugs = 500;
+
+      while (slugs.length < maxSlugs) {
+        const first = Math.min(CASE_STUDIES_GRAPHQL_CHUNK, maxSlugs - slugs.length);
+        const data = await fetchGraphQL<{
+          page?: {
+            children?: {
+              nodes?: Array<{ slug?: string }>;
+              pageInfo?: { hasNextPage?: boolean; endCursor?: string | null };
+            };
+          } | null;
+        }>(
+          `
+          query CaseStudyChildSlugs($id: ID!, $first: Int!, $after: String) {
+            page(id: $id, idType: SLUG) {
+              children(first: $first, after: $after${whereArg}) {
+                nodes {
+                  ... on Page {
+                    slug
+                  }
+                }
+                pageInfo { hasNextPage endCursor }
+              }
+            }
+          }
+        `,
+          { variables: { id: parentSlug, first, after }, tags: cacheTags, revalidate: 3600 },
+        );
+        const raw = data?.page?.children?.nodes ?? [];
+        const nodes = raw.filter((n) => n && typeof (n as { slug?: string }).slug === "string") as Array<{
+          slug?: string;
+        }>;
+        for (const n of nodes) {
+          if (n.slug) slugs.push(n.slug);
+        }
+        const pi = data?.page?.children?.pageInfo;
+        if (!pi?.hasNextPage || !pi?.endCursor || nodes.length === 0) {
+          break;
+        }
+        after = pi.endCursor;
+      }
+
+      return slugs;
+    };
+
+    const collectSlugsFromPagesWhere = async (
+      pid: string,
+      mode: "parent" | "parentIn",
+    ): Promise<string[]> => {
+      const whereFragment =
+        mode === "parent"
+          ? `where: { parent: $parentId, status: PUBLISH }`
+          : `where: { parentIn: [$parentId], status: PUBLISH }`;
+      const slugs: string[] = [];
+      let after: string | null = null;
+      const maxSlugs = 500;
+
+      while (slugs.length < maxSlugs) {
+        const first = Math.min(CASE_STUDIES_GRAPHQL_CHUNK, maxSlugs - slugs.length);
+        const data = await fetchGraphQL<{
+          pages?: {
+            nodes?: Array<{ slug?: string }>;
+            pageInfo?: { hasNextPage?: boolean; endCursor?: string | null };
+          };
+        }>(
+          `
+          query CaseStudyPageSlugs($parentId: ID!, $first: Int!, $after: String) {
+            pages(first: $first, after: $after, ${whereFragment}) {
+              nodes { slug }
+              pageInfo { hasNextPage endCursor }
+            }
+          }
+        `,
+          { variables: { parentId: pid, first, after }, tags: cacheTags, revalidate: 3600 },
+        );
+        const nodes = data?.pages?.nodes ?? [];
+        for (const n of nodes) {
+          if (n.slug) slugs.push(n.slug);
+        }
+        const pi = data?.pages?.pageInfo;
+        if (!pi?.hasNextPage || !pi?.endCursor || nodes.length === 0) {
+          break;
+        }
+        after = pi.endCursor;
+      }
+
+      return slugs;
+    };
+
+    const slugStrategies: Array<() => Promise<string[]>> = [
+      () => collectSlugsFromChildren(parent.slug, "publish"),
+      () => collectSlugsFromChildren(parent.slug, "none"),
+      () => collectSlugsFromPagesWhere(parentId, "parent"),
+      () => collectSlugsFromPagesWhere(parentId, "parentIn"),
+    ];
+
+    for (const run of slugStrategies) {
+      try {
+        const slugs = await run();
+        if (slugs.length > 0) {
+          return slugs;
+        }
+      } catch {
+        /* next strategy */
+      }
+    }
+  }
+
+  const fromRest = await fetchCaseStudyArchiveNodesFromWpRest(["sitemap"], 500);
+  if (fromRest && fromRest.nodes.length > 0) {
+    return fromRest.nodes
+      .map((n) => (n as { slug?: string }).slug)
+      .filter((s): s is string => Boolean(s));
+  }
+
   try {
-    const data = await fetchGraphQL<{
-      caseStudies?: { nodes?: Array<{ slug?: string }> };
-    }>(
-      `query { caseStudies(first: 500, where: { status: PUBLISH }) { nodes { slug } } }`,
-      { tags: ["sitemap"], revalidate: 3600 }
-    );
-    const nodes = data?.caseStudies?.nodes ?? [];
-    return nodes.map((n) => n.slug).filter(Boolean) as string[];
+    const slugs: string[] = [];
+    let after: string | null = null;
+    const maxSlugs = 500;
+
+    while (slugs.length < maxSlugs) {
+      const first = Math.min(CASE_STUDIES_GRAPHQL_CHUNK, maxSlugs - slugs.length);
+      const data = await fetchGraphQL<{
+        caseStudies?: {
+          nodes?: Array<{ slug?: string }>;
+          pageInfo?: { hasNextPage?: boolean; endCursor?: string | null };
+        };
+      }>(
+        `
+        query CaseStudySlugs($first: Int!, $after: String) {
+          caseStudies(first: $first, after: $after, where: { status: PUBLISH }) {
+            nodes { slug }
+            pageInfo { hasNextPage endCursor }
+          }
+        }
+      `,
+        { variables: { first, after }, tags: cacheTags, revalidate: 3600 },
+      );
+      const nodes = data?.caseStudies?.nodes ?? [];
+      for (const n of nodes) {
+        if (n.slug) slugs.push(n.slug);
+      }
+      const pi = data?.caseStudies?.pageInfo;
+      if (!pi?.hasNextPage || !pi?.endCursor || nodes.length === 0) {
+        break;
+      }
+      after = pi.endCursor;
+    }
+
+    return slugs;
   } catch {
     return [];
   }
+}
+
+/** Dev-only diagnostics (safe to expose: no secrets). */
+export interface CaseStudiesArchiveDiagnostic {
+  graphqlUrlSet: boolean;
+  restBaseUrl: string | null;
+  graphqlParentResolved: boolean;
+  graphqlParentError?: string;
+  restParentStatus: number | null;
+  restParentFound: boolean;
+  restParentDatabaseId: number | null;
+  restChildrenCount: number;
+  hints: string[];
+}
+
+export async function diagnoseCaseStudiesData(): Promise<CaseStudiesArchiveDiagnostic> {
+  const hints: string[] = [];
+  const graphqlUrlSet = Boolean(process.env.WORDPRESS_GRAPHQL_URL);
+
+  if (!graphqlUrlSet) {
+    hints.push("Set WORDPRESS_GRAPHQL_URL in .env.local (your WPGraphQL endpoint URL).");
+  }
+
+  const restBase = getWordPressRestBaseUrl();
+  if (!restBase) {
+    hints.push(
+      "Set WORDPRESS_REST_URL (e.g. https://yoursite.com/wp-json) or WORDPRESS_GRAPHQL_URL so the REST base can be derived from the same origin.",
+    );
+  }
+
+  let graphqlParentResolved = false;
+  let graphqlParentError: string | undefined;
+  try {
+    const p = await resolveCaseStudiesParentPage(["case-studies-debug"]);
+    graphqlParentResolved = Boolean(p);
+  } catch (e) {
+    graphqlParentError = e instanceof Error ? e.message : String(e);
+  }
+
+  let restParentStatus: number | null = null;
+  let restParentFound = false;
+  let restParentDatabaseId: number | null = null;
+  let restChildrenCount = 0;
+
+  if (restBase) {
+    try {
+      const slug = CASE_STUDIES_PARENT_SLUG.replace(/^\/+|\/+$/g, "");
+      const r = await fetch(`${restBase}/wp/v2/pages?slug=${encodeURIComponent(slug)}&per_page=1`, {
+        cache: "no-store",
+      });
+      restParentStatus = r.status;
+      restParentFound = r.ok;
+      if (r.ok) {
+        const arr = (await r.json()) as Array<{ id: number }>;
+        if (Array.isArray(arr) && arr[0]?.id) {
+          restParentDatabaseId = arr[0].id;
+          const cr = await fetch(
+            `${restBase}/wp/v2/pages?parent=${arr[0].id}&per_page=100&status=publish`,
+            { cache: "no-store" },
+          );
+          if (cr.ok) {
+            const kids = (await cr.json()) as unknown[];
+            restChildrenCount = Array.isArray(kids) ? kids.length : 0;
+          }
+        }
+      } else if (r.status === 401 || r.status === 403) {
+        hints.push(
+          "REST returned 401/403 — allow unauthenticated GET to /wp-json/wp/v2/pages or configure application passwords for server-side fetches.",
+        );
+      }
+    } catch (e) {
+      hints.push(`REST fetch failed: ${e instanceof Error ? e.message : String(e)}`);
+    }
+  }
+
+  if (!graphqlParentResolved && graphqlParentError) {
+    hints.push(`GraphQL parent lookup error: ${graphqlParentError}`);
+  }
+
+  if (!graphqlParentResolved && restChildrenCount > 0) {
+    hints.push(
+      "REST lists child pages but GraphQL did not resolve the parent — WPGraphQL/WPML may hide pages; the site should use the REST fallback for the archive.",
+    );
+  }
+
+  if (graphqlParentResolved && restChildrenCount === 0) {
+    hints.push(
+      "Both GraphQL strategies and REST report zero children — confirm the parent page slug in WordPress (WP_CASE_STUDIES_PARENT_SLUG) and that child pages are Published under that parent.",
+    );
+  }
+
+  return {
+    graphqlUrlSet,
+    restBaseUrl: restBase,
+    graphqlParentResolved,
+    graphqlParentError,
+    restParentStatus,
+    restParentFound,
+    restParentDatabaseId,
+    restChildrenCount,
+    hints,
+  };
 }

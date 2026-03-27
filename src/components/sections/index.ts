@@ -84,3 +84,43 @@ export {
   CommunitySupportSection,
   type CommunitySupportSlide,
 } from "./CommunitySupportSection";
+
+export {
+  ClientSuccessStoryHeroSection,
+  type ClientSuccessStoryHeroSectionProps,
+} from "./ClientSuccessStoryHeroSection";
+
+export {
+  ClientSuccessStoryProjectAtAGlanceSection,
+  type ClientSuccessStoryProjectAtAGlanceSectionProps,
+} from "./ClientSuccessStoryProjectAtAGlanceSection";
+
+export {
+  ClientSuccessStoryVideoSection,
+} from "./ClientSuccessStoryVideoSection";
+
+export {
+  ClientSuccessStoryChallengeSection,
+} from "./ClientSuccessStoryChallengeSection";
+
+export {
+  ClientSuccessStoryPerfectFitAutomationSection,
+  type ClientSuccessStoryPerfectFitAutomationSectionProps,
+} from "./ClientSuccessStoryPerfectFitAutomationSection";
+
+export {
+  ClientSuccessStoryResultsSection,
+  type ClientSuccessStoryResultsSectionProps,
+  type ClientSuccessStoryResultRow,
+} from "./ClientSuccessStoryResultsSection";
+
+export {
+  ClientSuccessStoryTestimonialCardSection,
+  type ClientSuccessStoryTestimonialCardSectionProps,
+} from "./ClientSuccessStoryTestimonialCardSection";
+
+export {
+  ClientSuccessStoryRelatedStoriesSection,
+  type ClientSuccessStoryRelatedStoriesSectionProps,
+  type ClientSuccessStoryRelatedStoryCard,
+} from "./ClientSuccessStoryRelatedStoriesSection";

@@ -5,6 +5,24 @@
 
 const GRAPHQL_URL = process.env.WORDPRESS_GRAPHQL_URL;
 
+/**
+ * Base URL for the WordPress REST API (`…/wp-json`), no trailing slash.
+ * Prefer `WORDPRESS_REST_URL` (same as Redirection); otherwise derive origin from GraphQL URL.
+ */
+export function getWordPressRestBaseUrl(): string | null {
+  const explicit = process.env.WORDPRESS_REST_URL?.trim();
+  if (explicit) {
+    return explicit.replace(/\/$/, "");
+  }
+  const g = process.env.WORDPRESS_GRAPHQL_URL?.trim();
+  if (!g) return null;
+  try {
+    return new URL(g).origin + "/wp-json";
+  } catch {
+    return null;
+  }
+}
+
 export interface FetchGraphQLOptions {
   /** Cache tags for on-demand revalidation (ISR) */
   tags?: string[];

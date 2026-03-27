@@ -410,6 +410,19 @@ function transformSection(node: Record<string, unknown>, index: number): Section
       ? "horizontal_scroll_section"
     : low.includes("tabbed") || low.includes("tabbed_content")
       ? "tabbed_content_section"
+    : low.includes("perfect_fit_automation") ||
+        low.includes("perfectfitautomation") ||
+        low.includes("client_success_story_perfect_fit")
+      ? "client_success_story_perfect_fit_automation_section"
+    : low.includes("client_success_story_results") ||
+        low.includes("clientsuccessstoryresults")
+      ? "client_success_story_results_section"
+    : low.includes("client_success_story_testimonial_card") ||
+        low.includes("clientsuccessstorytestimonialcard")
+      ? "client_success_story_testimonial_card_section"
+    : low.includes("client_success_story_related_stories") ||
+        low.includes("clientsuccessstoryrelatedstories")
+      ? "client_success_story_related_stories_section"
     : typenameToGroupName(typename);
 
   const { __typename, fieldGroupName, ...fields } = node;
@@ -847,6 +860,32 @@ function transformSection(node: Record<string, unknown>, index: number): Section
   if (acfGroupName === "what_makes_us_different_section" && normalized.whatMakesItems) {
     normalized.items = normalized.whatMakesItems;
     delete normalized.whatMakesItems;
+  }
+
+  // Client success related stories: optional ACF image field on story rows
+  if (
+    acfGroupName === "client_success_story_related_stories_section" &&
+    Array.isArray(normalized.stories)
+  ) {
+    normalized.stories = (normalized.stories as unknown[]).map((raw) => {
+      const s = { ...(raw as Record<string, unknown>) };
+      const img = s.image as Record<string, unknown> | undefined;
+      const node = img?.node as Record<string, unknown> | undefined;
+      if (img && (node?.sourceUrl || (img as { sourceUrl?: string }).sourceUrl)) {
+        s.imageSrc =
+          (node?.sourceUrl as string | undefined) ??
+          (img as { sourceUrl?: string }).sourceUrl ??
+          s.imageSrc ??
+          "";
+        s.imageAlt =
+          (node?.altText as string | undefined) ??
+          (img as { altText?: string }).altText ??
+          s.imageAlt ??
+          "";
+        delete s.image;
+      }
+      return s;
+    });
   }
 
   // Locations: locationsItems[].image.node -> imageSrc, imageAlt; map to items

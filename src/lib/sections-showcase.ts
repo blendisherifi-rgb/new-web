@@ -1699,6 +1699,192 @@ export const SECTIONS_SHOWCASE_GROUPS: SectionGroup[] = [
     ],
   },
   {
+    groupName: "Client stories",
+    sections: [
+      {
+        id: "client-success-story-1",
+        acfGroupName: "client_success_story_hero_section",
+        order: 10,
+        fields: {
+          clientSuccessStoryLabel: "CLIENT SUCCESS STORY",
+          clientLogoSrc: "/vercel.svg",
+          clientLogoAlt: "Superdry",
+          updatedText: "",
+          titleBefore: "Outcome led case study title leading with",
+          titleHighlight: "evidence-based",
+          titleAfter: " benefits",
+          tags: ["ACCOUNTS PAYABLE", "FINANCIAL SERVICES", "AP MANAGER"],
+          imageSrc: "/hero-platform-screenshot.png",
+          imageAlt: "Outcome led case study",
+          shareUrl: "#",
+          shareTitle: "Outcome led case study",
+          sharePlatforms: ["x", "linkedin", "youtube"],
+        },
+      },
+      {
+        id: "client-success-story-at-a-glance-1",
+        acfGroupName: "client_success_story_project_at_a_glance_section",
+        order: 11,
+        fields: {
+          title: "Project at a glance",
+          downloadLabel: "DOWNLOAD AS PDF",
+          downloadHref: "#",
+          challengeLabel: "THE CLIENT'S CHALLENGE",
+          challengeText:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec enim magna, vestibulum sed est vitae, venenatis feugiat magna. Sed molestie euismod elit cursus molestie. Mauris fringilla mi ut ullamcorper interdum.",
+          resultsLabel: "THE RESULTS",
+          results: [
+            "Lorem ipsum dolor sit amet",
+            "Consectetur adipiscing elit ullamcorper",
+            "Vestibulum sed est vitae",
+            "Enatis feugiat magna",
+            "Mauris fringilla mi ut ullamcorper interdum",
+          ],
+          detailsLabel: "DETAILS",
+          detailsRows: [
+            { label: "Industry", valueText: "Retail" },
+            { label: "Region", valueText: "Worldwide" },
+            { label: "Employees", valueText: "3,500+" },
+            { label: "Invoices", valueText: "30,000+ per annum" },
+            { label: "ERP system", valueText: "Coda Financials" },
+            {
+              label: "Solution",
+              valueLogoSrc: "/vercel.svg",
+              valueLogoAlt: "SoftCoAP",
+            },
+          ],
+        },
+      },
+      {
+        id: "client-success-story-video-1",
+        acfGroupName: "client_success_story_video_section",
+        order: 12,
+        fields: {
+          youtubeVideoId: "jNQXAC9IVRw",
+          videoPosterSrc: "/hero-platform-screenshot.png",
+          videoTitle: "Client success story",
+        },
+      },
+      {
+        id: "client-success-story-challenge-1",
+        acfGroupName: "client_success_story_challenge_section",
+        order: 13,
+        fields: {
+          overline: "THE CLIENT'S CHALLENGE",
+          headingBefore: "Client",
+          headingHighlight: "challenge more",
+          headingAfter: " descriptive title / can fall onto two lines",
+          body:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc maximus, nulla ut commodo sagittis, sapien dui mattis dui, non pulvinar lorem felis nec erat. Aliquam egestas, velit at condimentum placerat, sem sapien laoreet mauris, dictum porttitor lacus est nec enim. Vivamus feugiat elit lorem, eu porttitor ante ultrices id. Phasellus suscipit tellus ante, nec dignissim elit imperdiet nec.\n\nVivamus feugiat elit lorem, eu porttitor ante ultrices id. Phasellus suscipit tellus ante, nec dignissim elit imperdiet nec. Nullam fringilla feugiat nisl. Ut pretium, metus venenatis dictum viverra, dui metus finibus enim, ac rhoncus sem lorem vitae mauris. Suspendisse ut venenatis libero. Suspendisse lorem felis, pretium in maximus id, tempor non ipsum:",
+          bullets: [
+            "Bullet list style",
+            "Phasellus suscipit tellus ante, nec dignissim elit imperdiet nec",
+            "Nullam fringilla feugiat nisl",
+            "Ut pretium, metus venenatis dictum",
+          ],
+        },
+      },
+      {
+        id: "client-success-story-perfect-fit-1",
+        acfGroupName: "client_success_story_perfect_fit_automation_section",
+        order: 14,
+        fields: {
+          overline: "PERFECT FIT AUTOMATION",
+          headingBefore: "SoftCo's automation ",
+          headingHighlight: "solution in",
+          headingAfter: " a more compelling title",
+          bodyTop:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc maximus, nulla ut commodo sagittis, sapien dui mattis dui, non pulvinar lorem felis nec erat. Aliquam egestas, velit at condimentum placerat, sem sapien laoreet mauris, dictum porttitor lacus est nec enim.",
+          quote:
+            "Pull out quote style....can be a client or SoftCo expert. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel nisi euismod, facilisis magna in, varius metus. Donec a lorem at urna tincidunt cursus.",
+          attributionName: "Martin Ray",
+          attributionRole: "Accounts Payable Manager, SuperDry",
+          bodyBottom:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc maximus, nulla ut commodo sagittis, sapien dui mattis dui, non pulvinar lorem felis nec erat. Aliquam egestas, velit at condimentum placerat, sem sapien laoreet mauris, dictum porttitor lacus est nec enim. Vivamus feugiat elit lorem, eu porttitor ante ultrices id.",
+        },
+      },
+      {
+        id: "client-success-story-results-1",
+        acfGroupName: "client_success_story_results_section",
+        order: 15,
+        fields: {
+          overline: "RESULTS",
+          headingBefore: "SoftCo's automation ",
+          headingHighlight: "solution in",
+          headingAfter: " a more compelling title",
+          body:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc maximus, nulla ut commodo sagittis, sapien dui mattis dui, non pulvinar lorem felis nec erat. Aliquam egestas, velit at condimentum placerat, sem sapien laoreet mauris, dictum porttitor lacus est nec enim.",
+          results: [
+            {
+              title: "Reduced staffing costs",
+              description:
+                "Superdry were able to redeploy three team members into strategic roles.",
+            },
+            {
+              title: "Increased processing efficiency",
+              description: "From 5% to 80%",
+            },
+            {
+              title: "Higher PO compliance",
+              description: "From 5% to 80%",
+            },
+            {
+              title: "Increased processing efficiency",
+              description: "From 10% to 71%",
+            },
+            {
+              title: "Enhanced team perception",
+              description:
+                "The AP team's reputation improved significantly across audit committee and directors.",
+            },
+          ],
+        },
+      },
+      {
+        id: "client-success-story-testimonial-card-1",
+        acfGroupName: "client_success_story_testimonial_card_section",
+        order: 16,
+        fields: {
+          portraitSrc: "/hero-platform-screenshot.png",
+          portraitAlt: "Joe Smyth",
+          quote:
+            "Client quote....Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut commodo sagittis, sapien dui mattis dui, non pulvinar lorem felis nec erat. Aliquam egestas, velit at condimentum placerat, sem sapien laoreet mauris",
+          authorName: "Joe Smyth",
+          authorTitle: "AP Manager, Superdry",
+          clientLogoSrc: "/vercel.svg",
+          clientLogoAlt: "Superdry",
+        },
+      },
+      {
+        id: "client-success-story-related-1",
+        acfGroupName: "client_success_story_related_stories_section",
+        order: 17,
+        fields: {
+          titleLine1: "AP automation client success stories",
+          titleLine2: "you might be interested in",
+          stories: [
+            {
+              imageSrc: "/hero-platform-screenshot.png",
+              imageAlt: "Team collaboration",
+              tags: ["ACCOUNTS PAYABLE", "FINANCIAL SERVICES", "AP MANAGER"],
+              cardTitle:
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit ipsum",
+              ctaHref: "#",
+            },
+            {
+              imageSrc: "/hero-platform-screenshot.png",
+              imageAlt: "Meeting at conference table",
+              tags: ["ACCOUNTS PAYABLE", "FINANCIAL SERVICES", "AP MANAGER"],
+              cardTitle:
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit ipsum",
+              ctaHref: "#",
+            },
+          ],
+        },
+      },
+    ],
+  },
+  {
     groupName: "Locations",
     sections: [
   {

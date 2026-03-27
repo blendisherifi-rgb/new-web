@@ -1,8 +1,8 @@
 /**
- * Fetch News & Events CPT data from WordPress.
+ * Fetch News CPT data from WordPress (WPGraphQL + REST fallback).
  */
 
-import { fetchGraphQL } from "./wordpress";
+import { fetchGraphQL, getWordPressRestBaseUrl } from "./wordpress";
 import type { Locale } from "@/lib/i18n";
 import { localePath } from "@/lib/i18n";
 
@@ -31,68 +31,223 @@ export interface NewsArchiveData {
   hasMore: boolean;
 }
 
+const NEWS_GRAPHQL_CHUNK = 100;
+
+interface WpRestNewsPost {
+  id: number;
+  slug: string;
+  date?: string;
+  title: { rendered: string };
+  excerpt?: { rendered: string };
+  content?: { rendered: string };
+  _embedded?: {
+    "wp:featuredmedia"?: Array<{ source_url?: string; alt_text?: string }>;
+  };
+}
+
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+}
+
+function mapRestNewsToListItem(p: WpRestNewsPost): NewsListItem {
+  const media = p._embedded?.["wp:featuredmedia"]?.[0];
+  return {
+    id: `rest-news-${p.id}`,
+    slug: p.slug,
+    title: stripHtml(p.title?.rendered ?? ""),
+    excerpt: p.excerpt?.rendered ?? null,
+    date: p.date ?? null,
+    featuredImage: media?.source_url
+      ? {
+          sourceUrl: media.source_url,
+          altText: media.alt_text ?? "",
+        }
+      : null,
+  };
+}
+
+/**
+ * Paginated `news` GraphQL connection (chunked; avoids `first` above WPGraphQL max).
+ */
+async function fetchNewsArchiveNodesGraphQL(
+  cacheTags: string[],
+  maxItems: number,
+): Promise<{ nodes: NewsListItem[]; hasMore: boolean } | null> {
+  const query = `
+    query GetNewsArchive($first: Int!, $after: String) {
+      news(first: $first, after: $after, where: { status: PUBLISH }) {
+        nodes {
+          id
+          slug
+          title
+          excerpt
+          date
+          featuredImage { node { sourceUrl altText } }
+        }
+        pageInfo { hasNextPage endCursor }
+      }
+    }
+  `;
+
+  const mapNode = (n: Record<string, unknown>): NewsListItem => ({
+    id: n.id as string,
+    slug: (n.slug as string) ?? "",
+    title: (n.title as string) ?? "",
+    excerpt: (n.excerpt as string) ?? null,
+    date: (n.date as string) ?? null,
+    featuredImage: (n.featuredImage as { node?: { sourceUrl?: string; altText?: string } })?.node
+      ? {
+          sourceUrl: (n.featuredImage as { node?: { sourceUrl?: string } }).node?.sourceUrl,
+          altText: (n.featuredImage as { node?: { altText?: string } }).node?.altText,
+        }
+      : null,
+  });
+
+  try {
+    const nodes: NewsListItem[] = [];
+    let after: string | null = null;
+    let lastHasNext = false;
+
+    while (nodes.length < maxItems) {
+      const first = Math.min(NEWS_GRAPHQL_CHUNK, maxItems - nodes.length);
+      const data = await fetchGraphQL<{
+        news?: {
+          nodes?: Array<Record<string, unknown>>;
+          pageInfo?: { hasNextPage?: boolean; endCursor?: string | null };
+        };
+      }>(query, {
+        variables: { first, after },
+        tags: cacheTags,
+      });
+      const batch = data?.news?.nodes ?? [];
+      const pageInfo = data?.news?.pageInfo;
+      lastHasNext = pageInfo?.hasNextPage ?? false;
+      nodes.push(...batch.map(mapNode));
+      if (batch.length === 0 || !lastHasNext) break;
+      const endCursor = pageInfo?.endCursor;
+      if (!endCursor) break;
+      after = endCursor;
+    }
+
+    if (nodes.length > 0) {
+      return { nodes: nodes.slice(0, maxItems), hasMore: lastHasNext };
+    }
+  } catch {
+    /* try newsItems */
+  }
+
+  const altQuery = `
+    query GetNewsItemsArchive($first: Int!, $after: String) {
+      newsItems(first: $first, after: $after, where: { status: PUBLISH }) {
+        nodes {
+          id
+          slug
+          title
+          excerpt
+          date
+          featuredImage { node { sourceUrl altText } }
+        }
+        pageInfo { hasNextPage endCursor }
+      }
+    }
+  `;
+
+  try {
+    const nodes: NewsListItem[] = [];
+    let after: string | null = null;
+    let lastHasNext = false;
+
+    while (nodes.length < maxItems) {
+      const first = Math.min(NEWS_GRAPHQL_CHUNK, maxItems - nodes.length);
+      const data = await fetchGraphQL<{
+        newsItems?: {
+          nodes?: Array<Record<string, unknown>>;
+          pageInfo?: { hasNextPage?: boolean; endCursor?: string | null };
+        };
+      }>(altQuery, {
+        variables: { first, after },
+        tags: cacheTags,
+      });
+      const batch = data?.newsItems?.nodes ?? [];
+      const pageInfo = data?.newsItems?.pageInfo;
+      lastHasNext = pageInfo?.hasNextPage ?? false;
+      nodes.push(...batch.map(mapNode));
+      if (batch.length === 0 || !lastHasNext) break;
+      const endCursor = pageInfo?.endCursor;
+      if (!endCursor) break;
+      after = endCursor;
+    }
+
+    return {
+      nodes: nodes.slice(0, maxItems),
+      hasMore: lastHasNext,
+    };
+  } catch {
+    return null;
+  }
+}
+
+async function fetchNewsArchiveFromRest(
+  cacheTags: string[],
+  maxItems: number,
+): Promise<{ nodes: NewsListItem[]; hasMore: boolean } | null> {
+  const base = getWordPressRestBaseUrl();
+  if (!base) return null;
+
+  const nextOpts = { next: { tags: cacheTags } };
+
+  try {
+    const nodes: NewsListItem[] = [];
+    let pageNum = 1;
+    let hasMore = false;
+
+    while (nodes.length < maxItems) {
+      const perPage = Math.min(100, maxItems - nodes.length);
+      const url = `${base}/wp/v2/news?per_page=${perPage}&page=${pageNum}&status=publish&_embed`;
+      const res = await fetch(url, nextOpts);
+      if (!res.ok) return null;
+      const batch = (await res.json()) as WpRestNewsPost[];
+      if (!Array.isArray(batch) || batch.length === 0) break;
+      for (const p of batch) {
+        nodes.push(mapRestNewsToListItem(p));
+      }
+      const totalPages = parseInt(res.headers.get("X-WP-TotalPages") || "1", 10);
+      if (pageNum >= totalPages || batch.length < perPage) {
+        hasMore = pageNum < totalPages;
+        break;
+      }
+      pageNum += 1;
+      hasMore = pageNum < totalPages;
+    }
+
+    return {
+      nodes: nodes.slice(0, maxItems),
+      hasMore,
+    };
+  } catch {
+    return null;
+  }
+}
+
 export async function fetchNewsArchive(
   locale: Locale,
   options?: { page?: number; perPage?: number }
 ): Promise<NewsArchiveData> {
-  const perPage = options?.perPage ?? 12;
+  const perPage = Math.min(500, Math.max(1, options?.perPage ?? 500));
+  const cacheTags = ["news", `news-${locale}`];
 
   try {
-    const data = await fetchGraphQL<{
-      news?: {
-        nodes?: Array<{
-          id: string;
-          slug?: string;
-          title?: string;
-          excerpt?: string;
-          date?: string;
-          featuredImage?: { node?: { sourceUrl?: string; altText?: string } };
-        }>;
-        pageInfo?: { hasNextPage?: boolean };
-      };
-      newsItems?: { nodes?: unknown[] };
-    }>(
-      `
-      query GetNews($first: Int!) {
-        news(first: $first, where: { status: PUBLISH }) {
-          nodes {
-            id
-            slug
-            title
-            excerpt
-            date
-            featuredImage { node { sourceUrl altText } }
-          }
-          pageInfo { hasNextPage }
-        }
-      }
-    `,
-      {
-        variables: { first: perPage },
-        tags: ["news", `news-${locale}`],
-      }
-    );
+    const gql = await fetchNewsArchiveNodesGraphQL(cacheTags, perPage);
+    if (gql && gql.nodes.length > 0) {
+      return { items: gql.nodes, hasMore: gql.hasMore };
+    }
 
-    const nodes = data?.news?.nodes ?? data?.newsItems?.nodes ?? [];
+    const rest = await fetchNewsArchiveFromRest(cacheTags, perPage);
+    if (rest && rest.nodes.length > 0) {
+      return { items: rest.nodes, hasMore: rest.hasMore };
+    }
 
-    const items: NewsListItem[] = (nodes as Array<Record<string, unknown>>).map((n) => ({
-      id: n.id as string,
-      slug: (n.slug as string) ?? "",
-      title: (n.title as string) ?? "",
-      excerpt: (n.excerpt as string) ?? null,
-      date: (n.date as string) ?? null,
-      featuredImage: (n.featuredImage as { node?: { sourceUrl?: string; altText?: string } })?.node
-        ? {
-            sourceUrl: (n.featuredImage as { node?: { sourceUrl?: string } }).node?.sourceUrl,
-            altText: (n.featuredImage as { node?: { altText?: string } }).node?.altText,
-          }
-        : null,
-    }));
-
-    return {
-      items,
-      hasMore: (data?.news?.pageInfo?.hasNextPage as boolean) ?? false,
-    };
+    return { items: gql?.nodes ?? [], hasMore: false };
   } catch {
     return { items: [], hasMore: false };
   }
@@ -102,80 +257,152 @@ export async function fetchNewsBySlug(
   slug: string,
   locale: Locale
 ): Promise<NewsDetail | null> {
-  try {
-    const data = await fetchGraphQL<{
-      newsItem?: {
-        id: string;
-        slug?: string;
-        title?: string;
-        excerpt?: string;
-        date?: string;
-        content?: string;
-        featuredImage?: { node?: { sourceUrl?: string; altText?: string } };
-        seo?: Record<string, unknown>;
-      };
-      newsItemBy?: Record<string, unknown>;
-    }>(
-      `
-      query GetNewsItem($slug: ID!) {
-        newsItem(id: $slug, idType: SLUG) {
-          id
-          slug
-          title
-          excerpt
-          date
-          content
-          featuredImage { node { sourceUrl altText } }
-          seo { title metaDesc opengraphImage { sourceUrl } }
-        }
-      }
-    `,
-      {
-        variables: { slug },
-        tags: ["news", `news-${locale}-${slug}`],
-      }
-    );
+  const tags = ["news", `news-${locale}-${slug}`];
 
-    const post = data?.newsItem ?? data?.newsItemBy;
-    if (!post) return null;
-
-    const p = post as Record<string, unknown>;
-    return {
-      id: p.id as string,
-      slug: (p.slug as string) ?? "",
-      title: (p.title as string) ?? "",
-      excerpt: (p.excerpt as string) ?? null,
-      date: (p.date as string) ?? null,
-      content: (p.content as string) ?? null,
-      featuredImage: (p.featuredImage as { node?: { sourceUrl?: string; altText?: string } })?.node
-        ? {
-            sourceUrl: (p.featuredImage as { node?: { sourceUrl?: string } }).node?.sourceUrl,
-            altText: (p.featuredImage as { node?: { altText?: string } }).node?.altText,
+  const tryGraphql = async (): Promise<NewsDetail | null> => {
+    try {
+      const data = await fetchGraphQL<{
+        newsItem?: Record<string, unknown>;
+        newsItemBy?: Record<string, unknown>;
+      }>(
+        `
+        query GetNewsItem($slug: ID!) {
+          newsItem(id: $slug, idType: SLUG) {
+            id
+            slug
+            title
+            excerpt
+            date
+            content
+            featuredImage { node { sourceUrl altText } }
+            seo { title metaDesc opengraphImage { sourceUrl } }
           }
-        : null,
-      seo: p.seo as NewsDetail["seo"],
-    };
-  } catch {
-    return null;
-  }
+        }
+      `,
+        { variables: { slug }, tags }
+      );
+
+      const post = data?.newsItem ?? data?.newsItemBy;
+      if (!post) return null;
+      const p = post as Record<string, unknown>;
+      return {
+        id: p.id as string,
+        slug: (p.slug as string) ?? "",
+        title: (p.title as string) ?? "",
+        excerpt: (p.excerpt as string) ?? null,
+        date: (p.date as string) ?? null,
+        content: (p.content as string) ?? null,
+        featuredImage: (p.featuredImage as { node?: { sourceUrl?: string; altText?: string } })?.node
+          ? {
+              sourceUrl: (p.featuredImage as { node?: { sourceUrl?: string } }).node?.sourceUrl,
+              altText: (p.featuredImage as { node?: { altText?: string } }).node?.altText,
+            }
+          : null,
+        seo: p.seo as NewsDetail["seo"],
+      };
+    } catch {
+      return null;
+    }
+  };
+
+  const tryRest = async (): Promise<NewsDetail | null> => {
+    const base = getWordPressRestBaseUrl();
+    if (!base) return null;
+    try {
+      const url = `${base}/wp/v2/news?slug=${encodeURIComponent(slug)}&_embed`;
+      const res = await fetch(url, { next: { tags } });
+      if (!res.ok) return null;
+      const arr = (await res.json()) as WpRestNewsPost[];
+      if (!Array.isArray(arr) || arr.length === 0) return null;
+      const p = arr[0];
+      const list = mapRestNewsToListItem(p);
+      return {
+        ...list,
+        content: p.content?.rendered ?? null,
+        seo: undefined,
+      };
+    } catch {
+      return null;
+    }
+  };
+
+  return (await tryGraphql()) ?? (await tryRest());
 }
 
 export function newsUrl(slug: string, locale: Locale): string {
   return localePath(`/news/${slug}`, locale);
 }
 
-/** Fetch all news slugs for sitemap */
+/** Fetch all news slugs for sitemap (chunked GraphQL). */
 export async function fetchNewsSlugs(): Promise<string[]> {
+  const cacheTags = ["sitemap"];
+  const slugs: string[] = [];
+  let after: string | null = null;
+  const maxSlugs = 500;
+
+  const runQuery = async (useNewsItems: boolean): Promise<boolean> => {
+    const conn = useNewsItems ? "newsItems" : "news";
+    const query = `
+      query NewsSlugs($first: Int!, $after: String) {
+        ${conn}(first: $first, after: $after, where: { status: PUBLISH }) {
+          nodes { slug }
+          pageInfo { hasNextPage endCursor }
+        }
+      }
+    `;
+    while (slugs.length < maxSlugs) {
+      const first = Math.min(NEWS_GRAPHQL_CHUNK, maxSlugs - slugs.length);
+      try {
+        const data = await fetchGraphQL<{
+          news?: { nodes?: Array<{ slug?: string }>; pageInfo?: { hasNextPage?: boolean; endCursor?: string | null } };
+          newsItems?: { nodes?: Array<{ slug?: string }>; pageInfo?: { hasNextPage?: boolean; endCursor?: string | null } };
+        }>(query, {
+          variables: { first, after },
+          tags: cacheTags,
+          revalidate: 3600,
+        });
+        const block = useNewsItems ? data?.newsItems : data?.news;
+        const nodes = block?.nodes ?? [];
+        for (const n of nodes) {
+          if (n.slug) slugs.push(n.slug);
+        }
+        const pi = block?.pageInfo;
+        if (!pi?.hasNextPage || !pi?.endCursor || nodes.length === 0) break;
+        after = pi.endCursor;
+      } catch {
+        return false;
+      }
+    }
+    return slugs.length > 0;
+  };
+
+  after = null;
+  if (await runQuery(false)) return slugs;
+
+  slugs.length = 0;
+  after = null;
+  if (await runQuery(true)) return slugs;
+
   try {
-    const data = await fetchGraphQL<{
-      news?: { nodes?: Array<{ slug?: string }> };
-      newsItems?: { nodes?: Array<{ slug?: string }> };
-    }>(
-      `query { news(first: 500, where: { status: PUBLISH }) { nodes { slug } } }`,
-      { tags: ["sitemap"], revalidate: 3600 }
-    );
-    const nodes = data?.news?.nodes ?? data?.newsItems?.nodes ?? [];
-    return (nodes as Array<{ slug?: string }>).map((n) => n.slug).filter(Boolean) as string[];
+    const base = getWordPressRestBaseUrl();
+    if (!base) return [];
+    let page = 1;
+    while (slugs.length < maxSlugs) {
+      const res = await fetch(
+        `${base}/wp/v2/news?per_page=100&page=${page}&status=publish`,
+        { next: { tags: cacheTags, revalidate: 3600 } }
+      );
+      if (!res.ok) break;
+      const batch = (await res.json()) as Array<{ slug?: string }>;
+      if (!Array.isArray(batch) || batch.length === 0) break;
+      for (const p of batch) {
+        if (p.slug) slugs.push(p.slug);
+      }
+      const totalPages = parseInt(res.headers.get("X-WP-TotalPages") || "1", 10);
+      if (page >= totalPages) break;
+      page += 1;
+    }
+    return slugs;
   } catch {
     return [];
   }
