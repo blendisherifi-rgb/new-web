@@ -5,7 +5,7 @@
 
 import { fetchGraphQL, getWordPressRestBaseUrl } from "./wordpress";
 import type { Locale } from "./i18n";
-import { localePath } from "./i18n";
+import { localePath, getWpmlLanguage, getWpmlLanguageEnum } from "./i18n";
 
 /** Parent page slug in WP (Pages → Case Studies). Override if your parent slug differs. */
 const CASE_STUDIES_PARENT_SLUG =
@@ -50,6 +50,54 @@ const CASE_STUDY_ARCHIVE_NODE_FIELDS = `
 
 /** WPGraphQL default max is often 100; larger `first` makes every archive query fail silently. */
 const CASE_STUDIES_GRAPHQL_CHUNK = 100;
+
+/** Explicit GraphQL result shapes (avoids TS circular inference on `fetchGraphQL` + template `query`). */
+type GqlPageChildrenData = {
+  page?: {
+    children?: {
+      nodes?: Array<Record<string, unknown>>;
+      pageInfo?: { hasNextPage?: boolean; endCursor?: string | null };
+    };
+  } | null;
+};
+type GqlPagesData = {
+  pages?: {
+    nodes?: Array<Record<string, unknown>>;
+    pageInfo?: { hasNextPage?: boolean; endCursor?: string | null };
+  };
+};
+type GqlCaseStudiesData = {
+  caseStudies?: {
+    nodes?: Array<Record<string, unknown>>;
+    pageInfo?: { hasNextPage?: boolean; endCursor?: string | null };
+  };
+};
+type GqlPostsData = {
+  posts?: {
+    nodes?: Array<Record<string, unknown>>;
+    pageInfo?: { hasNextPage?: boolean; endCursor?: string | null };
+  };
+};
+type GqlPageChildSlugsData = {
+  page?: {
+    children?: {
+      nodes?: Array<{ slug?: string }>;
+      pageInfo?: { hasNextPage?: boolean; endCursor?: string | null };
+    };
+  } | null;
+};
+type GqlPageSlugsData = {
+  pages?: {
+    nodes?: Array<{ slug?: string }>;
+    pageInfo?: { hasNextPage?: boolean; endCursor?: string | null };
+  };
+};
+type GqlCaseStudySlugsData = {
+  caseStudies?: {
+    nodes?: Array<{ slug?: string }>;
+    pageInfo?: { hasNextPage?: boolean; endCursor?: string | null };
+  };
+};
 
 type PageIdPair = { id: string; idType: "SLUG" | "URI" };
 
@@ -147,18 +195,11 @@ async function fetchCaseStudyArchiveNodesFromPages(
     let lastHasNext = false;
 
     while (nodes.length < maxItems) {
-      const first = Math.min(CASE_STUDIES_GRAPHQL_CHUNK, maxItems - nodes.length);
-      const data = await fetchGraphQL<{
-        page?: {
-          children?: {
-            nodes?: Array<Record<string, unknown>>;
-            pageInfo?: { hasNextPage?: boolean; endCursor?: string | null };
-          };
-        } | null;
-      }>(query, {
-        variables: { id: parentSlug, first, after },
+      const pageSize = Math.min(CASE_STUDIES_GRAPHQL_CHUNK, maxItems - nodes.length);
+      const data = (await fetchGraphQL(query, {
+        variables: { id: parentSlug, first: pageSize, after },
         tags: cacheTags,
-      });
+      })) as GqlPageChildrenData;
       const ch = data?.page?.children;
       const batch = (ch?.nodes ?? []).filter((n) => n && typeof (n as { slug?: string }).slug === "string");
       const pageInfo = ch?.pageInfo;
@@ -206,16 +247,11 @@ async function fetchCaseStudyArchiveNodesFromPages(
     let lastHasNext = false;
 
     while (nodes.length < maxItems) {
-      const first = Math.min(CASE_STUDIES_GRAPHQL_CHUNK, maxItems - nodes.length);
-      const data = await fetchGraphQL<{
-        pages?: {
-          nodes?: Array<Record<string, unknown>>;
-          pageInfo?: { hasNextPage?: boolean; endCursor?: string | null };
-        };
-      }>(query, {
-        variables: { parentId, first, after },
+      const pageSize = Math.min(CASE_STUDIES_GRAPHQL_CHUNK, maxItems - nodes.length);
+      const data = (await fetchGraphQL(query, {
+        variables: { parentId, first: pageSize, after },
         tags: cacheTags,
-      });
+      })) as GqlPagesData;
       const batch = data?.pages?.nodes ?? [];
       const pageInfo = data?.pages?.pageInfo;
       lastHasNext = pageInfo?.hasNextPage ?? false;
@@ -295,6 +331,7 @@ function mapWpRestPageToArchiveNode(p: WpRestPage): Record<string, unknown> {
           },
         }
       : null,
+    seo: null,
   };
 }
 
@@ -436,10 +473,21 @@ function mapCaseStudyArchiveNode(n: Record<string, unknown>): CaseStudyListItem 
   };
 }
 
-function buildCaseStudiesConnectionQuery(extraNodeFields: string): string {
+function buildCaseStudiesConnectionQuery(
+  extraNodeFields: string,
+  opts?: { withLanguage: boolean },
+): string {
+  const where =
+    opts?.withLanguage === true
+      ? "where: { status: PUBLISH, language: $language }"
+      : "where: { status: PUBLISH }";
+  const signature =
+    opts?.withLanguage === true
+      ? "query CaseStudiesArchive($first: Int!, $after: String, $language: LanguageCodeEnum)"
+      : "query CaseStudiesArchive($first: Int!, $after: String)";
   return `
-    query CaseStudiesArchive($first: Int!, $after: String) {
-      caseStudies(first: $first, after: $after, where: { status: PUBLISH }) {
+    ${signature} {
+      caseStudies(first: $first, after: $after, ${where}) {
         nodes {
           ${CASE_STUDY_ARCHIVE_NODE_FIELDS}
           ${extraNodeFields}
@@ -476,21 +524,33 @@ async function fetchCaseStudyArchiveNodes(
     return fromRest;
   }
 
-  const caseStudiesQueryVariants = [
-    buildCaseStudiesConnectionQuery(`
+  const extraFieldSets = [
+    `
           tags { nodes { name } }
           clientLogo { node { sourceUrl altText } }
-    `),
-    buildCaseStudiesConnectionQuery(`
+    `,
+    `
           tags { nodes { name } }
-    `),
-    buildCaseStudiesConnectionQuery(`
+    `,
+    `
           categories { nodes { name } }
-    `),
-    buildCaseStudiesConnectionQuery(""),
+    `,
+    "",
   ];
 
-  async function paginateCaseStudies(query: string): Promise<{
+  const caseStudiesQueryVariantsWithLang = extraFieldSets.map((fields) =>
+    buildCaseStudiesConnectionQuery(fields, { withLanguage: true }),
+  );
+  const caseStudiesQueryVariants = extraFieldSets.map((fields) =>
+    buildCaseStudiesConnectionQuery(fields),
+  );
+
+  const languageEnum = getWpmlLanguageEnum(locale);
+
+  async function paginateCaseStudies(
+    query: string,
+    withLanguage: boolean,
+  ): Promise<{
     nodes: Array<Record<string, unknown>>;
     hasMore: boolean;
   }> {
@@ -499,16 +559,13 @@ async function fetchCaseStudyArchiveNodes(
     let lastHasNext = false;
 
     while (nodes.length < maxItems) {
-      const first = Math.min(CASE_STUDIES_GRAPHQL_CHUNK, maxItems - nodes.length);
-      const data = await fetchGraphQL<{
-        caseStudies?: {
-          nodes?: Array<Record<string, unknown>>;
-          pageInfo?: { hasNextPage?: boolean; endCursor?: string | null };
-        };
-      }>(query, {
-        variables: { first, after },
+      const pageSize = Math.min(CASE_STUDIES_GRAPHQL_CHUNK, maxItems - nodes.length);
+      const data = (await fetchGraphQL(query, {
+        variables: withLanguage
+          ? { first: pageSize, after, language: languageEnum }
+          : { first: pageSize, after },
         tags: cacheTags,
-      });
+      })) as GqlCaseStudiesData;
       const batch = data?.caseStudies?.nodes ?? [];
       const pageInfo = data?.caseStudies?.pageInfo;
       lastHasNext = pageInfo?.hasNextPage ?? false;
@@ -529,9 +586,21 @@ async function fetchCaseStudyArchiveNodes(
     };
   }
 
+  for (const query of caseStudiesQueryVariantsWithLang) {
+    try {
+      const result = await paginateCaseStudies(query, true);
+      if (result.nodes.length > 0) {
+        return result;
+      }
+      /* Successful response with 0 nodes: try next shape or fall back without language. */
+    } catch {
+      /* WPGraphQL may not support language filter — try next shape or fall back. */
+    }
+  }
+
   for (const query of caseStudiesQueryVariants) {
     try {
-      const result = await paginateCaseStudies(query);
+      const result = await paginateCaseStudies(query, false);
       if (result.nodes.length > 0) {
         return result;
       }
@@ -566,16 +635,11 @@ async function fetchCaseStudyArchiveNodes(
     let lastHasNext = false;
 
     while (nodes.length < maxItems) {
-      const first = Math.min(CASE_STUDIES_GRAPHQL_CHUNK, maxItems - nodes.length);
-      const data = await fetchGraphQL<{
-        posts?: {
-          nodes?: Array<Record<string, unknown>>;
-          pageInfo?: { hasNextPage?: boolean; endCursor?: string | null };
-        };
-      }>(postsQuery, {
-        variables: { first, after },
+      const pageSize = Math.min(CASE_STUDIES_GRAPHQL_CHUNK, maxItems - nodes.length);
+      const data = (await fetchGraphQL(postsQuery, {
+        variables: { first: pageSize, after },
         tags: cacheTags,
-      });
+      })) as GqlPostsData;
       const raw = data?.posts?.nodes ?? [];
       const batch = raw.filter((n) => n && typeof (n as { slug?: string }).slug === "string");
       const pageInfo = data?.posts?.pageInfo;
@@ -636,6 +700,7 @@ export async function fetchCaseStudyBySlug(
   locale: Locale
 ): Promise<CaseStudyDetail | null> {
   const tags = ["case-studies", `case-study-${locale}-${slug}`];
+  const language = getWpmlLanguage(locale);
 
   const tryPageBySlug = async (): Promise<CaseStudyDetail | null> => {
     try {
@@ -676,10 +741,27 @@ export async function fetchCaseStudyBySlug(
     return null;
   };
 
+  const mapCptPost = (post: Record<string, unknown>): CaseStudyDetail => ({
+    id: post.id as string,
+    slug: (post.slug as string) ?? "",
+    title: (post.title as string) ?? "",
+    excerpt: (post.excerpt as string) ?? null,
+    content: (post.content as string) ?? null,
+    featuredImage: (post.featuredImage as { node?: { sourceUrl?: string; altText?: string } })?.node
+      ? {
+          sourceUrl: (post.featuredImage as { node?: { sourceUrl?: string } }).node?.sourceUrl,
+          altText: (post.featuredImage as { node?: { altText?: string } }).node?.altText,
+        }
+      : null,
+    seo: post.seo as CaseStudyDetail["seo"],
+  });
+
   const tryCpt = async (): Promise<CaseStudyDetail | null> => {
-    try {
+    const run = async (withTranslations: boolean): Promise<CaseStudyDetail | null> => {
       const data = await fetchGraphQL<{
-        caseStudy?: Record<string, unknown>;
+        caseStudy?: Record<string, unknown> & {
+          translations?: Array<{ language?: { code?: string } }> | null;
+        };
         caseStudyBy?: Record<string, unknown>;
       }>(
         `
@@ -692,30 +774,45 @@ export async function fetchCaseStudyBySlug(
             content
             featuredImage { node { sourceUrl altText } }
             seo { title metaDesc opengraphImage { sourceUrl } }
+            ${
+              withTranslations
+                ? `
+            translations {
+              id
+              slug
+              title
+              excerpt
+              content
+              language { code }
+              featuredImage { node { sourceUrl altText } }
+              seo { title metaDesc opengraphImage { sourceUrl } }
+            }`
+                : ""
+            }
           }
         }
       `,
         { variables: { slug }, tags },
       );
-      const post = data?.caseStudy ?? data?.caseStudyBy;
-      if (!post) return null;
-      const p = post as Record<string, unknown>;
-      return {
-        id: p.id as string,
-        slug: (p.slug as string) ?? "",
-        title: (p.title as string) ?? "",
-        excerpt: (p.excerpt as string) ?? null,
-        content: (p.content as string) ?? null,
-        featuredImage: (p.featuredImage as { node?: { sourceUrl?: string; altText?: string } })?.node
-          ? {
-              sourceUrl: (p.featuredImage as { node?: { sourceUrl?: string } }).node?.sourceUrl,
-              altText: (p.featuredImage as { node?: { altText?: string } }).node?.altText,
-            }
-          : null,
-        seo: p.seo as CaseStudyDetail["seo"],
-      };
+      const raw = data?.caseStudy ?? data?.caseStudyBy;
+      if (!raw) return null;
+      if (withTranslations) {
+        const typed = raw as { translations?: Array<{ language?: { code?: string } }> };
+        const match = typed.translations?.find((t) => t.language?.code === language);
+        const post = (match ?? raw) as Record<string, unknown>;
+        return mapCptPost(post);
+      }
+      return mapCptPost(raw as Record<string, unknown>);
+    };
+
+    try {
+      return await run(true);
     } catch {
-      return null;
+      try {
+        return await run(false);
+      } catch {
+        return null;
+      }
     }
   };
 
@@ -812,15 +909,8 @@ export async function fetchCaseStudySlugs(): Promise<string[]> {
       const maxSlugs = 500;
 
       while (slugs.length < maxSlugs) {
-        const first = Math.min(CASE_STUDIES_GRAPHQL_CHUNK, maxSlugs - slugs.length);
-        const data = await fetchGraphQL<{
-          page?: {
-            children?: {
-              nodes?: Array<{ slug?: string }>;
-              pageInfo?: { hasNextPage?: boolean; endCursor?: string | null };
-            };
-          } | null;
-        }>(
+        const pageSize = Math.min(CASE_STUDIES_GRAPHQL_CHUNK, maxSlugs - slugs.length);
+        const data = (await fetchGraphQL(
           `
           query CaseStudyChildSlugs($id: ID!, $first: Int!, $after: String) {
             page(id: $id, idType: SLUG) {
@@ -835,8 +925,8 @@ export async function fetchCaseStudySlugs(): Promise<string[]> {
             }
           }
         `,
-          { variables: { id: parentSlug, first, after }, tags: cacheTags, revalidate: 3600 },
-        );
+          { variables: { id: parentSlug, first: pageSize, after }, tags: cacheTags, revalidate: 3600 },
+        )) as GqlPageChildSlugsData;
         const raw = data?.page?.children?.nodes ?? [];
         const nodes = raw.filter((n) => n && typeof (n as { slug?: string }).slug === "string") as Array<{
           slug?: string;
@@ -867,13 +957,8 @@ export async function fetchCaseStudySlugs(): Promise<string[]> {
       const maxSlugs = 500;
 
       while (slugs.length < maxSlugs) {
-        const first = Math.min(CASE_STUDIES_GRAPHQL_CHUNK, maxSlugs - slugs.length);
-        const data = await fetchGraphQL<{
-          pages?: {
-            nodes?: Array<{ slug?: string }>;
-            pageInfo?: { hasNextPage?: boolean; endCursor?: string | null };
-          };
-        }>(
+        const pageSize = Math.min(CASE_STUDIES_GRAPHQL_CHUNK, maxSlugs - slugs.length);
+        const data = (await fetchGraphQL(
           `
           query CaseStudyPageSlugs($parentId: ID!, $first: Int!, $after: String) {
             pages(first: $first, after: $after, ${whereFragment}) {
@@ -882,8 +967,8 @@ export async function fetchCaseStudySlugs(): Promise<string[]> {
             }
           }
         `,
-          { variables: { parentId: pid, first, after }, tags: cacheTags, revalidate: 3600 },
-        );
+          { variables: { parentId: pid, first: pageSize, after }, tags: cacheTags, revalidate: 3600 },
+        )) as GqlPageSlugsData;
         const nodes = data?.pages?.nodes ?? [];
         for (const n of nodes) {
           if (n.slug) slugs.push(n.slug);
@@ -930,13 +1015,8 @@ export async function fetchCaseStudySlugs(): Promise<string[]> {
     const maxSlugs = 500;
 
     while (slugs.length < maxSlugs) {
-      const first = Math.min(CASE_STUDIES_GRAPHQL_CHUNK, maxSlugs - slugs.length);
-      const data = await fetchGraphQL<{
-        caseStudies?: {
-          nodes?: Array<{ slug?: string }>;
-          pageInfo?: { hasNextPage?: boolean; endCursor?: string | null };
-        };
-      }>(
+      const pageSize = Math.min(CASE_STUDIES_GRAPHQL_CHUNK, maxSlugs - slugs.length);
+      const data = (await fetchGraphQL(
         `
         query CaseStudySlugs($first: Int!, $after: String) {
           caseStudies(first: $first, after: $after, where: { status: PUBLISH }) {
@@ -945,8 +1025,8 @@ export async function fetchCaseStudySlugs(): Promise<string[]> {
           }
         }
       `,
-        { variables: { first, after }, tags: cacheTags, revalidate: 3600 },
-      );
+        { variables: { first: pageSize, after }, tags: cacheTags, revalidate: 3600 },
+      )) as GqlCaseStudySlugsData;
       const nodes = data?.caseStudies?.nodes ?? [];
       for (const n of nodes) {
         if (n.slug) slugs.push(n.slug);

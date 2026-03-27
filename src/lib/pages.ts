@@ -6,6 +6,7 @@
 import { fetchGraphQL } from "./wordpress";
 import type { SectionData } from "./sections";
 import type { Locale } from "./i18n";
+import { getWpmlLanguage } from "./i18n";
 
 export interface PageData {
   title: string;
@@ -346,6 +347,8 @@ function transformSection(node: Record<string, unknown>, index: number): Section
   const acfGroupName =
     low.includes("meettheteam") || low.includes("meet_the_team")
       ? "meet_the_team_section"
+    : low.includes("meetspeakers") || low.includes("meet_speakers")
+      ? "meet_speakers_section"
     : low.includes("enterprisestats") || low.includes("enterprise_stats")
       ? "enterprise_stats_section"
     : low.includes("ourstory") || low.includes("our_story")
@@ -358,16 +361,86 @@ function transformSection(node: Record<string, unknown>, index: number): Section
       ? "finance_hero_section"
     : low.includes("overlappingcards") || low.includes("overlapping_cards")
       ? "overlapping_cards_section"
+    : low.includes("testimonialslider") || low.includes("testimonial_slider")
+      ? "testimonial_slider_section"
+    : low.includes("teamarchive") || low.includes("team_archive")
+      ? "team_archive_section"
+    : low.includes("automationengine") || low.includes("automation_engine")
+      ? "automation_engine_section"
+    : low.includes("smartmatchingchallengebanner") || low.includes("smart_matching_challenge_banner")
+      ? "smart_matching_challenge_banner_section"
+    : low.includes("smartmatchingchallenge") || low.includes("smart_matching_challenge")
+      ? "smart_matching_challenge_section"
+    : low.includes("matchingchallengeform") || low.includes("matching_challenge_form")
+      ? "matching_challenge_form_section"
+    : low.includes("startchallengeform") || low.includes("start_challenge_form")
+      ? "start_challenge_form_section"
+    : low.includes("challengesection") || low.includes("challenge_section")
+      ? "challenge_section"
+    : low.includes("strategicpriorities") || low.includes("strategic_priorities")
+      ? "strategic_priorities_section"
+    : low.includes("partnerprogrammehero") || low.includes("partner_programme_hero")
+      ? "partner_programme_hero_section"
+    : low.includes("partnerbenefits") || low.includes("partner_benefits")
+      ? "partner_benefits_section"
+    : low.includes("partnerecosystem") || low.includes("partner_ecosystem")
+      ? "partner_ecosystem_section"
     : low.includes("partnership")
       ? "partnership_section"
     : low.includes("outcomes")
       ? "outcomes_section"
-    : low.includes("enginesection") || (low.includes("engine") && !low.includes("innovation"))
+    : low.includes("aienginese") || low.includes("ai_engine")
+      ? "ai_engine_section"
+    : low.includes("enginesection") || (low.includes("engine") && !low.includes("innovation") && !low.includes("automation") && !low.includes("ai"))
       ? "engine_section"
-    : low.includes("esgsection") || (low.includes("esg") && !low.includes("horizontal"))
+    : low.includes("esgpolicies") || low.includes("esg_policies")
+      ? "esg_policies_section"
+    : low.includes("esgsection") || (low.includes("esg") && !low.includes("horizontal") && !low.includes("policies"))
       ? "esg_section"
     : low.includes("culturesection") || low.includes("culture")
       ? "culture_section"
+    : low.includes("contactwithform") || low.includes("contact_with_form")
+      ? "contact_with_form_section"
+    : low.includes("contactform") || low.includes("contact_form")
+      ? "contact_form_section"
+    : low.includes("contactbanner") || low.includes("contact_banner")
+      ? "contact_banner_section"
+    : low.includes("howitworks") || low.includes("how_it_works")
+      ? "how_it_works_section"
+    : low.includes("cfoseries") || low.includes("cfo_series")
+      ? "cfo_series_section"
+    : low.includes("whyattend") || low.includes("why_attend")
+      ? "why_attend_section"
+    : low.includes("eventregister") || low.includes("event_register")
+      ? "event_register_section"
+    : low.includes("apautomation") || low.includes("ap_automation")
+      ? "ap_automation_section"
+    : low.includes("apanalytics") || low.includes("ap_analytics")
+      ? "ap_analytics_section"
+    : low.includes("architecturesection") || low.includes("architecture")
+      ? "architecture_section"
+    : low.includes("erpintegration") || low.includes("erp_integration")
+      ? "erp_integration_section"
+    : low.includes("analyticsdashboards") || low.includes("analytics_dashboards")
+      ? "analytics_dashboards_section"
+    : low.includes("securitycompliance") || low.includes("security_compliance")
+      ? "security_compliance_section"
+    : low.includes("stpcomparison") || low.includes("stp_comparison")
+      ? "stp_comparison_section"
+    : low.includes("invoicelifecycle") || low.includes("invoice_lifecycle")
+      ? "invoice_lifecycle_section"
+    : low.includes("evidencesection") || low.includes("evidence")
+      ? "evidence_section"
+    : low.includes("faqsection") || low.includes("faq")
+      ? "faq_section"
+    : low.includes("environmentalsection") || low.includes("environmental")
+      ? "environmental_section"
+    : low.includes("socialsection") || low.includes("social_section")
+      ? "social_section"
+    : low.includes("governancesection") || low.includes("governance")
+      ? "governance_section"
+    : low.includes("communitysupport") || low.includes("community_support")
+      ? "community_support_section"
     : low.includes("hero")
       ? "hero_section"
     : low.includes("whereweexcel") || low.includes("where_we_excel")
@@ -382,10 +455,6 @@ function transformSection(node: Record<string, unknown>, index: number): Section
       ? "perfect_fit_framework_section"
     : low.includes("richtext") || low.includes("rich_text")
       ? "rich_text_section"
-    : low.includes("contactbanner") || low.includes("contact_banner")
-      ? "contact_banner_section"
-    : low.includes("contactwithform") || low.includes("contact_with_form")
-      ? "contact_with_form_section"
     : low.includes("locations")
       ? "locations_section"
     : low.includes("clientlogosmarquee") || low.includes("client_logos_marquee")
@@ -402,6 +471,8 @@ function transformSection(node: Record<string, unknown>, index: number): Section
       ? "feature_modal_section"
     : low.includes("newsletterform") || low.includes("newsletter_form")
       ? "newsletter_form_section"
+    : low.includes("trustbar") || low.includes("trust_bar")
+      ? "trust_bar_section"
     : low.includes("platform")
       ? "platform_section"
     : low.includes("innovation")
@@ -597,6 +668,19 @@ function transformSection(node: Record<string, unknown>, index: number): Section
       ? normalized.contactWithFormSocialLinks
       : [];
     delete normalized.contactWithFormSocialLinks;
+  }
+
+  // TrustBar: trustBarLogos[].image.node -> imageSrc, imageAlt
+  if (acfGroupName === "trust_bar_section") {
+    const raw = Array.isArray(normalized.trustBarLogos) ? normalized.trustBarLogos as Array<Record<string, unknown>> : [];
+    normalized.logos = raw.map((item) => {
+      const img = item.image as { node?: { sourceUrl?: string; altText?: string } } | null | undefined;
+      return {
+        imageSrc: img?.node?.sourceUrl ?? "",
+        imageAlt: (item.imageAlt as string | undefined) ?? img?.node?.altText ?? "",
+      };
+    });
+    delete normalized.trustBarLogos;
   }
 
   // Client logos marquee: clientLogosMarqueeLogos[].logo.node -> src, alt; map to logos
@@ -845,9 +929,25 @@ function transformSection(node: Record<string, unknown>, index: number): Section
   }
 
   // Engine: engineCards -> cards
-  if (acfGroupName === "engine_section" && normalized.engineCards) {
-    normalized.cards = normalized.engineCards;
+  if (acfGroupName === "engine_section") {
+    normalized.cards = normalized.engineCards ?? normalized.cards ?? [];
     delete normalized.engineCards;
+  }
+
+  // AiEngine: aiEngineTabs -> tabs, flatten image { node { sourceUrl altText } } -> imageSrc / imageAlt
+  if (acfGroupName === "ai_engine_section") {
+    const rawTabs = Array.isArray(normalized.aiEngineTabs) ? normalized.aiEngineTabs as Array<Record<string, unknown>> : [];
+    normalized.tabs = rawTabs.map((tab) => {
+      const img = tab.image as { node?: { sourceUrl?: string; altText?: string } } | null | undefined;
+      return {
+        label: tab.label ?? "",
+        title: tab.title ?? "",
+        body: tab.body ?? "",
+        imageSrc: img?.node?.sourceUrl ?? undefined,
+        imageAlt: img?.node?.altText ?? undefined,
+      };
+    });
+    delete normalized.aiEngineTabs;
   }
 
   // Outcomes: outcomesStats -> stats
@@ -905,6 +1005,445 @@ function transformSection(node: Record<string, unknown>, index: number): Section
     delete normalized.locationsItems;
   }
 
+  // Testimonial slider: testimonials[].image.node -> imageSrc/imageAlt
+  if (acfGroupName === "testimonial_slider_section") {
+    const raw = normalized.testimonials ?? [];
+    if (Array.isArray(raw)) {
+      normalized.testimonials = (raw as unknown[]).map((t) => {
+        const item = { ...(t as Record<string, unknown>) };
+        const img = item.image as Record<string, unknown> | undefined;
+        const n = img?.node as Record<string, unknown> | undefined;
+        item.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+        item.imageAlt = n?.altText ?? img?.altText ?? "";
+        delete item.image;
+        return item;
+      });
+    }
+  }
+
+  // Team archive: departments[].members[].image.node -> imageSrc/imageAlt
+  if (acfGroupName === "team_archive_section") {
+    const raw = normalized.departments ?? [];
+    if (Array.isArray(raw)) {
+      normalized.departments = (raw as unknown[]).map((d) => {
+        const dept = { ...(d as Record<string, unknown>) };
+        if (Array.isArray(dept.members)) {
+          dept.members = (dept.members as unknown[]).map((m) => {
+            const member = { ...(m as Record<string, unknown>) };
+            const img = member.image as Record<string, unknown> | undefined;
+            const n = img?.node as Record<string, unknown> | undefined;
+            member.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+            member.imageAlt = n?.altText ?? img?.altText ?? "";
+            delete member.image;
+            return member;
+          });
+        }
+        return dept;
+      });
+    }
+  }
+
+  // Automation engine: image.node -> imageSrc/imageAlt; logos[].logo.node -> src/alt
+  if (acfGroupName === "automation_engine_section") {
+    const img = normalized.image as Record<string, unknown> | undefined;
+    const n = img?.node as Record<string, unknown> | undefined;
+    normalized.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+    normalized.imageAlt = n?.altText ?? img?.altText ?? "";
+    delete normalized.image;
+    if (Array.isArray(normalized.logos)) {
+      normalized.logos = (normalized.logos as unknown[]).map((l) => {
+        const item = l as Record<string, unknown>;
+        const logo = item.logo as Record<string, unknown> | undefined;
+        const logoNode = logo?.node as Record<string, unknown> | undefined;
+        return {
+          src: (logoNode?.sourceUrl ?? logo?.sourceUrl) ?? "",
+          alt: (logoNode?.altText ?? logo?.altText) ?? "",
+        };
+      });
+    }
+  }
+
+  // Smart matching challenge: image.node -> imageSrc/imageAlt
+  if (acfGroupName === "smart_matching_challenge_section") {
+    const img = normalized.image as Record<string, unknown> | undefined;
+    const n = img?.node as Record<string, unknown> | undefined;
+    normalized.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+    normalized.imageAlt = n?.altText ?? img?.altText ?? "";
+    delete normalized.image;
+  }
+
+  // Start challenge form: formPlaceholderImage.node -> formPlaceholderImageSrc/Alt
+  if (acfGroupName === "start_challenge_form_section") {
+    const img = normalized.formPlaceholderImage as Record<string, unknown> | undefined;
+    const n = img?.node as Record<string, unknown> | undefined;
+    normalized.formPlaceholderImageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+    normalized.formPlaceholderImageAlt = n?.altText ?? img?.altText ?? "";
+    delete normalized.formPlaceholderImage;
+  }
+
+  // Partner benefits: steps[].stepNumberImage.node -> stepNumberImageSrc/Alt
+  if (acfGroupName === "partner_benefits_section") {
+    const raw = normalized.steps ?? [];
+    if (Array.isArray(raw)) {
+      normalized.steps = (raw as unknown[]).map((s) => {
+        const step = { ...(s as Record<string, unknown>) };
+        const img = step.stepNumberImage as Record<string, unknown> | undefined;
+        const n = img?.node as Record<string, unknown> | undefined;
+        step.stepNumberImageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+        step.stepNumberImageAlt = n?.altText ?? img?.altText ?? "";
+        delete step.stepNumberImage;
+        return step;
+      });
+    }
+  }
+
+  // Matching challenge form: formPlaceholderImage.node -> formPlaceholderImageSrc/Alt
+  if (acfGroupName === "matching_challenge_form_section") {
+    const img = normalized.formPlaceholderImage as Record<string, unknown> | undefined;
+    const n = img?.node as Record<string, unknown> | undefined;
+    normalized.formPlaceholderImageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+    normalized.formPlaceholderImageAlt = n?.altText ?? img?.altText ?? "";
+    delete normalized.formPlaceholderImage;
+  }
+
+  // How it works: howItWorksSteps[].stepNumberImage.node -> stepNumberImageSrc/Alt; remap to steps
+  if (acfGroupName === "how_it_works_section") {
+    const raw = normalized.howItWorksSteps ?? normalized.steps ?? [];
+    if (Array.isArray(raw)) {
+      normalized.steps = (raw as unknown[]).map((s) => {
+        const step = { ...(s as Record<string, unknown>) };
+        const img = step.stepNumberImage as Record<string, unknown> | undefined;
+        const n = img?.node as Record<string, unknown> | undefined;
+        step.stepNumberImageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+        step.stepNumberImageAlt = n?.altText ?? img?.altText ?? "";
+        delete step.stepNumberImage;
+        return step;
+      });
+    }
+    delete normalized.howItWorksSteps;
+  }
+
+  // CFO series: image.node -> imageSrc/imageAlt
+  if (acfGroupName === "cfo_series_section") {
+    const img = normalized.image as Record<string, unknown> | undefined;
+    const n = img?.node as Record<string, unknown> | undefined;
+    normalized.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+    normalized.imageAlt = n?.altText ?? img?.altText ?? "";
+    delete normalized.image;
+  }
+
+  // Why attend: attendColumns[].iconImage.node -> iconImageSrc/Alt; remap to columns
+  if (acfGroupName === "why_attend_section") {
+    const raw = normalized.attendColumns ?? normalized.columns ?? [];
+    if (Array.isArray(raw)) {
+      normalized.columns = (raw as unknown[]).map((c) => {
+        const col = { ...(c as Record<string, unknown>) };
+        const img = col.iconImage as Record<string, unknown> | undefined;
+        const n = img?.node as Record<string, unknown> | undefined;
+        col.iconImageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+        col.iconImageAlt = n?.altText ?? img?.altText ?? "";
+        delete col.iconImage;
+        return col;
+      });
+    }
+    delete normalized.attendColumns;
+  }
+
+  // Meet speakers: speakers[].image.node -> imageSrc/imageAlt
+  if (acfGroupName === "meet_speakers_section") {
+    const raw = normalized.speakers ?? [];
+    if (Array.isArray(raw)) {
+      normalized.speakers = (raw as unknown[]).map((s) => {
+        const speaker = { ...(s as Record<string, unknown>) };
+        const img = speaker.image as Record<string, unknown> | undefined;
+        const n = img?.node as Record<string, unknown> | undefined;
+        speaker.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+        speaker.imageAlt = n?.altText ?? img?.altText ?? "";
+        delete speaker.image;
+        return speaker;
+      });
+    }
+  }
+
+  // Event register: formPlaceholderImage.node -> formPlaceholderImageSrc/Alt
+  if (acfGroupName === "event_register_section") {
+    const img = normalized.formPlaceholderImage as Record<string, unknown> | undefined;
+    const n = img?.node as Record<string, unknown> | undefined;
+    normalized.formPlaceholderImageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+    normalized.formPlaceholderImageAlt = n?.altText ?? img?.altText ?? "";
+    delete normalized.formPlaceholderImage;
+  }
+
+  // Book a demo: formPlaceholderImage.node -> formPlaceholderImageSrc/Alt; videoPoster.node
+  if (acfGroupName === "book_a_demo_section") {
+    const fpImg = normalized.formPlaceholderImage as Record<string, unknown> | undefined;
+    const fpNode = fpImg?.node as Record<string, unknown> | undefined;
+    normalized.formPlaceholderImageSrc = fpNode?.sourceUrl ?? fpImg?.sourceUrl ?? "";
+    normalized.formPlaceholderImageAlt = fpNode?.altText ?? fpImg?.altText ?? "";
+    delete normalized.formPlaceholderImage;
+  }
+
+  // Life at SoftCo: videoPoster.node -> videoPosterSrc/Alt
+  if (acfGroupName === "life_at_softco_section") {
+    const vp = normalized.videoPoster as Record<string, unknown> | undefined;
+    const vpNode = vp?.node as Record<string, unknown> | undefined;
+    normalized.videoPosterSrc = vpNode?.sourceUrl ?? vp?.sourceUrl ?? "";
+    normalized.videoPosterAlt = vpNode?.altText ?? vp?.altText ?? "";
+    delete normalized.videoPoster;
+  }
+
+  // Feature modal: featureModalItems[].image.node -> imageSrc/imageAlt
+  if (acfGroupName === "feature_modal_section") {
+    const raw = normalized.featureModalItems ?? normalized.items ?? [];
+    if (Array.isArray(raw)) {
+      normalized.items = (raw as unknown[]).map((f) => {
+        const item = { ...(f as Record<string, unknown>) };
+        const img = item.image as Record<string, unknown> | undefined;
+        const n = img?.node as Record<string, unknown> | undefined;
+        item.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+        item.imageAlt = n?.altText ?? img?.altText ?? "";
+        delete item.image;
+        return item;
+      });
+    }
+    delete normalized.featureModalItems;
+  }
+
+  // AP automation: image.node, softcoApImage.node, gartnerLogo.node -> flatten
+  if (acfGroupName === "ap_automation_section") {
+    const img = normalized.image as Record<string, unknown> | undefined;
+    const n = img?.node as Record<string, unknown> | undefined;
+    normalized.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+    normalized.imageAlt = n?.altText ?? img?.altText ?? "";
+    delete normalized.image;
+    const sap = normalized.softcoApImage as Record<string, unknown> | undefined;
+    const sapN = sap?.node as Record<string, unknown> | undefined;
+    normalized.softcoApImageSrc = sapN?.sourceUrl ?? sap?.sourceUrl ?? "";
+    normalized.softcoApImageAlt = sapN?.altText ?? sap?.altText ?? "";
+    delete normalized.softcoApImage;
+    const gl = normalized.gartnerLogo as Record<string, unknown> | undefined;
+    const glN = gl?.node as Record<string, unknown> | undefined;
+    normalized.gartnerLogoSrc = glN?.sourceUrl ?? gl?.sourceUrl ?? "";
+    normalized.gartnerLogoAlt = glN?.altText ?? gl?.altText ?? "";
+    delete normalized.gartnerLogo;
+  }
+
+  // Architecture: image.node -> imageSrc/imageAlt
+  if (acfGroupName === "architecture_section") {
+    const img = normalized.image as Record<string, unknown> | undefined;
+    const n = img?.node as Record<string, unknown> | undefined;
+    normalized.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+    normalized.imageAlt = n?.altText ?? img?.altText ?? "";
+    delete normalized.image;
+  }
+
+  // Analytics dashboards: slides[].image.node -> imageSrc/imageAlt
+  if (acfGroupName === "analytics_dashboards_section") {
+    const raw = normalized.slides ?? [];
+    if (Array.isArray(raw)) {
+      normalized.slides = (raw as unknown[]).map((s) => {
+        const item = { ...(s as Record<string, unknown>) };
+        const img = item.image as Record<string, unknown> | undefined;
+        const n = img?.node as Record<string, unknown> | undefined;
+        item.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+        item.imageAlt = n?.altText ?? img?.altText ?? "";
+        delete item.image;
+        return item;
+      });
+    }
+  }
+
+  // Security compliance: certifications[].image.node -> imageSrc/imageAlt
+  if (acfGroupName === "security_compliance_section") {
+    const raw = normalized.certifications ?? [];
+    if (Array.isArray(raw)) {
+      normalized.certifications = (raw as unknown[]).map((c) => {
+        const item = { ...(c as Record<string, unknown>) };
+        const img = item.image as Record<string, unknown> | undefined;
+        const n = img?.node as Record<string, unknown> | undefined;
+        item.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+        item.imageAlt = n?.altText ?? img?.altText ?? "";
+        delete item.image;
+        return item;
+      });
+    }
+  }
+
+  // Evidence: evidenceMetrics[].image.node -> imageSrc/imageAlt; remap to metrics
+  if (acfGroupName === "evidence_section") {
+    const raw = normalized.evidenceMetrics ?? normalized.metrics ?? [];
+    if (Array.isArray(raw)) {
+      normalized.metrics = (raw as unknown[]).map((m) => {
+        const item = { ...(m as Record<string, unknown>) };
+        const img = item.image as Record<string, unknown> | undefined;
+        const n = img?.node as Record<string, unknown> | undefined;
+        item.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+        item.imageAlt = n?.altText ?? img?.altText ?? "";
+        delete item.image;
+        return item;
+      });
+    }
+    delete normalized.evidenceMetrics;
+  }
+
+  // STP comparison: image.node -> imageSrc/imageAlt
+  if (acfGroupName === "stp_comparison_section") {
+    const img = normalized.image as Record<string, unknown> | undefined;
+    const n = img?.node as Record<string, unknown> | undefined;
+    normalized.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+    normalized.imageAlt = n?.altText ?? img?.altText ?? "";
+    delete normalized.image;
+  }
+
+  // Invoice lifecycle: imageWithSoftCo.node, imageWithoutSoftCo.node -> flatten
+  if (acfGroupName === "invoice_lifecycle_section") {
+    const ws = normalized.imageWithSoftCo as Record<string, unknown> | undefined;
+    const wsN = ws?.node as Record<string, unknown> | undefined;
+    normalized.imageWithSoftCoSrc = wsN?.sourceUrl ?? ws?.sourceUrl ?? "";
+    normalized.imageWithSoftCoAlt = wsN?.altText ?? ws?.altText ?? "";
+    delete normalized.imageWithSoftCo;
+    const wos = normalized.imageWithoutSoftCo as Record<string, unknown> | undefined;
+    const wosN = wos?.node as Record<string, unknown> | undefined;
+    normalized.imageWithoutSoftCoSrc = wosN?.sourceUrl ?? wos?.sourceUrl ?? "";
+    normalized.imageWithoutSoftCoAlt = wosN?.altText ?? wos?.altText ?? "";
+    delete normalized.imageWithoutSoftCo;
+  }
+
+  // AP analytics: analyticsCards[].icon.node -> iconSrc/iconAlt; remap to cards
+  if (acfGroupName === "ap_analytics_section") {
+    const raw = normalized.analyticsCards ?? normalized.cards ?? [];
+    if (Array.isArray(raw)) {
+      normalized.cards = (raw as unknown[]).map((c) => {
+        const card = { ...(c as Record<string, unknown>) };
+        const img = card.icon as Record<string, unknown> | undefined;
+        const n = img?.node as Record<string, unknown> | undefined;
+        card.iconSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+        card.iconAlt = n?.altText ?? img?.altText ?? "";
+        delete card.icon;
+        return card;
+      });
+    }
+    delete normalized.analyticsCards;
+  }
+
+  // ESG policies: slides[].image.node -> imageSrc/imageAlt; esgPolicyCards -> cards
+  if (acfGroupName === "esg_policies_section") {
+    const rawSlides = normalized.slides ?? [];
+    if (Array.isArray(rawSlides)) {
+      normalized.slides = (rawSlides as unknown[]).map((s) => {
+        const item = { ...(s as Record<string, unknown>) };
+        const img = item.image as Record<string, unknown> | undefined;
+        const n = img?.node as Record<string, unknown> | undefined;
+        item.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+        item.imageAlt = n?.altText ?? img?.altText ?? "";
+        delete item.image;
+        return item;
+      });
+    }
+    normalized.cards = normalized.esgPolicyCards ?? normalized.cards ?? [];
+    delete normalized.esgPolicyCards;
+  }
+
+  // Social: image.node -> imageSrc/imageAlt; socialInitiatives[].initiative -> initiatives (string[])
+  if (acfGroupName === "social_section") {
+    const img = normalized.image as Record<string, unknown> | undefined;
+    const n = img?.node as Record<string, unknown> | undefined;
+    normalized.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+    normalized.imageAlt = n?.altText ?? img?.altText ?? "";
+    delete normalized.image;
+    const rawInit = normalized.socialInitiatives ?? normalized.initiatives ?? [];
+    if (Array.isArray(rawInit)) {
+      normalized.initiatives = rawInit.map((item) => {
+        if (typeof item === "string") return item;
+        const obj = item as Record<string, unknown>;
+        return String(obj.initiative ?? obj.label ?? obj.text ?? "");
+      });
+    }
+    delete normalized.socialInitiatives;
+  }
+
+  // Governance: govInitiatives[].initiative -> initiatives (string[])
+  if (acfGroupName === "governance_section") {
+    const rawInit = normalized.govInitiatives ?? normalized.initiatives ?? [];
+    if (Array.isArray(rawInit)) {
+      normalized.initiatives = rawInit.map((item) => {
+        if (typeof item === "string") return item;
+        const obj = item as Record<string, unknown>;
+        return String(obj.initiative ?? obj.label ?? obj.text ?? "");
+      });
+    }
+    delete normalized.govInitiatives;
+  }
+
+  // Environmental: envInitiatives -> initiatives
+  if (acfGroupName === "environmental_section") {
+    normalized.initiatives = normalized.envInitiatives ?? normalized.initiatives ?? [];
+    delete normalized.envInitiatives;
+  }
+
+  // Challenge: challengeColumns -> columns
+  if (acfGroupName === "challenge_section") {
+    normalized.columns = normalized.challengeColumns ?? normalized.columns ?? [];
+    delete normalized.challengeColumns;
+  }
+
+  // Strategic priorities: priorityRows -> rows
+  if (acfGroupName === "strategic_priorities_section") {
+    normalized.rows = normalized.priorityRows ?? normalized.rows ?? [];
+    delete normalized.priorityRows;
+  }
+
+  // ERP integration: erpLogos -> logos, flatten logoImg
+  if (acfGroupName === "erp_integration_section") {
+    const raw = normalized.erpLogos ?? normalized.logos ?? [];
+    if (Array.isArray(raw)) {
+      normalized.logos = (raw as unknown[]).map((l) => {
+        const item = { ...(l as Record<string, unknown>) };
+        const img = item.logoImg as Record<string, unknown> | undefined;
+        const n2 = img?.node as Record<string, unknown> | undefined;
+        return {
+          logoSrc: (n2?.sourceUrl ?? img?.sourceUrl ?? "") as string,
+          logoAlt: (item.logoAlt as string) ?? (n2?.altText ?? img?.altText ?? "") as string,
+          href: (item.href ?? "") as string,
+        };
+      });
+    }
+    delete normalized.erpLogos;
+  }
+
+  // Partner ecosystem: partnerLogos -> logos
+  if (acfGroupName === "partner_ecosystem_section") {
+    const raw = normalized.partnerLogos ?? normalized.logos ?? [];
+    if (Array.isArray(raw)) {
+      normalized.logos = (raw as unknown[]).map((p) => {
+        const item = { ...(p as Record<string, unknown>) };
+        const img = item.image as Record<string, unknown> | undefined;
+        const n2 = img?.node as Record<string, unknown> | undefined;
+        return {
+          imageSrc: (n2?.sourceUrl ?? img?.sourceUrl ?? "") as string,
+          imageAlt: (item.imageAlt as string) ?? (n2?.altText ?? img?.altText ?? "") as string,
+        };
+      });
+    }
+    delete normalized.partnerLogos;
+  }
+
+  // Community support: slides[].image.node -> imageSrc/imageAlt
+  if (acfGroupName === "community_support_section") {
+    const rawSlides = normalized.slides ?? [];
+    if (Array.isArray(rawSlides)) {
+      normalized.slides = (rawSlides as unknown[]).map((s) => {
+        const item = { ...(s as Record<string, unknown>) };
+        const img = item.image as Record<string, unknown> | undefined;
+        const n = img?.node as Record<string, unknown> | undefined;
+        item.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+        item.imageAlt = n?.altText ?? img?.altText ?? "";
+        delete item.image;
+        return item;
+      });
+    }
+  }
+
   return {
     id: (node.id as string) ?? `section-${index}`,
     acfGroupName,
@@ -939,11 +1478,17 @@ export async function fetchPageData(
     };
   }
 
+  const language = getWpmlLanguage(locale);
+
+  // Step 1: fetch base page (always default language URI) + translation IDs only.
+  // The fragment is typed `on Page` so it cannot spread into translations[] — 
+  // we fetch the translated page by its database ID in a second request instead.
   const minimalQuery = `
     query GetPageMinimal($id: ID!, $idType: PageIdType!) {
       page(id: $id, idType: $idType) {
         id
         title
+        translations { id language { code } }
         seo {
           title
           metaDesc
@@ -962,6 +1507,7 @@ export async function fetchPageData(
       page(id: $id, idType: $idType) {
         id
         title
+        translations { id language { code } }
         seo {
           title
           metaDesc
@@ -977,21 +1523,24 @@ export async function fetchPageData(
   const fullQuery = buildFullQuery(PAGE_SECTIONS_FRAGMENT);
   const resilientQuery = buildFullQuery(PAGE_SECTIONS_FRAGMENT_RESILIENT);
 
-  type PageResponse = {
-    page?: {
-      id?: string;
-      title?: string | null;
-      seo?: Record<string, unknown>;
+  type PageNode = {
+    id?: string;
+    title?: string | null;
+    seo?: Record<string, unknown>;
+    language?: { code?: string } | null;
+    contentSections?: Array<Record<string, unknown>>;
+    acfSections?: Array<Record<string, unknown>>;
+    flexibleContent?: Array<Record<string, unknown>>;
+    pageContentSections?: {
+      sections?: Array<Record<string, unknown>>;
+      sectionGroups?: Array<{ sections?: unknown[] }>;
       contentSections?: Array<Record<string, unknown>>;
-      acfSections?: Array<Record<string, unknown>>;
-      flexibleContent?: Array<Record<string, unknown>>;
-      pageContentSections?: {
-        sections?: Array<Record<string, unknown>>;
-        sectionGroups?: Array<{ sections?: unknown[] }>;
-        contentSections?: Array<Record<string, unknown>>;
-      };
     };
+    /** Lightweight translation stubs — only id + language.code, no sections */
+    translations?: Array<{ id: string; language?: { code?: string } }> | null;
   };
+
+  type PageResponse = { page?: PageNode };
 
   const tryFetch = async (
     id: string,
@@ -1016,27 +1565,64 @@ export async function fetchPageData(
     }
   };
 
+  /**
+   * For non-default locales, find the translated page's WP node ID from the
+   * base page's translations[] stubs, then re-fetch by ID with the full ACF
+   * fragment. The PageSections fragment is typed `on Page` so it can't spread
+   * inside translations[] — fetching by node ID is the only reliable approach.
+   */
+  const fetchTranslatedPage = async (base: PageNode): Promise<PageNode | null> => {
+    if (!base.translations?.length) return null;
+    const stub = base.translations.find((t) => t.language?.code === language);
+    if (!stub?.id) return null;
+
+    const id = stub.id;
+    const tags = ["pages", `page-${locale}-${slug}`];
+
+    // Always fetch by WP node ID (base64 global ID) — proven to work via debug
+    try {
+      const data = await fetchGraphQL<PageResponse>(fullQuery, { variables: { id, idType: "ID" }, tags });
+      if (data?.page) return data.page;
+    } catch { /* fall through to resilient */ }
+
+    try {
+      const data = await fetchGraphQL<PageResponse>(resilientQuery, { variables: { id, idType: "ID" }, tags });
+      if (data?.page) return data.page;
+    } catch { /* fall through to minimal */ }
+
+    try {
+      const data = await fetchGraphQL<PageResponse>(minimalQuery, { variables: { id, idType: "ID" }, tags });
+      if (data?.page) return data.page;
+    } catch { /* give up */ }
+
+    return null;
+  };
+
   // Try full query first; if schema mismatch (e.g. ContactBanner/Locations fields missing in WP), fall back to resilient, then minimal.
   const uriVariants = isHome ? ["/"] : [`/${slug}`, `/${slug}/`, slug, `${slug}/`];
-  let page: PageResponse["page"] | null = null;
+  let page: PageNode | null = null;
   let data: PageResponse | null = null;
+
+  let basePage: PageNode | null = null;
 
   for (const uri of uriVariants) {
     data = await tryFetch(uri, "URI", fullQuery, true);
-    if (data?.page) {
-      page = data.page;
-      break;
-    }
+    if (data?.page) { basePage = data.page; break; }
     data = await tryFetch(uri, "URI", resilientQuery, false);
-    if (data?.page) {
-      page = data.page;
-      break;
-    }
+    if (data?.page) { basePage = data.page; break; }
     data = await tryFetch(uri, "URI", minimalQuery, false);
-    if (data?.page) {
-      page = data.page;
-      break;
-    }
+    if (data?.page) { basePage = data.page; break; }
+  }
+
+  if (!basePage) {
+    page = null;
+  } else if (language === "us") {
+    // Default locale — use base page directly
+    page = basePage;
+  } else {
+    // Non-default locale — fetch the translated page by its WP node ID
+    const translated = await fetchTranslatedPage(basePage);
+    page = translated ?? basePage;
   }
 
   if (!page) {

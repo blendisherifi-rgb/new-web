@@ -78,7 +78,7 @@ export function EngineSection({
 
         {/* 80px gap between body and cards, 60px between each card */}
         <div className="mt-10 grid grid-cols-1 gap-8 tablet-down:mt-[80px] tablet-down:grid-cols-3 tablet-down:gap-[60px]">
-          {cards.map((card, i) => (
+          {(cards ?? []).map((card, i) => (
             <article key={i} className="flex flex-col items-center text-center">
               {/* 32px gap between each element in card */}
               {card.icon ? (

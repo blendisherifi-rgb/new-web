@@ -3,8 +3,12 @@
  */
 
 import { fetchGraphQL, getWordPressRestBaseUrl } from "./wordpress";
-import type { Locale } from "@/lib/i18n";
-import { localePath } from "@/lib/i18n";
+import {
+  localePath,
+  getWpmlLanguage,
+  getWpmlLanguageEnum,
+  type Locale,
+} from "@/lib/i18n";
 
 export interface NewsListItem {
   id: string;
@@ -32,6 +36,18 @@ export interface NewsArchiveData {
 }
 
 const NEWS_GRAPHQL_CHUNK = 100;
+
+/** Explicit GraphQL result shape (avoids TS circular inference on `fetchGraphQL` + template `query`). */
+type NewsArchiveConnData = {
+  news?: {
+    nodes?: Array<Record<string, unknown>>;
+    pageInfo?: { hasNextPage?: boolean; endCursor?: string | null };
+  };
+  newsItems?: {
+    nodes?: Array<Record<string, unknown>>;
+    pageInfo?: { hasNextPage?: boolean; endCursor?: string | null };
+  };
+};
 
 interface WpRestNewsPost {
   id: number;
@@ -66,112 +82,77 @@ function mapRestNewsToListItem(p: WpRestNewsPost): NewsListItem {
   };
 }
 
+const mapNewsArchiveNode = (n: Record<string, unknown>): NewsListItem => ({
+  id: n.id as string,
+  slug: (n.slug as string) ?? "",
+  title: (n.title as string) ?? "",
+  excerpt: (n.excerpt as string) ?? null,
+  date: (n.date as string) ?? null,
+  featuredImage: (n.featuredImage as { node?: { sourceUrl?: string; altText?: string } })?.node
+    ? {
+        sourceUrl: (n.featuredImage as { node?: { sourceUrl?: string } }).node?.sourceUrl,
+        altText: (n.featuredImage as { node?: { altText?: string } }).node?.altText,
+      }
+    : null,
+});
+
 /**
- * Paginated `news` GraphQL connection (chunked; avoids `first` above WPGraphQL max).
+ * Paginated `news` / `newsItems` GraphQL connection (chunked; avoids `first` above WPGraphQL max).
+ * Tries WPML `language` filter first when supported, then falls back.
  */
 async function fetchNewsArchiveNodesGraphQL(
   cacheTags: string[],
   maxItems: number,
+  locale: Locale,
 ): Promise<{ nodes: NewsListItem[]; hasMore: boolean } | null> {
-  const query = `
-    query GetNewsArchive($first: Int!, $after: String) {
-      news(first: $first, after: $after, where: { status: PUBLISH }) {
-        nodes {
-          id
-          slug
-          title
-          excerpt
-          date
-          featuredImage { node { sourceUrl altText } }
+  const languageEnum = getWpmlLanguageEnum(locale);
+
+  async function paginateConnection(
+    connection: "news" | "newsItems",
+    withLanguage: boolean,
+  ): Promise<{ nodes: NewsListItem[]; hasMore: boolean }> {
+    const where =
+      withLanguage === true
+        ? "where: { status: PUBLISH, language: $language }"
+        : "where: { status: PUBLISH }";
+    const signature =
+      withLanguage === true
+        ? `query GetNewsArchive($first: Int!, $after: String, $language: LanguageCodeEnum)`
+        : `query GetNewsArchive($first: Int!, $after: String)`;
+    const query = `
+      ${signature} {
+        ${connection}(first: $first, after: $after, ${where}) {
+          nodes {
+            id
+            slug
+            title
+            excerpt
+            date
+            featuredImage { node { sourceUrl altText } }
+          }
+          pageInfo { hasNextPage endCursor }
         }
-        pageInfo { hasNextPage endCursor }
       }
-    }
-  `;
+    `;
 
-  const mapNode = (n: Record<string, unknown>): NewsListItem => ({
-    id: n.id as string,
-    slug: (n.slug as string) ?? "",
-    title: (n.title as string) ?? "",
-    excerpt: (n.excerpt as string) ?? null,
-    date: (n.date as string) ?? null,
-    featuredImage: (n.featuredImage as { node?: { sourceUrl?: string; altText?: string } })?.node
-      ? {
-          sourceUrl: (n.featuredImage as { node?: { sourceUrl?: string } }).node?.sourceUrl,
-          altText: (n.featuredImage as { node?: { altText?: string } }).node?.altText,
-        }
-      : null,
-  });
-
-  try {
     const nodes: NewsListItem[] = [];
     let after: string | null = null;
     let lastHasNext = false;
 
     while (nodes.length < maxItems) {
-      const first = Math.min(NEWS_GRAPHQL_CHUNK, maxItems - nodes.length);
-      const data = await fetchGraphQL<{
-        news?: {
-          nodes?: Array<Record<string, unknown>>;
-          pageInfo?: { hasNextPage?: boolean; endCursor?: string | null };
-        };
-      }>(query, {
-        variables: { first, after },
+      const pageSize = Math.min(NEWS_GRAPHQL_CHUNK, maxItems - nodes.length);
+      const data = (await fetchGraphQL(query, {
+        variables:
+          withLanguage === true
+            ? { first: pageSize, after, language: languageEnum }
+            : { first: pageSize, after },
         tags: cacheTags,
-      });
-      const batch = data?.news?.nodes ?? [];
-      const pageInfo = data?.news?.pageInfo;
+      })) as NewsArchiveConnData;
+      const block = connection === "news" ? data?.news : data?.newsItems;
+      const batch = block?.nodes ?? [];
+      const pageInfo = block?.pageInfo;
       lastHasNext = pageInfo?.hasNextPage ?? false;
-      nodes.push(...batch.map(mapNode));
-      if (batch.length === 0 || !lastHasNext) break;
-      const endCursor = pageInfo?.endCursor;
-      if (!endCursor) break;
-      after = endCursor;
-    }
-
-    if (nodes.length > 0) {
-      return { nodes: nodes.slice(0, maxItems), hasMore: lastHasNext };
-    }
-  } catch {
-    /* try newsItems */
-  }
-
-  const altQuery = `
-    query GetNewsItemsArchive($first: Int!, $after: String) {
-      newsItems(first: $first, after: $after, where: { status: PUBLISH }) {
-        nodes {
-          id
-          slug
-          title
-          excerpt
-          date
-          featuredImage { node { sourceUrl altText } }
-        }
-        pageInfo { hasNextPage endCursor }
-      }
-    }
-  `;
-
-  try {
-    const nodes: NewsListItem[] = [];
-    let after: string | null = null;
-    let lastHasNext = false;
-
-    while (nodes.length < maxItems) {
-      const first = Math.min(NEWS_GRAPHQL_CHUNK, maxItems - nodes.length);
-      const data = await fetchGraphQL<{
-        newsItems?: {
-          nodes?: Array<Record<string, unknown>>;
-          pageInfo?: { hasNextPage?: boolean; endCursor?: string | null };
-        };
-      }>(altQuery, {
-        variables: { first, after },
-        tags: cacheTags,
-      });
-      const batch = data?.newsItems?.nodes ?? [];
-      const pageInfo = data?.newsItems?.pageInfo;
-      lastHasNext = pageInfo?.hasNextPage ?? false;
-      nodes.push(...batch.map(mapNode));
+      nodes.push(...batch.map(mapNewsArchiveNode));
       if (batch.length === 0 || !lastHasNext) break;
       const endCursor = pageInfo?.endCursor;
       if (!endCursor) break;
@@ -182,9 +163,27 @@ async function fetchNewsArchiveNodesGraphQL(
       nodes: nodes.slice(0, maxItems),
       hasMore: lastHasNext,
     };
-  } catch {
-    return null;
   }
+
+  const attempts: Array<{ connection: "news" | "newsItems"; withLanguage: boolean }> = [
+    { connection: "news", withLanguage: true },
+    { connection: "news", withLanguage: false },
+    { connection: "newsItems", withLanguage: true },
+    { connection: "newsItems", withLanguage: false },
+  ];
+
+  for (const { connection, withLanguage } of attempts) {
+    try {
+      const result = await paginateConnection(connection, withLanguage);
+      if (result.nodes.length > 0) {
+        return result;
+      }
+    } catch {
+      /* schema may omit language or connection name — try next */
+    }
+  }
+
+  return null;
 }
 
 async function fetchNewsArchiveFromRest(
@@ -237,7 +236,7 @@ export async function fetchNewsArchive(
   const cacheTags = ["news", `news-${locale}`];
 
   try {
-    const gql = await fetchNewsArchiveNodesGraphQL(cacheTags, perPage);
+    const gql = await fetchNewsArchiveNodesGraphQL(cacheTags, perPage, locale);
     if (gql && gql.nodes.length > 0) {
       return { items: gql.nodes, hasMore: gql.hasMore };
     }
@@ -258,11 +257,30 @@ export async function fetchNewsBySlug(
   locale: Locale
 ): Promise<NewsDetail | null> {
   const tags = ["news", `news-${locale}-${slug}`];
+  const language = getWpmlLanguage(locale);
+
+  const mapNewsDetail = (p: Record<string, unknown>): NewsDetail => ({
+    id: p.id as string,
+    slug: (p.slug as string) ?? "",
+    title: (p.title as string) ?? "",
+    excerpt: (p.excerpt as string) ?? null,
+    date: (p.date as string) ?? null,
+    content: (p.content as string) ?? null,
+    featuredImage: (p.featuredImage as { node?: { sourceUrl?: string; altText?: string } })?.node
+      ? {
+          sourceUrl: (p.featuredImage as { node?: { sourceUrl?: string } }).node?.sourceUrl,
+          altText: (p.featuredImage as { node?: { altText?: string } }).node?.altText,
+        }
+      : null,
+    seo: p.seo as NewsDetail["seo"],
+  });
 
   const tryGraphql = async (): Promise<NewsDetail | null> => {
-    try {
+    const run = async (withTranslations: boolean): Promise<NewsDetail | null> => {
       const data = await fetchGraphQL<{
-        newsItem?: Record<string, unknown>;
+        newsItem?: Record<string, unknown> & {
+          translations?: Array<{ language?: { code?: string } }> | null;
+        };
         newsItemBy?: Record<string, unknown>;
       }>(
         `
@@ -276,32 +294,47 @@ export async function fetchNewsBySlug(
             content
             featuredImage { node { sourceUrl altText } }
             seo { title metaDesc opengraphImage { sourceUrl } }
+            ${
+              withTranslations
+                ? `
+            translations {
+              id
+              slug
+              title
+              excerpt
+              date
+              content
+              language { code }
+              featuredImage { node { sourceUrl altText } }
+              seo { title metaDesc opengraphImage { sourceUrl } }
+            }`
+                : ""
+            }
           }
         }
       `,
-        { variables: { slug }, tags }
+        { variables: { slug }, tags },
       );
 
-      const post = data?.newsItem ?? data?.newsItemBy;
-      if (!post) return null;
-      const p = post as Record<string, unknown>;
-      return {
-        id: p.id as string,
-        slug: (p.slug as string) ?? "",
-        title: (p.title as string) ?? "",
-        excerpt: (p.excerpt as string) ?? null,
-        date: (p.date as string) ?? null,
-        content: (p.content as string) ?? null,
-        featuredImage: (p.featuredImage as { node?: { sourceUrl?: string; altText?: string } })?.node
-          ? {
-              sourceUrl: (p.featuredImage as { node?: { sourceUrl?: string } }).node?.sourceUrl,
-              altText: (p.featuredImage as { node?: { altText?: string } }).node?.altText,
-            }
-          : null,
-        seo: p.seo as NewsDetail["seo"],
-      };
+      const raw = data?.newsItem ?? data?.newsItemBy;
+      if (!raw) return null;
+      if (withTranslations) {
+        const typed = raw as { translations?: Array<{ language?: { code?: string } }> };
+        const match = typed.translations?.find((t) => t.language?.code === language);
+        const post = (match ?? raw) as Record<string, unknown>;
+        return mapNewsDetail(post);
+      }
+      return mapNewsDetail(raw as Record<string, unknown>);
+    };
+
+    try {
+      return await run(true);
     } catch {
-      return null;
+      try {
+        return await run(false);
+      } catch {
+        return null;
+      }
     }
   };
 
@@ -351,13 +384,13 @@ export async function fetchNewsSlugs(): Promise<string[]> {
       }
     `;
     while (slugs.length < maxSlugs) {
-      const first = Math.min(NEWS_GRAPHQL_CHUNK, maxSlugs - slugs.length);
+      const pageSize = Math.min(NEWS_GRAPHQL_CHUNK, maxSlugs - slugs.length);
       try {
         const data = await fetchGraphQL<{
           news?: { nodes?: Array<{ slug?: string }>; pageInfo?: { hasNextPage?: boolean; endCursor?: string | null } };
           newsItems?: { nodes?: Array<{ slug?: string }>; pageInfo?: { hasNextPage?: boolean; endCursor?: string | null } };
         }>(query, {
-          variables: { first, after },
+          variables: { first: pageSize, after },
           tags: cacheTags,
           revalidate: 3600,
         });

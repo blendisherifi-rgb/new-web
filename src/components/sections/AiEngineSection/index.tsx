@@ -53,7 +53,7 @@ export function AiEngineSection({
   const useSplit =
     Boolean(headingLine1?.trim()) && Boolean(headingLine2?.trim());
 
-  if (!tabs.length) return null;
+  if (!tabs?.length) return null;
 
   const active = tabs[activeIndex] ?? tabs[0];
 

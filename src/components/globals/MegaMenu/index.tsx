@@ -3,125 +3,214 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "@/components/atoms/Link";
 import type { NavItem } from "@/lib/menus";
+import { WhatWeDoDropdown } from "../WhatWeDoDropdown";
+import { SolutionsDropdown } from "../SolutionsDropdown";
+import { WhoWeAreDropdown } from "../WhoWeAreDropdown";
 
 interface MegaMenuProps {
   items: NavItem[];
-  /** Used to detect active page for highlighting */
   currentPath?: string;
-  /** Dark variant for use on dark backgrounds */
-  variant?: "light" | "dark";
+  /** True when header is in transparent/overlay mode (over hero). */
+  isOverlay?: boolean;
 }
 
 /**
- * Desktop mega-menu — hover to open, keyboard accessible.
+ * Desktop mega-menu — hover/click to open, keyboard accessible.
+ * Nav link colours adapt: white in overlay mode, dark when scrolled.
  */
-export function MegaMenu({ items, currentPath = "", variant = "light" }: MegaMenuProps) {
+export function MegaMenu({ items, currentPath = "", isOverlay = false }: MegaMenuProps) {
   return (
-    <nav aria-label="Primary navigation" className="flex items-center gap-8">
+    <nav aria-label="Primary navigation" className="flex items-center gap-6">
       {items.map((item) => (
         <NavDropdown
           key={item.id}
           item={item}
           currentPath={currentPath}
-          variant={variant}
+          isOverlay={isOverlay}
         />
       ))}
     </nav>
   );
 }
 
-function NavDropdown({ item, currentPath, variant = "light" }: { item: NavItem; currentPath: string; variant?: "light" | "dark" }) {
+function NavDropdown({
+  item,
+  currentPath,
+  isOverlay,
+}: {
+  item: NavItem;
+  currentPath: string;
+  isOverlay: boolean;
+}) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const hasChildren = !!(item.children && item.children.length > 0);
+  const hasDropdown =
+    hasChildren ||
+    item.dropdownType === "what-we-do" ||
+    item.dropdownType === "solutions" ||
+    item.dropdownType === "who-we-are";
 
-  const hasChildren = item.children && item.children.length > 0;
-  const isDark = variant === "dark";
-  const textColor = isDark ? "text-white" : "text-brand-dark";
-  const hoverColor = isDark ? "hover:text-brand-orange" : "hover:text-brand-blue";
-  const activeColor = isDark ? "text-brand-orange" : "text-brand-blue";
   const isActive =
     currentPath === item.href ||
     (hasChildren &&
-      item.children!.some((c) => currentPath === c.href || currentPath.startsWith(c.href + "/")));
+      item.children!.some(
+        (c) => currentPath === c.href || currentPath.startsWith(c.href + "/")
+      )) ||
+    (item.dropdownType === "what-we-do" &&
+      !!item.products?.some(
+        (p) => currentPath === p.href || currentPath.startsWith(p.href + "/")
+      )) ||
+    (item.dropdownType === "solutions" &&
+      !!item.solutionsCategories?.some((cat) =>
+        cat.links.some(
+          (l) => currentPath === l.href || currentPath.startsWith(l.href + "/")
+        )
+      )) ||
+    (item.dropdownType === "who-we-are" &&
+      !!item.whoWeAreLinks?.some(
+        (l) => currentPath === l.href || currentPath.startsWith(l.href + "/")
+      ));
 
+  // Close on outside click
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-
     const handleOutside = (e: MouseEvent) => {
       if (!el.contains(e.target as Node)) setOpen(false);
     };
-
-    document.addEventListener("click", handleOutside);
-    return () => document.removeEventListener("click", handleOutside);
+    document.addEventListener("mousedown", handleOutside);
+    return () => document.removeEventListener("mousedown", handleOutside);
   }, []);
 
-  const content = (
-    <>
-      <span className={`font-body text-sm font-bold uppercase tracking-wider ${textColor}`}>
-        {item.label}
-      </span>
-      {hasChildren && (
-        <svg
-          className={`ml-1 h-4 w-4 ${textColor} transition-transform ${open ? "rotate-180" : ""}`}
-          viewBox="0 0 16 16"
-          fill="currentColor"
-          aria-hidden
-        >
-          <path d="M4.427 6.427l3.396 3.396a.25.25 0 00.354 0l3.396-3.396A.25.25 0 0011.396 6H4.604a.25.25 0 00-.177.427z" />
-        </svg>
-      )}
-    </>
-  );
+  const baseLinkCls = [
+    "font-body text-base font-semibold leading-6 tracking-normal transition-colors duration-200",
+    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-blue",
+    isOverlay
+      ? "text-white hover:text-white/70"
+      : "text-brand-dark hover:text-brand-blue",
+    isActive
+      ? isOverlay
+        ? "text-white/70"
+        : "text-brand-blue"
+      : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-  if (!hasChildren) {
+  const chevronCls = [
+    "ml-1.5 h-3 w-3 shrink-0",
+    isOverlay ? "text-white" : "text-brand-dark",
+  ].join(" ");
+
+  if (!hasDropdown) {
     return (
-      <Link
-        href={item.href}
-        className={`relative flex items-center py-6 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-blue ${
-          isActive ? activeColor : textColor
-        } ${hoverColor}`}
-      >
+      <Link href={item.href} className={`${baseLinkCls} flex items-center py-3`}>
         {item.label}
       </Link>
     );
   }
 
   return (
-    <div ref={ref} className="relative">
+    <div
+      ref={ref}
+      className="relative"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        onMouseEnter={() => setOpen(true)}
         aria-expanded={open}
         aria-haspopup="true"
-        className={`flex items-center py-6 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-blue ${
-          isActive ? activeColor : textColor
-        } ${hoverColor}`}
+        className={`${baseLinkCls} flex items-center gap-0.5 py-3`}
       >
-        {content}
+        {item.label}
+        <svg
+          className={chevronCls}
+          viewBox="0 0 12 12"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          aria-hidden
+        >
+          <path d="M6 1v10M1 6h10" />
+        </svg>
       </button>
+
+      {/* Gap bridge + caret + dropdown panel — all in one positioned wrapper so hover is unbroken */}
       <div
-        onMouseEnter={() => setOpen(true)}
-        onMouseLeave={() => setOpen(false)}
-        className={`absolute left-0 top-full z-50 min-w-[240px] border border-brand-grey bg-white shadow-lg transition-opacity ${
-          open ? "visible opacity-100" : "invisible opacity-0"
-        }`}
+        className={[
+          "absolute left-1/2 -translate-x-1/2 top-full z-50 pt-[7px]",
+          item.dropdownType === "what-we-do"
+            ? "min-w-[800px]"
+            : item.dropdownType === "solutions"
+            ? "min-w-[1100px]"
+            : item.dropdownType === "who-we-are"
+            ? "min-w-[800px]"
+            : "min-w-[220px]",
+          "transition-all duration-200 origin-top",
+          open
+            ? "visible opacity-100 translate-y-0"
+            : "invisible opacity-0 -translate-y-1",
+        ].join(" ")}
       >
-        <ul className="py-2">
-          {item.children!.map((child) => (
-            <li key={child.id}>
-              <Link
-                href={child.href}
-                className={`block px-4 py-2 font-body text-sm font-medium text-brand-dark hover:bg-brand-light-blue hover:text-brand-blue ${
-                  currentPath === child.href ? "bg-brand-light-blue text-brand-blue" : ""
-                }`}
-              >
-                {child.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        {/* Caret — upward-pointing triangle centered on the trigger */}
+        <div
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-0 h-0"
+          style={{
+            borderLeft: "10px solid transparent",
+            borderRight: "10px solid transparent",
+            borderBottom: `10px solid ${isOverlay ? "white" : "#0057B8"}`,
+            filter: isOverlay ? "drop-shadow(0 -1px 0 #d1d5db)" : "none",
+            marginTop: "-2px",
+          }}
+        />
+
+        {/* Panel */}
+        <div className="border border-brand-grey bg-white shadow-lg overflow-hidden">
+          {item.dropdownType === "what-we-do" && item.products && item.platformLinks ? (
+            <WhatWeDoDropdown
+              products={item.products}
+              platformLinks={item.platformLinks}
+              currentPath={currentPath}
+              onClose={() => setOpen(false)}
+            />
+        ) : item.dropdownType === "solutions" && item.solutionsCategories ? (
+          <SolutionsDropdown
+            categories={item.solutionsCategories}
+            currentPath={currentPath}
+            onClose={() => setOpen(false)}
+          />
+        ) : item.dropdownType === "who-we-are" && item.whoWeAreLinks ? (
+          <WhoWeAreDropdown
+            links={item.whoWeAreLinks}
+            featured={item.whoWeAreFeatured}
+            currentPath={currentPath}
+            onClose={() => setOpen(false)}
+          />
+        ) : (
+            <ul className="py-1.5">
+              {item.children!.map((child) => (
+                <li key={child.id}>
+                  <Link
+                    href={child.href}
+                    className={[
+                      "block px-5 py-2.5 font-body text-sm font-medium text-brand-dark",
+                      "transition-colors hover:bg-brand-grey/50 hover:text-brand-blue",
+                      currentPath === child.href
+                        ? "bg-brand-grey/50 font-semibold text-brand-blue"
+                        : "",
+                    ].join(" ")}
+                  >
+                    {child.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     </div>
   );

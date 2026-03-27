@@ -27,8 +27,9 @@ export default async function NotFound() {
       <Header
         menus={menus}
         cta={globals.headerCta}
+        utilityBar={globals.utilityBar}
         locale={locale}
-        variant="dark"
+        variant="transparent"
       />
       <main
         className="relative flex flex-1 flex-col items-center justify-center px-6 py-24 text-center"

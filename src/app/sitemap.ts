@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { fetchGraphQL } from "@/lib/wordpress";
-import { LOCALES, localePath } from "@/lib/i18n";
+import { LOCALES, localePath, getWpmlLanguageEnum } from "@/lib/i18n";
 import { fetchCaseStudySlugs } from "@/lib/case-studies";
 import { fetchResourceSlugs } from "@/lib/resources";
 import { fetchNewsSlugs } from "@/lib/news";
@@ -22,37 +22,52 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [];
 
   try {
-    const data = await fetchGraphQL<{
-      pages?: { nodes?: Array<{ uri?: string | null; slug?: string | null }> };
-    }>(
-      `
-      query GetSitemapPages {
-        pages(first: 500, where: { status: PUBLISH }) {
-          nodes { uri slug }
-        }
-      }
-    `,
-      { tags: ["sitemap"], revalidate: 3600 }
+    // Fetch pages for each locale separately using WPML language filter
+    // so only pages translated into that language appear in the sitemap.
+    const localePageSets = await Promise.all(
+      LOCALES.map(async (loc) => {
+        const language = getWpmlLanguageEnum(loc);
+        const data = await fetchGraphQL<{
+          pages?: { nodes?: Array<{ uri?: string | null; slug?: string | null }> };
+        }>(
+          `
+          query GetSitemapPages($language: LanguageCodeEnum) {
+            pages(first: 500, where: { status: PUBLISH, language: $language }) {
+              nodes { uri slug }
+            }
+          }
+        `,
+          { variables: { language }, tags: ["sitemap"], revalidate: 3600 }
+        );
+        return { loc, nodes: data?.pages?.nodes ?? [] };
+      })
     );
 
-    const pages = data?.pages?.nodes ?? [];
+    // Build a map of slug → set of locales that have a translation
+    const slugLocaleMap = new Map<string, Set<string>>();
+    for (const { loc, nodes } of localePageSets) {
+      for (const page of nodes) {
+        const uri = page.uri ?? page.slug ?? "";
+        const path = uri.replace(/^\//, "").replace(/\/$/, "") || "";
+        const slug = path === "" || path === "front" || path === "front-page" ? "" : path;
+        if (!slugLocaleMap.has(slug)) slugLocaleMap.set(slug, new Set());
+        slugLocaleMap.get(slug)!.add(loc);
+      }
+    }
 
-    for (const page of pages) {
-      const uri = page.uri ?? page.slug ?? "";
-      const path = uri.replace(/^\//, "").replace(/\/$/, "") || "";
-      const slug = path === "" || path === "front" || path === "front-page" ? "" : path;
+    for (const [slug, availableLocales] of slugLocaleMap) {
       const urlPath = localePath(slug ? `/${slug}` : "/", "us");
-
       entries.push({
         url: absoluteUrl(urlPath),
         lastModified: new Date(),
-        changeFrequency: path === "" ? "weekly" : "monthly",
-        priority: path === "" ? 1 : 0.8,
+        changeFrequency: slug === "" ? "weekly" : "monthly",
+        priority: slug === "" ? 1 : 0.8,
         alternates: {
           languages: Object.fromEntries(
-            LOCALES.map((loc) => [
+            // Only include hreflang entries for locales that have this page translated
+            Array.from(availableLocales).map((loc) => [
               LOCALE_TO_HREFLANG[loc] ?? loc,
-              absoluteUrl(localePath(slug ? `/${slug}` : "/", loc)),
+              absoluteUrl(localePath(slug ? `/${slug}` : "/", loc as (typeof LOCALES)[number])),
             ])
           ),
         },

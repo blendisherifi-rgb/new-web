@@ -5,7 +5,7 @@
 
 import { fetchGraphQL } from "./wordpress";
 import type { Locale } from "./i18n";
-import { localePath } from "./i18n";
+import { localePath, getWpmlLanguage } from "./i18n";
 
 export interface PromoBarData {
   enabled: boolean;
@@ -219,6 +219,8 @@ function makeLocaleAware(globals: GlobalsData, locale: Locale): GlobalsData {
 }
 
 export async function fetchGlobalFields(locale: Locale): Promise<GlobalsData> {
+  const language = getWpmlLanguage(locale);
+
   try {
     const data = await fetchGraphQL<{
       acfOptionsSiteSettings?: {
