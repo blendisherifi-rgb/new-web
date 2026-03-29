@@ -1,5 +1,3 @@
-"use client";
-
 import { ContentArchiveGrid } from "@/components/archives/ContentArchiveGrid";
 import type { NewsListItem } from "@/lib/news";
 import { newsUrl } from "@/lib/news";

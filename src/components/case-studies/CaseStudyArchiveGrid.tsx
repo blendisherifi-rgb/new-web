@@ -1,5 +1,3 @@
-"use client";
-
 import { ContentArchiveGrid } from "@/components/archives/ContentArchiveGrid";
 import type { CaseStudyListItem } from "@/lib/case-studies";
 import { caseStudyUrl } from "@/lib/case-studies";

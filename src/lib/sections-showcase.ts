@@ -5,6 +5,7 @@
  */
 
 import type { SectionData } from "./sections";
+import { DEFAULT_NEWS_AND_EVENTS_PROPS } from "./news-and-events-defaults";
 
 export interface SectionGroup {
   groupName?: string;
@@ -517,6 +518,12 @@ export const SECTIONS_SHOWCASE_GROUPS: SectionGroup[] = [
     },
   },
   {
+    id: "news-and-events-1",
+    acfGroupName: "news_and_events_section",
+    order: 1.91,
+    fields: { ...DEFAULT_NEWS_AND_EVENTS_PROPS },
+  },
+  {
     id: "why-attend-1",
     acfGroupName: "why_attend_section",
     order: 1.95,
@@ -964,6 +971,36 @@ export const SECTIONS_SHOWCASE_GROUPS: SectionGroup[] = [
       imageWithSoftCoAlt: "Invoice lifecycle with SoftCo — 90% straight-through processing",
       imageWithoutSoftCo: "/ai-model.svg",
       imageWithoutSoftCoAlt: "Invoice lifecycle without SoftCo",
+    },
+  },
+  {
+    id: "ap-automation-financial-controllers-1",
+    acfGroupName: "ap_automation_for_financial_controllers_section",
+    order: 1.695,
+    fields: {
+      overline: "AP AUTOMATION FOR FINANCIAL CONTROLLERS",
+      headingBlue: "Get complete visibility",
+      headingDark: "over AP function",
+      imageSrc: "/hero-platform-screenshot.png",
+      imageAlt:
+        "AP workflow queue showing invoice status, approval routing, and exception flags",
+      body:
+        "SoftCo gives Financial Controllers a single view of every invoice, every approval, and every exception across the AP function. Automated audit trails record every action. Policy enforcement is configured into the workflow, not applied after the fact. Your team stops reconstructing the past and starts reporting with confidence.",
+    },
+  },
+  {
+    id: "ap-softco-experience-1",
+    acfGroupName: "ap_softco_experience_section",
+    order: 1.696,
+    fields: {
+      overline: "YOUR SOFTCO EXPERIENCE",
+      headingBlue: "The view",
+      headingDark: "your team has been building manually",
+      imageSrc: "/hero-platform-screenshot.png",
+      imageAlt:
+        "Processing Team Performance or Workflow and Bottleneck Analysis dashboard — team metrics, not executive summary",
+      body:
+        "Team workload. Approval bottlenecks. Exception queues. Processing status by person. This is the operational view that lets you manage the AP function with data, not instinct. Updated in real time. Filterable by team member, supplier, or status. The view that means your next conversation with the CFO starts with evidence.",
     },
   },
   {

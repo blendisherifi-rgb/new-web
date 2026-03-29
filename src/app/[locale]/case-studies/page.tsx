@@ -1,5 +1,6 @@
-import { Heading } from "@/components/atoms/Heading";
 import { CaseStudyArchiveGrid } from "@/components/case-studies/CaseStudyArchiveGrid";
+import { CaseStudiesHeroSection } from "@/components/sections/CaseStudiesHeroSection";
+import { DEFAULT_CASE_STUDIES_HERO_PROPS } from "@/lib/case-studies-hero-defaults";
 import { fetchCaseStudiesArchive } from "@/lib/case-studies";
 import { buildMetadataFromYoast } from "@/lib/seo";
 import { isLocale } from "@/lib/i18n";
@@ -29,36 +30,26 @@ export default async function CaseStudiesPage({ params }: CaseStudiesPageProps) 
   });
 
   return (
-    <section className="w-full bg-white">
-      <div className="mx-auto max-w-[1440px] px-6 py-16 tablet-down:px-6 tablet-down:py-24">
-        <div className="mx-auto max-w-[1100px] text-center">
-          <Heading
-            level={1}
-            className="text-center !font-heading !font-semibold !text-[60px] !leading-[64px] !tracking-normal text-brand-dark"
-          >
-            Case Studies
-          </Heading>
-          <p className="mx-auto mt-6 max-w-[720px] font-body text-[20px] font-normal leading-[32px] tracking-normal text-brand-dark-60">
-            See how SoftCo helps enterprises automate P2P and AP in complex environments.
-          </p>
-        </div>
+    <>
+      <CaseStudiesHeroSection {...DEFAULT_CASE_STUDIES_HERO_PROPS} />
 
-        {items.length === 0 ? (
-          <p className="mt-16 text-center font-body text-brand-dark-60">
-            No case studies yet. Check back soon.
-          </p>
-        ) : (
-          <div className="mt-16">
+      <section className="w-full bg-white">
+        <div className="mx-auto max-w-[1440px] px-6 py-16 tablet-down:px-6 tablet-down:py-24">
+          {items.length === 0 ? (
+            <p className="text-center font-body text-brand-dark-60">
+              No case studies yet. Check back soon.
+            </p>
+          ) : (
             <CaseStudyArchiveGrid items={items} locale={locale} />
-          </div>
-        )}
+          )}
 
-        {hasMore ? (
-          <p className="mt-10 text-center font-body text-sm text-brand-dark-60">
-            More than 500 case studies are published — contact us to extend this list.
-          </p>
-        ) : null}
-      </div>
-    </section>
+          {hasMore ? (
+            <p className="mt-10 text-center font-body text-sm text-brand-dark-60">
+              More than 500 case studies are published — contact us to extend this list.
+            </p>
+          ) : null}
+        </div>
+      </section>
+    </>
   );
 }

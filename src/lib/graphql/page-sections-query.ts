@@ -67,6 +67,8 @@ const PeopleFirstProofLayout = `${LAYOUT_PREFIX}PeopleFirstProofSection${LAYOUT_
 const OpenRolesLayout = `${LAYOUT_PREFIX}OpenRolesSection${LAYOUT_SUFFIX}`;
 const FeatureModalLayout = `${LAYOUT_PREFIX}FeatureModalSection${LAYOUT_SUFFIX}`;
 const ApAutomationLayout = `${LAYOUT_PREFIX}ApAutomationSection${LAYOUT_SUFFIX}`;
+const ApAutomationForFinancialControllersLayout = `${LAYOUT_PREFIX}ApAutomationForFinancialControllersSection${LAYOUT_SUFFIX}`;
+const ApSoftcoExperienceLayout = `${LAYOUT_PREFIX}ApSoftcoExperienceSection${LAYOUT_SUFFIX}`;
 const ArchitectureLayout = `${LAYOUT_PREFIX}ArchitectureSection${LAYOUT_SUFFIX}`;
 const ErpIntegrationLayout = `${LAYOUT_PREFIX}ErpIntegrationSection${LAYOUT_SUFFIX}`;
 const AnalyticsDashboardsLayout = `${LAYOUT_PREFIX}AnalyticsDashboardsSection${LAYOUT_SUFFIX}`;
@@ -83,6 +85,15 @@ const SocialLayout = `${LAYOUT_PREFIX}SocialSection${LAYOUT_SUFFIX}`;
 const GovernanceLayout = `${LAYOUT_PREFIX}GovernanceSection${LAYOUT_SUFFIX}`;
 const CommunitySupportLayout = `${LAYOUT_PREFIX}CommunitySupportSection${LAYOUT_SUFFIX}`;
 const ContactFormLayout = `${LAYOUT_PREFIX}ContactFormSection${LAYOUT_SUFFIX}`;
+/** Client success story (case study) page sections — must match WPGraphQL ACF layout types */
+const ClientSuccessStoryHeroLayout = `${LAYOUT_PREFIX}ClientSuccessStoryHeroSection${LAYOUT_SUFFIX}`;
+const ClientSuccessStoryProjectAtAGlanceLayout = `${LAYOUT_PREFIX}ClientSuccessStoryProjectAtAGlanceSection${LAYOUT_SUFFIX}`;
+const ClientSuccessStoryVideoLayout = `${LAYOUT_PREFIX}ClientSuccessStoryVideoSection${LAYOUT_SUFFIX}`;
+const ClientSuccessStoryChallengeLayout = `${LAYOUT_PREFIX}ClientSuccessStoryChallengeSection${LAYOUT_SUFFIX}`;
+const ClientSuccessStoryPerfectFitAutomationLayout = `${LAYOUT_PREFIX}ClientSuccessStoryPerfectFitAutomationSection${LAYOUT_SUFFIX}`;
+const ClientSuccessStoryResultsLayout = `${LAYOUT_PREFIX}ClientSuccessStoryResultsSection${LAYOUT_SUFFIX}`;
+const ClientSuccessStoryTestimonialCardLayout = `${LAYOUT_PREFIX}ClientSuccessStoryTestimonialCardSection${LAYOUT_SUFFIX}`;
+const ClientSuccessStoryRelatedStoriesLayout = `${LAYOUT_PREFIX}ClientSuccessStoryRelatedStoriesSection${LAYOUT_SUFFIX}`;
 
 function buildFragment(): string {
   const sectionsSelection = `
@@ -732,6 +743,13 @@ function buildFragment(): string {
       endorsementText
       metrics { value label }
     }
+    ... on ${ApAutomationForFinancialControllersLayout} {
+      overline
+      headingBlue
+      headingDark
+      body
+      image { node { sourceUrl altText } }
+    }
     ... on ${ArchitectureLayout} {
       overline
       headingLine1
@@ -881,6 +899,83 @@ function buildFragment(): string {
       ctaLabel
       ctaHref
       slides { image { node { sourceUrl altText } } }
+    }
+    ... on ${ClientSuccessStoryHeroLayout} {
+      clientSuccessStoryLabel
+      clientLogo { node { sourceUrl altText } }
+      updatedText
+      titleBefore
+      titleHighlight
+      titleAfter
+      tags { label }
+      image { node { sourceUrl altText } }
+      shareUrl
+      shareTitle
+      sharePlatforms { platform label }
+    }
+    ... on ${ClientSuccessStoryProjectAtAGlanceLayout} {
+      title
+      downloadLabel
+      downloadHref
+      challengeLabel
+      challengeText
+      resultsLabel
+      results { label text }
+      detailsLabel
+      detailsRows {
+        label
+        valueText
+        valueLogo { node { sourceUrl altText } }
+      }
+    }
+    ... on ${ClientSuccessStoryVideoLayout} {
+      youtubeVideoId
+      videoPoster { node { sourceUrl altText } }
+      videoTitle
+    }
+    ... on ${ClientSuccessStoryChallengeLayout} {
+      overline
+      headingBefore
+      headingHighlight
+      headingAfter
+      body
+      bullets { label text }
+    }
+    ... on ${ClientSuccessStoryPerfectFitAutomationLayout} {
+      overline
+      headingBefore
+      headingHighlight
+      headingAfter
+      bodyTop
+      quote
+      attributionName
+      attributionRole
+      bodyBottom
+    }
+    ... on ${ClientSuccessStoryResultsLayout} {
+      overline
+      headingBefore
+      headingHighlight
+      headingAfter
+      body
+      results { label text }
+    }
+    ... on ${ClientSuccessStoryTestimonialCardLayout} {
+      portrait { node { sourceUrl altText } }
+      quote
+      authorName
+      authorTitle
+      clientLogo { node { sourceUrl altText } }
+    }
+    ... on ${ClientSuccessStoryRelatedStoriesLayout} {
+      titleLine1
+      titleLine2
+      stories {
+        image { node { sourceUrl altText } }
+        tags { label }
+        cardTitle
+        ctaHref
+      }
     }
     ... on ${ContactFormLayout} {
       __typename
@@ -1058,6 +1153,8 @@ function buildFragmentResilient(): string {
     ... on ${OpenRolesLayout} { overline headingLine1 headingLine2 locationFilterLabel departmentFilterLabel hireHiveLive viewAllHref viewAllLabel openRolesJobs { title location department excerpt readMoreHref } }
     ... on ${FeatureModalLayout} { overline headingBefore headingHighlight headingAfter body ctaLabel ctaHref featureModalItems { title description modalLabel modalTitle modalDescription image { node { sourceUrl altText } } } }
     ... on ${ApAutomationLayout} { overline headingLine1 headingLine2 image { node { sourceUrl altText } } softcoApImage { node { sourceUrl altText } } body ctaLabel ctaHref gartnerLogo { node { sourceUrl altText } } endorsementText metrics { value label } }
+    ... on ${ApAutomationForFinancialControllersLayout} { overline headingBlue headingDark body image { node { sourceUrl altText } } }
+    ... on ${ApSoftcoExperienceLayout} { overline headingBlue headingDark body image { node { sourceUrl altText } } }
     ... on ${ArchitectureLayout} { overline headingLine1 headingLine2 body image { node { sourceUrl altText } } }
     ... on ${ErpIntegrationLayout} { overline headingLine1 headingLine2 body ctaLabel ctaHref moreCountHighlight moreCountRest erpLogos { logoImg { node { sourceUrl altText } } logoAlt href } }
     ... on ${AnalyticsDashboardsLayout} { overline mainTitle introBody ctaLabel ctaHref headingBefore headingHighlight body slides { image { node { sourceUrl altText } } } }
@@ -1073,6 +1170,14 @@ function buildFragmentResilient(): string {
     ... on ${SocialLayout} { overline headingHighlight headingAfter body ctaLabel ctaHref image { node { sourceUrl altText } } statNumber statLabel socialInitiatives { initiative } }
     ... on ${GovernanceLayout} { overline heading ctaLabel ctaHref body statNumber statLabel govInitiatives { initiative } }
     ... on ${CommunitySupportLayout} { overline headingBefore headingHighlight bodyTop bodyBottom ctaLabel ctaHref slides { image { node { sourceUrl altText } } } }
+    ... on ${ClientSuccessStoryHeroLayout} { clientSuccessStoryLabel clientLogo { node { sourceUrl altText } } updatedText titleBefore titleHighlight titleAfter tags { label } image { node { sourceUrl altText } } shareUrl shareTitle sharePlatforms { platform label } }
+    ... on ${ClientSuccessStoryProjectAtAGlanceLayout} { title downloadLabel downloadHref challengeLabel challengeText resultsLabel results { label text } detailsLabel detailsRows { label valueText valueLogo { node { sourceUrl altText } } } }
+    ... on ${ClientSuccessStoryVideoLayout} { youtubeVideoId videoPoster { node { sourceUrl altText } } videoTitle }
+    ... on ${ClientSuccessStoryChallengeLayout} { overline headingBefore headingHighlight headingAfter body bullets { label text } }
+    ... on ${ClientSuccessStoryPerfectFitAutomationLayout} { overline headingBefore headingHighlight headingAfter bodyTop quote attributionName attributionRole bodyBottom }
+    ... on ${ClientSuccessStoryResultsLayout} { overline headingBefore headingHighlight headingAfter body results { label text } }
+    ... on ${ClientSuccessStoryTestimonialCardLayout} { portrait { node { sourceUrl altText } } quote authorName authorTitle clientLogo { node { sourceUrl altText } } }
+    ... on ${ClientSuccessStoryRelatedStoriesLayout} { titleLine1 titleLine2 stories { image { node { sourceUrl altText } } tags { label } cardTitle ctaHref } }
     ... on ${ContactFormLayout} { __typename }
   `;
 

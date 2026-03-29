@@ -3,10 +3,11 @@ import { Heading } from "@/components/atoms/Heading";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Image } from "@/components/atoms/Image";
 import { Link } from "@/components/atoms/Link";
+import { SectionRenderer } from "@/components/templates";
 import { fetchCaseStudyBySlug } from "@/lib/case-studies";
+import { fetchPageData } from "@/lib/pages";
 import { buildMetadataFromYoast } from "@/lib/seo";
 import { localePath } from "@/lib/i18n";
-import type { Locale } from "@/lib/i18n";
 import { isLocale } from "@/lib/i18n";
 
 interface CaseStudyPageProps {
@@ -16,6 +17,19 @@ interface CaseStudyPageProps {
 export async function generateMetadata({ params }: CaseStudyPageProps) {
   const { locale: localeParam, slug } = await params;
   const locale = isLocale(localeParam) ? localeParam : "us";
+  const path = `case-studies/${slug}`;
+
+  const pageData = await fetchPageData(path, locale);
+  if (pageData && pageData.sections.length > 0) {
+    return buildMetadataFromYoast({
+      seo: pageData.seo,
+      fallbackTitle: pageData.title,
+      fallbackDescription: undefined,
+      locale,
+      path,
+    });
+  }
+
   const item = await fetchCaseStudyBySlug(slug, locale);
   if (!item) return {};
   return buildMetadataFromYoast({
@@ -23,13 +37,36 @@ export async function generateMetadata({ params }: CaseStudyPageProps) {
     fallbackTitle: `${item.title} | SoftCo`,
     fallbackDescription: item.excerpt ?? undefined,
     locale,
-    path: `case-studies/${slug}`,
+    path,
   });
 }
 
+/**
+ * Case study detail: prefer WordPress **Page** flexible sections (Client Success Story
+ * layouts + `pageContentSections`. Same as `[...slug]`). If none, fall back to CPT / child
+ * page content from `fetchCaseStudyBySlug` (title, excerpt, body).
+ */
 export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
   const { locale: localeParam, slug } = await params;
   const locale = isLocale(localeParam) ? localeParam : "us";
+  const path = `case-studies/${slug}`;
+
+  const pageData = await fetchPageData(path, locale);
+  if (pageData && pageData.sections.length > 0) {
+    return (
+      <div className="w-full bg-white">
+        <div className="mx-auto max-w-[1440px] px-6 pt-8 pb-4 md:pt-10">
+          <Link
+            href={localePath("/case-studies", locale)}
+            className="font-body text-sm font-medium text-brand-blue hover:underline"
+          >
+            ← Back to Case Studies
+          </Link>
+        </div>
+        <SectionRenderer sections={pageData.sections} />
+      </div>
+    );
+  }
 
   const item = await fetchCaseStudyBySlug(slug, locale);
   if (!item) notFound();

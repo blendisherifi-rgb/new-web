@@ -3,6 +3,7 @@
  * Falls back to placeholder when WP is not configured or query fails.
  */
 
+import { cache } from "react";
 import { fetchGraphQL } from "./wordpress";
 import type { SectionData } from "./sections";
 import type { Locale } from "./i18n";
@@ -73,6 +74,15 @@ function transformSection(node: Record<string, unknown>, index: number): Section
       ? "matching_challenge_form_section"
     : low.includes("startchallengeform") || low.includes("start_challenge_form")
       ? "start_challenge_form_section"
+    : low.includes("client_success_story_hero") || low.includes("clientsuccessstoryhero")
+      ? "client_success_story_hero_section"
+    : low.includes("client_success_story_project_at_a_glance") ||
+        low.includes("clientsuccessstoryprojectataglance")
+      ? "client_success_story_project_at_a_glance_section"
+    : low.includes("client_success_story_video") || low.includes("clientsuccessstoryvideo")
+      ? "client_success_story_video_section"
+    : low.includes("client_success_story_challenge") || low.includes("clientsuccessstorychallenge")
+      ? "client_success_story_challenge_section"
     : low.includes("challengesection") || low.includes("challenge_section")
       ? "challenge_section"
     : low.includes("strategicpriorities") || low.includes("strategic_priorities")
@@ -111,6 +121,11 @@ function transformSection(node: Record<string, unknown>, index: number): Section
       ? "why_attend_section"
     : low.includes("eventregister") || low.includes("event_register")
       ? "event_register_section"
+    : low.includes("ap_softco_experience") || low.includes("apsoftcoexperience")
+      ? "ap_softco_experience_section"
+    : low.includes("ap_automation_for_financial") ||
+        low.includes("apautomationforfinancialcontrollers")
+      ? "ap_automation_for_financial_controllers_section"
     : low.includes("apautomation") || low.includes("ap_automation")
       ? "ap_automation_section"
     : low.includes("apanalytics") || low.includes("ap_analytics")
@@ -686,6 +701,132 @@ function transformSection(node: Record<string, unknown>, index: number): Section
     });
   }
 
+  // Client success story hero: clientLogo / image AcfMediaItemConnectionEdge -> *Src / *Alt
+  if (acfGroupName === "client_success_story_hero_section") {
+    const cl = normalized.clientLogo as Record<string, unknown> | undefined;
+    const clNode = cl?.node as Record<string, unknown> | undefined;
+    normalized.clientLogoSrc =
+      (clNode?.sourceUrl as string | undefined) ??
+      (cl as { sourceUrl?: string } | undefined)?.sourceUrl ??
+      "";
+    normalized.clientLogoAlt =
+      (clNode?.altText as string | undefined) ??
+      (cl as { altText?: string } | undefined)?.altText ??
+      "";
+    delete normalized.clientLogo;
+    const img = normalized.image as Record<string, unknown> | undefined;
+    const imgNode = img?.node as Record<string, unknown> | undefined;
+    normalized.imageSrc =
+      (imgNode?.sourceUrl as string | undefined) ??
+      (img as { sourceUrl?: string } | undefined)?.sourceUrl ??
+      "";
+    normalized.imageAlt =
+      (imgNode?.altText as string | undefined) ??
+      (img as { altText?: string } | undefined)?.altText ??
+      "";
+    delete normalized.image;
+  }
+
+  // Client success video: videoPoster -> videoPosterSrc / videoPosterAlt
+  if (acfGroupName === "client_success_story_video_section") {
+    const poster = normalized.videoPoster as Record<string, unknown> | undefined;
+    const n = poster?.node as Record<string, unknown> | undefined;
+    normalized.videoPosterSrc =
+      (n?.sourceUrl as string | undefined) ??
+      (poster as { sourceUrl?: string } | undefined)?.sourceUrl ??
+      "";
+    normalized.videoPosterAlt =
+      (n?.altText as string | undefined) ??
+      (poster as { altText?: string } | undefined)?.altText ??
+      "";
+    delete normalized.videoPoster;
+  }
+
+  // Project at a glance: detailsRows[].valueLogo -> valueLogoSrc / valueLogoAlt
+  if (
+    acfGroupName === "client_success_story_project_at_a_glance_section" &&
+    Array.isArray(normalized.detailsRows)
+  ) {
+    normalized.detailsRows = (normalized.detailsRows as unknown[]).map((row) => {
+      const r = { ...(row as Record<string, unknown>) };
+      const vl = r.valueLogo as Record<string, unknown> | undefined;
+      const vlNode = vl?.node as Record<string, unknown> | undefined;
+      if (vl && (vlNode?.sourceUrl || (vl as { sourceUrl?: string }).sourceUrl)) {
+        r.valueLogoSrc =
+          (vlNode?.sourceUrl as string | undefined) ??
+          (vl as { sourceUrl?: string }).sourceUrl ??
+          "";
+        r.valueLogoAlt =
+          (vlNode?.altText as string | undefined) ??
+          (vl as { altText?: string }).altText ??
+          "";
+        delete r.valueLogo;
+      }
+      return r;
+    });
+  }
+
+  // Challenge: repeater bullets { label, text } -> string[] for the component
+  if (
+    acfGroupName === "client_success_story_challenge_section" &&
+    Array.isArray(normalized.bullets)
+  ) {
+    normalized.bullets = (normalized.bullets as Array<Record<string, unknown>>)
+      .map((b) => {
+        const label = typeof b.label === "string" ? b.label.trim() : "";
+        const text = typeof b.text === "string" ? b.text.trim() : "";
+        if (label && text) return `${label}: ${text}`;
+        return text || label;
+      })
+      .filter((s): s is string => typeof s === "string" && s.length > 0);
+  }
+
+  // Results: WPGraphQL shares repeater row type with Project at a glance — GraphQL returns `label`/`text`; component expects `title`/`description`
+  if (
+    acfGroupName === "client_success_story_results_section" &&
+    Array.isArray(normalized.results)
+  ) {
+    normalized.results = (normalized.results as Array<Record<string, unknown>>).map(
+      (row) => {
+        const title =
+          (typeof row.title === "string" ? row.title : null) ??
+          (typeof row.label === "string" ? row.label : "") ??
+          "";
+        const description =
+          (typeof row.description === "string" ? row.description : null) ??
+          (typeof row.text === "string" ? row.text : "") ??
+          "";
+        return { ...row, title, description };
+      },
+    );
+  }
+
+  // Testimonial card: portrait + clientLogo media edges
+  if (acfGroupName === "client_success_story_testimonial_card_section") {
+    const portrait = normalized.portrait as Record<string, unknown> | undefined;
+    const pNode = portrait?.node as Record<string, unknown> | undefined;
+    normalized.portraitSrc =
+      (pNode?.sourceUrl as string | undefined) ??
+      (portrait as { sourceUrl?: string } | undefined)?.sourceUrl ??
+      "";
+    normalized.portraitAlt =
+      (pNode?.altText as string | undefined) ??
+      (portrait as { altText?: string } | undefined)?.altText ??
+      "";
+    delete normalized.portrait;
+    const cl = normalized.clientLogo as Record<string, unknown> | undefined;
+    const clNode = cl?.node as Record<string, unknown> | undefined;
+    normalized.clientLogoSrc =
+      (clNode?.sourceUrl as string | undefined) ??
+      (cl as { sourceUrl?: string } | undefined)?.sourceUrl ??
+      "";
+    normalized.clientLogoAlt =
+      (clNode?.altText as string | undefined) ??
+      (cl as { altText?: string } | undefined)?.altText ??
+      "";
+    delete normalized.clientLogo;
+  }
+
   // Locations: locationsItems[].image.node -> imageSrc, imageAlt; map to items
   if (acfGroupName === "locations_section") {
     const rawItems = normalized.locationsItems ?? normalized.items ?? [];
@@ -905,6 +1046,18 @@ function transformSection(node: Record<string, unknown>, index: number): Section
       });
     }
     delete normalized.featureModalItems;
+  }
+
+  // AP automation for financial controllers / SoftCo experience: image.node -> imageSrc/imageAlt
+  if (
+    acfGroupName === "ap_automation_for_financial_controllers_section" ||
+    acfGroupName === "ap_softco_experience_section"
+  ) {
+    const img = normalized.image as Record<string, unknown> | undefined;
+    const n = img?.node as Record<string, unknown> | undefined;
+    normalized.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+    normalized.imageAlt = n?.altText ?? img?.altText ?? "";
+    delete normalized.image;
   }
 
   // AP automation: image.node, softcoApImage.node, gartnerLogo.node -> flatten
@@ -1160,7 +1313,7 @@ import {
  * Homepage: uri = "/" or "". Inner pages: uri = "new-homepage", "about", etc.
  * Tries URI first, then SLUG idType so pages created in WP admin work immediately.
  */
-export async function fetchPageData(
+export const fetchPageData = cache(async function fetchPageData(
   uri: string,
   locale: Locale
 ): Promise<PageData | null> {
@@ -1392,4 +1545,4 @@ export async function fetchPageData(
     sections,
     seo: page.seo as PageData["seo"],
   };
-}
+});

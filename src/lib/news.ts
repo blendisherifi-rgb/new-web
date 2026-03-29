@@ -61,7 +61,8 @@ interface WpRestNewsPost {
   };
 }
 
-function stripHtml(html: string): string {
+/** Strip tags / collapse whitespace — excerpts from WP are often HTML. */
+export function stripNewsHtml(html: string): string {
   return html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
 }
 
@@ -70,7 +71,7 @@ function mapRestNewsToListItem(p: WpRestNewsPost): NewsListItem {
   return {
     id: `rest-news-${p.id}`,
     slug: p.slug,
-    title: stripHtml(p.title?.rendered ?? ""),
+    title: stripNewsHtml(p.title?.rendered ?? ""),
     excerpt: p.excerpt?.rendered ?? null,
     date: p.date ?? null,
     featuredImage: media?.source_url
@@ -364,6 +365,23 @@ export async function fetchNewsBySlug(
 
 export function newsUrl(slug: string, locale: Locale): string {
   return localePath(`/news/${slug}`, locale);
+}
+
+/** Featured card meta under title, e.g. "12 June 2026 | SoftCo" (locale-aware). */
+export function formatNewsFeaturedMetaLine(
+  date: string | null | undefined,
+  locale: Locale,
+): string {
+  if (!date) return "SoftCo";
+  const d = new Date(date);
+  if (Number.isNaN(d.getTime())) return "SoftCo";
+  const loc = locale === "uk" ? "en-GB" : locale === "ie" ? "en-IE" : "en-US";
+  const formatted = d.toLocaleDateString(loc, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+  return `${formatted} | SoftCo`;
 }
 
 /** Fetch all news slugs for sitemap (chunked GraphQL). */

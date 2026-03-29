@@ -45,6 +45,7 @@ import { PartnerBenefitsSection } from "@/components/sections/PartnerBenefitsSec
 import { MatchingChallengeFormSection } from "@/components/sections/MatchingChallengeFormSection";
 import { HowItWorksSection } from "@/components/sections/HowItWorksSection";
 import { CfoSeriesSection } from "@/components/sections/CfoSeriesSection";
+import { NewsAndEventsSection } from "@/components/sections/NewsAndEventsSection";
 import { WhyAttendSection } from "@/components/sections/WhyAttendSection";
 import { MeetSpeakersSection } from "@/components/sections/MeetSpeakersSection";
 import { EventRegisterSection } from "@/components/sections/EventRegisterSection";
@@ -54,6 +55,10 @@ import { PeopleFirstProofSection } from "@/components/sections/PeopleFirstProofS
 import { OpenRolesSection } from "@/components/sections/OpenRolesSection";
 import { FeatureModalSection } from "@/components/sections/FeatureModalSection";
 import { ApAutomationSection } from "@/components/sections/ApAutomationSection";
+import {
+  ApAutomationForFinancialControllersSection,
+  ApSoftcoExperienceSection,
+} from "@/components/sections/ApAutomationForFinancialControllersSection";
 import { ArchitectureSection } from "@/components/sections/ArchitectureSection";
 import { AiEngineSection } from "@/components/sections/AiEngineSection";
 import { ErpIntegrationSection } from "@/components/sections/ErpIntegrationSection";
@@ -146,6 +151,7 @@ export const SECTION_MAP: Record<string, React.ComponentType<Record<string, unkn
   matching_challenge_form_section: MatchingChallengeFormSection as unknown as React.ComponentType<Record<string, unknown>>,
   how_it_works_section: HowItWorksSection as unknown as React.ComponentType<Record<string, unknown>>,
   cfo_series_section: CfoSeriesSection as unknown as React.ComponentType<Record<string, unknown>>,
+  news_and_events_section: NewsAndEventsSection as unknown as React.ComponentType<Record<string, unknown>>,
   why_attend_section: WhyAttendSection as unknown as React.ComponentType<Record<string, unknown>>,
   meet_speakers_section: MeetSpeakersSection as unknown as React.ComponentType<Record<string, unknown>>,
   event_register_section: EventRegisterSection as unknown as React.ComponentType<Record<string, unknown>>,
@@ -155,6 +161,12 @@ export const SECTION_MAP: Record<string, React.ComponentType<Record<string, unkn
   open_roles_section: OpenRolesSection as unknown as React.ComponentType<Record<string, unknown>>,
   feature_modal_section: FeatureModalSection as unknown as React.ComponentType<Record<string, unknown>>,
   ap_automation_section: ApAutomationSection as unknown as React.ComponentType<Record<string, unknown>>,
+  ap_automation_for_financial_controllers_section:
+    ApAutomationForFinancialControllersSection as unknown as React.ComponentType<
+      Record<string, unknown>
+    >,
+  ap_softco_experience_section:
+    ApSoftcoExperienceSection as unknown as React.ComponentType<Record<string, unknown>>,
   architecture_section: ArchitectureSection as unknown as React.ComponentType<Record<string, unknown>>,
   ai_engine_section: AiEngineSection as unknown as React.ComponentType<Record<string, unknown>>,
   erp_integration_section: ErpIntegrationSection as unknown as React.ComponentType<Record<string, unknown>>,

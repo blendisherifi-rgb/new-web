@@ -31,8 +31,10 @@ export async function middleware(request: NextRequest) {
   }
 
   // 4. No locale — treat as US: rewrite / to /us, /about to /us/about
-  const rewritePath = pathname === "/" ? `/${DEFAULT_LOCALE}` : `/${DEFAULT_LOCALE}${pathname}`;
-  return NextResponse.rewrite(new URL(rewritePath, request.url));
+  // Must preserve search (and hash); `new URL("/us/path", origin+path?qs)` drops ?qs.
+  const url = request.nextUrl.clone();
+  url.pathname = pathname === "/" ? `/${DEFAULT_LOCALE}` : `/${DEFAULT_LOCALE}${pathname}`;
+  return NextResponse.rewrite(url);
 }
 
 export const config = {
