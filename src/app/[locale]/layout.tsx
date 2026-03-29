@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { PromoBar, Header, Footer, CookieConsent } from "@/components/globals";
+import { Header, Footer, CookieConsent } from "@/components/globals";
 import { fetchMenus } from "@/lib/menus";
 import { fetchGlobalFields } from "@/lib/globals";
 import type { Locale } from "@/lib/i18n";
@@ -21,9 +21,6 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
 
   return (
     <>
-      {/* PromoBar scrolls naturally out of view */}
-      <PromoBar data={globals.promoBar} />
-
       {/* Header is fixed — utility bar + nav bar as one unit */}
       <Header
         menus={menus}

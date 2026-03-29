@@ -339,8 +339,8 @@ async function fetchKindViaRest(
   return [];
 }
 
-/** REST collection slug candidates per hub kind (first match wins). */
-const REST_PATHS_BY_KIND: Record<ResourceHubKind, string[]> = {
+/** REST collection slug candidates per hub kind (first match wins). Also used for single-entry slug fetch. */
+export const REST_PATHS_BY_KIND: Record<ResourceHubKind, string[]> = {
   blog: ["posts", "blog", "blogs"],
   guide: [
     "guide",

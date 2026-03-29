@@ -6,10 +6,12 @@ import { Button } from "@/components/atoms/Button";
 import { Link } from "@/components/atoms/Link";
 import { MegaMenu } from "../MegaMenu";
 import { MobileMenu } from "../MobileMenu";
+import { HeaderSearch } from "./HeaderSearch";
 import type { NavItem } from "@/lib/menus";
 import type { HeaderCtaData, UtilityBarData } from "@/lib/globals";
 import { localePath, LOCALES } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
+import { useHomeBannerEntrance } from "@/components/home/homeBannerEntranceContext";
 
 interface HeaderProps {
   menus: { primary: NavItem[] };
@@ -70,10 +72,21 @@ export function Header({ menus, cta, utilityBar, locale, variant = "transparent"
 
   const isOverlay = variant === "transparent" && !scrolled;
 
+  const { coordinatedEntrance, preloaderComplete } = useHomeBannerEntrance();
+  const headerTransitionCls = coordinatedEntrance
+    ? "transition-[opacity,background-color,box-shadow,color,border-color] duration-500 ease-out"
+    : "transition-colors duration-300 ease-in-out";
+  const headerEntranceOpacityCls =
+    coordinatedEntrance && !preloaderComplete ? "pointer-events-none opacity-0" : "";
+
   const wrapperCls = [
-    "fixed top-0 left-0 right-0 z-40 transition-colors duration-300 ease-in-out",
+    "fixed top-0 left-0 right-0 z-40",
+    headerTransitionCls,
+    headerEntranceOpacityCls,
     isOverlay ? "bg-transparent" : "bg-white shadow-sm",
-  ].join(" ");
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   // Utility bar colours
   const utilityTextCls = isOverlay
@@ -86,10 +99,6 @@ export function Header({ menus, cta, utilityBar, locale, variant = "transparent"
   // Nav bar colours
   const logoColor = isOverlay ? "text-white" : "text-brand-dark";
   const burgerColor = isOverlay ? "bg-white" : "bg-brand-dark";
-  const searchColor = isOverlay
-    ? "text-white hover:bg-white/10"
-    : "text-brand-dark hover:bg-brand-grey";
-
   return (
     <>
       <div className={wrapperCls}>
@@ -193,13 +202,7 @@ export function Header({ menus, cta, utilityBar, locale, variant = "transparent"
 
             {/* Right — Search + CTA (desktop) / Burger (mobile) */}
             <div className="ml-auto flex items-center gap-3 md:ml-0">
-              <Link
-                href={localePath("/search", locale)}
-                className={`hidden rounded p-2 no-underline transition-colors hover:no-underline md:block ${searchColor}`}
-                aria-label="Search"
-              >
-                <SearchIcon />
-              </Link>
+              <HeaderSearch locale={locale} isOverlay={isOverlay} />
               {cta.label && cta.href && (
                 <>
                   {/* Mobile CTA — 132×32px, rounded-[5px], hidden when menu is open */}
@@ -274,21 +277,3 @@ function SoftCoLogo({ isOverlay, mobileMenuOpen }: { isOverlay: boolean; mobileM
   );
 }
 
-function SearchIcon() {
-  return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <circle cx="11" cy="11" r="8" />
-      <path d="m21 21-4.35-4.35" />
-    </svg>
-  );
-}

@@ -5,7 +5,6 @@
 import { fetchGraphQL, getWordPressRestBaseUrl } from "./wordpress";
 import {
   localePath,
-  getWpmlLanguage,
   getWpmlLanguageEnum,
   type Locale,
 } from "@/lib/i18n";
@@ -17,17 +16,6 @@ export interface NewsListItem {
   excerpt?: string | null;
   date?: string | null;
   featuredImage?: { sourceUrl?: string; altText?: string } | null;
-}
-
-export interface NewsDetail extends NewsListItem {
-  content?: string | null;
-  /** ACF: type, location */
-  acf?: Record<string, unknown>;
-  seo?: {
-    title?: string | null;
-    metaDesc?: string | null;
-    opengraphImage?: { sourceUrl?: string } | null;
-  };
 }
 
 export interface NewsArchiveData {
@@ -251,116 +239,6 @@ export async function fetchNewsArchive(
   } catch {
     return { items: [], hasMore: false };
   }
-}
-
-export async function fetchNewsBySlug(
-  slug: string,
-  locale: Locale
-): Promise<NewsDetail | null> {
-  const tags = ["news", `news-${locale}-${slug}`];
-  const language = getWpmlLanguage(locale);
-
-  const mapNewsDetail = (p: Record<string, unknown>): NewsDetail => ({
-    id: p.id as string,
-    slug: (p.slug as string) ?? "",
-    title: (p.title as string) ?? "",
-    excerpt: (p.excerpt as string) ?? null,
-    date: (p.date as string) ?? null,
-    content: (p.content as string) ?? null,
-    featuredImage: (p.featuredImage as { node?: { sourceUrl?: string; altText?: string } })?.node
-      ? {
-          sourceUrl: (p.featuredImage as { node?: { sourceUrl?: string } }).node?.sourceUrl,
-          altText: (p.featuredImage as { node?: { altText?: string } }).node?.altText,
-        }
-      : null,
-    seo: p.seo as NewsDetail["seo"],
-  });
-
-  const tryGraphql = async (): Promise<NewsDetail | null> => {
-    const run = async (withTranslations: boolean): Promise<NewsDetail | null> => {
-      const data = await fetchGraphQL<{
-        newsItem?: Record<string, unknown> & {
-          translations?: Array<{ language?: { code?: string } }> | null;
-        };
-        newsItemBy?: Record<string, unknown>;
-      }>(
-        `
-        query GetNewsItem($slug: ID!) {
-          newsItem(id: $slug, idType: SLUG) {
-            id
-            slug
-            title
-            excerpt
-            date
-            content
-            featuredImage { node { sourceUrl altText } }
-            seo { title metaDesc opengraphImage { sourceUrl } }
-            ${
-              withTranslations
-                ? `
-            translations {
-              id
-              slug
-              title
-              excerpt
-              date
-              content
-              language { code }
-              featuredImage { node { sourceUrl altText } }
-              seo { title metaDesc opengraphImage { sourceUrl } }
-            }`
-                : ""
-            }
-          }
-        }
-      `,
-        { variables: { slug }, tags },
-      );
-
-      const raw = data?.newsItem ?? data?.newsItemBy;
-      if (!raw) return null;
-      if (withTranslations) {
-        const typed = raw as { translations?: Array<{ language?: { code?: string } }> };
-        const match = typed.translations?.find((t) => t.language?.code === language);
-        const post = (match ?? raw) as Record<string, unknown>;
-        return mapNewsDetail(post);
-      }
-      return mapNewsDetail(raw as Record<string, unknown>);
-    };
-
-    try {
-      return await run(true);
-    } catch {
-      try {
-        return await run(false);
-      } catch {
-        return null;
-      }
-    }
-  };
-
-  const tryRest = async (): Promise<NewsDetail | null> => {
-    const base = getWordPressRestBaseUrl();
-    if (!base) return null;
-    try {
-      const url = `${base}/wp/v2/news?slug=${encodeURIComponent(slug)}&_embed`;
-      const res = await fetch(url, { next: { tags } });
-      if (!res.ok) return null;
-      const arr = (await res.json()) as WpRestNewsPost[];
-      if (!Array.isArray(arr) || arr.length === 0) return null;
-      const p = arr[0];
-      const list = mapRestNewsToListItem(p);
-      return {
-        ...list,
-        content: p.content?.rendered ?? null,
-        seo: undefined,
-      };
-    } catch {
-      return null;
-    }
-  };
-
-  return (await tryGraphql()) ?? (await tryRest());
 }
 
 export function newsUrl(slug: string, locale: Locale): string {

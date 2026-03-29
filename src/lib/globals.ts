@@ -140,7 +140,7 @@ const PLACEHOLDER_GLOBALS: GlobalsData = {
           { label: "Articles", href: "/resources/articles" },
           { label: "Whitepapers", href: "/resources/whitepapers" },
           { label: "Webinars", href: "/resources/webinars" },
-          { label: "Glossaries", href: "/resources/glossaries" },
+          { label: "Glossary", href: "/resources/glossary" },
         ],
         featuredLinks: [
           { label: "Customer portal", href: "/portal" },

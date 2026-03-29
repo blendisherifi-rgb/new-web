@@ -2,16 +2,16 @@ import { Heading } from "@/components/atoms/Heading";
 import { Overline } from "@/components/atoms/Overline";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { GlossaryContent } from "@/components/glossary/GlossaryContent";
-import { fetchGlossaryTerms } from "@/lib/glossary";
+import { fetchGlossaryArchive } from "@/lib/glossary";
 import { buildMetadataFromYoast } from "@/lib/seo";
 import type { Locale } from "@/lib/i18n";
 import { isLocale } from "@/lib/i18n";
 
-interface GlossaryPageProps {
+interface ResourcesGlossaryPageProps {
   params: Promise<{ locale: string }>;
 }
 
-export async function generateMetadata({ params }: GlossaryPageProps) {
+export async function generateMetadata({ params }: ResourcesGlossaryPageProps) {
   const { locale: localeParam } = await params;
   const locale = isLocale(localeParam) ? localeParam : "us";
   return buildMetadataFromYoast({
@@ -19,19 +19,18 @@ export async function generateMetadata({ params }: GlossaryPageProps) {
     fallbackDescription:
       "Finance, AP automation, and P2P terms explained. Browse our glossary of key concepts.",
     locale,
-    path: "glossary",
+    path: "resources/glossary",
   });
 }
 
-export default async function GlossaryPage({ params }: GlossaryPageProps) {
+export default async function ResourcesGlossaryPage({ params }: ResourcesGlossaryPageProps) {
   const { locale: localeParam } = await params;
-  const locale = isLocale(localeParam) ? localeParam : "us";
+  const locale: Locale = isLocale(localeParam) ? localeParam : "us";
 
-  const { terms, byLetter } = await fetchGlossaryTerms(locale);
+  const { terms, byLetter } = await fetchGlossaryArchive(locale);
 
   return (
     <>
-      {/* Banner: #060D2E, overline → h1 (40px) → body (24px) */}
       <section className="w-full bg-brand-dark px-4 py-12 tablet-down:px-6 tablet-down:py-24">
         <div className="mx-auto flex max-w-[1440px] flex-col items-center text-center">
           <Overline className="text-brand-orange">Resources</Overline>
@@ -44,7 +43,6 @@ export default async function GlossaryPage({ params }: GlossaryPageProps) {
         </div>
       </section>
 
-      {/* Main content: sticky sidebar (25%) + 2-col glossary (75%) */}
       <section className="w-full bg-white">
         <div className="mx-auto flex max-w-[1440px] flex-col gap-8 px-4 py-12 tablet-down:flex-row tablet-down:gap-12 tablet-down:px-6 tablet-down:py-24">
           <GlossaryContent terms={terms} byLetter={byLetter} locale={locale} />

@@ -3,7 +3,8 @@ import { searchContent } from "@/lib/search";
 import { buildMetadataFromYoast } from "@/lib/seo";
 import type { Locale } from "@/lib/i18n";
 import { isLocale } from "@/lib/i18n";
-import type { SearchResultType } from "@/lib/search";
+import type { SearchResult, SearchResultType } from "@/lib/search";
+import { SEARCH_PAGE_SIZE } from "@/lib/search";
 
 interface SearchPageProps {
   params: Promise<{ locale: string }>;
@@ -30,16 +31,29 @@ export default async function SearchPage({ params, searchParams }: SearchPagePro
     ? (type as SearchResultType)
     : undefined;
 
-  const { results } = q?.trim()
-    ? await searchContent(q.trim(), locale, { contentTypes: typeFilter ? [typeFilter] : undefined })
-    : { results: [] };
+  const empty: {
+    results: SearchResult[];
+    hasMore: boolean;
+    page: number;
+    totalPages: number;
+  } = { results: [], hasMore: false, page: 1, totalPages: 1 };
+
+  const payload = q?.trim()
+    ? await searchContent(q.trim(), locale, {
+        page: 1,
+        perPage: SEARCH_PAGE_SIZE,
+        contentTypes: typeFilter ? [typeFilter] : undefined,
+      })
+    : empty;
 
   return (
     <SearchPageContent
       locale={locale}
       initialQuery={q ?? ""}
       initialType={type ?? ""}
-      initialResults={results}
+      initialResults={payload.results}
+      initialHasMore={payload.hasMore}
+      initialPage={payload.page}
     />
   );
 }

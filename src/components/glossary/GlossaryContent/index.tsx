@@ -3,15 +3,15 @@
 import { useState, useMemo } from "react";
 import { Heading } from "@/components/atoms/Heading";
 import { Link } from "@/components/atoms/Link";
-import { glossaryTermUrl } from "@/lib/glossary";
-import type { GlossaryTerm } from "@/lib/glossary";
+import { glossaryEntryUrl } from "@/lib/glossary";
+import type { Glossary } from "@/lib/glossary";
 import type { Locale } from "@/lib/i18n";
 
 const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
 interface GlossaryContentProps {
-  terms: GlossaryTerm[];
-  byLetter: Record<string, GlossaryTerm[]>;
+  terms: Glossary[];
+  byLetter: Record<string, Glossary[]>;
   locale: Locale;
 }
 
@@ -22,7 +22,7 @@ export function GlossaryContent({ terms, byLetter, locale }: GlossaryContentProp
     if (!query.trim()) return byLetter;
 
     const q = query.trim().toLowerCase();
-    const filtered: Record<string, GlossaryTerm[]> = {};
+    const filtered: Record<string, Glossary[]> = {};
 
     for (const letter of LETTERS) {
       const letterTerms = byLetter[letter] ?? [];
@@ -146,7 +146,7 @@ export function GlossaryContent({ terms, byLetter, locale }: GlossaryContentProp
                     {letterTerms.map((term) => (
                       <li key={term.id}>
                         <Link
-                          href={glossaryTermUrl(term.slug, locale)}
+                          href={glossaryEntryUrl(term.slug, locale)}
                           className="font-heading text-[20px] font-semibold leading-[1.3] tracking-[-0.01em] text-brand-dark no-underline transition-colors hover:text-[#1077D7] hover:no-underline cursor-pointer tablet-down:text-[28px] tablet-down:leading-[34px]"
                         >
                           {term.title}
@@ -167,7 +167,7 @@ export function GlossaryContent({ terms, byLetter, locale }: GlossaryContentProp
                   {filteredByLetter["#"].map((term) => (
                     <li key={term.id}>
                       <Link
-                        href={glossaryTermUrl(term.slug, locale)}
+                        href={glossaryEntryUrl(term.slug, locale)}
                         className="font-heading text-[28px] font-semibold leading-[34px] tracking-[-0.01em] text-brand-dark no-underline transition-colors hover:text-[#1077D7] hover:no-underline cursor-pointer"
                       >
                         {term.title}
