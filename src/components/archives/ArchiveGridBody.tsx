@@ -15,15 +15,33 @@ interface ArchiveGridBodyProps {
   items: ArchiveGridResolvedItem[];
   readMoreAriaNoun: string;
   columnCount?: 2 | 3;
+  /** First card spans full row on tablet+ (same card UI, resources / latest strip). */
+  firstItemFullWidth?: boolean;
+  /** Erode 500, 36px / 44px, −1% — latest resources strip bottom row. */
+  largeCardTitles?: boolean;
+  /** Light-blue pill + dark-blue text on image (latest resources mockup). */
+  softImageTypeBadge?: boolean;
 }
 
 /** Client grid: each item must include `href` (resolved server-side or in the client shell). */
+const titleClassDefault =
+  "mt-4 !font-heading !font-semibold !text-[20px] !leading-[1.25] tracking-[-0.01em] text-brand-dark tablet-down:mt-4 tablet-down:!text-[22px] tablet-down:!leading-[1.2]";
+const titleClassLarge =
+  "mt-4 !font-heading !font-medium !text-[28px] !leading-[34px] tracking-[-0.01em] text-brand-dark tablet-down:mt-4 tablet-down:!text-[36px] tablet-down:!leading-[44px]";
+
 export function ArchiveGridBody({
   items,
   readMoreAriaNoun,
   columnCount = 3,
+  firstItemFullWidth = false,
+  largeCardTitles = false,
+  softImageTypeBadge = false,
 }: ArchiveGridBodyProps) {
   if (items.length === 0) return null;
+
+  const imageBadgeClass = softImageTypeBadge
+    ? "pointer-events-none absolute right-3 top-3 z-[1] rounded-[4px] bg-[#E8F2FD] px-3 py-1.5 font-body text-[11px] font-extrabold uppercase leading-none tracking-[0.08em] text-brand-blue"
+    : "pointer-events-none absolute right-3 top-3 z-[1] rounded bg-brand-blue px-2.5 py-1 font-body text-[10px] font-extrabold uppercase leading-none tracking-wider text-white";
 
   const gridCols =
     columnCount === 2
@@ -37,7 +55,7 @@ export function ArchiveGridBody({
   return (
     <div className="border-l border-t border-brand-grey">
       <div className={gridCols}>
-        {items.map((item) => {
+        {items.map((item, index) => {
           const href = item.href;
           const tags = item.tags?.length ? item.tags : [];
           const img = item.featuredImage?.sourceUrl;
@@ -45,10 +63,15 @@ export function ArchiveGridBody({
           const logo = item.clientLogoOverlay?.sourceUrl;
           const badge = item.typeBadge?.trim();
 
+          const spanFirst =
+            firstItemFullWidth && index === 0 && columnCount === 3
+              ? "tablet-down:col-span-3"
+              : "";
+
           return (
             <article
               key={item.id}
-              className="flex min-w-0 flex-col border-b border-r border-brand-grey p-6 tablet-down:p-6 lg:p-8"
+              className={`flex min-w-0 flex-col border-b border-r border-brand-grey p-6 tablet-down:p-6 lg:p-8 ${spanFirst}`}
             >
               {img ? (
                 <div className="relative w-full overflow-hidden rounded-lg">
@@ -58,13 +81,13 @@ export function ArchiveGridBody({
                     width={720}
                     height={540}
                     className="h-auto w-full object-cover"
-                    sizes={imageSizes}
+                    sizes={
+                      firstItemFullWidth && index === 0
+                        ? "(max-width: 768px) 100vw, min(1200px, 90vw)"
+                        : imageSizes
+                    }
                   />
-                  {badge ? (
-                    <span className="pointer-events-none absolute right-3 top-3 z-[1] rounded bg-brand-blue px-2.5 py-1 font-body text-[10px] font-extrabold uppercase leading-none tracking-wider text-white">
-                      {badge}
-                    </span>
-                  ) : null}
+                  {badge ? <span className={imageBadgeClass}>{badge}</span> : null}
                   {logo ? (
                     <div className="pointer-events-none absolute left-4 top-4 max-w-[45%]">
                       <Image
@@ -79,11 +102,7 @@ export function ArchiveGridBody({
                 </div>
               ) : (
                 <div className="relative flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-lg bg-brand-grey/30 font-body text-sm text-brand-dark-40">
-                  {badge ? (
-                    <span className="pointer-events-none absolute right-3 top-3 z-[1] rounded bg-brand-blue px-2.5 py-1 font-body text-[10px] font-extrabold uppercase leading-none tracking-wider text-white">
-                      {badge}
-                    </span>
-                  ) : null}
+                  {badge ? <span className={imageBadgeClass}>{badge}</span> : null}
                   No image
                 </div>
               )}
@@ -111,7 +130,7 @@ export function ArchiveGridBody({
 
               <Heading
                 level={3}
-                className="mt-4 !font-heading !font-semibold !text-[20px] !leading-[1.25] tracking-[-0.01em] text-brand-dark tablet-down:mt-4 tablet-down:!text-[22px] tablet-down:!leading-[1.2]"
+                className={largeCardTitles ? titleClassLarge : titleClassDefault}
               >
                 <Link
                   href={href}

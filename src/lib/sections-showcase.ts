@@ -1922,6 +1922,21 @@ export const SECTIONS_SHOWCASE_GROUPS: SectionGroup[] = [
     ],
   },
   {
+    groupName: "Latest resources",
+    sections: [
+      {
+        id: "latest-resources-1",
+        acfGroupName: "latest_resources_section",
+        order: 0,
+        fields: {
+          heading: "Latest resources",
+          viewAllLabel: "VIEW ALL RESOURCES",
+          viewAllHref: "/resources",
+        },
+      },
+    ],
+  },
+  {
     groupName: "Locations",
     sections: [
   {

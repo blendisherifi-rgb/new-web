@@ -81,6 +81,112 @@ function CardCtaLink({ href, label }: { href: string; label: string }) {
   );
 }
 
+/** White featured card + split backdrop — same block as under the hero on `/news` and `/resources`. */
+export interface NewsAndEventsFeaturedCardProps {
+  cardOverline: string;
+  cardTitle: string;
+  cardMeta: string;
+  cardImageSrc: string;
+  cardImageAlt: string;
+  cardBody: string;
+  cardCtaLabel: string;
+  cardCtaHref: string;
+  /**
+   * When true (default), negative top margin overlaps the blue hero — use on `/news` and `/resources`.
+   * When false, card sits in normal flow (e.g. homepage latest strip without hero).
+   */
+  overlapHero?: boolean;
+  /**
+   * Left split fill behind the white card (default `#E8F2FD`). Homepage latest strip uses a stronger blue.
+   */
+  splitFillColor?: string;
+}
+
+export function NewsAndEventsFeaturedCard({
+  cardOverline,
+  cardTitle,
+  cardMeta,
+  cardImageSrc,
+  cardImageAlt,
+  cardBody,
+  cardCtaLabel,
+  cardCtaHref,
+  overlapHero = true,
+  splitFillColor,
+}: NewsAndEventsFeaturedCardProps) {
+  const splitFill = splitFillColor ?? LEFT_FILL;
+  const rowAlign = overlapHero
+    ? "justify-end tablet-down:pr-[min(5vw,3.5rem)]"
+    : "justify-center";
+  const articleOverlap = overlapHero
+    ? "-mt-[5rem] mb-2 ml-4 w-full max-w-[min(100%,920px)] tablet-down:-mt-[7.75rem] tablet-down:ml-[100px]"
+    : "mb-2 mt-0 w-full max-w-[min(100%,920px)] tablet-down:mt-0 tablet-down:ml-0";
+
+  return (
+    <div className="relative z-[2] bg-white">
+      <NewsLowerSplitBackdrop
+        fillColor={splitFill}
+        className={
+          overlapHero
+            ? "min-h-[min(52vw,380px)] pb-20 tablet-down:min-h-[420px] tablet-down:pb-28"
+            : "min-h-0 pb-14 pt-8 tablet-down:pb-20 tablet-down:pt-12"
+        }
+      >
+        <div className="mx-auto w-full max-w-[1320px] px-4 tablet-down:px-10">
+          <div className={`flex w-full ${rowAlign}`}>
+            <article
+              data-news-and-events-card
+              className={`relative z-10 rounded-lg bg-white text-left shadow-[0_22px_60px_-14px_rgba(0,26,51,0.22)] tablet-down:rounded-lg tablet-down:shadow-[0_26px_70px_-16px_rgba(0,26,51,0.24)] ${articleOverlap}`}
+            >
+              <div className="px-8 py-10 text-left tablet-down:px-12 tablet-down:py-12">
+                <Overline className="!text-[#F58220]">{cardOverline}</Overline>
+
+                <Heading
+                  level={3}
+                  className="mt-5 w-full max-w-none text-left text-balance !font-heading !font-semibold !text-[26px] !leading-[1.18] !tracking-tight !text-[#001A33] tablet-down:mt-6 tablet-down:!text-[34px] tablet-down:!leading-[1.12]"
+                >
+                  {cardTitle}
+                </Heading>
+
+                <p
+                  className="mt-3 font-body text-[15px] font-normal leading-relaxed tablet-down:mt-4 tablet-down:text-base"
+                  style={{ color: GREY_BODY }}
+                >
+                  {cardMeta}
+                </p>
+
+                <div className="mt-8 grid grid-cols-1 gap-8 tablet-down:mt-10 tablet-down:grid-cols-5 tablet-down:gap-10">
+                  <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg bg-brand-dark-7 tablet-down:col-span-2">
+                    <Image
+                      src={cardImageSrc}
+                      alt={cardImageAlt}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 992px) 100vw, 380px"
+                    />
+                  </div>
+
+                  <div className="flex flex-col justify-start text-left tablet-down:col-span-3">
+                    <p
+                      className="font-body text-[16px] font-normal leading-[26px] tablet-down:text-[17px] tablet-down:leading-[28px]"
+                      style={{ color: GREY_BODY }}
+                    >
+                      {cardBody}
+                    </p>
+                    <div className="mt-8 flex justify-start tablet-down:mt-10">
+                      <CardCtaLink href={cardCtaHref} label={cardCtaLabel} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </NewsLowerSplitBackdrop>
+    </div>
+  );
+}
+
 /**
  * News & events: blue hero; below — #E8F2FD from left to midpoint of featured card, then white.
  */
@@ -129,63 +235,16 @@ export function NewsAndEventsSection({
         </div>
       </div>
 
-      <div className="relative z-[2] bg-white">
-        <NewsLowerSplitBackdrop
-          fillColor={LEFT_FILL}
-          className="min-h-[min(52vw,380px)] pb-20 tablet-down:min-h-[420px] tablet-down:pb-28"
-        >
-          <div className="mx-auto w-full max-w-[1320px] px-4 tablet-down:px-10">
-            <div className="flex w-full justify-end tablet-down:pr-[min(5vw,3.5rem)]">
-              <article
-                data-news-and-events-card
-                className="relative z-10 -mt-[5rem] mb-2 ml-4 w-full max-w-[min(100%,920px)] rounded-lg bg-white text-left shadow-[0_22px_60px_-14px_rgba(0,26,51,0.22)] tablet-down:-mt-[7.75rem] tablet-down:ml-[100px] tablet-down:rounded-lg tablet-down:shadow-[0_26px_70px_-16px_rgba(0,26,51,0.24)]"
-              >
-                <div className="px-8 py-10 text-left tablet-down:px-12 tablet-down:py-12">
-                  <Overline className="!text-[#F58220]">{cardOverline}</Overline>
-
-                  <Heading
-                    level={3}
-                    className="mt-5 w-full max-w-none text-left text-balance !font-heading !font-semibold !text-[26px] !leading-[1.18] !tracking-tight !text-[#001A33] tablet-down:mt-6 tablet-down:!text-[34px] tablet-down:!leading-[1.12]"
-                  >
-                    {cardTitle}
-                  </Heading>
-
-                  <p
-                    className="mt-3 font-body text-[15px] font-normal leading-relaxed tablet-down:mt-4 tablet-down:text-base"
-                    style={{ color: GREY_BODY }}
-                  >
-                    {cardMeta}
-                  </p>
-
-                  <div className="mt-8 grid grid-cols-1 gap-8 tablet-down:mt-10 tablet-down:grid-cols-5 tablet-down:gap-10">
-                    <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg bg-brand-dark-7 tablet-down:col-span-2">
-                      <Image
-                        src={cardImageSrc}
-                        alt={cardImageAlt}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 992px) 100vw, 380px"
-                      />
-                    </div>
-
-                    <div className="flex flex-col justify-start text-left tablet-down:col-span-3">
-                      <p
-                        className="font-body text-[16px] font-normal leading-[26px] tablet-down:text-[17px] tablet-down:leading-[28px]"
-                        style={{ color: GREY_BODY }}
-                      >
-                        {cardBody}
-                      </p>
-                      <div className="mt-8 flex justify-start tablet-down:mt-10">
-                        <CardCtaLink href={cardCtaHref} label={cardCtaLabel} />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </article>
-            </div>
-          </div>
-        </NewsLowerSplitBackdrop>
-      </div>
+      <NewsAndEventsFeaturedCard
+        cardOverline={cardOverline}
+        cardTitle={cardTitle}
+        cardMeta={cardMeta}
+        cardImageSrc={cardImageSrc}
+        cardImageAlt={cardImageAlt}
+        cardBody={cardBody}
+        cardCtaLabel={cardCtaLabel}
+        cardCtaHref={cardCtaHref}
+      />
     </section>
   );
 }

@@ -207,6 +207,8 @@ function transformSection(node: Record<string, unknown>, index: number): Section
     : low.includes("client_success_story_related_stories") ||
         low.includes("clientsuccessstoryrelatedstories")
       ? "client_success_story_related_stories_section"
+    : low.includes("latestresources") || low.includes("latest_resources")
+      ? "latest_resources_section"
     : typenameToGroupName(typename);
 
   const { __typename, fieldGroupName, ...fields } = node;

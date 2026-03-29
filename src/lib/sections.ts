@@ -46,6 +46,7 @@ import { MatchingChallengeFormSection } from "@/components/sections/MatchingChal
 import { HowItWorksSection } from "@/components/sections/HowItWorksSection";
 import { CfoSeriesSection } from "@/components/sections/CfoSeriesSection";
 import { NewsAndEventsSection } from "@/components/sections/NewsAndEventsSection";
+import { LatestResourcesSection } from "@/components/sections/LatestResourcesSection";
 import { WhyAttendSection } from "@/components/sections/WhyAttendSection";
 import { MeetSpeakersSection } from "@/components/sections/MeetSpeakersSection";
 import { EventRegisterSection } from "@/components/sections/EventRegisterSection";
@@ -152,6 +153,7 @@ export const SECTION_MAP: Record<string, React.ComponentType<Record<string, unkn
   how_it_works_section: HowItWorksSection as unknown as React.ComponentType<Record<string, unknown>>,
   cfo_series_section: CfoSeriesSection as unknown as React.ComponentType<Record<string, unknown>>,
   news_and_events_section: NewsAndEventsSection as unknown as React.ComponentType<Record<string, unknown>>,
+  latest_resources_section: LatestResourcesSection as unknown as React.ComponentType<Record<string, unknown>>,
   why_attend_section: WhyAttendSection as unknown as React.ComponentType<Record<string, unknown>>,
   meet_speakers_section: MeetSpeakersSection as unknown as React.ComponentType<Record<string, unknown>>,
   event_register_section: EventRegisterSection as unknown as React.ComponentType<Record<string, unknown>>,

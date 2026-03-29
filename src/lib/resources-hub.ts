@@ -11,9 +11,16 @@ import {
   getWpmlLanguageEnum,
   type Locale,
 } from "@/lib/i18n";
-import { stripNewsHtml } from "@/lib/news";
+import {
+  fetchNewsArchive,
+  stripNewsHtml,
+  type NewsListItem,
+} from "@/lib/news";
 
 export type ResourceHubKind = "blog" | "guide" | "webinar";
+
+/** Homepage “latest” strip: hub kinds + WordPress news. */
+export type LatestMergedKind = ResourceHubKind | "news";
 
 export interface ResourceHubListItem {
   id: string;
@@ -27,6 +34,10 @@ export interface ResourceHubListItem {
   tags: string[];
   readTimeLabel: string | null;
 }
+
+export type LatestMergedResourceItem = Omit<ResourceHubListItem, "kind"> & {
+  kind: LatestMergedKind;
+};
 
 export interface ResourcesHubArchiveData {
   items: ResourceHubListItem[];
@@ -783,6 +794,56 @@ function sortByDateDesc(a: ResourceHubListItem, b: ResourceHubListItem): number 
   const ta = a.date ? new Date(a.date).getTime() : 0;
   const tb = b.date ? new Date(b.date).getTime() : 0;
   return tb - ta;
+}
+
+function sortLatestMergedByDateDesc(a: LatestMergedResourceItem, b: LatestMergedResourceItem): number {
+  const ta = a.date ? new Date(a.date).getTime() : 0;
+  const tb = b.date ? new Date(b.date).getTime() : 0;
+  return tb - ta;
+}
+
+function mapNewsToLatestItem(n: NewsListItem): LatestMergedResourceItem {
+  return {
+    id: `news-${n.id}`,
+    slug: n.slug,
+    title: n.title,
+    excerpt: n.excerpt ?? null,
+    date: n.date ?? null,
+    featuredImage: n.featuredImage ?? null,
+    kind: "news",
+    tags: [],
+    readTimeLabel: null,
+  };
+}
+
+/**
+ * Newest items across blog, guide, webinar, and news (merged, date-sorted).
+ * Used by the homepage “latest resources” section.
+ */
+export async function fetchLatestMergedResources(
+  locale: Locale,
+  limit: number,
+): Promise<LatestMergedResourceItem[]> {
+  const cacheTags = ["latest-resources-section", `latest-resources-${locale}`];
+  const cap = Math.max(limit * 6, 48);
+  try {
+    const [blog, guide, webinar, newsArchive] = await Promise.all([
+      fetchKindItemsUpTo(locale, "blog", cap, cacheTags),
+      fetchKindItemsUpTo(locale, "guide", cap, cacheTags),
+      fetchKindItemsUpTo(locale, "webinar", cap, cacheTags),
+      fetchNewsArchive(locale, { perPage: cap }),
+    ]);
+    const fromNews = newsArchive.items.map(mapNewsToLatestItem);
+    const merged = [
+      ...blog.items,
+      ...guide.items,
+      ...webinar.items,
+      ...fromNews,
+    ].sort(sortLatestMergedByDateDesc);
+    return merged.slice(0, limit);
+  } catch {
+    return [];
+  }
 }
 
 export async function fetchResourcesHubArchive(locale: Locale): Promise<ResourcesHubArchiveData> {
