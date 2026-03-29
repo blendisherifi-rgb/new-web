@@ -1,11 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Heading } from "@/components/atoms/Heading";
 import { Link } from "@/components/atoms/Link";
 import { Image } from "@/components/atoms/Image";
-import { SEARCH_TYPE_LABELS, type SearchResult, type SearchResultType } from "@/lib/search";
+import {
+  SEARCH_PAGE_SIZE,
+  SEARCH_TYPE_LABELS,
+  type SearchResult,
+  type SearchResultType,
+} from "@/lib/search";
 import type { Locale } from "@/lib/i18n";
 import { localePath } from "@/lib/i18n";
 
@@ -22,6 +27,8 @@ interface SearchPageContentProps {
   initialQuery: string;
   initialType: string;
   initialResults: SearchResult[];
+  initialHasMore: boolean;
+  initialPage: number;
 }
 
 function formatDate(dateStr: string | null | undefined): string {
@@ -33,19 +40,103 @@ function formatDate(dateStr: string | null | undefined): string {
   });
 }
 
+function dedupeById(items: SearchResult[]): SearchResult[] {
+  const seen = new Set<string>();
+  return items.filter((r) => {
+    if (seen.has(r.id)) return false;
+    seen.add(r.id);
+    return true;
+  });
+}
+
 export function SearchPageContent({
   locale,
   initialQuery,
   initialType,
   initialResults,
+  initialHasMore,
+  initialPage,
 }: SearchPageContentProps) {
   const router = useRouter();
   const [query, setQuery] = useState(initialQuery);
   const [typeFilter, setTypeFilter] = useState<SearchResultType | "">(
-    (initialType as SearchResultType) || ""
+    (initialType as SearchResultType) || "",
   );
-  const results = initialResults;
+  const [results, setResults] = useState<SearchResult[]>(() =>
+    dedupeById(initialResults),
+  );
+  const [page, setPage] = useState(initialPage);
+  const [hasMore, setHasMore] = useState(initialHasMore);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
   const searched = !!initialQuery.trim();
+
+  useEffect(() => {
+    setQuery(initialQuery);
+    setTypeFilter((initialType as SearchResultType) || "");
+    setResults(dedupeById(initialResults));
+    setPage(initialPage);
+    setHasMore(initialHasMore);
+  }, [initialQuery, initialType, initialResults, initialHasMore, initialPage]);
+
+  const loadMore = useCallback(async () => {
+    const q = initialQuery.trim();
+    if (!q || !hasMore || loadingMore) return;
+
+    const nextPage = page + 1;
+
+    setLoadingMore(true);
+    try {
+      const params = new URLSearchParams({
+        q,
+        locale,
+        page: String(nextPage),
+        per_page: String(SEARCH_PAGE_SIZE),
+      });
+      if (typeFilter) params.set("type", typeFilter);
+
+      const res = await fetch(`/api/search?${params.toString()}`);
+      if (!res.ok) {
+        setHasMore(false);
+        return;
+      }
+      const data = (await res.json()) as {
+        results?: SearchResult[];
+        hasMore?: boolean;
+        page?: number;
+      };
+
+      const batch = data.results ?? [];
+      setResults((prev) => dedupeById([...prev, ...batch]));
+      setPage(data.page ?? nextPage);
+      setHasMore(data.hasMore ?? false);
+    } catch {
+      setHasMore(false);
+    } finally {
+      setLoadingMore(false);
+    }
+  }, [
+    initialQuery,
+    locale,
+    hasMore,
+    loadingMore,
+    page,
+    typeFilter,
+  ]);
+
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el || !searched || !hasMore) return;
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) void loadMore();
+      },
+      { rootMargin: "240px", threshold: 0 },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [searched, hasMore, loadMore]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,7 +162,7 @@ export function SearchPageContent({
       acc[r.type].push(r);
       return acc;
     },
-    {} as Record<SearchResultType, SearchResult[]>
+    {} as Record<SearchResultType, SearchResult[]>,
   );
 
   return (
@@ -117,7 +208,7 @@ export function SearchPageContent({
           </div>
         </form>
 
-        {searched && results.length === 0 && initialQuery && (
+        {searched && results.length === 0 && !loadingMore && initialQuery && (
           <p className="mt-12 font-body text-brand-dark">
             No results found for &quot;{query}&quot;.
           </p>
@@ -171,9 +262,17 @@ export function SearchPageContent({
                       ))}
                     </ul>
                   </div>
-                )
+                ),
             )}
           </div>
+        )}
+
+        {searched && hasMore && <div ref={sentinelRef} className="h-8 w-full" aria-hidden />}
+
+        {loadingMore && (
+          <p className="mt-8 text-center font-body text-sm text-brand-dark-40" role="status">
+            Loading more…
+          </p>
         )}
       </div>
     </section>

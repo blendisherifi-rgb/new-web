@@ -1,3 +1,4 @@
+import { HomepageWithPreloader } from "@/components/home/HomepageWithPreloader";
 import { SectionRenderer } from "@/components/templates";
 import { fetchPageData } from "@/lib/pages";
 import { buildMetadataFromYoast } from "@/lib/seo";
@@ -32,8 +33,8 @@ export default async function HomePage({ params }: HomePageProps) {
   }
 
   return (
-    <>
+    <HomepageWithPreloader>
       <SectionRenderer sections={pageData.sections} />
-    </>
+    </HomepageWithPreloader>
   );
 }

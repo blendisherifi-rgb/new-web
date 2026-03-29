@@ -5,8 +5,33 @@ import { fetchRedirects, matchRedirect } from "@/lib/redirects";
 /** Paths that are NOT locale-prefixed (skip rewrite) */
 const ROOT_PATHS = ["/styleguide", "/api"];
 
+const STATIC_ASSET =
+  /\.(?:json|svg|png|jpg|jpeg|gif|webp|ico|woff2?|ttf|eot|webmanifest)$/i;
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Root-level public files (e.g. /animations/*.json) must not get a locale rewrite
+  if (STATIC_ASSET.test(pathname)) {
+    return NextResponse.next();
+  }
+
+  // Legacy glossary URLs → canonical Resources hub paths
+  if (pathname === "/glossary" || pathname.startsWith("/glossary/")) {
+    const slug =
+      pathname === "/glossary" ? "" : pathname.slice("/glossary/".length);
+    const url = request.nextUrl.clone();
+    url.pathname = slug ? `/resources/glossary/${slug}` : `/resources/glossary`;
+    return NextResponse.redirect(url, 308);
+  }
+  if (
+    pathname === "/resources/glossaries" ||
+    pathname.startsWith("/resources/glossaries/")
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/resources/glossary";
+    return NextResponse.redirect(url, 308);
+  }
 
   // 1. Check redirects first (from Redirection plugin)
   try {
@@ -27,6 +52,19 @@ export async function middleware(request: NextRequest) {
   // 3. Already has valid locale prefix (/us, /ie, /uk)
   const segments = pathname.split("/").filter(Boolean);
   if (segments[0] && isLocale(segments[0])) {
+    if (segments[1] === "glossary") {
+      const url = request.nextUrl.clone();
+      const rest = segments.slice(2).join("/");
+      url.pathname = rest
+        ? `/${segments[0]}/resources/glossary/${rest}`
+        : `/${segments[0]}/resources/glossary`;
+      return NextResponse.redirect(url, 308);
+    }
+    if (segments[1] === "resources" && segments[2] === "glossaries") {
+      const url = request.nextUrl.clone();
+      url.pathname = `/${segments[0]}/resources/glossary`;
+      return NextResponse.redirect(url, 308);
+    }
     return NextResponse.next();
   }
 
@@ -47,6 +85,6 @@ export const config = {
      * - favicon.ico
      * - public folder assets
      */
-    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|json|woff2?|ttf|eot|webmanifest)$).*)",
   ],
 };

@@ -4,6 +4,7 @@ import { LOCALES, localePath, getWpmlLanguageEnum } from "@/lib/i18n";
 import { fetchCaseStudySlugs } from "@/lib/case-studies";
 import { fetchResourceSlugs } from "@/lib/resources";
 import { fetchNewsSlugs } from "@/lib/news";
+import { fetchGlossarySlugs } from "@/lib/glossary";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://softco.com";
 
@@ -76,10 +77,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     if (entries.length > 0) {
       // Add CPT archives and singles
-      const [caseSlugs, resourceSlugs, newsSlugs] = await Promise.all([
+      const [caseSlugs, resourceSlugs, newsSlugs, glossarySlugs] = await Promise.all([
         fetchCaseStudySlugs(),
         fetchResourceSlugs(),
         fetchNewsSlugs(),
+        fetchGlossarySlugs(),
       ]);
 
       for (const slug of caseSlugs) {
@@ -133,6 +135,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         });
       }
 
+      for (const slug of glossarySlugs) {
+        entries.push({
+          url: absoluteUrl(localePath(`/resources/glossary/${slug}`, "us")),
+          lastModified: new Date(),
+          changeFrequency: "monthly",
+          priority: 0.6,
+          alternates: {
+            languages: Object.fromEntries(
+              LOCALES.map((loc) => [
+                LOCALE_TO_HREFLANG[loc] ?? loc,
+                absoluteUrl(localePath(`/resources/glossary/${slug}`, loc)),
+              ])
+            ),
+          },
+        });
+      }
+
       entries.push(
         {
           url: absoluteUrl(localePath("/case-studies", "us")),
@@ -172,6 +191,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
               LOCALES.map((loc) => [
                 LOCALE_TO_HREFLANG[loc] ?? loc,
                 absoluteUrl(localePath("/news", loc)),
+              ])
+            ),
+          },
+        },
+        {
+          url: absoluteUrl(localePath("/resources/glossary", "us")),
+          lastModified: new Date(),
+          changeFrequency: "monthly",
+          priority: 0.75,
+          alternates: {
+            languages: Object.fromEntries(
+              LOCALES.map((loc) => [
+                LOCALE_TO_HREFLANG[loc] ?? loc,
+                absoluteUrl(localePath("/resources/glossary", loc)),
               ])
             ),
           },
@@ -223,6 +256,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.8,
+    },
+    {
+      url: absoluteUrl(localePath("/resources/glossary", "us")),
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.75,
     },
     {
       url: absoluteUrl(localePath("/search", "us")),
