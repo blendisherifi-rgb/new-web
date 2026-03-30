@@ -58,6 +58,8 @@ const PartnerBenefitsLayout = `${LAYOUT_PREFIX}PartnerBenefitsSection${LAYOUT_SU
 const MatchingChallengeFormLayout = `${LAYOUT_PREFIX}MatchingChallengeFormSection${LAYOUT_SUFFIX}`;
 const HowItWorksLayout = `${LAYOUT_PREFIX}HowItWorksSection${LAYOUT_SUFFIX}`;
 const CfoSeriesLayout = `${LAYOUT_PREFIX}CfoSeriesSection${LAYOUT_SUFFIX}`;
+const NewsAndEventsLayout = `${LAYOUT_PREFIX}NewsAndEventsSection${LAYOUT_SUFFIX}`;
+const LatestResourcesLayout = `${LAYOUT_PREFIX}LatestResourcesSection${LAYOUT_SUFFIX}`;
 const WhyAttendLayout = `${LAYOUT_PREFIX}WhyAttendSection${LAYOUT_SUFFIX}`;
 const MeetSpeakersLayout = `${LAYOUT_PREFIX}MeetSpeakersSection${LAYOUT_SUFFIX}`;
 const EventRegisterLayout = `${LAYOUT_PREFIX}EventRegisterSection${LAYOUT_SUFFIX}`;
@@ -69,8 +71,7 @@ const FeatureModalLayout = `${LAYOUT_PREFIX}FeatureModalSection${LAYOUT_SUFFIX}`
 const ApAutomationLayout = `${LAYOUT_PREFIX}ApAutomationSection${LAYOUT_SUFFIX}`;
 /** ACF layout `ap_automation_for_cfo_section` — WPGraphQL type `…ApAutomationForCfoSectionLayout` (not …FinancialControllers…). */
 const ApAutomationForCfoLayout = `${LAYOUT_PREFIX}ApAutomationForCfoSection${LAYOUT_SUFFIX}`;
-/** Only add a fragment spread for this once the layout exists in WP/WPGraphQL (schema exposes the union member). */
-// const ApSoftcoExperienceLayout = `${LAYOUT_PREFIX}ApSoftcoExperienceSection${LAYOUT_SUFFIX}`;
+const ApSoftcoExperienceLayout = `${LAYOUT_PREFIX}ApSoftcoExperienceSection${LAYOUT_SUFFIX}`;
 const ArchitectureLayout = `${LAYOUT_PREFIX}ArchitectureSection${LAYOUT_SUFFIX}`;
 const ErpIntegrationLayout = `${LAYOUT_PREFIX}ErpIntegrationSection${LAYOUT_SUFFIX}`;
 const AnalyticsDashboardsLayout = `${LAYOUT_PREFIX}AnalyticsDashboardsSection${LAYOUT_SUFFIX}`;
@@ -758,6 +759,34 @@ function buildFragment(): string {
       body
       image { node { sourceUrl altText } }
     }
+    ... on ${ApSoftcoExperienceLayout} {
+      overline
+      headingHighlight
+      headingLine1After
+      headingLine2
+      headingLine3
+      body
+      image { node { sourceUrl altText } }
+    }
+    ... on ${NewsAndEventsLayout} {
+      heroOverline
+      heroHeading
+      heroBody
+      heroCtaLabel
+      heroCtaHref
+      cardOverline
+      cardTitle
+      cardMeta
+      cardBody
+      cardCtaLabel
+      cardCtaHref
+      cardImage { node { sourceUrl altText } }
+    }
+    ... on ${LatestResourcesLayout} {
+      heading
+      viewAllLabel
+      viewAllHref
+    }
     ... on ${ArchitectureLayout} {
       overline
       headingLine1
@@ -1164,6 +1193,9 @@ function buildFragmentResilient(): string {
     ... on ${FeatureModalLayout} { overline headingBefore headingHighlight headingAfter body ctaLabel ctaHref featureModalItems { title description modalLabel modalTitle modalDescription image { node { sourceUrl altText } } } }
     ... on ${ApAutomationLayout} { overline headingLine1 headingLine2 image { node { sourceUrl altText } } softcoApImage { node { sourceUrl altText } } body ctaLabel ctaHref gartnerLogo { node { sourceUrl altText } } endorsementText metrics { value label } }
     ... on ${ApAutomationForCfoLayout} { overline headingHighlight headingLine1After headingLine2 headingLine3 body image { node { sourceUrl altText } } }
+    ... on ${ApSoftcoExperienceLayout} { overline headingHighlight headingLine1After headingLine2 headingLine3 body image { node { sourceUrl altText } } }
+    ... on ${NewsAndEventsLayout} { heroOverline heroHeading heroBody heroCtaLabel heroCtaHref cardOverline cardTitle cardMeta cardBody cardCtaLabel cardCtaHref cardImage { node { sourceUrl altText } } }
+    ... on ${LatestResourcesLayout} { heading viewAllLabel viewAllHref }
     ... on ${ArchitectureLayout} { overline headingLine1 headingLine2 body image { node { sourceUrl altText } } p2pImage { node { sourceUrl altText } } apImage { node { sourceUrl altText } } }
     ... on ${ErpIntegrationLayout} { overline headingLine1 headingLine2 body ctaLabel ctaHref moreCountHighlight moreCountRest erpLogos { logoImg { node { sourceUrl altText } } logoAlt href } }
     ... on ${AnalyticsDashboardsLayout} { overline mainTitle introBody ctaLabel ctaHref headingBefore headingHighlight body slides { image { node { sourceUrl altText } } } }

@@ -1059,6 +1059,15 @@ function transformSection(node: Record<string, unknown>, index: number): Section
     delete normalized.featureModalItems;
   }
 
+  // News & events: cardImage.node -> cardImageSrc/cardImageAlt
+  if (acfGroupName === "news_and_events_section") {
+    const img = normalized.cardImage as Record<string, unknown> | undefined;
+    const n = img?.node as Record<string, unknown> | undefined;
+    normalized.cardImageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+    normalized.cardImageAlt = n?.altText ?? img?.altText ?? "";
+    delete normalized.cardImage;
+  }
+
   // AP automation for CFO / financial controllers / SoftCo experience: image.node -> imageSrc/imageAlt
   if (
     acfGroupName === "ap_automation_for_cfo_section" ||
