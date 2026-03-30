@@ -32,6 +32,27 @@ export interface FetchGraphQLOptions {
   variables?: Record<string, unknown>;
 }
 
+function describeFetchFailure(err: unknown): string {
+  if (!(err instanceof Error)) return String(err);
+  const parts: string[] = [err.message];
+  let c: unknown = err.cause;
+  let depth = 0;
+  while (c != null && depth < 5) {
+    if (c instanceof Error) {
+      parts.push(c.message);
+      c = c.cause;
+    } else if (typeof c === "object" && c !== null && "code" in c) {
+      parts.push(String((c as { code?: string }).code ?? ""));
+      break;
+    } else {
+      parts.push(String(c));
+      break;
+    }
+    depth += 1;
+  }
+  return parts.filter(Boolean).join(" | ");
+}
+
 export async function fetchGraphQL<T = unknown>(
   query: string,
   options: FetchGraphQLOptions = {}
@@ -44,17 +65,30 @@ export async function fetchGraphQL<T = unknown>(
     );
   }
 
-  const response = await fetch(GRAPHQL_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ query, variables }),
-    next: {
-      ...(tags.length > 0 && { tags }),
-      ...(revalidate !== undefined && { revalidate }),
-    },
-  });
+  let response: Response;
+  try {
+    response = await fetch(GRAPHQL_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ query, variables }),
+      next: {
+        ...(tags.length > 0 && { tags }),
+        ...(revalidate !== undefined && { revalidate }),
+      },
+    });
+  } catch (err) {
+    let origin = GRAPHQL_URL;
+    try {
+      origin = new URL(GRAPHQL_URL).origin;
+    } catch {
+      /* keep raw */
+    }
+    throw new Error(
+      `GraphQL network error (${origin}): ${describeFetchFailure(err)}`
+    );
+  }
 
   if (!response.ok) {
     const text = await response.text();
