@@ -551,6 +551,10 @@ function buildFragment(): string {
     ... on ${StrategicPrioritiesLayout} {
       overline
       intro
+      headingBefore
+      headingHighlight
+      headingAfter
+      subheading
       leftColumnLabel
       rightColumnLabel
       priorityRows { priority deliverable }
@@ -1135,7 +1139,7 @@ function buildFragmentResilient(): string {
     ... on ${TeamArchiveLayout} { overline title body departments { name members { name title bio image { node { sourceUrl altText } } } } }
     ... on ${AutomationEngineLayout} { overline heading image { node { sourceUrl altText } } body ctaLabel ctaHref metrics { value label } logos { logo { node { sourceUrl altText } } } }
     ... on ${ChallengeLayout} { overline headingHighlight headingAfter intro challengeColumns { icon titleLineBlue titleLineDark body showCta ctaLabel ctaHref } }
-    ... on ${StrategicPrioritiesLayout} { overline intro leftColumnLabel rightColumnLabel priorityRows { priority deliverable } }
+    ... on ${StrategicPrioritiesLayout} { overline intro headingBefore headingHighlight headingAfter subheading leftColumnLabel rightColumnLabel priorityRows { priority deliverable } }
     ... on ${SmartMatchingChallengeLayout} { overline headingLine1 headingLine2 image { node { sourceUrl altText } } body ctaLabel ctaHref }
     ... on ${SmartMatchingChallengeBannerLayout} { overline headingLine1 headingLine2 body ctaLabel ctaHref }
     ... on ${StartChallengeFormLayout} { overline headingLine1 headingHighlight formPlaceholderImage { node { sourceUrl altText } } }
@@ -1155,7 +1159,7 @@ function buildFragmentResilient(): string {
     ... on ${ApAutomationLayout} { overline headingLine1 headingLine2 image { node { sourceUrl altText } } softcoApImage { node { sourceUrl altText } } body ctaLabel ctaHref gartnerLogo { node { sourceUrl altText } } endorsementText metrics { value label } }
     ... on ${ApAutomationForFinancialControllersLayout} { overline headingBlue headingDark body image { node { sourceUrl altText } } }
     ... on ${ApSoftcoExperienceLayout} { overline headingBlue headingDark body image { node { sourceUrl altText } } }
-    ... on ${ArchitectureLayout} { overline headingLine1 headingLine2 body image { node { sourceUrl altText } } }
+    ... on ${ArchitectureLayout} { overline headingLine1 headingLine2 body image { node { sourceUrl altText } } p2pImage { node { sourceUrl altText } } apImage { node { sourceUrl altText } } }
     ... on ${ErpIntegrationLayout} { overline headingLine1 headingLine2 body ctaLabel ctaHref moreCountHighlight moreCountRest erpLogos { logoImg { node { sourceUrl altText } } logoAlt href } }
     ... on ${AnalyticsDashboardsLayout} { overline mainTitle introBody ctaLabel ctaHref headingBefore headingHighlight body slides { image { node { sourceUrl altText } } } }
     ... on ${SecurityComplianceLayout} { overline headingLine1 headingLine2 body certifications { image { node { sourceUrl altText } } } }

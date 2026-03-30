@@ -1081,13 +1081,25 @@ function transformSection(node: Record<string, unknown>, index: number): Section
     delete normalized.gartnerLogo;
   }
 
-  // Architecture: image.node -> imageSrc/imageAlt
+  // Architecture: image.node -> imageSrc/imageAlt; optional P2P/AP tab images
   if (acfGroupName === "architecture_section") {
     const img = normalized.image as Record<string, unknown> | undefined;
     const n = img?.node as Record<string, unknown> | undefined;
     normalized.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
     normalized.imageAlt = n?.altText ?? img?.altText ?? "";
     delete normalized.image;
+
+    const p2p = normalized.p2pImage as Record<string, unknown> | undefined;
+    const p2pN = p2p?.node as Record<string, unknown> | undefined;
+    normalized.p2pImageSrc = p2pN?.sourceUrl ?? p2p?.sourceUrl ?? "";
+    normalized.p2pImageAlt = p2pN?.altText ?? p2p?.altText ?? "";
+    delete normalized.p2pImage;
+
+    const ap = normalized.apImage as Record<string, unknown> | undefined;
+    const apN = ap?.node as Record<string, unknown> | undefined;
+    normalized.apImageSrc = apN?.sourceUrl ?? ap?.sourceUrl ?? "";
+    normalized.apImageAlt = apN?.altText ?? ap?.altText ?? "";
+    delete normalized.apImage;
   }
 
   // Analytics dashboards: slides[].image.node -> imageSrc/imageAlt

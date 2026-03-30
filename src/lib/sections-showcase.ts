@@ -284,6 +284,10 @@ export const SECTIONS_SHOWCASE_GROUPS: SectionGroup[] = [
     order: 1.6,
     fields: {
       overline: "WHAT YOU GAIN",
+      headingBefore: "How ",
+      headingHighlight: "SoftCo",
+      headingAfter: " supports your",
+      subheading: "strategic priorities",
       intro:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
       leftColumnLabel: "YOUR PRIORITY",
@@ -747,6 +751,10 @@ export const SECTIONS_SHOWCASE_GROUPS: SectionGroup[] = [
       body: "Instead of forcing you into rigid templates, SoftCoAI+ adapts to your processes. Our modular architecture lets you deploy AI where it matters most—without overhauling your entire stack.",
       imageSrc: "/hero-platform-screenshot.png",
       imageAlt: "SoftCo platform architecture diagram",
+      p2pImageSrc: "/hero-platform-screenshot.png",
+      p2pImageAlt: "P2P architecture diagram",
+      apImageSrc: "/platform-p2p.png",
+      apImageAlt: "AP architecture diagram",
     },
   },
   {
