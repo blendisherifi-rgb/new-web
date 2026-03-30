@@ -163,6 +163,10 @@ export const SECTION_MAP: Record<string, React.ComponentType<Record<string, unkn
   open_roles_section: OpenRolesSection as unknown as React.ComponentType<Record<string, unknown>>,
   feature_modal_section: FeatureModalSection as unknown as React.ComponentType<Record<string, unknown>>,
   ap_automation_section: ApAutomationSection as unknown as React.ComponentType<Record<string, unknown>>,
+  ap_automation_for_cfo_section:
+    ApAutomationForFinancialControllersSection as unknown as React.ComponentType<
+      Record<string, unknown>
+    >,
   ap_automation_for_financial_controllers_section:
     ApAutomationForFinancialControllersSection as unknown as React.ComponentType<
       Record<string, unknown>

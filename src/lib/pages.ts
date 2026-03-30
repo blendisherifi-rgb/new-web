@@ -121,6 +121,8 @@ function transformSection(node: Record<string, unknown>, index: number): Section
       ? "why_attend_section"
     : low.includes("eventregister") || low.includes("event_register")
       ? "event_register_section"
+    : low.includes("apautomationforcfo") || low.includes("ap_automation_for_cfo")
+      ? "ap_automation_for_cfo_section"
     : low.includes("ap_softco_experience") || low.includes("apsoftcoexperience")
       ? "ap_softco_experience_section"
     : low.includes("ap_automation_for_financial") ||
@@ -1050,8 +1052,9 @@ function transformSection(node: Record<string, unknown>, index: number): Section
     delete normalized.featureModalItems;
   }
 
-  // AP automation for financial controllers / SoftCo experience: image.node -> imageSrc/imageAlt
+  // AP automation for CFO / financial controllers / SoftCo experience: image.node -> imageSrc/imageAlt
   if (
+    acfGroupName === "ap_automation_for_cfo_section" ||
     acfGroupName === "ap_automation_for_financial_controllers_section" ||
     acfGroupName === "ap_softco_experience_section"
   ) {
