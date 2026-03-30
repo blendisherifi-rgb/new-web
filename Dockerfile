@@ -30,6 +30,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 USER nextjs
 EXPOSE 3000
 ENV PORT=3000
+# Bind address for Node (all interfaces). Public hostname is test.softco.com via nginx + DNS, not this value.
 ENV HOSTNAME=0.0.0.0
 
 CMD ["node", "server.js"]

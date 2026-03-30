@@ -1059,8 +1059,9 @@ function transformSection(node: Record<string, unknown>, index: number): Section
     delete normalized.featureModalItems;
   }
 
-  // AP automation for financial controllers / SoftCo experience: image.node -> imageSrc/imageAlt
+  // AP automation for CFO / financial controllers / SoftCo experience: image.node -> imageSrc/imageAlt
   if (
+    acfGroupName === "ap_automation_for_cfo_section" ||
     acfGroupName === "ap_automation_for_financial_controllers_section" ||
     acfGroupName === "ap_softco_experience_section" ||
     acfGroupName === "your_softco_experience_section" ||
@@ -1448,11 +1449,15 @@ export const fetchPageData = cache(async function fetchPageData(
         tags: ["pages", `page-${locale}-${slug}`],
       });
     } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      if (process.env.LOG_WP_GRAPHQL_ERRORS === "1") {
+        console.error(`[pages] GraphQL fetch failed id=${id} idType=${idType} isFull=${isFull}: ${msg}`);
+      }
       if (isFull && process.env.NODE_ENV === "development") {
         console.warn(
           "[pages] Full ACF query failed for %s — trying resilient query. Re-import acf-export-softco-sections.json in WP to fix schema mismatch.",
           id,
-          err instanceof Error ? err.message : err
+          msg
         );
       }
       return null;
@@ -1477,17 +1482,38 @@ export const fetchPageData = cache(async function fetchPageData(
     try {
       const data = await fetchGraphQL<PageResponse>(fullQuery, { variables: { id, idType: "ID" }, tags });
       if (data?.page) return data.page;
-    } catch { /* fall through to resilient */ }
+    } catch (err) {
+      if (process.env.LOG_WP_GRAPHQL_ERRORS === "1") {
+        console.error(
+          `[pages] translated page full query failed id=${id}:`,
+          err instanceof Error ? err.message : err
+        );
+      }
+    }
 
     try {
       const data = await fetchGraphQL<PageResponse>(resilientQuery, { variables: { id, idType: "ID" }, tags });
       if (data?.page) return data.page;
-    } catch { /* fall through to minimal */ }
+    } catch (err) {
+      if (process.env.LOG_WP_GRAPHQL_ERRORS === "1") {
+        console.error(
+          `[pages] translated page resilient query failed id=${id}:`,
+          err instanceof Error ? err.message : err
+        );
+      }
+    }
 
     try {
       const data = await fetchGraphQL<PageResponse>(minimalQuery, { variables: { id, idType: "ID" }, tags });
       if (data?.page) return data.page;
-    } catch { /* give up */ }
+    } catch (err) {
+      if (process.env.LOG_WP_GRAPHQL_ERRORS === "1") {
+        console.error(
+          `[pages] translated page minimal query failed id=${id}:`,
+          err instanceof Error ? err.message : err
+        );
+      }
+    }
 
     return null;
   };

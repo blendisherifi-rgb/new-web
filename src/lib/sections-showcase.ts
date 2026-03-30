@@ -983,7 +983,7 @@ export const SECTIONS_SHOWCASE_GROUPS: SectionGroup[] = [
   },
   {
     id: "ap-automation-financial-controllers-1",
-    acfGroupName: "ap_automation_for_financial_controllers_section",
+    acfGroupName: "ap_automation_for_cfo_section",
     order: 1.695,
     fields: {
       overline: "AP AUTOMATION FOR FINANCIAL CONTROLLERS",

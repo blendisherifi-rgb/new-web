@@ -1,5 +1,11 @@
 # Place `.env.production` next to this file on the server (not committed to git).
 # NEXT_PUBLIC_* vars must be present at image build time; server-only vars can be set via env_file at runtime.
+# Debug empty WP sections: set LOG_WP_GRAPHQL_ERRORS=1 and check `docker logs` for GraphQL errors.
+#
+# AWS ALB: target group uses HTTPS → port 443 on this host (TLS from ALB to nginx).
+# Before first deploy: run `bash scripts/generate-nginx-internal-certs.sh` on the server so
+# docker/nginx/ssl/fullchain.pem and privkey.pem exist (self-signed). If ALB HTTPS health checks
+# still fail, ask SysOps to allow that or provide an internal CA cert in the same paths.
 
 services:
   web:
@@ -18,12 +24,14 @@ services:
   nginx:
     image: nginx:alpine
     restart: unless-stopped
-    # Bind on all interfaces (0.0.0.0) so the Elastic IP / public IP reaches this container.
+    # Bind on all interfaces so traffic to the host (DNS → test.softco.com) reaches this container.
     # If host port 80 is taken by system nginx, set NGINX_HTTP_PORT=8080 in the environment or `.env`.
     ports:
       - "0.0.0.0:${NGINX_HTTP_PORT:-80}:80"
+      - "0.0.0.0:443:443"
     volumes:
-      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./docker/nginx/default-alb.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./docker/nginx/ssl:/etc/nginx/ssl:ro
     depends_on:
       - web
     networks:

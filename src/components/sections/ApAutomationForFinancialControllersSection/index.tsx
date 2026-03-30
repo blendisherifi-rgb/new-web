@@ -8,6 +8,12 @@ export interface ApAutomationForFinancialControllersSectionProps {
   headingBlue?: string;
   /** Second part of the headline — dark navy. */
   headingDark?: string;
+  /** ACF “AP automation for CFO” layout: blue segment on line 1 (replaces headingBlue/headingDark when set). */
+  headingHighlight?: string;
+  /** Text after the blue segment on line 1. */
+  headingLine1After?: string;
+  headingLine2?: string;
+  headingLine3?: string;
   /** Left column image — design size 581×506. */
   imageSrc: string;
   imageAlt: string;
@@ -31,10 +37,17 @@ function splitParagraphs(text: string) {
  * Light blue band (#E8F2FD): orange overline, full-width rule with centered tick,
  * two columns — 581×506 image + two-tone Erode headline + body (`imagePosition` swaps sides).
  */
+const headlineClass =
+  "font-heading font-semibold tracking-normal text-[40px] leading-[1.15] text-brand-dark tablet-down:text-[80px] tablet-down:leading-[82px]";
+
 export function ApAutomationForFinancialControllersSection({
   overline = "AP AUTOMATION FOR FINANCIAL CONTROLLERS",
   headingBlue = "",
   headingDark = "",
+  headingHighlight = "",
+  headingLine1After = "",
+  headingLine2 = "",
+  headingLine3 = "",
   imageSrc,
   imageAlt,
   body,
@@ -43,6 +56,9 @@ export function ApAutomationForFinancialControllersSection({
   const paragraphs = splitParagraphs(body);
   const imageOrder = imagePosition === "left" ? "order-1" : "order-2";
   const textOrder = imagePosition === "left" ? "order-2" : "order-1";
+
+  const useCfoHeadline =
+    Boolean(headingHighlight || headingLine1After || headingLine2 || headingLine3);
 
   return (
     <section className="w-full bg-[#E8F2FD]" aria-label={overline}>
@@ -73,8 +89,21 @@ export function ApAutomationForFinancialControllersSection({
           </div>
 
           <div className={`min-w-0 ${textOrder}`}>
-            {headingBlue || headingDark ? (
-              <h2 className="font-heading font-semibold tracking-normal text-[40px] leading-[1.15] text-brand-dark tablet-down:text-[80px] tablet-down:leading-[82px]">
+            {useCfoHeadline ? (
+              <h2 className={headlineClass}>
+                <span className="block">
+                  {headingHighlight ? (
+                    <span className="text-brand-blue">{headingHighlight}</span>
+                  ) : null}
+                  {headingLine1After ? (
+                    <span className="text-brand-dark">{headingLine1After}</span>
+                  ) : null}
+                </span>
+                {headingLine2 ? <span className="block text-brand-dark">{headingLine2}</span> : null}
+                {headingLine3 ? <span className="block text-brand-dark">{headingLine3}</span> : null}
+              </h2>
+            ) : headingBlue || headingDark ? (
+              <h2 className={headlineClass}>
                 {headingBlue ? (
                   <span className="text-brand-blue">{headingBlue}</span>
                 ) : null}
