@@ -33,6 +33,7 @@ export default async function NewsItemPage({ params }: NewsItemPageProps) {
       item={item}
       backHref={localePath("/news", locale)}
       backLabel="← Back to News"
+      topPaddingClass="pt-[140px]"
     />
   );
 }

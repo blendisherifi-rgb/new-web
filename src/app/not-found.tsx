@@ -32,7 +32,7 @@ export default async function NotFound() {
         variant="transparent"
       />
       <main
-        className="relative flex flex-1 flex-col items-center justify-center px-6 py-24 text-center"
+        className="relative flex flex-1 flex-col items-center justify-center px-6 pt-[120px] py-24 text-center"
         style={{
           backgroundImage: "url('/404-bg.jpg')",
           backgroundSize: "cover",

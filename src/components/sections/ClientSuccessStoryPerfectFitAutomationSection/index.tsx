@@ -5,18 +5,18 @@ import { Overline } from "@/components/atoms/Overline";
 
 export interface ClientSuccessStoryPerfectFitAutomationSectionProps {
   /** Eyebrow, e.g. "PERFECT FIT AUTOMATION". */
-  overline?: string;
-  headingBefore: string;
-  headingHighlight: string;
-  headingAfter?: string;
+  overline?: string | null;
+  headingBefore?: string | null;
+  headingHighlight?: string | null;
+  headingAfter?: string | null;
   /** Intro copy above the pull quote. Use `\n\n` for multiple paragraphs. */
-  bodyTop: string;
+  bodyTop?: string | null;
   /** Pull quote body (blue left rule). */
-  quote: string;
-  attributionName: string;
-  attributionRole: string;
+  quote?: string | null;
+  attributionName?: string | null;
+  attributionRole?: string | null;
   /** Copy below the quote. Use `\n\n` for multiple paragraphs. */
-  bodyBottom: string;
+  bodyBottom?: string | null;
 }
 
 /** Same as ClientSuccessStoryChallengeSection body: Plus Jakarta Sans 400, 20px / 32px. */
@@ -27,8 +27,9 @@ const bodyParagraphClass =
 const testimonialQuoteClass =
   "font-body text-[28px] font-normal leading-[40px] tracking-normal text-brand-dark-60";
 
-function splitParagraphs(text: string) {
-  return text
+function splitParagraphs(text: string | null | undefined) {
+  const s = text ?? "";
+  return s
     .split(/\n{2,}/)
     .map((p) => p.trim())
     .filter(Boolean);
@@ -71,9 +72,9 @@ export function ClientSuccessStoryPerfectFitAutomationSection({
         <div className="grid items-start gap-10 tablet-down:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] tablet-down:gap-16">
           <div className="min-w-0">
             <HeadlineWithHighlight
-              headingBefore={headingBefore}
-              headingHighlight={headingHighlight}
-              headingAfter={headingAfter}
+              headingBefore={headingBefore ?? ""}
+              headingHighlight={headingHighlight ?? ""}
+              headingAfter={headingAfter ?? ""}
               level={2}
               className="max-w-[520px] !font-heading !font-semibold !text-[60px] !leading-[64px] !tracking-normal text-brand-dark"
             />

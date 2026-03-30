@@ -134,7 +134,7 @@ function FeatureModal({
               className="inline-flex h-10 w-10 items-center justify-center text-brand-dark/70 transition-colors hover:text-brand-dark"
               aria-label="Close"
             >
-              <XIcon size={20} />
+              <XIcon size="md" />
             </button>
           </div>
           <Overline className="text-brand-orange">

@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Header, Footer, CookieConsent } from "@/components/globals";
+import { Header, Footer, CookieConsent, ConsentAnalytics } from "@/components/globals";
 import { fetchMenus } from "@/lib/menus";
 import { fetchGlobalFields } from "@/lib/globals";
 import type { Locale } from "@/lib/i18n";
@@ -39,6 +39,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
         {children}
       </main>
       <Footer data={globals.footer} />
+      <ConsentAnalytics locale={locale} />
       <CookieConsent
         locale={locale}
         cookiePolicyUrl={localePath("/cookies", locale)}

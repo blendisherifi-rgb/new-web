@@ -14,9 +14,9 @@ export interface ClientSuccessStoryRelatedStoryCard {
 
 export interface ClientSuccessStoryRelatedStoriesSectionProps {
   /** First line of the centered section title. */
-  titleLine1: string;
+  titleLine1?: string | null;
   /** Second line of the centered section title. */
-  titleLine2: string;
+  titleLine2?: string | null;
   /** Story cards (layout uses the first two). */
   stories?: ClientSuccessStoryRelatedStoryCard[] | Record<string, unknown>[];
 }
@@ -58,27 +58,29 @@ function normalizeStories(
  * (image, tag pills, serif card title, orange arrow + line CTA).
  */
 export function ClientSuccessStoryRelatedStoriesSection({
-  titleLine1 = "",
-  titleLine2 = "",
+  titleLine1,
+  titleLine2,
   stories = [],
 }: ClientSuccessStoryRelatedStoriesSectionProps) {
   const cards = normalizeStories(stories).slice(0, 2);
+  const t1 = (titleLine1 ?? "").trim();
+  const t2 = (titleLine2 ?? "").trim();
 
   return (
     <section className="w-full bg-white">
       <div className="mx-auto w-full max-w-[1440px] px-6 py-16 tablet-down:px-6 tablet-down:py-24">
-        {(titleLine1.trim() || titleLine2.trim()) && (
+        {(t1 || t2) && (
           <div className="mx-auto max-w-[980px] text-center">
             <Heading
               level={2}
               className="text-center !font-heading !font-semibold !text-[60px] !leading-[64px] !tracking-normal text-brand-dark tablet-down:!text-[36px] tablet-down:!leading-[1.12]"
             >
-              {titleLine1.trim() ? (
-                <span className="block">{titleLine1.trim()}</span>
+              {t1 ? (
+                <span className="block">{t1}</span>
               ) : null}
-              {titleLine2.trim() ? (
+              {t2 ? (
                 <span className="mt-2 block tablet-down:mt-3">
-                  {titleLine2.trim()}
+                  {t2}
                 </span>
               ) : null}
             </Heading>

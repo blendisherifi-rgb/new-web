@@ -43,6 +43,26 @@ export function getWpmlLanguageEnum(locale: Locale): string {
   return LOCALE_TO_WPML[locale].toUpperCase();
 }
 
+/**
+ * Pick the WPML translation for `locale`, or the root node when it is already in that language.
+ * Returns null when the post exists only in another language (prevents showing UK on US, etc.).
+ * When there is no WPML metadata (no `language` and no `translations`), returns `root` for backward compatibility.
+ */
+export function resolveWpmlNodeForLocale<T extends { language?: { code?: string } | null }>(
+  root: T,
+  translations: T[] | null | undefined,
+  locale: Locale,
+): T | null {
+  const code = getWpmlLanguage(locale);
+  const fromTranslations = translations?.find((t) => t.language?.code === code);
+  if (fromTranslations) return fromTranslations;
+  if (root.language?.code === code) return root;
+  if (!root.language?.code && (!translations || translations.length === 0)) {
+    return root;
+  }
+  return null;
+}
+
 export function isLocale(value: string): value is Locale {
   return LOCALES.includes(value as Locale);
 }

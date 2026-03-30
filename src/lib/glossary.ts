@@ -6,9 +6,10 @@
  * Last resort: `contentNodes(where: { contentTypes: GLOSSARY })` if the CPT is exposed there.
  */
 
+import { cache } from "react";
 import { fetchGraphQL } from "./wordpress";
 import type { Locale } from "./i18n";
-import { localePath, getWpmlLanguage, getWpmlLanguageEnum } from "./i18n";
+import { localePath, getWpmlLanguageEnum, resolveWpmlNodeForLocale } from "./i18n";
 
 export interface Glossary {
   id: string;
@@ -254,22 +255,19 @@ function mapGlossaryPost(raw: Record<string, unknown>): Glossary {
   };
 }
 
-export async function fetchGlossaryBySlug(
+export const fetchGlossaryBySlug = cache(async function fetchGlossaryBySlug(
   slug: string,
   locale: Locale
 ): Promise<Glossary | null> {
-  const language = getWpmlLanguage(locale);
-
   type GlossaryGraphqlNode = {
     id: string;
     slug?: string;
-    title?: string;
     excerpt?: string;
     content?: string;
+    language?: { code?: string };
     translations?: Array<{
       id: string;
       slug?: string;
-      title?: string;
       excerpt?: string;
       content?: string;
       language?: { code?: string };
@@ -283,13 +281,11 @@ export async function fetchGlossaryBySlug(
         glossary(id: $slug, idType: SLUG) {
           id
           slug
-          title
           excerpt
           content
           translations {
             id
             slug
-            title
             excerpt
             content
             language { code }
@@ -302,13 +298,12 @@ export async function fetchGlossaryBySlug(
         glossaryTerm(id: $slug, idType: SLUG) {
           id
           slug
-          title
           excerpt
           content
+          language { code }
           translations {
             id
             slug
-            title
             excerpt
             content
             language { code }
@@ -324,13 +319,12 @@ export async function fetchGlossaryBySlug(
           ... on Glossary {
             id
             slug
-            title
             excerpt
             content
+            language { code }
             translations {
               id
               slug
-              title
               excerpt
               content
               language { code }
@@ -339,13 +333,12 @@ export async function fetchGlossaryBySlug(
           ... on GlossaryTerm {
             id
             slug
-            title
             excerpt
             content
+            language { code }
             translations {
               id
               slug
-              title
               excerpt
               content
               language { code }
@@ -377,16 +370,16 @@ export async function fetchGlossaryBySlug(
           : null);
       if (!raw) continue;
 
-      const match = raw.translations?.find((t) => t.language?.code === language);
-      const post = match ?? raw;
-      return mapGlossaryPost(post as Record<string, unknown>);
+      const resolved = resolveWpmlNodeForLocale(raw, raw.translations, locale);
+      if (!resolved) continue;
+      return mapGlossaryPost(resolved as Record<string, unknown>);
     } catch {
       // try next resolver shape
     }
   }
 
   return null;
-}
+});
 
 /** Locale-prefixed URL for a single glossary entry (under Resources). */
 export function glossaryEntryUrl(slug: string, locale: Locale): string {

@@ -121,8 +121,17 @@ function transformSection(node: Record<string, unknown>, index: number): Section
       ? "why_attend_section"
     : low.includes("eventregister") || low.includes("event_register")
       ? "event_register_section"
-    : low.includes("ap_softco_experience") || low.includes("apsoftcoexperience")
+    : low.includes("ap_softco_experience") ||
+        low.includes("apsoftcoexperience") ||
+        /* Common ACF typo: experiance */
+        low.includes("ap_softco_experiance") ||
+        low.includes("apsoftcoexperiance") ||
+        /* WPGraphQL: …YourSoftcoExperienceSectionLayout — not "ap_softco_*" */
+        low.includes("yoursoftcoexperience") ||
+        low.includes("your_softco_experience")
       ? "ap_softco_experience_section"
+    : low.includes("ap_automation_for_cfo") || low.includes("apautomationforcfo")
+      ? "ap_automation_for_financial_controllers_section"
     : low.includes("ap_automation_for_financial") ||
         low.includes("apautomationforfinancialcontrollers")
       ? "ap_automation_for_financial_controllers_section"
@@ -1053,13 +1062,42 @@ function transformSection(node: Record<string, unknown>, index: number): Section
   // AP automation for financial controllers / SoftCo experience: image.node -> imageSrc/imageAlt
   if (
     acfGroupName === "ap_automation_for_financial_controllers_section" ||
-    acfGroupName === "ap_softco_experience_section"
+    acfGroupName === "ap_softco_experience_section" ||
+    acfGroupName === "your_softco_experience_section" ||
+    acfGroupName === "ap_softco_experiance_section"
   ) {
     const img = normalized.image as Record<string, unknown> | undefined;
     const n = img?.node as Record<string, unknown> | undefined;
     normalized.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
     normalized.imageAlt = n?.altText ?? img?.altText ?? "";
     delete normalized.image;
+
+    // ACF `ap_automation_for_cfo_section`: headingHighlight + lines → component headingBlue + headingDark
+    if (
+      acfGroupName === "ap_automation_for_financial_controllers_section" &&
+      !normalized.headingBlue &&
+      !normalized.headingDark &&
+      (normalized.headingHighlight != null ||
+        normalized.headingLine2 != null ||
+        normalized.headingLine3 != null)
+    ) {
+      const hb =
+        typeof normalized.headingHighlight === "string" ? normalized.headingHighlight : "";
+      const rest = [
+        typeof normalized.headingLine1After === "string" ? normalized.headingLine1After : "",
+        typeof normalized.headingLine2 === "string" ? normalized.headingLine2 : "",
+        typeof normalized.headingLine3 === "string" ? normalized.headingLine3 : "",
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .trim();
+      normalized.headingBlue = hb;
+      normalized.headingDark = rest;
+      delete normalized.headingHighlight;
+      delete normalized.headingLine1After;
+      delete normalized.headingLine2;
+      delete normalized.headingLine3;
+    }
   }
 
   // AP automation: image.node, softcoApImage.node, gartnerLogo.node -> flatten

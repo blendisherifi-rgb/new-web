@@ -4,7 +4,7 @@
 
 import { fetchGraphQL } from "./wordpress";
 import type { Locale } from "@/lib/i18n";
-import { localePath, getWpmlLanguage, getWpmlLanguageEnum } from "@/lib/i18n";
+import { localePath, getWpmlLanguage, getWpmlLanguageEnum, resolveWpmlNodeForLocale } from "@/lib/i18n";
 
 export interface ResourceListItem {
   id: string;
@@ -111,8 +111,6 @@ export async function fetchResourceBySlug(
   slug: string,
   locale: Locale
 ): Promise<ResourceDetail | null> {
-  const language = getWpmlLanguage(locale);
-
   try {
     const data = await fetchGraphQL<{
       resource?: {
@@ -149,6 +147,7 @@ export async function fetchResourceBySlug(
           content
           featuredImage { node { sourceUrl altText } }
           seo { title metaDesc opengraphImage { sourceUrl } }
+          language { code }
           translations {
             id
             slug
@@ -172,13 +171,14 @@ export async function fetchResourceBySlug(
     const raw = data?.resource ?? data?.resourceBy;
     if (!raw) return null;
 
-    // Prefer WPML translation matching this locale when available
-    const typedRaw = raw as typeof data.resource;
-    const match = typedRaw?.translations?.find(
-      (t) => t.language?.code === language
+    const typedRaw = raw as NonNullable<typeof data.resource>;
+    const resolved = resolveWpmlNodeForLocale(
+      typedRaw,
+      typedRaw?.translations ?? undefined,
+      locale,
     );
-    const post = match ?? raw;
-    const p = post as Record<string, unknown>;
+    if (!resolved) return null;
+    const p = resolved as Record<string, unknown>;
     return {
       id: p.id as string,
       slug: (p.slug as string) ?? "",

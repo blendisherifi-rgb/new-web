@@ -43,6 +43,7 @@ const LOCALE_SHORT: Record<Locale, string> = {
  */
 export function Header({ menus, cta, utilityBar, locale, variant = "transparent" }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
+  const [forceSolidAtTop, setForceSolidAtTop] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [regionOpen, setRegionOpen] = useState(false);
   const regionRef = useRef<HTMLDivElement>(null);
@@ -54,6 +55,104 @@ export function Header({ menus, cta, utilityBar, locale, variant = "transparent"
     handler();
     return () => window.removeEventListener("scroll", handler);
   }, []);
+
+  useEffect(() => {
+    if (variant !== "transparent") {
+      setForceSolidAtTop(false);
+      return;
+    }
+
+    /** Parse rgb/rgba from getComputedStyle (comma or space syntax, with alpha). */
+    const parseRgbChannels = (value: string): [number, number, number] | null => {
+      const s = value.trim();
+      const m =
+        s.match(/rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)/i) ??
+        s.match(/rgba?\(\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)/i);
+      if (!m) return null;
+      return [Math.round(Number(m[1])), Math.round(Number(m[2])), Math.round(Number(m[3]))];
+    };
+
+    const isTargetColor = (value: string): boolean => {
+      const ch = parseRgbChannels(value);
+      if (!ch) return false;
+      const [r, g, b] = ch;
+      // White (#fff) and brand light blue (#e8f2fd)
+      return (
+        (r === 255 && g === 255 && b === 255) || (r === 232 && g === 242 && b === 253)
+      );
+    };
+
+    const isTransparentBg = (value: string): boolean => {
+      const v = value.replace(/\s+/g, "").toLowerCase();
+      if (v === "transparent") return true;
+      // Fully transparent (avoid treating rgb(0,0,0) as transparent)
+      if (v === "rgba(0,0,0,0)") return true;
+      const slash = value.match(/\/\s*([\d.]+)\s*\)\s*$/);
+      if (slash && Number(slash[1]) === 0) return true;
+      return false;
+    };
+
+    /** First block under main: section/article (blogs, news, resources, glossary) or first child (wrappers). */
+    const getFirstContentBlock = (
+      main: HTMLElement,
+    ): { el: Element; treatAsArticleSurface: boolean } | null => {
+      const semantic = main.querySelector("section, article");
+      if (semantic) {
+        return {
+          el: semantic,
+          treatAsArticleSurface: semantic.tagName === "ARTICLE",
+        };
+      }
+      let el: Element | null = main.firstElementChild;
+      const skip = new Set(["SCRIPT", "STYLE", "NOSCRIPT"]);
+      while (el && skip.has(el.tagName)) {
+        el = el.nextElementSibling;
+      }
+      return el ? { el, treatAsArticleSurface: false } : null;
+    };
+
+    /**
+     * Walk up for a non-transparent background.
+     * For `<article>` pages (blog, news, resources detail), we may need `body`'s
+     * white when `<article>`/`main` compute as transparent — but for `<section>`
+     * heroes we stop at `main` so a transparent section over a dark hero does not
+     * pick up body white.
+     */
+    const resolveBackgroundColor = (start: Element, treatAsArticleSurface: boolean): string => {
+      let node: Element | null = start;
+      for (let i = 0; i < 12 && node; i++) {
+        const bg = window.getComputedStyle(node).backgroundColor;
+        if (!isTransparentBg(bg)) return bg;
+        if (node.id === "main-content" && !treatAsArticleSurface) break;
+        node = node.parentElement;
+        if (node === document.documentElement) break;
+      }
+      return window.getComputedStyle(start).backgroundColor;
+    };
+
+    const detect = () => {
+      const main = document.getElementById("main-content");
+      if (!main) {
+        setForceSolidAtTop(false);
+        return;
+      }
+      const block = getFirstContentBlock(main);
+      if (!block) {
+        setForceSolidAtTop(false);
+        return;
+      }
+      const bg = resolveBackgroundColor(block.el, block.treatAsArticleSurface);
+      setForceSolidAtTop(isTargetColor(bg));
+    };
+
+    detect();
+    const raf = window.requestAnimationFrame(detect);
+    const timeout = window.setTimeout(detect, 60);
+    return () => {
+      window.cancelAnimationFrame(raf);
+      window.clearTimeout(timeout);
+    };
+  }, [pathname, variant]);
 
   // Close region dropdown on outside click
   useEffect(() => {
@@ -70,7 +169,7 @@ export function Header({ menus, cta, utilityBar, locale, variant = "transparent"
   const match = pathname.match(/^\/(us|ie|uk)(?:\/(.*))?$/);
   const basePath = match ? (match[2] ? `/${match[2]}` : "/") : pathname || "/";
 
-  const isOverlay = variant === "transparent" && !scrolled;
+  const isOverlay = variant === "transparent" && !scrolled && !forceSolidAtTop;
 
   const { coordinatedEntrance, preloaderComplete } = useHomeBannerEntrance();
   const headerTransitionCls = coordinatedEntrance
