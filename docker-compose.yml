@@ -1,5 +1,6 @@
 # Place `.env.production` next to this file on the server (not committed to git).
 # NEXT_PUBLIC_* vars must be present at image build time; server-only vars can be set via env_file at runtime.
+# Debug empty WP sections: set LOG_WP_GRAPHQL_ERRORS=1 and check `docker logs` for GraphQL errors.
 #
 # AWS ALB: target group uses HTTPS → port 443 on this host (TLS from ALB to nginx).
 # Before first deploy: run `bash scripts/generate-nginx-internal-certs.sh` on the server so
