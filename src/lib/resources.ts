@@ -4,7 +4,12 @@
 
 import { fetchGraphQL } from "./wordpress";
 import type { Locale } from "@/lib/i18n";
-import { localePath, getWpmlLanguage, getWpmlLanguageEnum, resolveWpmlNodeForLocale } from "@/lib/i18n";
+import {
+  localePath,
+  getWpmlLanguage,
+  getWpmlLanguageEnum,
+  resolveWpmlNodeForLocale,
+} from "@/lib/i18n";
 
 export interface ResourceListItem {
   id: string;
@@ -122,6 +127,7 @@ export async function fetchResourceBySlug(
         content?: string;
         featuredImage?: { node?: { sourceUrl?: string; altText?: string } };
         seo?: Record<string, unknown>;
+        language?: { code?: string | null } | null;
         translations?: Array<{
           id: string;
           slug?: string;
@@ -171,10 +177,11 @@ export async function fetchResourceBySlug(
     const raw = data?.resource ?? data?.resourceBy;
     if (!raw) return null;
 
-    const typedRaw = raw as NonNullable<typeof data.resource>;
+    type ResourceNode = NonNullable<(typeof data)["resource"]>;
+    const typedRaw = raw as ResourceNode;
     const resolved = resolveWpmlNodeForLocale(
       typedRaw,
-      typedRaw?.translations ?? undefined,
+      typedRaw.translations ?? undefined,
       locale,
     );
     if (!resolved) return null;
