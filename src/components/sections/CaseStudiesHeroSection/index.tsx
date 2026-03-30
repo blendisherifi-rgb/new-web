@@ -30,7 +30,7 @@ export function CaseStudiesHeroSection({
 
   return (
     <section
-      className="w-full bg-brand-blue"
+      className="w-full bg-brand-blue pt-[120px]"
       aria-label={overline}
     >
       <div className="mx-auto w-full max-w-[1440px] px-4 py-14 text-center tablet-down:px-6 tablet-down:py-20">

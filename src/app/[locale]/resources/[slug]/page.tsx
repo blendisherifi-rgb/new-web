@@ -46,7 +46,7 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
 
   return (
     <article className="w-full bg-white">
-      <div className="mx-auto max-w-[1440px] px-6 py-16 md:py-24">
+      <div className="mx-auto max-w-[1440px] px-6 pt-[140px] py-16 md:py-24">
         <Link
           href={localePath("/resources", locale)}
           className="font-body text-sm font-medium text-brand-blue hover:underline"

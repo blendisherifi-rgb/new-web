@@ -31,8 +31,8 @@ export default async function ResourcesGlossaryPage({ params }: ResourcesGlossar
 
   return (
     <>
-      <section className="w-full bg-brand-dark px-4 py-12 tablet-down:px-6 tablet-down:py-24">
-        <div className="mx-auto flex max-w-[1440px] flex-col items-center text-center">
+      <section className="w-full bg-brand-dark px-4 pt-[120px] py-12 tablet-down:px-6 tablet-down:py-24">
+        <div className="mx-auto flex max-w-[1440px] flex-col items-center pt-[80px] text-center">
           <Overline className="text-brand-orange">Resources</Overline>
           <Heading level={1} className="mt-10 text-white">
             Glossary of terms
@@ -44,7 +44,7 @@ export default async function ResourcesGlossaryPage({ params }: ResourcesGlossar
       </section>
 
       <section className="w-full bg-white">
-        <div className="mx-auto flex max-w-[1440px] flex-col gap-8 px-4 py-12 tablet-down:flex-row tablet-down:gap-12 tablet-down:px-6 tablet-down:py-24">
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-8 px-4 pb-12 pt-10 tablet-down:flex-row tablet-down:gap-12 tablet-down:px-6 tablet-down:pb-24 tablet-down:pt-10">
           <GlossaryContent terms={terms} byLetter={byLetter} locale={locale} />
         </div>
       </section>

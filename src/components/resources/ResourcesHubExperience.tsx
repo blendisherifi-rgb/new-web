@@ -16,8 +16,13 @@ import {
   resourceHubTypeBadgeClient,
   type ResourcesHubBundle,
 } from "@/lib/resources-hub-view";
+import { SearchInputWithSuggestions } from "@/components/globals/Header/SearchInputWithSuggestions";
 import { stripNewsHtml } from "@/lib/news";
+import type { SearchResultType } from "@/lib/search";
 import type { Locale } from "@/lib/i18n";
+
+/** Same `/api/search` buckets as the hub listing: blog posts + guides/webinars/resources CPTs. */
+const RESOURCES_HUB_SEARCH_TYPES: SearchResultType[] = ["post", "resource"];
 
 const KIND_OPTIONS: { key: ResourceHubKind; label: string }[] = [
   { key: "blog", label: "Blog" },
@@ -143,34 +148,47 @@ export function ResourcesHubExperience({
       {heroProps ? <NewsAndEventsSection {...heroProps} /> : null}
 
       <section className="w-full bg-white">
-        <div className="mx-auto flex max-w-[1440px] flex-col lg:flex-row lg:items-stretch">
-          <aside className="w-full shrink-0 border-b border-brand-grey bg-[#E8F2FD] px-6 py-8 lg:w-[min(100%,300px)] lg:border-b-0 lg:border-r lg:border-brand-grey lg:py-10">
-            <h2 className="font-body text-[12px] font-extrabold uppercase leading-none tracking-[0.12em] text-brand-dark">
-              Type
-            </h2>
-            <ul className="mt-5 space-y-3" role="list">
-              {KIND_OPTIONS.map(({ key, label }) => (
-                <li key={key}>
-                  <label className="flex cursor-pointer items-center gap-3 select-none">
-                    <input
-                      type="checkbox"
-                      name={`resource-type-${key}`}
-                      checked={selectedSet.has(key)}
-                      onChange={(e) => toggleKind(key, e.target.checked)}
-                      className="h-4 w-4 shrink-0 rounded border-2 border-brand-dark-40 text-brand-blue accent-brand-blue focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue"
-                    />
-                    <span className="font-body text-[15px] font-medium leading-snug text-brand-dark">
-                      {label}
-                    </span>
-                  </label>
-                </li>
-              ))}
-            </ul>
-          </aside>
+        <div className="mx-auto max-w-[1440px] px-6 pb-16 pt-2 sm:px-8 lg:px-10 xl:px-14">
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-10 xl:gap-12">
+            <aside className="mx-auto w-full max-w-md shrink-0 rounded-lg border border-brand-grey/20 bg-[#EBF2FA] px-6 py-8 shadow-sm sm:max-w-lg lg:mx-0 lg:w-[280px] lg:max-w-[280px] lg:border-0 lg:shadow-none xl:w-[300px] xl:max-w-[300px]">
+              <h2 className="font-body text-[12px] font-extrabold uppercase leading-none tracking-[0.14em] text-brand-dark">
+                Type
+              </h2>
+              <ul className="mt-5 space-y-3.5" role="list">
+                {KIND_OPTIONS.map(({ key, label }) => (
+                  <li key={key}>
+                    <label className="flex cursor-pointer items-center gap-3 select-none">
+                      <input
+                        type="checkbox"
+                        name={`resource-type-${key}`}
+                        checked={selectedSet.has(key)}
+                        onChange={(e) => toggleKind(key, e.target.checked)}
+                        className="h-4 w-4 shrink-0 rounded border-2 border-brand-blue/80 text-brand-blue accent-brand-blue focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue"
+                      />
+                      <span className="font-body text-[15px] font-medium leading-snug text-brand-dark">
+                        {label}
+                      </span>
+                    </label>
+                  </li>
+                ))}
+              </ul>
 
-          <div className="min-w-0 flex-1 px-4 py-10 tablet-down:px-8 tablet-down:py-12 lg:px-10 lg:py-12">
+              <div className="mt-10">
+                <SearchInputWithSuggestions
+                  locale={locale}
+                  placeholder="Search by keyword"
+                  contentTypes={RESOURCES_HUB_SEARCH_TYPES}
+                  leadingIcon
+                  perPage={12}
+                  className="w-full"
+                />
+              </div>
+            </aside>
+
+            <div className="min-w-0 flex-1 lg:pt-0">
+              <div className="overflow-hidden rounded-lg border border-brand-grey bg-white">
             {!view.featured && view.gridItems.length === 0 ? (
-              <p className="font-body text-brand-dark-60">
+              <p className="px-8 py-14 text-center font-body text-brand-dark-60">
                 No resources yet. Check back soon.
               </p>
             ) : (
@@ -178,7 +196,7 @@ export function ResourcesHubExperience({
                 <ArchiveGridBody items={gridResolved} readMoreAriaNoun="resource" columnCount={2} />
                 {view.totalGridPages > 1 ? (
                   <nav
-                    className="mt-12 flex flex-wrap items-center justify-center gap-6"
+                    className="mt-12 flex flex-wrap items-center justify-center gap-6 px-6 pb-10 tablet-down:px-8"
                     aria-label="Resource list pages"
                   >
                     {safePage > 1 ? (
@@ -209,12 +227,14 @@ export function ResourcesHubExperience({
                   </nav>
                 ) : null}
                 {(kindsFilter === "all" || kindsFilter.length > 1) && view.hasMoreKinds ? (
-                  <p className="mt-10 font-body text-sm text-brand-dark-60">
+                  <p className="mt-10 px-6 pb-8 font-body text-sm text-brand-dark-60 tablet-down:px-8">
                     Showing the latest items loaded for this view; more may exist in WordPress.
                   </p>
                 ) : null}
               </>
             )}
+              </div>
+            </div>
           </div>
         </div>
       </section>

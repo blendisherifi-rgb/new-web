@@ -210,7 +210,7 @@ export function NewsAndEventsSection({
       <div className="relative z-[2]" style={{ backgroundColor: HERO_BLUE }}>
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.06)_0%,transparent_55%)]" aria-hidden />
 
-        <div className="relative z-10 mx-auto flex w-full max-w-[1440px] flex-col items-center px-6 pb-28 pt-16 text-center tablet-down:pb-40 tablet-down:pt-20">
+        <div className="relative z-10 mx-auto flex w-full max-w-[1440px] flex-col items-center px-6 pb-28 pt-[140px] text-center tablet-down:pb-40">
           <div className="flex w-full max-w-[min(100%,30rem)] flex-col items-center text-center tablet-down:max-w-[34rem]">
             <Overline className="!text-[#F58220]">{heroOverline}</Overline>
 
@@ -248,3 +248,4 @@ export function NewsAndEventsSection({
     </section>
   );
 }
+

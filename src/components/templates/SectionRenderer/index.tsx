@@ -39,21 +39,37 @@ export function SectionRenderer({ sections, showLabels = false }: SectionRendere
 
   return (
     <>
-      {sorted.map((section) => {
+      {sorted.map((section, index) => {
         const Component = SECTION_MAP[section.acfGroupName];
+        /**
+         * Offset below fixed header (~100px). Slightly lighter than full nav height
+         * so it stacks better with sections that already ship their own top spacing.
+         * Applied to the first child inside the section (not the outer wrapper).
+         * Skipped on /sections showcase (showLabels).
+         */
+        const firstSectionInnerOffsetClass =
+          index === 0 && !showLabels ? "[&>*:first-child]:pt-[100px]" : "";
+        const firstUnmappedSectionPad =
+          index === 0 && !showLabels ? "pt-[100px]" : "";
+
         if (!Component) {
           return process.env.NODE_ENV === "development" ? (
             <div
               key={section.id}
-              className="mx-auto max-w-2xl px-6 py-8 border border-amber-300 bg-amber-50 text-amber-900"
+              className={`mx-auto max-w-2xl px-6 py-8 border border-amber-300 bg-amber-50 text-amber-900 ${firstUnmappedSectionPad}`}
             >
               <strong>Unmapped section:</strong> {section.acfGroupName} — add to
               SECTION_MAP in src/lib/sections.ts
             </div>
           ) : null;
         }
+
+        const wrapperClass = [showLabels ? "relative" : "", firstSectionInnerOffsetClass]
+          .filter(Boolean)
+          .join(" ");
+
         return (
-          <div key={section.id} className={showLabels ? "relative" : undefined}>
+          <div key={section.id} className={wrapperClass || undefined}>
             {showLabels && (
               <div className="pointer-events-none absolute left-0 top-0 z-50 flex items-center gap-2 rounded-br-lg bg-black/70 px-3 py-1.5 backdrop-blur-sm">
                 <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-brand-orange">

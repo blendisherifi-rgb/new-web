@@ -1,6 +1,7 @@
 import { Link } from "@/components/atoms/Link";
 import { Image } from "@/components/atoms/Image";
 import { Paragraph } from "@/components/atoms/Paragraph";
+import { CookieSettingsLink } from "@/components/globals/CookieConsent/CookieSettingsLink";
 import type { FooterData } from "@/lib/globals";
 
 interface FooterProps {
@@ -160,20 +161,28 @@ export function Footer({ data }: FooterProps) {
               ))}
             </ul>
           ) : null}
-          {data.legalLinks && data.legalLinks.length > 0 ? (
-            <ul className="flex flex-wrap items-center gap-3">
-              {data.legalLinks.map((link, i) => (
-                <li key={i} className="flex items-center gap-3">
-                  <Link href={link.href} className="text-[14px] text-brand-dark no-underline hover:no-underline md:text-[15px]">
-                    {link.label}
-                  </Link>
-                  {i < data.legalLinks!.length - 1 ? (
-                    <span className="text-brand-dark-40">/</span>
-                  ) : null}
-                </li>
-              ))}
-            </ul>
-          ) : null}
+          <ul className="flex flex-wrap items-center gap-3">
+            {data.legalLinks?.map((link, i) => (
+              <li key={i} className="flex items-center gap-3">
+                {i > 0 ? (
+                  <span className="text-brand-dark-40" aria-hidden>
+                    /
+                  </span>
+                ) : null}
+                <Link href={link.href} className="text-[14px] text-brand-dark no-underline hover:no-underline md:text-[15px]">
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+            <li className="flex items-center gap-3">
+              {(data.legalLinks?.length ?? 0) > 0 ? (
+                <span className="text-brand-dark-40" aria-hidden>
+                  /
+                </span>
+              ) : null}
+              <CookieSettingsLink />
+            </li>
+          </ul>
         </div>
       </div>
     </footer>

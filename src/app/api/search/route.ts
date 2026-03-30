@@ -1,17 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
-import { searchContent, SEARCH_PAGE_SIZE } from "@/lib/search";
+import { searchContent, SEARCH_PAGE_SIZE, type SearchResultType } from "@/lib/search";
 import { isLocale } from "@/lib/i18n";
-import type { SearchResultType } from "@/lib/search";
+
+const ALLOWED_TYPES = new Set<string>(["page", "post", "case_study", "resource", "news"]);
+
+function parseContentTypes(req: NextRequest): SearchResultType[] | undefined {
+  const typesStr = req.nextUrl.searchParams.get("types")?.trim();
+  if (typesStr) {
+    const out: SearchResultType[] = [];
+    for (const part of typesStr.split(",")) {
+      const p = part.trim().toLowerCase();
+      if (ALLOWED_TYPES.has(p)) out.push(p as SearchResultType);
+    }
+    if (out.length) return out;
+  }
+  const one = req.nextUrl.searchParams.get("type")?.trim().toLowerCase();
+  if (one && ALLOWED_TYPES.has(one)) {
+    return [one as SearchResultType];
+  }
+  return undefined;
+}
 
 /**
  * JSON search — WordPress REST `/wp/v2/search` + GraphQL fallback (see `lib/search.ts`).
+ * Use `types=post,resource` (comma-separated) to scope results (e.g. resources hub).
  */
 export async function GET(req: NextRequest) {
   const q = req.nextUrl.searchParams.get("q")?.trim() ?? "";
   const localeParam = req.nextUrl.searchParams.get("locale") ?? "us";
   const pageParam = req.nextUrl.searchParams.get("page");
   const perParam = req.nextUrl.searchParams.get("per_page");
-  const typeParam = req.nextUrl.searchParams.get("type");
 
   if (!isLocale(localeParam)) {
     return NextResponse.json({ error: "Invalid locale" }, { status: 400 });
@@ -32,10 +50,7 @@ export async function GET(req: NextRequest) {
     Math.max(1, parseInt(perParam || String(SEARCH_PAGE_SIZE), 10) || SEARCH_PAGE_SIZE),
   );
 
-  const typeFilter =
-    typeParam && ["page", "post", "case_study", "resource", "news"].includes(typeParam)
-      ? ([typeParam] as SearchResultType[])
-      : undefined;
+  const typeFilter = parseContentTypes(req);
 
   const { results, hasMore, page: outPage, totalPages } = await searchContent(q, localeParam, {
     page,

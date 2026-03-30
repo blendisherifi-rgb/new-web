@@ -127,6 +127,7 @@ export async function fetchResourceBySlug(
         content?: string;
         featuredImage?: { node?: { sourceUrl?: string; altText?: string } };
         seo?: Record<string, unknown>;
+        language?: { code?: string | null } | null;
         translations?: Array<{
           id: string;
           slug?: string;
@@ -152,6 +153,7 @@ export async function fetchResourceBySlug(
           content
           featuredImage { node { sourceUrl altText } }
           seo { title metaDesc opengraphImage { sourceUrl } }
+          language { code }
           translations {
             id
             slug
@@ -177,8 +179,13 @@ export async function fetchResourceBySlug(
 
     type ResourceNode = NonNullable<(typeof data)["resource"]>;
     const typedRaw = raw as ResourceNode;
-    const post = resolveWpmlNodeForLocale(typedRaw, typedRaw.translations, locale);
-    const p = post as Record<string, unknown>;
+    const resolved = resolveWpmlNodeForLocale(
+      typedRaw,
+      typedRaw.translations ?? undefined,
+      locale,
+    );
+    if (!resolved) return null;
+    const p = resolved as Record<string, unknown>;
     return {
       id: p.id as string,
       slug: (p.slug as string) ?? "",

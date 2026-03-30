@@ -55,7 +55,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
   if (pageData && pageData.sections.length > 0) {
     return (
       <div className="w-full bg-white">
-        <div className="mx-auto max-w-[1440px] px-6 pt-8 pb-4 md:pt-10">
+        <div className="mx-auto max-w-[1440px] px-6 pt-2 pb-4 md:pt-4">
           <Link
             href={localePath("/case-studies", locale)}
             className="font-body text-sm font-medium text-brand-blue hover:underline"
@@ -73,7 +73,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
 
   return (
     <article className="w-full bg-white">
-      <div className="mx-auto max-w-[1440px] px-6 py-16 md:py-24">
+      <div className="mx-auto max-w-[1440px] px-6 pt-[120px] py-16 md:py-24">
         <Link
           href={localePath("/case-studies", locale)}
           className="font-body text-sm font-medium text-brand-blue hover:underline"

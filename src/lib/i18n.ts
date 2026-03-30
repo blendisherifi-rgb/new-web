@@ -44,17 +44,28 @@ export function getWpmlLanguageEnum(locale: Locale): string {
 }
 
 /**
- * Pick the WPML translation row for `locale`, or fall back to the base node.
- * `base` is typically the default-language post; `translations` comes from WPGraphQL `translations { … }`.
+ * Pick the WPML translation for `locale`, or the root node when it already matches that language.
+ * Returns null when the post exists only in another language (prevents showing the wrong locale’s copy).
+ * When there is no WPML metadata (no `language` on root and no `translations`), returns `root` for backward compatibility.
  */
-export function resolveWpmlNodeForLocale<T extends object>(
-  base: T,
-  translations: Array<{ language?: { code?: string | null } | null } & Partial<T>> | null | undefined,
-  locale: Locale
-): T {
+export function resolveWpmlNodeForLocale<
+  T extends { language?: { code?: string | null } | null } & object,
+>(
+  root: T,
+  translations:
+    | Array<{ language?: { code?: string | null } | null } & Partial<T>>
+    | null
+    | undefined,
+  locale: Locale,
+): T | null {
   const code = getWpmlLanguage(locale);
-  const match = translations?.find((t) => t.language?.code === code);
-  return (match ?? base) as T;
+  const fromTranslations = translations?.find((t) => t.language?.code === code);
+  if (fromTranslations) return fromTranslations as T;
+  if (root.language?.code === code) return root;
+  if (!root.language?.code && (!translations || translations.length === 0)) {
+    return root;
+  }
+  return null;
 }
 
 export function isLocale(value: string): value is Locale {

@@ -173,6 +173,12 @@ export const SECTION_MAP: Record<string, React.ComponentType<Record<string, unkn
     >,
   ap_softco_experience_section:
     ApSoftcoExperienceSection as unknown as React.ComponentType<Record<string, unknown>>,
+  /** Same layout as above; some WP/ACF exports use this layout `name` / GraphQL typename. */
+  your_softco_experience_section:
+    ApSoftcoExperienceSection as unknown as React.ComponentType<Record<string, unknown>>,
+  /** Same section; typo `experiance` in some ACF layout names. */
+  ap_softco_experiance_section:
+    ApSoftcoExperienceSection as unknown as React.ComponentType<Record<string, unknown>>,
   architecture_section: ArchitectureSection as unknown as React.ComponentType<Record<string, unknown>>,
   ai_engine_section: AiEngineSection as unknown as React.ComponentType<Record<string, unknown>>,
   erp_integration_section: ErpIntegrationSection as unknown as React.ComponentType<Record<string, unknown>>,

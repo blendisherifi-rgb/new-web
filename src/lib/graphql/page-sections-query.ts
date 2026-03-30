@@ -67,8 +67,10 @@ const PeopleFirstProofLayout = `${LAYOUT_PREFIX}PeopleFirstProofSection${LAYOUT_
 const OpenRolesLayout = `${LAYOUT_PREFIX}OpenRolesSection${LAYOUT_SUFFIX}`;
 const FeatureModalLayout = `${LAYOUT_PREFIX}FeatureModalSection${LAYOUT_SUFFIX}`;
 const ApAutomationLayout = `${LAYOUT_PREFIX}ApAutomationSection${LAYOUT_SUFFIX}`;
-/** Matches ACF layout `ap_automation_for_cfo_section` (WPGraphQL type …ApAutomationForCfoSection…). */
-const ApAutomationForCfoSectionLayout = `${LAYOUT_PREFIX}ApAutomationForCfoSection${LAYOUT_SUFFIX}`;
+/** ACF layout `ap_automation_for_cfo_section` — WPGraphQL type `…ApAutomationForCfoSectionLayout` (not …FinancialControllers…). */
+const ApAutomationForCfoLayout = `${LAYOUT_PREFIX}ApAutomationForCfoSection${LAYOUT_SUFFIX}`;
+/** Only add a fragment spread for this once the layout exists in WP/WPGraphQL (schema exposes the union member). */
+// const ApSoftcoExperienceLayout = `${LAYOUT_PREFIX}ApSoftcoExperienceSection${LAYOUT_SUFFIX}`;
 const ArchitectureLayout = `${LAYOUT_PREFIX}ArchitectureSection${LAYOUT_SUFFIX}`;
 const ErpIntegrationLayout = `${LAYOUT_PREFIX}ErpIntegrationSection${LAYOUT_SUFFIX}`;
 const AnalyticsDashboardsLayout = `${LAYOUT_PREFIX}AnalyticsDashboardsSection${LAYOUT_SUFFIX}`;
@@ -747,7 +749,7 @@ function buildFragment(): string {
       endorsementText
       metrics { value label }
     }
-    ... on ${ApAutomationForCfoSectionLayout} {
+    ... on ${ApAutomationForCfoLayout} {
       overline
       headingHighlight
       headingLine1After
@@ -762,6 +764,8 @@ function buildFragment(): string {
       headingLine2
       body
       image { node { sourceUrl altText } }
+      p2pImage { node { sourceUrl altText } }
+      apImage { node { sourceUrl altText } }
     }
     ... on ${ErpIntegrationLayout} {
       overline
@@ -1159,15 +1163,7 @@ function buildFragmentResilient(): string {
     ... on ${OpenRolesLayout} { overline headingLine1 headingLine2 locationFilterLabel departmentFilterLabel hireHiveLive viewAllHref viewAllLabel openRolesJobs { title location department excerpt readMoreHref } }
     ... on ${FeatureModalLayout} { overline headingBefore headingHighlight headingAfter body ctaLabel ctaHref featureModalItems { title description modalLabel modalTitle modalDescription image { node { sourceUrl altText } } } }
     ... on ${ApAutomationLayout} { overline headingLine1 headingLine2 image { node { sourceUrl altText } } softcoApImage { node { sourceUrl altText } } body ctaLabel ctaHref gartnerLogo { node { sourceUrl altText } } endorsementText metrics { value label } }
-    ... on ${ApAutomationForCfoSectionLayout} {
-      overline
-      headingHighlight
-      headingLine1After
-      headingLine2
-      headingLine3
-      body
-      image { node { sourceUrl altText } }
-    }
+    ... on ${ApAutomationForCfoLayout} { overline headingHighlight headingLine1After headingLine2 headingLine3 body image { node { sourceUrl altText } } }
     ... on ${ArchitectureLayout} { overline headingLine1 headingLine2 body image { node { sourceUrl altText } } p2pImage { node { sourceUrl altText } } apImage { node { sourceUrl altText } } }
     ... on ${ErpIntegrationLayout} { overline headingLine1 headingLine2 body ctaLabel ctaHref moreCountHighlight moreCountRest erpLogos { logoImg { node { sourceUrl altText } } logoAlt href } }
     ... on ${AnalyticsDashboardsLayout} { overline mainTitle introBody ctaLabel ctaHref headingBefore headingHighlight body slides { image { node { sourceUrl altText } } } }

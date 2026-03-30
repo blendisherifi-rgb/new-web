@@ -3,7 +3,7 @@
  */
 
 import { fetchGraphQL, getWordPressRestBaseUrl } from "./wordpress";
-import { getWpmlLanguage, type Locale } from "@/lib/i18n";
+import { getWpmlLanguage, resolveWpmlNodeForLocale, type Locale } from "@/lib/i18n";
 import type { ResourceHubKind } from "@/lib/resources-hub";
 import { REST_PATHS_BY_KIND } from "@/lib/resources-hub";
 
@@ -30,6 +30,7 @@ const DETAIL_FIELDS = `
   date
   featuredImage { node { sourceUrl altText } }
   seo { title metaDesc opengraphImage { sourceUrl } }
+  language { code }
 `;
 
 /** GraphQL single-entry root field names to try in order (schema / CPT naming varies). */
@@ -143,14 +144,14 @@ async function fetchCptEntryBySlug(
     const raw = data?.[root];
     if (!raw || typeof raw.title !== "string") return null;
 
-    if (withTranslations) {
-      const typed = raw as { translations?: Array<{ language?: { code?: string } }> };
-      const match = typed.translations?.find((t) => t.language?.code === language);
-      const post = (match ?? raw) as Record<string, unknown>;
-      return mapDetail(post);
-    }
-
-    return mapDetail(raw);
+    const typed = raw as {
+      language?: { code?: string };
+      translations?: Array<Record<string, unknown> & { language?: { code?: string } }>;
+    };
+    const translations = withTranslations ? typed.translations : undefined;
+    const resolved = resolveWpmlNodeForLocale(typed, translations, locale);
+    if (!resolved) return null;
+    return mapDetail(resolved as Record<string, unknown>);
   };
 
   for (const root of graphqlRoots) {
@@ -168,7 +169,7 @@ async function fetchCptEntryBySlug(
   if (base) {
     for (const collection of restCollections) {
       try {
-        const url = `${base}/wp/v2/${collection}?slug=${encodeURIComponent(slug)}&_embed`;
+        const url = `${base}/wp/v2/${collection}?slug=${encodeURIComponent(slug)}&_embed&lang=${encodeURIComponent(language)}`;
         const res = await fetch(url, { next: { tags } });
         if (!res.ok) continue;
         const arr = (await res.json()) as WpRestPostLike[];

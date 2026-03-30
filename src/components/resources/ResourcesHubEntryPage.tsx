@@ -8,20 +8,24 @@ export function ResourcesHubEntryPage({
   item,
   backHref,
   backLabel,
+  topPaddingClass = "pt-[120px]",
 }: {
   item: ResourceHubDetail;
   backHref: string;
   backLabel: string;
+  topPaddingClass?: string;
 }) {
   return (
     <article className="w-full bg-white">
-      <div className="mx-auto max-w-[1440px] px-6 py-16 md:py-24">
-        <Link
-          href={backHref}
-          className="font-body text-sm font-medium text-brand-blue hover:underline"
-        >
-          {backLabel}
-        </Link>
+      <div className={`mx-auto max-w-[1440px] px-6 ${topPaddingClass} py-16 md:py-24`}>
+        <div className="pt-[50px]">
+          <Link
+            href={backHref}
+            className="font-body text-sm font-medium text-brand-blue hover:underline"
+          >
+            {backLabel}
+          </Link>
+        </div>
 
         <header className="mt-8">
           <Heading level={1} className="text-brand-dark">

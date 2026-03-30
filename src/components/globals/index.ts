@@ -14,3 +14,5 @@ export { WhoWeAreDropdown } from "./WhoWeAreDropdown";
 export { Footer } from "./Footer";
 export { SmoothScroll } from "./SmoothScroll";
 export { CookieConsent } from "./CookieConsent";
+export { ConsentAnalytics } from "./CookieConsent/ConsentAnalytics";
+export { CookieSettingsLink } from "./CookieConsent/CookieSettingsLink";

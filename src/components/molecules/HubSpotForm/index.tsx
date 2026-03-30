@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { isOptInRegion } from "@/lib/cookies";
+import { hasMarketingConsent } from "@/lib/cookies";
 
 interface HubSpotFormProps {
   /** HubSpot portal ID */
@@ -18,9 +18,7 @@ interface HubSpotFormProps {
 const HUBSPOT_SCRIPT = "//js.hsforms.net/forms/v2.js";
 
 /**
- * HubSpot form embed with cookie consent gating.
- * For EU/UK: only loads form after user accepts cookies.
- * For US: loads immediately (opt-out model).
+ * HubSpot form embed — loads only when marketing cookies are allowed (see cookie banner).
  */
 export function HubSpotForm({
   portalId,
@@ -33,8 +31,6 @@ export function HubSpotForm({
     "loading"
   );
 
-  const optIn = isOptInRegion(locale);
-
   useEffect(() => {
     if (!portalId || !formId) {
       setStatus("error");
@@ -43,13 +39,10 @@ export function HubSpotForm({
 
     const checkConsent = () => {
       if (typeof document === "undefined") return false;
-      const cookies = document.cookie;
-      const match = cookies.match(/softco-consent=([^;]+)/);
-      const consent = match?.[1];
-      return consent === "accepted" || !optIn;
+      return hasMarketingConsent(document.cookie, locale);
     };
 
-    if (optIn && !checkConsent()) {
+    if (!checkConsent()) {
       setStatus("consent-required");
       const handler = () => {
         if (checkConsent()) {
@@ -63,7 +56,7 @@ export function HubSpotForm({
     }
 
     loadForm();
-  }, [portalId, formId, optIn]);
+  }, [portalId, formId, locale]);
 
   const loadForm = () => {
     const container = containerRef.current;
@@ -106,7 +99,8 @@ export function HubSpotForm({
         className={`rounded-lg border border-brand-grey bg-brand-light-blue p-8 ${className}`}
       >
         <p className="font-body text-brand-dark">
-          To view and submit this form, please accept cookies in the banner below.
+          To view and submit this form, please enable marketing cookies in the cookie banner (or open Cookie settings
+          in the footer).
         </p>
       </div>
     );

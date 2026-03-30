@@ -5,7 +5,7 @@
 
 import { fetchGraphQL, getWordPressRestBaseUrl } from "./wordpress";
 import type { Locale } from "./i18n";
-import { localePath, getWpmlLanguage, getWpmlLanguageEnum } from "./i18n";
+import { localePath, getWpmlLanguage, getWpmlLanguageEnum, resolveWpmlNodeForLocale } from "./i18n";
 
 /** Parent page slug in WP (Pages → Case Studies). Override if your parent slug differs. */
 const CASE_STUDIES_PARENT_SLUG =
@@ -700,7 +700,6 @@ export async function fetchCaseStudyBySlug(
   locale: Locale
 ): Promise<CaseStudyDetail | null> {
   const tags = ["case-studies", `case-study-${locale}-${slug}`];
-  const language = getWpmlLanguage(locale);
 
   const tryPageBySlug = async (): Promise<CaseStudyDetail | null> => {
     try {
@@ -774,6 +773,7 @@ export async function fetchCaseStudyBySlug(
             content
             featuredImage { node { sourceUrl altText } }
             seo { title metaDesc opengraphImage { sourceUrl } }
+            language { code }
             ${
               withTranslations
                 ? `
@@ -796,13 +796,14 @@ export async function fetchCaseStudyBySlug(
       );
       const raw = data?.caseStudy ?? data?.caseStudyBy;
       if (!raw) return null;
-      if (withTranslations) {
-        const typed = raw as { translations?: Array<{ language?: { code?: string } }> };
-        const match = typed.translations?.find((t) => t.language?.code === language);
-        const post = (match ?? raw) as Record<string, unknown>;
-        return mapCptPost(post);
-      }
-      return mapCptPost(raw as Record<string, unknown>);
+      const typed = raw as {
+        language?: { code?: string };
+        translations?: Array<Record<string, unknown> & { language?: { code?: string } }>;
+      };
+      const translations = withTranslations ? typed.translations : undefined;
+      const resolved = resolveWpmlNodeForLocale(typed, translations, locale);
+      if (!resolved) return null;
+      return mapCptPost(resolved as Record<string, unknown>);
     };
 
     try {
