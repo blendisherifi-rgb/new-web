@@ -61,7 +61,7 @@ export function ClientSuccessStoryChallengeSection({
               headingHighlight={headingHighlight}
               headingAfter={headingAfter}
               level={2}
-              className="max-w-[520px] !font-heading !font-semibold !text-[60px] !leading-[64px] !tracking-normal text-brand-dark"
+              className="max-w-[520px] !font-heading !font-semibold !text-[60px] !leading-[64px] !tracking-normal text-brand-dark tablet-down:!text-[36px] tablet-down:!leading-[1.12]"
             />
           </div>
 

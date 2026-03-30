@@ -71,7 +71,7 @@ export function ClientSuccessStoryRelatedStoriesSection({
           <div className="mx-auto max-w-[980px] text-center">
             <Heading
               level={2}
-              className="text-center !font-heading !font-semibold !text-[60px] !leading-[64px] !tracking-normal text-brand-dark"
+              className="text-center !font-heading !font-semibold !text-[60px] !leading-[64px] !tracking-normal text-brand-dark tablet-down:!text-[36px] tablet-down:!leading-[1.12]"
             >
               {titleLine1.trim() ? (
                 <span className="block">{titleLine1.trim()}</span>

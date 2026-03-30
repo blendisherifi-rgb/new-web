@@ -1,10 +1,10 @@
 "use client";
 
+import { useCallback, useEffect, useRef } from "react";
 import { Overline } from "@/components/atoms/Overline";
 import { Heading } from "@/components/atoms/Heading";
-import { Button } from "@/components/atoms/Button";
-import { ChevronRightIcon } from "@/components/atoms/Icon";
 import Image from "next/image";
+import Script from "next/script";
 
 interface SocialLink {
   platform?: string;
@@ -26,8 +26,18 @@ function socialIconLabel(platform: string, fallback?: string): string {
   return (fallback ?? platform).slice(0, 2);
 }
 
-const contactFieldClass =
-  "w-full rounded-[5px] border border-white/25 bg-[#E8EEF8]/35 px-4 py-3 font-body text-[16px] text-brand-dark shadow-inner backdrop-blur-sm placeholder:text-brand-dark/50 focus:border-brand-orange focus:outline-none focus:ring-2 focus:ring-brand-orange/25";
+type HubSpotWindow = Window & {
+  hbspt?: {
+    forms?: {
+      create: (config: {
+        portalId: string;
+        formId: string;
+        region: string;
+        target: string;
+      }) => void;
+    };
+  };
+};
 
 /**
  * Contact hero + form on one gradient section (matches Contact Us 2 comp).
@@ -39,9 +49,42 @@ export function ContactWithFormSection({
   socialLinks = [],
 }: ContactWithFormSectionProps) {
   const links = socialLinks?.filter((s) => s.url) ?? [];
+  const targetId = "contact-with-form-hubspot-target";
+  const createdRef = useRef(false);
+
+  const createHubSpotForm = useCallback(() => {
+    const hsWindow = window as HubSpotWindow;
+    if (createdRef.current || !hsWindow.hbspt?.forms?.create) return;
+    const target = document.getElementById(targetId);
+    if (!target) return;
+
+    target.innerHTML = "";
+    hsWindow.hbspt.forms.create({
+      portalId: "4912815",
+      formId: "5eaf5a91-c179-42a3-9649-84c18bc39a30",
+      region: "na1",
+      target: `#${targetId}`,
+    });
+    createdRef.current = true;
+  }, []);
+
+  useEffect(() => {
+    createHubSpotForm();
+    return () => {
+      createdRef.current = false;
+      const target = document.getElementById(targetId);
+      if (target) target.innerHTML = "";
+    };
+  }, [createHubSpotForm]);
 
   return (
     <section className="relative w-full overflow-hidden">
+      <Script
+        id="hubspot-forms-v2"
+        src="//js.hsforms.net/forms/embed/v2.js"
+        strategy="afterInteractive"
+        onLoad={createHubSpotForm}
+      />
       <Image
         src="/softco-gradient.jpg"
         alt=""
@@ -81,128 +124,11 @@ export function ContactWithFormSection({
         </div>
 
         {/* Gap + Form */}
-        <div className="pb-16 pt-12 tablet-down:pb-24 tablet-down:pt-[120px]">
+        <div className="pb-16 pt-4 tablet-down:pb-24 tablet-down:pt-10">
           <div className="mx-auto max-w-[800px] px-4 tablet-down:px-6">
-            <form className="flex flex-col gap-6" onSubmit={(e) => e.preventDefault()}>
-              <div className="grid gap-6 tablet-down:grid-cols-2">
-                <div className="flex flex-col gap-1.5">
-                  <label htmlFor="cf-first-name" className="font-body text-[14px] font-medium text-white">
-                    First name <span className="text-brand-orange" aria-hidden>*</span>
-                  </label>
-                  <input
-                    id="cf-first-name"
-                    type="text"
-                    required
-                    autoComplete="given-name"
-                    className={contactFieldClass}
-                  />
-                </div>
-                <div className="flex flex-col gap-1.5">
-                  <label htmlFor="cf-last-name" className="font-body text-[14px] font-medium text-white">
-                    Last name <span className="text-brand-orange" aria-hidden>*</span>
-                  </label>
-                  <input
-                    id="cf-last-name"
-                    type="text"
-                    required
-                    autoComplete="family-name"
-                    className={contactFieldClass}
-                  />
-                </div>
-              </div>
-              <div className="grid gap-6 tablet-down:grid-cols-2">
-                <div className="flex flex-col gap-1.5">
-                  <label htmlFor="cf-email" className="font-body text-[14px] font-medium text-white">
-                    Email <span className="text-brand-orange" aria-hidden>*</span>
-                  </label>
-                  <input
-                    id="cf-email"
-                    type="email"
-                    required
-                    autoComplete="email"
-                    className={contactFieldClass}
-                  />
-                </div>
-                <div className="flex flex-col gap-1.5">
-                  <label htmlFor="cf-job-title" className="font-body text-[14px] font-medium text-white">
-                    Job title <span className="text-brand-orange" aria-hidden>*</span>
-                  </label>
-                  <input
-                    id="cf-job-title"
-                    type="text"
-                    required
-                    autoComplete="organization-title"
-                    className={contactFieldClass}
-                  />
-                </div>
-              </div>
-              <div className="grid gap-6 tablet-down:grid-cols-2">
-                <div className="flex flex-col gap-1.5">
-                  <label htmlFor="cf-company" className="font-body text-[14px] font-medium text-white">
-                    Company name <span className="text-brand-orange" aria-hidden>*</span>
-                  </label>
-                  <input
-                    id="cf-company"
-                    type="text"
-                    required
-                    autoComplete="organization"
-                    className={contactFieldClass}
-                  />
-                </div>
-                <div className="flex flex-col gap-1.5">
-                  <label htmlFor="cf-role" className="font-body text-[14px] font-medium text-white">
-                    Role
-                  </label>
-                  <select id="cf-role" defaultValue="" className={`${contactFieldClass} cursor-pointer`}>
-                    <option value="" disabled>
-                      Select your role
-                    </option>
-                    <option value="cfo">CFO / Finance leader</option>
-                    <option value="ap">Accounts Payable Manager</option>
-                    <option value="procurement">Procurement / P2P</option>
-                    <option value="it">IT / Digital transformation</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <label htmlFor="cf-message" className="font-body text-[14px] font-medium text-white">
-                  Your message <span className="text-brand-orange" aria-hidden>*</span>
-                </label>
-                <textarea
-                  id="cf-message"
-                  required
-                  rows={5}
-                  className={contactFieldClass}
-                />
-              </div>
-              <div className="flex flex-col gap-4">
-                <label className="inline-flex cursor-pointer items-center gap-3">
-                  <input
-                    type="checkbox"
-                    defaultChecked
-                    className="h-5 w-5 shrink-0 cursor-pointer rounded border-white/30 text-brand-orange accent-brand-orange focus:ring-2 focus:ring-brand-orange/30"
-                  />
-                  <span className="font-body text-[14px] text-white/90">
-                    I agree my information can be used to contact me regarding my enquiry
-                  </span>
-                </label>
-                <label className="inline-flex cursor-pointer items-center gap-3">
-                  <input
-                    type="checkbox"
-                    className="h-5 w-5 shrink-0 cursor-pointer rounded border-white/30 text-brand-orange accent-brand-orange focus:ring-2 focus:ring-brand-orange/30"
-                  />
-                  <span className="font-body text-[14px] text-white/90">
-                    I would like to receive occasional updates with technology insights from SoftCo
-                  </span>
-                </label>
-              </div>
-              <div className="flex justify-center pt-4">
-                <Button type="submit" variant="orange" iconAfter={<ChevronRightIcon />}>
-                  SEND MESSAGE
-                </Button>
-              </div>
-            </form>
+            <div className="contact-with-form-hubspot">
+              <div id={targetId} />
+            </div>
           </div>
         </div>
       </div>

@@ -14,6 +14,14 @@ export interface StrategicPriorityRow {
 interface StrategicPrioritiesSectionProps {
   /** Eyebrow, e.g. "WHAT YOU GAIN". */
   overline: string;
+  /** Main heading before highlighted word (line 1). */
+  headingBefore?: string;
+  /** Highlighted heading word (orange). */
+  headingHighlight?: string;
+  /** Main heading after highlighted word (line 1). */
+  headingAfter?: string;
+  /** Second heading line (subheading). */
+  subheading?: string;
   /** Intro paragraph below the main title (muted on dark). */
   intro: string;
   /** Left tab label (orange tab, black text). */
@@ -67,6 +75,10 @@ function RowConnector() {
  */
 export function StrategicPrioritiesSection({
   overline,
+  headingBefore = "How ",
+  headingHighlight = "SoftCo",
+  headingAfter = " supports your",
+  subheading = "strategic priorities",
   intro,
   leftColumnLabel,
   rightColumnLabel,
@@ -92,9 +104,11 @@ export function StrategicPrioritiesSection({
           className="mx-auto mt-[50px] max-w-[min(100%,75rem)] text-center font-heading font-semibold text-[46px] leading-[1.1] tracking-[0] text-white tablet-down:text-[80px] tablet-down:leading-[88px]"
         >
           <span className="block">
-            How <span className="text-brand-orange">SoftCo</span> supports your
+            {headingBefore}
+            <span className="text-brand-orange">{headingHighlight}</span>
+            {headingAfter}
           </span>
-          <span className="mt-2 block tablet-down:mt-3">strategic priorities</span>
+          <span className="mt-2 block tablet-down:mt-3">{subheading}</span>
         </Heading>
 
         <Paragraph

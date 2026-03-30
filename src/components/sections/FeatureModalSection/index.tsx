@@ -6,7 +6,7 @@ import { Heading } from "@/components/atoms/Heading";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Button } from "@/components/atoms/Button";
 import { Image } from "@/components/atoms/Image";
-import { ChevronRightIcon, XIcon } from "@/components/atoms/Icon";
+import { ArrowRightIcon, ChevronRightIcon, XIcon } from "@/components/atoms/Icon";
 import { HeadlineWithHighlight } from "@/components/molecules/HeadlineWithHighlight";
 
 export interface FeatureModalItem {
@@ -70,7 +70,7 @@ function FeatureModal({
   const canGoPrev = activeIndex > 0;
 
   const navBtnBase =
-    "flex h-[48px] w-full items-center justify-center text-brand-dark/70 transition-colors hover:bg-brand-light-blue hover:text-brand-dark disabled:cursor-not-allowed disabled:opacity-30";
+    "flex h-[100px] w-[100px] items-center justify-center border-b border-brand-grey text-brand-dark/75 transition-colors hover:bg-brand-light-blue hover:text-brand-dark disabled:cursor-not-allowed disabled:opacity-30";
 
   return (
     <div
@@ -86,72 +86,80 @@ function FeatureModal({
         onClick={onClose}
       />
 
-      {/* Floating nav buttons — separate block, NOT part of the white panel.
-          Only as tall as the 3 buttons. Below them: transparent (backdrop shows). */}
+      {/* Floating nav control strip centered on the panel boundary */}
       <div
-        className="absolute top-0 flex flex-col bg-white"
-        style={{ right: "calc(62% - 56px)" }}
+        className="absolute left-[calc(50%-4px)] top-0 z-10 hidden -translate-x-1/2 flex-col bg-white tablet-down:flex"
       >
         <button
           type="button"
           onClick={onClose}
-          className={`${navBtnBase} border-b border-brand-grey`}
+          className={navBtnBase}
           aria-label="Close"
         >
-          <XIcon size="sm" />
+          <XIcon size="lg" strokeWidth={2.5} />
         </button>
         <button
           type="button"
           onClick={onNext}
           disabled={!canGoNext}
-          className={`${navBtnBase} border-b border-brand-grey`}
+          className={navBtnBase}
           aria-label="Next"
         >
           <span className="inline-flex">
-            <ChevronRightIcon size="sm" strokeWidth={2} />
+            <ArrowRightIcon size="lg" strokeWidth={2.5} />
           </span>
         </button>
         <button
           type="button"
           onClick={onPrev}
           disabled={!canGoPrev}
-          className={navBtnBase}
+          className={`${navBtnBase} border-b-0`}
           aria-label="Previous"
         >
           <span className="inline-flex rotate-180">
-            <ChevronRightIcon size="sm" strokeWidth={2} />
+            <ArrowRightIcon size="lg" strokeWidth={2.5} />
           </span>
         </button>
       </div>
 
-      {/* White content panel — right-aligned, full height */}
+      {/* White content panel — right aligned, 50% viewport width on desktop */}
       <div
-        className="absolute right-0 top-0 flex h-full w-[62%] min-w-[420px] flex-col overflow-hidden bg-white shadow-[-6px_0_30px_rgba(0,0,0,0.15)]"
+        className="absolute right-0 top-0 flex h-full w-full min-w-0 flex-col overflow-hidden bg-white shadow-[-6px_0_30px_rgba(0,0,0,0.15)] tablet-down:w-1/2"
       >
-        <div className="flex-1 overflow-hidden px-8 py-8 tablet-down:px-10 tablet-down:py-10">
+        <div className="flex-1 overflow-hidden px-6 py-8 tablet-down:px-14 tablet-down:py-12">
+          <div className="mb-5 flex items-center justify-end tablet-down:hidden">
+            <button
+              type="button"
+              onClick={onClose}
+              className="inline-flex h-10 w-10 items-center justify-center text-brand-dark/70 transition-colors hover:text-brand-dark"
+              aria-label="Close"
+            >
+              <XIcon size={20} />
+            </button>
+          </div>
           <Overline className="text-brand-orange">
             {(item.modalLabel || "LABEL").toUpperCase()}
           </Overline>
 
-          <Heading level={2} className="mt-3 text-left !text-brand-blue">
+          <Heading
+            level={2}
+            className="mt-3 text-left !font-heading !font-semibold !text-[42px] !leading-[1.08] !tracking-[-0.01em] !text-brand-blue tablet-down:!text-[60px] tablet-down:!leading-[64px]"
+          >
             {item.modalTitle || item.title}
           </Heading>
 
-          <Paragraph
-            size="caption"
-            className="mt-4 max-w-[min(100%,38rem)] leading-[1.7] text-brand-dark-80"
-          >
+          <Paragraph size="caption" className="mt-6 max-w-[min(100%,42rem)] !text-[20px] !leading-[32px] text-brand-dark-80">
             {item.modalDescription}
           </Paragraph>
 
-          <div className="mt-6 overflow-hidden rounded-sm border border-brand-grey">
+          <div className="mt-8 overflow-hidden rounded-sm border border-brand-grey tablet-down:w-[545px]">
             <Image
               src={item.imageSrc}
               alt={item.imageAlt ?? item.modalTitle ?? item.title}
               width={545}
               height={398}
-              className="h-auto w-full max-w-[545px] object-cover"
-              sizes="(max-width: 992px) 90vw, 54vw"
+              className="h-auto w-full object-cover tablet-down:h-[398px] tablet-down:w-[545px]"
+              sizes="(max-width: 992px) 100vw, 545px"
             />
           </div>
         </div>

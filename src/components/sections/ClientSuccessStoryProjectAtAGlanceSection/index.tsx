@@ -180,7 +180,7 @@ export function ClientSuccessStoryProjectAtAGlanceSection({
                   return (
                     <div
                       key={`${row.label}-${idx}`}
-                      className={`flex items-center justify-between gap-6 py-[14px] whitespace-nowrap bg-[#E8F2FD] ${
+                      className={`flex items-start justify-between gap-6 py-[14px] bg-[#E8F2FD] ${
                         isLast ? "" : "border-b border-[#E7E7EB]"
                       }`}
                     >
@@ -188,7 +188,7 @@ export function ClientSuccessStoryProjectAtAGlanceSection({
                         {row.label}
                       </span>
 
-                      <span className="flex items-center justify-end gap-3 whitespace-nowrap">
+                      <span className="flex flex-wrap items-center justify-end gap-3 text-right">
                         {row.valueText ? (
                           <span className={`${detailsTypeClass} text-brand-dark`}>
                             {row.valueText}

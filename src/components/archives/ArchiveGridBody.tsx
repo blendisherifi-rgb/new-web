@@ -9,7 +9,7 @@ import { ArrowRightIcon } from "@/components/atoms/Icon";
 export type ArchiveGridResolvedItem = ContentArchiveGridItem & { href: string };
 
 const tagPillClass =
-  "inline-flex items-center rounded-[4px] bg-[#E8F2FD] px-3 py-1.5 font-body text-[20px] font-medium leading-[28px] tracking-normal text-brand-dark-60";
+  "inline-flex items-center rounded-[4px] bg-[#E8F2FD] px-3 py-1.5 font-body text-[20px] font-medium leading-[28px] tracking-normal text-brand-dark-60 tablet-down:text-[12px] tablet-down:leading-[16px]";
 
 interface ArchiveGridBodyProps {
   items: ArchiveGridResolvedItem[];
