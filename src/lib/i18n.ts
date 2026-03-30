@@ -43,6 +43,20 @@ export function getWpmlLanguageEnum(locale: Locale): string {
   return LOCALE_TO_WPML[locale].toUpperCase();
 }
 
+/**
+ * Pick the WPML translation row for `locale`, or fall back to the base node.
+ * `base` is typically the default-language post; `translations` comes from WPGraphQL `translations { … }`.
+ */
+export function resolveWpmlNodeForLocale<T extends object>(
+  base: T,
+  translations: Array<{ language?: { code?: string | null } | null } & Partial<T>> | null | undefined,
+  locale: Locale
+): T {
+  const code = getWpmlLanguage(locale);
+  const match = translations?.find((t) => t.language?.code === code);
+  return (match ?? base) as T;
+}
+
 export function isLocale(value: string): value is Locale {
   return LOCALES.includes(value as Locale);
 }
