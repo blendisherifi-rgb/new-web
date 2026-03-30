@@ -18,7 +18,7 @@ services:
   nginx:
     image: nginx:alpine
     restart: unless-stopped
-    # Bind on all interfaces (0.0.0.0) so the Elastic IP / public IP reaches this container.
+    # Bind on all interfaces so traffic to the host (DNS → test.softco.com) reaches this container.
     # If host port 80 is taken by system nginx, set NGINX_HTTP_PORT=8080 in the environment or `.env`.
     ports:
       - "0.0.0.0:${NGINX_HTTP_PORT:-80}:80"
