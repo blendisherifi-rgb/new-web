@@ -224,6 +224,9 @@ function transformSection(node: Record<string, unknown>, index: number): Section
 
   // Normalize field names from GraphQL (camelCase) / ACF structure
   const normalized: Record<string, unknown> = { ...fields };
+  if (Object.keys(normalized).length === 0) {
+    return null;
+  }
 
   // Hero: image.node / logos[].logo.node (AcfMediaItemConnectionEdge) -> imageSrc, imageAlt; logos -> { src, alt }
   if (acfGroupName === "hero_section") {
