@@ -1,8 +1,23 @@
 "use client";
 
+import { useCallback, useEffect, useId, useRef } from "react";
+import Script from "next/script";
+
 import { Overline } from "@/components/atoms/Overline";
 import { Heading } from "@/components/atoms/Heading";
-import { Image } from "@/components/atoms/Image";
+
+type HubSpotWindow = Window & {
+  hbspt?: {
+    forms?: {
+      create: (config: {
+        portalId: string;
+        formId: string;
+        region: string;
+        target: string;
+      }) => void;
+    };
+  };
+};
 
 export interface StartChallengeFormSectionProps {
   /** Top-left eyebrow, e.g. "START THE CHALLENGE". */
@@ -11,12 +26,6 @@ export interface StartChallengeFormSectionProps {
   headingLine1: string;
   /** Second line — brand blue (e.g. "challenge"). */
   headingHighlight: string;
-  /**
-   * Placeholder screenshot of the form until HubSpot is embedded.
-   * Replace this `<Image />` with a HubSpot embed in the page template when ready.
-   */
-  formPlaceholderImageSrc: string;
-  formPlaceholderImageAlt: string;
 }
 
 /**
@@ -27,11 +36,52 @@ export function StartChallengeFormSection({
   overline,
   headingLine1,
   headingHighlight,
-  formPlaceholderImageSrc,
-  formPlaceholderImageAlt,
 }: StartChallengeFormSectionProps) {
+  const instanceId = useId().replace(/:/g, "");
+  const targetId = `start-challenge-hubspot-target-${instanceId}`;
+  const createdRef = useRef(false);
+
+  const createHubSpotForm = useCallback(() => {
+    const hsWindow = window as HubSpotWindow;
+    if (createdRef.current || !hsWindow.hbspt?.forms?.create) return;
+    const target = document.getElementById(targetId);
+    if (!target) return;
+    if (target.querySelector(".hs-form")) {
+      createdRef.current = true;
+      return;
+    }
+
+    target.innerHTML = "";
+    hsWindow.hbspt.forms.create({
+      portalId: "4912815",
+      formId: "8102c8e8-2d88-4427-bd6a-6ad7e5de82c3",
+      region: "na1",
+      target: `#${targetId}`,
+    });
+    createdRef.current = true;
+  }, [targetId]);
+
+  useEffect(() => {
+    createHubSpotForm();
+    const timer = window.setInterval(() => {
+      createHubSpotForm();
+    }, 300);
+
+    return () => {
+      window.clearInterval(timer);
+      createdRef.current = false;
+      const target = document.getElementById(targetId);
+      if (target) target.innerHTML = "";
+    };
+  }, [createHubSpotForm, targetId]);
+
   return (
     <section className="w-full bg-white">
+      <Script
+        id="hubspot-forms-v2"
+        src="//js.hsforms.net/forms/embed/v2.js"
+        strategy="afterInteractive"
+      />
       <div className="mx-auto w-full max-w-[1440px] px-4 pb-16 pt-10 tablet-down:px-6 tablet-down:pb-24">
         {/* Eyebrow + full-width grey rule + left tick — same pattern as Strategic Priorities (light line on white) */}
         <div className="text-left">
@@ -53,15 +103,8 @@ export function StartChallengeFormSection({
         </Heading>
 
         <div className="mx-auto w-full max-w-[920px]">
-          <div className="overflow-hidden rounded-xl">
-            <Image
-              src={formPlaceholderImageSrc}
-              alt={formPlaceholderImageAlt}
-              width={920}
-              height={980}
-              className="h-auto w-full object-cover object-top"
-              sizes="(max-width: 920px) 100vw, 920px"
-            />
+          <div className="contact-with-form-hubspot">
+            <div id={targetId} />
           </div>
         </div>
       </div>

@@ -1,10 +1,25 @@
 "use client";
 
+import { useCallback, useEffect, useId, useRef } from "react";
+import Script from "next/script";
+
 import { Overline } from "@/components/atoms/Overline";
 import { Heading } from "@/components/atoms/Heading";
 import { Paragraph } from "@/components/atoms/Paragraph";
-import { Image } from "@/components/atoms/Image";
 import { LogoMarquee, type LogoItem } from "@/components/molecules/LogoMarquee";
+
+type HubSpotWindow = Window & {
+  hbspt?: {
+    forms?: {
+      create: (config: {
+        portalId: string;
+        formId: string;
+        region: string;
+        target: string;
+      }) => void;
+    };
+  };
+};
 
 export interface BookADemoSectionProps {
   /** Eyebrow, e.g. "BOOK A DEMO" (centered, orange). */
@@ -47,8 +62,51 @@ export function BookADemoSection({
   const normalizedLogos = logos.filter((l) => l.src);
   const showMarquee = normalizedLogos.length > 0;
 
+  const instanceId = useId().replace(/:/g, "");
+  const targetId = `book-a-demo-hubspot-target-${instanceId}`;
+  const createdRef = useRef(false);
+
+  const createHubSpotForm = useCallback(() => {
+    const hsWindow = window as HubSpotWindow;
+    if (createdRef.current || !hsWindow.hbspt?.forms?.create) return;
+    const target = document.getElementById(targetId);
+    if (!target) return;
+    if (target.querySelector(".hs-form")) {
+      createdRef.current = true;
+      return;
+    }
+
+    target.innerHTML = "";
+    hsWindow.hbspt.forms.create({
+      portalId: "4912815",
+      formId: "5eaf5a91-c179-42a3-9649-84c18bc39a30",
+      region: "na1",
+      target: `#${targetId}`,
+    });
+    createdRef.current = true;
+  }, [targetId]);
+
+  useEffect(() => {
+    createHubSpotForm();
+    const timer = window.setInterval(() => {
+      createHubSpotForm();
+    }, 300);
+
+    return () => {
+      window.clearInterval(timer);
+      createdRef.current = false;
+      const target = document.getElementById(targetId);
+      if (target) target.innerHTML = "";
+    };
+  }, [createHubSpotForm, targetId]);
+
   return (
     <section className="w-full bg-brand-blue">
+      <Script
+        id="hubspot-forms-v2"
+        src="//js.hsforms.net/forms/embed/v2.js"
+        strategy="afterInteractive"
+      />
       <div className="mx-auto w-full max-w-[1440px] px-4 py-16 text-center tablet-down:px-6 tablet-down:py-24">
         <Overline className="text-brand-orange">{overline}</Overline>
 
@@ -67,16 +125,11 @@ export function BookADemoSection({
           {intro}
         </Paragraph>
 
-        <div className="mx-auto mt-12 w-full max-w-[960px] px-2 tablet-down:mt-16 tablet-down:px-4">
-          <div className="overflow-hidden rounded-xl bg-white shadow-lg">
-            <Image
-              src={formPlaceholderImageSrc}
-              alt={formPlaceholderImageAlt}
-              width={920}
-              height={980}
-              className="h-auto w-full object-cover object-top"
-              sizes="(max-width: 960px) 100vw, 920px"
-            />
+        <div className="pb-16 pt-4 tablet-down:pb-24 tablet-down:pt-10">
+          <div className="mx-auto max-w-[800px] px-4 tablet-down:px-6">
+            <div className="contact-with-form-hubspot book-a-demo-hubspot">
+              <div id={targetId} />
+            </div>
           </div>
         </div>
 

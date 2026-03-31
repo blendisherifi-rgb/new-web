@@ -1040,7 +1040,7 @@ function buildFragment(): string {
 
 export const PAGE_SECTIONS_FRAGMENT = buildFragment();
 
-/** Resilient fragment: only __typename for layouts that may not exist in WP schema yet. Use when full query fails. */
+/** True resilient fragment: avoid inline union fragments so unknown WP ACF types never break query parsing. */
 function buildFragmentResilient(): string {
   const sectionsSelection = `
     __typename
