@@ -2,6 +2,7 @@ import { Heading } from "@/components/atoms/Heading";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Image } from "@/components/atoms/Image";
 import { Link } from "@/components/atoms/Link";
+import { FaqSection } from "@/components/sections/FaqSection";
 import type { ResourceHubDetail } from "@/lib/resources-hub-detail";
 
 export function ResourcesHubEntryPage({
@@ -56,6 +57,17 @@ export function ResourcesHubEntryPage({
             dangerouslySetInnerHTML={{ __html: item.content }}
           />
         )}
+
+        {Array.isArray(item.faqs) && item.faqs.length > 0 ? (
+          <div className="mt-14">
+            <FaqSection
+              overline="FAQ"
+              headingLine1="Frequently asked"
+              headingLine2="questions"
+              items={item.faqs}
+            />
+          </div>
+        ) : null}
       </div>
     </article>
   );

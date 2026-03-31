@@ -16,6 +16,7 @@ export interface ResourceHubDetail {
   content?: string | null;
   date?: string | null;
   featuredImage?: { sourceUrl?: string; altText?: string } | null;
+  faqs?: Array<{ question: string; answer: string }>;
   seo?: {
     title?: string | null;
     metaDesc?: string | null;
@@ -100,6 +101,94 @@ function mapDetail(raw: Record<string, unknown> | null | undefined): ResourceHub
       : null,
     seo: raw.seo as ResourceHubDetail["seo"],
   };
+}
+
+function mapFaqsFromNode(raw: Record<string, unknown> | null | undefined): ResourceHubDetail["faqs"] {
+  const source =
+    (raw?.faqs as unknown[] | undefined) ??
+    ((raw?.fAQs as { faqs?: unknown[] } | undefined)?.faqs as unknown[] | undefined) ??
+    (raw?.fAQs as unknown[] | undefined);
+  if (!Array.isArray(source)) return [];
+  return source
+    .map((item) => {
+      const row = item as Record<string, unknown>;
+      const question = typeof row.question === "string" ? row.question.trim() : "";
+      const answer = typeof row.answer === "string" ? row.answer.trim() : "";
+      if (!question || !answer) return null;
+      return { question, answer };
+    })
+    .filter((row): row is { question: string; answer: string } => Boolean(row));
+}
+
+async function fetchBlogFaqsBySlug(
+  slug: string,
+  locale: Locale,
+  tags: string[],
+): Promise<ResourceHubDetail["faqs"]> {
+  const roots = GRAPHQL_ROOTS_BY_KIND.blog;
+  const question = (
+    root: string,
+    withTranslations: boolean,
+    faqSelection: string,
+    translationFaqSelection: string,
+  ) => `
+    query BlogFaqs($slug: ID!) {
+      ${root}(id: $slug, idType: SLUG) {
+        language { code }
+        ${faqSelection}
+        ${
+          withTranslations
+            ? `translations { language { code } ${translationFaqSelection} }`
+            : ""
+        }
+      }
+    }
+  `;
+
+  const faqShapes = [
+    {
+      faqSelection: "fAQs { faqs { question answer } }",
+      translationFaqSelection: "fAQs { faqs { question answer } }",
+    },
+    {
+      faqSelection: "faqs { question answer }",
+      translationFaqSelection: "faqs { question answer }",
+    },
+  ] as const;
+
+  for (const root of roots) {
+    for (const shape of faqShapes) {
+      for (const withTranslations of [true, false] as const) {
+        try {
+          const data = await fetchGraphQL<Record<string, Record<string, unknown> | null>>(
+            question(
+              root,
+              withTranslations,
+              shape.faqSelection,
+              shape.translationFaqSelection,
+            ),
+            { variables: { slug }, tags },
+          );
+          const raw = data?.[root];
+          if (!raw) continue;
+          const typed = raw as {
+            language?: { code?: string };
+            translations?: Array<Record<string, unknown> & { language?: { code?: string } }>;
+          };
+          const resolved = resolveWpmlNodeForLocale(
+            typed,
+            withTranslations ? typed.translations : undefined,
+            locale,
+          ) as Record<string, unknown> | null;
+          const faqs = mapFaqsFromNode(resolved ?? (raw as Record<string, unknown>));
+          if (faqs && faqs.length > 0) return faqs;
+        } catch {
+          /* try next shape / translations mode */
+        }
+      }
+    }
+  }
+  return [];
 }
 
 async function fetchCptEntryBySlug(
@@ -193,5 +282,15 @@ export async function fetchResourceHubEntryBySlug(
   const tags = detailCacheTags(locale, kind, slug);
   const graphqlRoots = GRAPHQL_ROOTS_BY_KIND[kind];
   const restCollections = restCollectionsForKind(kind);
-  return fetchCptEntryBySlug(slug, locale, tags, graphqlRoots, restCollections);
+  const detail = await fetchCptEntryBySlug(slug, locale, tags, graphqlRoots, restCollections);
+  if (!detail) return null;
+
+  if (kind === "blog") {
+    const faqs = await fetchBlogFaqsBySlug(slug, locale, tags);
+    if (faqs && faqs.length > 0) {
+      detail.faqs = faqs;
+    }
+  }
+
+  return detail;
 }
