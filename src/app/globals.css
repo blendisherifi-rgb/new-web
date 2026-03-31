@@ -513,11 +513,12 @@ html {
 .contact-with-form-hubspot .hs-form input[type="tel"],
 .contact-with-form-hubspot .hs-form input[type="number"],
 .contact-with-form-hubspot .hs-form select,
-.contact-with-form-hubspot .hs-form textarea {
+.contact-with-form-hubspot .hs-form textarea,
+.contact-with-form-hubspot .hs-form .hs-input {
   width: 320px;
   border-radius: 5px;
-  border: 1px solid #1e81d6;
-  background: #047fe5;
+  border: 1px solid #047fe5 !important;
+  background: #047fe5 !important;
   padding: 0 16px;
   font-family: var(--font-body);
   font-size: 16px;
