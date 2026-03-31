@@ -12,7 +12,7 @@
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
-                "width": "",    
+                "width": "",
                 "class": "",
                 "id": ""
             },
@@ -15863,6 +15863,521 @@
                                     "parent_repeater": "field_css_rel_stories"
                                 }
                             ]
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                },
+                {
+                    "key": "layout_news_and_events_section",
+                    "name": "news_and_events_section",
+                    "label": "Content | News & events",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_nae_hero_overline",
+                            "label": "Hero overline",
+                            "name": "heroOverline",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": false,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "NEWS & EVENTS",
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "heroOverline",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_nae_hero_heading",
+                            "label": "Hero heading",
+                            "name": "heroHeading",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": false,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "Updates from our HQ",
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "heroHeading",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_nae_hero_body",
+                            "label": "Hero body",
+                            "name": "heroBody",
+                            "aria-label": "",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": false,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "Stay in the loop on product launches, leadership perspectives, and where to meet us next — from webinars to flagship industry events.",
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "heroBody",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "rows": "",
+                            "new_lines": ""
+                        },
+                        {
+                            "key": "field_nae_hero_cta_label",
+                            "label": "Hero CTA label",
+                            "name": "heroCtaLabel",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": false,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "SIGN UP FOR UPDATES",
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "heroCtaLabel",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_nae_hero_cta_href",
+                            "label": "Hero CTA link",
+                            "name": "heroCtaHref",
+                            "aria-label": "",
+                            "type": "url",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": false,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "heroCtaHref",
+                            "placeholder": ""
+                        },
+                        {
+                            "key": "field_nae_card_overline",
+                            "label": "Card overline",
+                            "name": "cardOverline",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": false,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "MEET US AT THE NEXT EVENT",
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "cardOverline",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_nae_card_title",
+                            "label": "Card title",
+                            "name": "cardTitle",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": false,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "cardTitle",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_nae_card_meta",
+                            "label": "Card meta (date / location line)",
+                            "name": "cardMeta",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": false,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "cardMeta",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_nae_card_image",
+                            "label": "Card image",
+                            "name": "cardImage",
+                            "aria-label": "",
+                            "type": "image",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": false,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "return_format": "array",
+                            "library": "all",
+                            "preview_size": "medium",
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "cardImage",
+                            "min_width": 0,
+                            "min_height": 0,
+                            "min_size": 0,
+                            "max_width": 0,
+                            "max_height": 0,
+                            "max_size": 0,
+                            "mime_types": ""
+                        },
+                        {
+                            "key": "field_nae_card_body",
+                            "label": "Card body",
+                            "name": "cardBody",
+                            "aria-label": "",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": false,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "cardBody",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "rows": "",
+                            "new_lines": ""
+                        },
+                        {
+                            "key": "field_nae_card_cta_label",
+                            "label": "Card CTA label",
+                            "name": "cardCtaLabel",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": false,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "MEET US THERE",
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "cardCtaLabel",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_nae_card_cta_href",
+                            "label": "Card CTA link",
+                            "name": "cardCtaHref",
+                            "aria-label": "",
+                            "type": "url",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": false,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "cardCtaHref",
+                            "placeholder": ""
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                },
+                {
+                    "key": "layout_latest_resources_section",
+                    "name": "latest_resources_section",
+                    "label": "Content | Latest resources",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_lrs_heading",
+                            "label": "Section heading",
+                            "name": "heading",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "Optional. Shown above the featured card row.",
+                            "required": 0,
+                            "conditional_logic": false,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "Latest resources",
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "heading",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_lrs_view_all_label",
+                            "label": "View all label",
+                            "name": "viewAllLabel",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": false,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "VIEW ALL RESOURCES",
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "viewAllLabel",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_lrs_view_all_href",
+                            "label": "View all link",
+                            "name": "viewAllHref",
+                            "aria-label": "",
+                            "type": "url",
+                            "instructions": "Path (e.g. /resources) or full URL.",
+                            "required": 0,
+                            "conditional_logic": false,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "viewAllHref",
+                            "placeholder": ""
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                },
+                {
+                    "key": "layout_ap_softco_experience_section",
+                    "name": "ap_softco_experience_section",
+                    "label": "Content | AP SoftCo experience",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_ase_overline",
+                            "label": "Overline",
+                            "name": "overline",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": false,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "YOUR SOFTCO EXPERIENCE",
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "overline",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_ase_heading_highlight",
+                            "label": "Heading highlight (blue)",
+                            "name": "headingHighlight",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "First word or phrase in brand blue.",
+                            "required": 0,
+                            "conditional_logic": false,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "The view",
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "headingHighlight",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_ase_heading_line1_after",
+                            "label": "Heading line 1 after highlight",
+                            "name": "headingLine1After",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "Text after the blue segment on line 1.",
+                            "required": 0,
+                            "conditional_logic": false,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "headingLine1After",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_ase_heading_line2",
+                            "label": "Heading line 2",
+                            "name": "headingLine2",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": false,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "your team has been building manually",
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "headingLine2",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_ase_heading_line3",
+                            "label": "Heading line 3",
+                            "name": "headingLine3",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": false,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "headingLine3",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_ase_image",
+                            "label": "Image",
+                            "name": "image",
+                            "aria-label": "",
+                            "type": "image",
+                            "instructions": "Recommended 581×506px.",
+                            "required": 0,
+                            "conditional_logic": false,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "return_format": "array",
+                            "library": "all",
+                            "preview_size": "medium",
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "image",
+                            "min_width": 0,
+                            "min_height": 0,
+                            "min_size": 0,
+                            "max_width": 0,
+                            "max_height": 0,
+                            "max_size": 0,
+                            "mime_types": ""
+                        },
+                        {
+                            "key": "field_ase_body",
+                            "label": "Body",
+                            "name": "body",
+                            "aria-label": "",
+                            "type": "textarea",
+                            "instructions": "Use a blank line between paragraphs.",
+                            "required": 0,
+                            "conditional_logic": false,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "Team workload. Approval bottlenecks. Exception queues. Processing status by person. This is the operational view that lets you manage the AP function with data, not instinct. Updated in real time. Filterable by team member, supplier, or status. The view that means your next conversation with the CFO starts with evidence.",
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "body",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "rows": "",
+                            "new_lines": ""
                         }
                     ],
                     "min": "",
