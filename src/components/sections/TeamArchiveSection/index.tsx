@@ -7,6 +7,7 @@ import { Heading } from "@/components/atoms/Heading";
 import { Overline } from "@/components/atoms/Overline";
 import { ChevronRightIcon, XIcon } from "@/components/atoms/Icon";
 import type { TeamMember } from "@/components/sections/MeetTheTeamSection";
+import { acquireScrollLock } from "@/lib/scrollLock";
 
 export interface TeamDepartment {
   /** Department taxonomy term name, e.g. "Executive Leadership". */
@@ -49,8 +50,7 @@ function TeamModal({
   const restName = nameParts.slice(1).join(" ");
 
   useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = ""; };
+    return acquireScrollLock();
   }, []);
 
   useEffect(() => {

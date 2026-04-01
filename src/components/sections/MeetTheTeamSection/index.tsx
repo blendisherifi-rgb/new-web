@@ -7,6 +7,7 @@ import { Heading } from "@/components/atoms/Heading";
 import { Overline } from "@/components/atoms/Overline";
 import { Button } from "@/components/atoms/Button";
 import { ChevronRightIcon, XIcon } from "@/components/atoms/Icon";
+import { acquireScrollLock } from "@/lib/scrollLock";
 
 export interface TeamMember {
   /** Member name. */
@@ -56,9 +57,7 @@ function TeamModal({
   const restName = nameParts.slice(1).join(" ");
 
   useEffect(() => {
-    // Block page scroll
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = ""; };
+    return acquireScrollLock();
   }, []);
 
   useEffect(() => {

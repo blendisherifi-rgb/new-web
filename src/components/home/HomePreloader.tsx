@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { shouldReduceMotion } from "@/lib/animations";
+import { acquireScrollLock } from "@/lib/scrollLock";
 
 const ANIMATION_SRC = "/animations/homepage.json";
 const PRELOADER_BG = "#047FE5";
@@ -33,15 +34,7 @@ export function HomePreloader({ onDone }: HomePreloaderProps) {
 
   useLayoutEffect(() => {
     if (gone) return;
-    const html = document.documentElement;
-    const prevBodyOverflow = document.body.style.overflow;
-    const prevHtmlOverflow = html.style.overflow;
-    document.body.style.overflow = "hidden";
-    html.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = prevBodyOverflow;
-      html.style.overflow = prevHtmlOverflow;
-    };
+    return acquireScrollLock();
   }, [gone]);
 
   useLayoutEffect(() => {

@@ -8,6 +8,7 @@ import { Button } from "@/components/atoms/Button";
 import { Image } from "@/components/atoms/Image";
 import { ArrowRightIcon, ChevronRightIcon, XIcon } from "@/components/atoms/Icon";
 import { HeadlineWithHighlight } from "@/components/molecules/HeadlineWithHighlight";
+import { acquireScrollLock } from "@/lib/scrollLock";
 
 export interface FeatureModalItem {
   title: string;
@@ -48,10 +49,7 @@ function FeatureModal({
   const item = items[activeIndex];
 
   useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "";
-    };
+    return acquireScrollLock();
   }, []);
 
   useEffect(() => {

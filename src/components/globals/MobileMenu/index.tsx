@@ -7,6 +7,7 @@ import type { UtilityBarData } from "@/lib/globals";
 import type { Locale } from "@/lib/i18n";
 import { LOCALES, localePath } from "@/lib/i18n";
 import { usePathname } from "next/navigation";
+import { acquireScrollLock } from "@/lib/scrollLock";
 
 interface MobileMenuProps {
   open: boolean;
@@ -42,8 +43,7 @@ export function MobileMenu({
   // Scroll lock
   useEffect(() => {
     if (!open) return;
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = ""; };
+    return acquireScrollLock();
   }, [open]);
 
   // Escape key

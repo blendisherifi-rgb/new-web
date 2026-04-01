@@ -8,6 +8,7 @@ import { LogoMarquee, type LogoItem } from "@/components/molecules/LogoMarquee";
 import { Image } from "@/components/atoms/Image";
 import { shouldReduceMotion } from "@/lib/animations";
 import { useHomeBannerEntrance } from "@/components/home/homeBannerEntranceContext";
+import { acquireScrollLock } from "@/lib/scrollLock";
 import Lottie from "lottie-react";
 
 interface HeroSectionProps {
@@ -82,15 +83,7 @@ export function HeroSection({
 
   useLayoutEffect(() => {
     if (!useCoord || entranceSettled) return;
-    const html = document.documentElement;
-    const pB = document.body.style.overflow;
-    const pH = html.style.overflow;
-    document.body.style.overflow = "hidden";
-    html.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = pB;
-      html.style.overflow = pH;
-    };
+    return acquireScrollLock();
   }, [useCoord, entranceSettled]);
 
   useEffect(() => {
