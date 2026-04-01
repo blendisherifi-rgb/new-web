@@ -86,22 +86,22 @@ export function PlatformSection({
 
           {/* Right column — static images (always visible, no scroll effect) */}
           <div className="relative flex flex-col gap-12 tablet-down:gap-[200px]">
-            <div className="relative aspect-video w-[93%] overflow-hidden rounded-lg">
+            <div className="relative mx-auto aspect-video w-full max-w-[754px] overflow-hidden rounded-lg">
               <Image
                 src={image1Src}
                 alt={image1Alt}
                 fill
                 className="object-contain object-center"
-                sizes="(max-width: 1024px) 93vw, 43vw"
+                sizes="(max-width: 1024px) 100vw, 754px"
               />
             </div>
-            <div className="relative aspect-video w-[93%] overflow-hidden rounded-lg">
+            <div className="relative mx-auto -mt-[30px] aspect-video w-full max-w-[754px] overflow-hidden rounded-lg">
               <Image
                 src={image2Src}
                 alt={image2Alt}
                 fill
                 className="object-contain object-center"
-                sizes="(max-width: 1024px) 93vw, 43vw"
+                sizes="(max-width: 1024px) 100vw, 754px"
               />
             </div>
           </div>
