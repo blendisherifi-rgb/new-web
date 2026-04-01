@@ -6,7 +6,7 @@ import { Button } from "@/components/atoms/Button";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
 import { LogoMarquee, type LogoItem } from "@/components/molecules/LogoMarquee";
 import { Image } from "@/components/atoms/Image";
-import { shouldReduceMotion } from "@/lib/animations";
+import { shouldReduceMotion, shouldSkipIntroLocksOnMobile } from "@/lib/animations";
 import { useHomeBannerEntrance } from "@/components/home/homeBannerEntranceContext";
 import { acquireScrollLock } from "@/lib/scrollLock";
 import Lottie from "lottie-react";
@@ -42,7 +42,7 @@ export function HeroSection({
   lottieUrl,
 }: HeroSectionProps) {
   const { coordinatedEntrance: coordinated, preloaderComplete } = useHomeBannerEntrance();
-  const reduceMotion = shouldReduceMotion();
+  const reduceMotion = shouldReduceMotion() || shouldSkipIntroLocksOnMobile();
   const useCoord = coordinated && !reduceMotion;
 
   const [titleFadeIn, setTitleFadeIn] = useState(!useCoord);
