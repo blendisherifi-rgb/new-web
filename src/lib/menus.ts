@@ -111,7 +111,7 @@ const WHAT_WE_DO_MEGA_MENU: Pick<NavItem, "dropdownType" | "products" | "platfor
     {
       id: "1-pl4",
       label: "Multi-ERP integration",
-      href: "/platform/ap-automation-erp-integration",
+      href: "/platform-ap-automation-erp-integration",
     },
     {
       id: "1-pl5",
@@ -207,7 +207,7 @@ const WHO_WE_ARE_MEGA_MENU: Pick<
     { id: "5-l4", label: "Partner Programme", href: "/partner-programme" },
     { id: "5-l5", label: "Careers", href: "/careers" },
     { id: "5-l6", label: "News", href: "/news" },
-    { id: "5-l7", label: "Events", href: "/events" },
+    { id: "5-l7", label: "Events", href: "/resources?types=webinar" },
     { id: "5-l8", label: "Contact US", href: "/contact-us" },
   ],
   whoWeAreFeatured: {

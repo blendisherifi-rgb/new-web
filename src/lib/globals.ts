@@ -88,25 +88,6 @@ const PLACEHOLDER_GLOBALS: GlobalsData = {
         ],
       },
       {
-        heading: "By goal",
-        links: [
-          { label: "Fraud risk reduction", href: "/by-goal/fraud-risk-reduction" },
-          { label: "Cost reduction", href: "/by-goal/cost-reduction" },
-          { label: "Compliance & audit readiness", href: "/by-goal/compliance-audit-readiness" },
-          { label: "Better data accuracy", href: "/by-goal/better-data-accuracy" },
-          { label: "ERP integration", href: "/by-goal/erp-integration" },
-          { label: "Enhanced vendor relationships", href: "/by-goal/enhanced-vendor-relationships" },
-        ],
-        extraHeading: "By ERP",
-        extraLinks: [
-          { label: "Microsoft Dynamics", href: "/by-erp/microsoft-dynamics" },
-          { label: "Sage", href: "/by-erp/sage" },
-          { label: "Oracle", href: "/by-erp/oracle" },
-          { label: "Infor", href: "/by-erp/infor" },
-          { label: "SAP", href: "/by-erp/sap" },
-        ],
-      },
-      {
         heading: "By industry",
         links: [
           { label: "Retail", href: "/solution-by-retail" },
@@ -133,13 +114,11 @@ const PLACEHOLDER_GLOBALS: GlobalsData = {
           { label: "ESG", href: "/esg" },
           { label: "Careers", href: "/careers" },
           { label: "News", href: "/news" },
-          { label: "Events", href: "/events" },
+          { label: "Events", href: "/resources?types=webinar" },
         ],
         extraHeading: "Resources",
         extraLinks: [
-          { label: "Articles", href: "/resources/articles" },
-          { label: "Whitepapers", href: "/resources/whitepapers" },
-          { label: "Webinars", href: "/resources/webinars" },
+          { label: "Webinars", href: "/resources?types=webinar" },
           { label: "Glossary", href: "/resources/glossary" },
         ],
         featuredLinks: [
