@@ -511,13 +511,17 @@ function transformSection(node: Record<string, unknown>, index: number): Section
 
   // About Us Hero: galleryImages[].image.node -> {imageSrc, imageAlt}; ceoQuoteImage.node -> ceoQuoteImageSrc/Alt
   if (acfGroupName === "about_us_hero_section") {
-    if (Array.isArray(normalized.galleryImages)) {
-      normalized.galleryImages = (normalized.galleryImages as unknown[]).map((g) => {
+    const rawGallery = normalized.galleryImages;
+    if (Array.isArray(rawGallery)) {
+      normalized.galleryImages = (rawGallery as unknown[]).map((g) => {
         const item = g as Record<string, unknown>;
         const img = item.image as Record<string, unknown> | undefined;
         const n = img?.node as Record<string, unknown> | undefined;
         return { src: n?.sourceUrl ?? img?.sourceUrl ?? "", alt: n?.altText ?? img?.altText ?? "" };
       });
+    } else {
+      // WPGraphQL often returns null for empty repeaters — avoid client crash on .length
+      normalized.galleryImages = [];
     }
     const cqImg = normalized.ceoQuoteImage as Record<string, unknown> | undefined;
     const cqNode = cqImg?.node as Record<string, unknown> | undefined;

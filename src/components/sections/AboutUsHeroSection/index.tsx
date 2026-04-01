@@ -11,16 +11,16 @@ interface AboutUsHeroSectionProps {
   /** Main title — 60px. */
   title: string;
   /** Gallery images for the marquee — must match GalleryMarquee's { src, alt } shape. */
-  galleryImages: GalleryImage[];
+  galleryImages?: GalleryImage[] | null;
   /** Body paragraph. */
   body: string;
-  /** CEO quote block. */
-  ceoQuote: {
-    imageSrc: string;
-    imageAlt: string;
-    quote: string;
-    authorName: string;
-    authorTitle: string;
+  /** CEO quote block (optional pieces default safely if WP omits or section is partial). */
+  ceoQuote?: {
+    imageSrc?: string;
+    imageAlt?: string;
+    quote?: string;
+    authorName?: string;
+    authorTitle?: string;
   };
 }
 
@@ -31,13 +31,25 @@ interface AboutUsHeroSectionProps {
  * body text, divider, and CEO quote with portrait.
  * 50px vertical gap between all major elements.
  */
+const emptyCeoQuote = {
+  imageSrc: "",
+  imageAlt: "",
+  quote: "",
+  authorName: "",
+  authorTitle: "",
+};
+
 export function AboutUsHeroSection({
   overline,
   title,
   galleryImages,
   body,
-  ceoQuote,
+  ceoQuote: ceoQuoteProp,
 }: AboutUsHeroSectionProps) {
+  const images = (galleryImages ?? []).filter((img) => Boolean(img?.src?.trim()));
+  const ceoQuote = { ...emptyCeoQuote, ...ceoQuoteProp };
+  const showCeoImage = Boolean(ceoQuote.imageSrc?.trim());
+
   return (
     <section
       className="relative w-full overflow-hidden"
@@ -64,10 +76,10 @@ export function AboutUsHeroSection({
       </div>
 
       {/* Gallery marquee — full viewport width, outside constrained container */}
-      {galleryImages.length > 0 && (
+      {images.length > 0 && (
         <div className="about-us-marquee relative z-10 mt-8 tablet-down:mt-[50px] w-full">
           <GalleryMarquee
-            images={galleryImages}
+            images={images}
             duration={40}
             imageHeight={280}
             gap={24}
@@ -87,15 +99,17 @@ export function AboutUsHeroSection({
 
           {/* CEO quote — 50px gap */}
           <div className="mt-6 flex w-full max-w-4xl flex-col items-start gap-6 tablet-down:mt-[50px] tablet-down:flex-row tablet-down:gap-[60px] text-left">
-            <div className="relative aspect-square w-full shrink-0 overflow-hidden rounded-lg tablet-down:h-[320px] tablet-down:w-[280px] tablet-down:aspect-auto">
-              <Image
-                src={ceoQuote.imageSrc}
-                alt={ceoQuote.imageAlt}
-                fill
-                className="object-cover"
-                sizes="280px"
-              />
-            </div>
+            {showCeoImage ? (
+              <div className="relative aspect-square w-full shrink-0 overflow-hidden rounded-lg tablet-down:h-[320px] tablet-down:w-[280px] tablet-down:aspect-auto">
+                <Image
+                  src={ceoQuote.imageSrc}
+                  alt={ceoQuote.imageAlt || ""}
+                  fill
+                  className="object-cover"
+                  sizes="280px"
+                />
+              </div>
+            ) : null}
             <div className="flex min-w-0 flex-1 flex-col justify-center">
               <blockquote className="relative pl-12 tablet-down:pl-0">
                 <span
