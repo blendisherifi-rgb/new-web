@@ -6,9 +6,8 @@ import { Button } from "@/components/atoms/Button";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
 import { LogoMarquee, type LogoItem } from "@/components/molecules/LogoMarquee";
 import { Image } from "@/components/atoms/Image";
-import { shouldReduceMotion, shouldSkipIntroLocksOnMobile } from "@/lib/animations";
+import { shouldReduceMotion } from "@/lib/animations";
 import { useHomeBannerEntrance } from "@/components/home/homeBannerEntranceContext";
-import { acquireScrollLock } from "@/lib/scrollLock";
 import Lottie from "lottie-react";
 
 interface HeroSectionProps {
@@ -42,7 +41,7 @@ export function HeroSection({
   lottieUrl,
 }: HeroSectionProps) {
   const { coordinatedEntrance: coordinated, preloaderComplete } = useHomeBannerEntrance();
-  const reduceMotion = shouldReduceMotion() || shouldSkipIntroLocksOnMobile();
+  const reduceMotion = shouldReduceMotion();
   const useCoord = coordinated && !reduceMotion;
 
   const [titleFadeIn, setTitleFadeIn] = useState(!useCoord);
@@ -80,11 +79,6 @@ export function HeroSection({
     const id = window.setTimeout(() => setTitleMoved(true), TITLE_FADE_IN_MS);
     return () => window.clearTimeout(id);
   }, [useCoord, titleFadeIn, titleMoved]);
-
-  useLayoutEffect(() => {
-    if (!useCoord || entranceSettled) return;
-    return acquireScrollLock();
-  }, [useCoord, entranceSettled]);
 
   useEffect(() => {
     if (!useCoord || !titleMoved) return;

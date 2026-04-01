@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { shouldReduceMotion, shouldSkipIntroLocksOnMobile } from "@/lib/animations";
+import { shouldReduceMotion } from "@/lib/animations";
 import { acquireScrollLock } from "@/lib/scrollLock";
 
 const ANIMATION_SRC = "/animations/homepage.json";
@@ -25,7 +25,7 @@ export function HomePreloader({ onDone }: HomePreloaderProps) {
   }, []);
 
   useEffect(() => {
-    if (shouldReduceMotion() || shouldSkipIntroLocksOnMobile()) {
+    if (shouldReduceMotion()) {
       finish();
       return;
     }
