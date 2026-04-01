@@ -68,7 +68,6 @@ export { TeamArchiveSection, type TeamDepartment } from "./TeamArchiveSection";
 export {
   PerfectFitFrameworkSection,
   type PerfectFitCard,
-  type PerfectFitCtaCard,
 } from "./PerfectFitFrameworkSection";
 export {
   EnvironmentalSection,

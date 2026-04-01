@@ -380,7 +380,6 @@ function transformSection(node: Record<string, unknown>, index: number): Section
   }
   if (acfGroupName === "perfect_fit_framework_section") {
     normalized.cards = Array.isArray(normalized.cards) ? normalized.cards : [];
-    normalized.ctaCard = (normalized.ctaCard ?? {}) as Record<string, unknown>;
   }
 
   if (acfGroupName === "contact_banner_section") {

@@ -274,11 +274,6 @@ function buildFragment(): string {
           }
         }
       }
-      ctaCard {
-        heading
-        ctaLabel
-        ctaHref
-      }
     }
     ... on ${RichTextLayout} {
       content
@@ -1120,7 +1115,6 @@ function buildFragmentResilient(): string {
       description
       emphasis
       perfectFitCards { step title description image { node { sourceUrl altText } } }
-      ctaCard { heading ctaLabel ctaHref }
     }
     ... on ${RichTextLayout} {
       content

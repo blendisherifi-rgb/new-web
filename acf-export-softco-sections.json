@@ -1463,50 +1463,6 @@
                         "graphql_field_name": "image"
                       }
                     ]
-                  },
-                  {
-                    "key": "field_pff_cta_card",
-                    "label": "CTA Card",
-                    "name": "cta_card",
-                    "type": "group",
-                    "required": 0,
-                    "layout": "block",
-                    "wrapper": {
-                      "width": "",
-                      "class": "",
-                      "id": ""
-                    },
-                    "show_in_graphql": 1,
-                    "graphql_field_name": "ctaCard",
-                    "sub_fields": [
-                      {
-                        "key": "field_pff_cta_card_heading",
-                        "label": "Heading",
-                        "name": "heading",
-                        "type": "text",
-                        "required": 0,
-                        "show_in_graphql": 1,
-                        "graphql_field_name": "heading"
-                      },
-                      {
-                        "key": "field_pff_cta_card_label",
-                        "label": "CTA Label",
-                        "name": "cta_label",
-                        "type": "text",
-                        "required": 0,
-                        "show_in_graphql": 1,
-                        "graphql_field_name": "ctaLabel"
-                      },
-                      {
-                        "key": "field_pff_cta_card_href",
-                        "label": "CTA Link",
-                        "name": "cta_href",
-                        "type": "url",
-                        "required": 0,
-                        "show_in_graphql": 1,
-                        "graphql_field_name": "ctaHref"
-                      }
-                    ]
                   }
                 ],
                 "min": "",

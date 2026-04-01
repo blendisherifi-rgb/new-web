@@ -1393,7 +1393,6 @@ export const SECTIONS_SHOWCASE_GROUPS: SectionGroup[] = [
         { step: "04", title: "Prove the fit", description: "Using your real data, we validate workflows, rules and outcomes before go-live, so results are clear, measurable and evidence-led.", imageSrc: "/hero-platform-screenshot.png", imageAlt: "Prove the fit" },
         { step: "05", title: "Launch", description: "With the fit proven, we launch confidently and continue to refine as volumes, complexity and ambition grow.", imageSrc: "/hero-platform-screenshot.png", imageAlt: "Launch" },
       ],
-      ctaCard: { heading: "Discover our Perfect Fit framework", ctaLabel: "Find out more", ctaHref: "#" },
     },
   },
   {

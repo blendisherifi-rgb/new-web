@@ -48,7 +48,7 @@ Some fields return objects; the Next.js `transformSection` in `pages.ts` maps th
 | Horizontal Scroll | `scrollCards` (GraphQL) | Each item: `{ id, title, description?, imageSrc?, imageAlt? }` |
 | Role Accordion | `accordionItems` (GraphQL) | Each item: `{ tabTitle, title, content, ctaLabel, ctaHref, imageSrc?, imageAlt? }` |
 | Review Logos | `reviewLogosCards` (GraphQL) | Each item: `{ logoSrc?, logoAlt?, logoLabel?, featured? }` |
-| Perfect Fit Framework | `perfectFitCards` (GraphQL), `ctaCard` (group) | Cards map image to `imageSrc/imageAlt`; CTA group maps to `{ heading, ctaLabel, ctaHref }` |
+| Perfect Fit Framework | `perfectFitCards` (GraphQL) | Cards map image to `imageSrc/imageAlt` |
 | Contact Banner | `overline`, `title`, `contactBannerSocialLinks` | `{ overline, title, socialLinks }` — socialLinks: `{ platform, url, label }` |
 | Contact Banner + Form | `overline`, `title`, `contactWithFormSocialLinks` | Same as Contact Banner — banner + form in one section |
 | Locations | `locationsItems` (GraphQL) | Each item: `{ tabTitle, title, imageSrc?, imageAlt?, address, phone, email, mapUrl, mapLabel }` |
@@ -70,7 +70,7 @@ The layout `name` must match our `acfGroupName` in `sections.ts`:
 - `role_accordion_section` — overline + highlighted heading + repeater items (tab/content/cta/image)
 - `review_logos_section` — heading + logo cards
 - `simple_cta_section` — overline + title/highlight + description + CTA
-- `perfect_fit_framework_section` — overline + heading + description + cards + CTA card
+- `perfect_fit_framework_section` — overline + heading + description + cards
 - `rich_text_section` — single WYSIWYG `content` field (for policy pages, legal pages, etc.)
 - `contact_banner_section` — overline, title, social links (platform, url, label). Uses `softco-gradient.jpg` as background.
 - `contact_with_form_section` — same as contact banner (overline, title, social links) plus a contact form below. Uses `tall-bg.png` spanning both. Choose **Banners | Contact Banner + Form** in the dropdown.

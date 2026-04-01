@@ -2,11 +2,9 @@
 
 import { Image } from "@/components/atoms/Image";
 import { HeadlineWithHighlight } from "@/components/molecules/HeadlineWithHighlight";
-import { Button } from "@/components/atoms/Button";
 import { Overline } from "@/components/atoms/Overline";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Heading } from "@/components/atoms/Heading";
-import { ChevronRightIcon } from "@/components/atoms/Icon";
 
 export interface PerfectFitCard {
   step: string;
@@ -14,12 +12,6 @@ export interface PerfectFitCard {
   description: string;
   imageSrc?: string;
   imageAlt?: string;
-}
-
-export interface PerfectFitCtaCard {
-  heading: string;
-  ctaLabel: string;
-  ctaHref: string;
 }
 
 interface PerfectFitFrameworkSectionProps {
@@ -30,7 +22,6 @@ interface PerfectFitFrameworkSectionProps {
   description: string;
   emphasis?: string;
   cards: PerfectFitCard[];
-  ctaCard: PerfectFitCtaCard;
 }
 
 export function PerfectFitFrameworkSection({
@@ -41,7 +32,6 @@ export function PerfectFitFrameworkSection({
   description,
   emphasis,
   cards,
-  ctaCard,
 }: PerfectFitFrameworkSectionProps) {
   return (
     <section className="w-full bg-white">
@@ -103,19 +93,6 @@ export function PerfectFitFrameworkSection({
                 </Paragraph>
               </article>
             ))}
-
-            <article className="w-[300px] tablet-down:w-[360px] shrink-0 snap-start rounded-[4px] bg-brand-dark p-5 tablet-down:p-6 text-white">
-              <div className="flex h-full min-h-[360px] flex-col justify-between border-y border-white/30 py-14">
-                <Heading level={2} className="mx-auto max-w-[260px] text-center text-[52px] leading-[1.2] text-white">
-                  {ctaCard.heading}
-                </Heading>
-                <div className="mx-auto mt-8">
-                  <Button variant="orange" href={ctaCard.ctaHref} iconAfter={<ChevronRightIcon />}>
-                    {ctaCard.ctaLabel}
-                  </Button>
-                </div>
-              </div>
-            </article>
           </div>
         </div>
       </div>
