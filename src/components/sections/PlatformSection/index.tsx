@@ -113,10 +113,11 @@ function PlatformContentRow({
       <Heading level={3} className="text-xl text-brand-orange tablet-down:text-3xl">
         {title}
       </Heading>
-      <Paragraph size="lg" className="mt-1 text-white">
+      {/* Subheader: clearly heavier + larger than body (design: Solutions / Platform cards). */}
+      <p className="mt-2 font-body text-[18px] font-bold leading-[1.45] text-white tablet-down:mt-3 tablet-down:text-[22px] tablet-down:leading-[1.35]">
         {subtitle}
-      </Paragraph>
-      <Paragraph size="lg" className="mt-12 text-white">
+      </p>
+      <Paragraph size="sm" className="mt-10 text-white/95 tablet-down:mt-12">
         {description}
       </Paragraph>
       <Link
