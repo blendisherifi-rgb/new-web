@@ -1,8 +1,12 @@
 import { notFound } from "next/navigation";
 import { ResourcesHubEntryPage } from "@/components/resources/ResourcesHubEntryPage";
-import { fetchResourceHubEntryBySlug } from "@/lib/resources-hub-detail";
+import {
+  fetchResourceHubEntryBySlug,
+  resourceHubEntryDisplayTitle,
+} from "@/lib/resources-hub-detail";
 import { buildMetadataFromYoast } from "@/lib/seo";
 import { isLocale, localePath } from "@/lib/i18n";
+import { stripNewsHtml } from "@/lib/news";
 
 interface WebinarPageProps {
   params: Promise<{ locale: string; slug: string }>;
@@ -13,10 +17,18 @@ export async function generateMetadata({ params }: WebinarPageProps) {
   const locale = isLocale(localeParam) ? localeParam : "us";
   const item = await fetchResourceHubEntryBySlug(slug, locale, "webinar");
   if (!item) return {};
+  const title = resourceHubEntryDisplayTitle(item);
+  const short = item.webcast?.shortDescription?.trim();
+  const fallbackDescription =
+    short && short.length > 0
+      ? stripNewsHtml(short)
+      : item.excerpt
+        ? stripNewsHtml(item.excerpt)
+        : undefined;
   return buildMetadataFromYoast({
     seo: item.seo,
-    fallbackTitle: `${item.title} | SoftCo`,
-    fallbackDescription: item.excerpt ?? undefined,
+    fallbackTitle: `${title} | SoftCo`,
+    fallbackDescription,
     locale,
     path: `webinars/${slug}`,
   });
