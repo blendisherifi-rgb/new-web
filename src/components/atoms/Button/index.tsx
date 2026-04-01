@@ -67,7 +67,7 @@ const variantStyles: Record<ButtonVariant, string> = {
     "disabled:border-brand-dark-40 disabled:text-brand-dark-40 disabled:cursor-not-allowed",
   ].join(" "),
   orange: [
-    "bg-brand-orange text-brand-dark uppercase tracking-wide",
+    "bg-brand-orange text-brand-dark tracking-wide",
     "active:bg-brand-orange-60",
     "focus-visible:outline-brand-orange",
     "disabled:bg-brand-orange-40 disabled:text-brand-dark-40 disabled:cursor-not-allowed",
@@ -86,7 +86,7 @@ const variantStyles: Record<ButtonVariant, string> = {
     "disabled:text-brand-blue-40 disabled:cursor-not-allowed",
   ].join(" "),
   "read-more": [
-    "!p-0 !rounded-none bg-transparent text-brand-dark uppercase tracking-wider",
+    "!p-0 !rounded-none bg-transparent text-brand-dark tracking-wider",
     "border-b-2 border-brand-orange",
     "focus-visible:outline-brand-orange",
     "disabled:text-brand-dark-40 disabled:border-brand-dark-20 disabled:cursor-not-allowed",

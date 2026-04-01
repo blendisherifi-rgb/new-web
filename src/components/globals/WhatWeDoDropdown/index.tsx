@@ -48,7 +48,7 @@ export function WhatWeDoDropdown({
               .join(" ")}
           >
             <div>
-              <p className="font-body text-xs font-semibold uppercase tracking-wide text-brand-dark/70 mb-1">
+              <p className="font-body text-xs font-semibold tracking-wide text-brand-dark/70 mb-1">
                 {product.eyebrow}
               </p>
               <ProductName product={product} />

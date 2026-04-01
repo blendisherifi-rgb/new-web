@@ -115,7 +115,7 @@ export function ClientSuccessStoryRelatedStoriesSection({
                       {tags.map((t) => (
                         <span
                           key={t}
-                          className="inline-flex items-center rounded-[4px] bg-[#E8F2FD] px-3 py-1 font-body text-[11px] font-extrabold uppercase leading-[14px] tracking-[0.14em] text-brand-dark-60"
+                          className="inline-flex items-center rounded-[4px] bg-[#E8F2FD] px-3 py-1 font-body text-[11px] font-extrabold leading-[14px] tracking-[0.14em] text-brand-dark-60"
                         >
                           {t}
                         </span>

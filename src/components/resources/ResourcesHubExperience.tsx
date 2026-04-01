@@ -151,7 +151,7 @@ export function ResourcesHubExperience({
         <div className="mx-auto max-w-[1440px] px-6 pb-16 pt-2 sm:px-8 lg:px-10 xl:px-14">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-10 xl:gap-12">
             <aside className="mx-auto w-full max-w-md shrink-0 rounded-lg border border-brand-grey/20 bg-[#EBF2FA] px-6 py-8 shadow-sm sm:max-w-lg lg:mx-0 lg:w-[280px] lg:max-w-[280px] lg:border-0 lg:shadow-none xl:w-[300px] xl:max-w-[300px]">
-              <h2 className="font-body text-[12px] font-extrabold uppercase leading-none tracking-[0.14em] text-brand-dark">
+              <h2 className="font-body text-[12px] font-extrabold leading-none tracking-[0.14em] text-brand-dark">
                 Type
               </h2>
               <ul className="mt-5 space-y-3.5" role="list">

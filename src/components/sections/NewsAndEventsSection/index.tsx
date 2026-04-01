@@ -38,7 +38,7 @@ function HeroCtaLink({ href, label }: { href: string; label: string }) {
         className="inline-flex items-end gap-1.5 border-b-[3px] pb-1"
         style={{ borderColor: ACCENT_ORANGE }}
       >
-        <span className="font-body text-[12px] font-extrabold uppercase leading-none tracking-widest text-white">
+        <span className="font-body text-[12px] font-extrabold leading-none tracking-widest text-white">
           {label}
         </span>
         <span
@@ -64,7 +64,7 @@ function CardCtaLink({ href, label }: { href: string; label: string }) {
         style={{ borderColor: ACCENT_ORANGE }}
       >
         <span
-          className="font-body text-[12px] font-extrabold uppercase leading-none tracking-widest"
+          className="font-body text-[12px] font-extrabold leading-none tracking-widest"
           style={{ color: ACCENT_ORANGE }}
         >
           {label}

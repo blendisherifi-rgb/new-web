@@ -148,7 +148,7 @@ export function ApAutomationSection({
                   </span>
                   <Paragraph
                     size="base"
-                    className="mt-2 text-[18px] leading-[26px] text-white/90 lowercase tablet-down:text-[20px] tablet-down:leading-[28px]"
+                    className="mt-2 text-[18px] leading-[26px] text-white/90 tablet-down:text-[20px] tablet-down:leading-[28px]"
                   >
                     {m.label}
                   </Paragraph>

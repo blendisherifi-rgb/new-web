@@ -45,7 +45,7 @@ interface AutomationEngineSectionProps {
  * - 60px gap between heading and image row
  * - 110px gap between left image and right content
  * - 150px gap between image row and metrics
- * - Metric value: Plus Jakarta Sans 800, 48px / 48px, brand orange (#F7931E); label: 20px, lowercase
+ * - Metric value: Plus Jakarta Sans 800, 48px / 48px, brand orange (#F7931E); label: 20px
  */
 export function AutomationEngineSection({
   overline,
@@ -124,7 +124,7 @@ export function AutomationEngineSection({
                   <span className="font-body text-[40px] font-extrabold leading-[48px] tracking-normal text-brand-orange tablet-down:text-[48px] tablet-down:leading-[48px]">
                     {metric.value}
                   </span>
-                  <p className="mt-3 max-w-[240px] font-body text-[16px] leading-[24px] lowercase text-white/90 tablet-down:text-[20px] tablet-down:leading-[28px]">
+                  <p className="mt-3 max-w-[240px] font-body text-[16px] leading-[24px] text-white/90 tablet-down:text-[20px] tablet-down:leading-[28px]">
                     {metric.label}
                   </p>
                 </div>

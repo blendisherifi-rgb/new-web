@@ -122,7 +122,7 @@ export function ArchitectureSection({
               <span className="block font-heading text-[52px] font-semibold leading-[1.02] tablet-down:text-[34px]">
                 P2P Automation
               </span>
-              <span className="mt-4 inline-flex items-center gap-3 font-body text-[24px] font-bold uppercase tracking-[0.02em] tablet-down:mt-3 tablet-down:text-[16px]">
+              <span className="mt-4 inline-flex items-center gap-3 font-body text-[24px] font-bold tracking-[0.02em] tablet-down:mt-3 tablet-down:text-[16px]">
                 Find out more
                 <span aria-hidden className="text-[20px] leading-none tablet-down:text-[14px]">
                   &#8250;

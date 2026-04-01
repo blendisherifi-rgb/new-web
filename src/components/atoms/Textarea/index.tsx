@@ -70,7 +70,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           {!hideLabel && (
             <label
               htmlFor={id}
-              className="absolute -top-[10px] left-3 z-10 bg-transparent px-1 font-body text-[11px] font-extrabold uppercase tracking-widest text-brand-orange"
+              className="absolute -top-[10px] left-3 z-10 bg-transparent px-1 font-body text-[11px] font-extrabold tracking-widest text-brand-orange"
             >
               <span
                 className={`relative z-10 px-1 ${variant === "dark" ? "bg-brand-blue" : "bg-white"}`}

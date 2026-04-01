@@ -17,7 +17,7 @@ export interface CaseStudyListItem {
   title: string;
   excerpt?: string | null;
   featuredImage?: { sourceUrl?: string; altText?: string } | null;
-  /** Up to 3 uppercase tag labels for archive cards (from tags/categories in WP). */
+  /** Up to 3 tag labels for archive cards (from tags/categories in WP); casing preserved. */
   tags?: string[];
   /** Optional client logo over the featured image (WP field `clientLogo` when exposed). */
   clientLogoOverlay?: { sourceUrl?: string; altText?: string } | null;

@@ -269,7 +269,7 @@ export function OpenRolesSection({
                         href={job.readMoreHref || HIREHIVE_CAREERS_URL}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group inline-flex items-center gap-2 border-b-2 border-brand-orange pb-1 font-body text-[13px] font-bold uppercase tracking-wide text-brand-dark transition-colors hover:text-brand-blue tablet-down:text-[14px]"
+                        className="group inline-flex items-center gap-2 border-b-2 border-brand-orange pb-1 font-body text-[13px] font-bold tracking-wide text-brand-dark transition-colors hover:text-brand-blue tablet-down:text-[14px]"
                       >
                         READ MORE
                         <span className="inline-flex text-brand-orange transition-transform group-hover:translate-x-0.5">

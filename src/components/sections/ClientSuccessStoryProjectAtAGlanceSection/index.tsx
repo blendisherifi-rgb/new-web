@@ -131,7 +131,7 @@ export function ClientSuccessStoryProjectAtAGlanceSection({
               {downloadHref ? (
                 <a
                   href={downloadHref}
-                  className="inline-flex items-center gap-4 rounded-[5px] bg-brand-orange px-8 py-[18px] font-body text-[13px] font-bold uppercase tracking-wide text-brand-dark transition-opacity hover:opacity-90"
+                  className="inline-flex items-center gap-4 rounded-[5px] bg-brand-orange px-8 py-[18px] font-body text-[13px] font-bold tracking-wide text-brand-dark transition-opacity hover:opacity-90"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

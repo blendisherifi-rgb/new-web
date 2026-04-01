@@ -122,12 +122,12 @@ export function StrategicPrioritiesSection({
         <div className="mx-auto mt-14 w-full max-w-[1080px] tablet-down:mt-16">
           <div className="flex flex-col gap-2 tablet-down:flex-row tablet-down:gap-0">
             <div
-              className="flex min-h-[52px] flex-1 items-center justify-center rounded-lg bg-brand-orange px-5 py-3 text-center font-body text-[11px] font-extrabold uppercase leading-snug tracking-[0.14em] text-brand-dark tablet-down:min-h-[56px] tablet-down:rounded-none tablet-down:px-8 tablet-down:py-4 tablet-down:text-[12px] tablet-down:tracking-[0.16em] tablet-down:[clip-path:polygon(0_0,calc(100%-28px)_0,100%_50%,calc(100%-28px)_100%,0_100%)]"
+              className="flex min-h-[52px] flex-1 items-center justify-center rounded-lg bg-brand-orange px-5 py-3 text-center font-body text-[11px] font-extrabold leading-snug tracking-[0.14em] text-brand-dark tablet-down:min-h-[56px] tablet-down:rounded-none tablet-down:px-8 tablet-down:py-4 tablet-down:text-[12px] tablet-down:tracking-[0.16em] tablet-down:[clip-path:polygon(0_0,calc(100%-28px)_0,100%_50%,calc(100%-28px)_100%,0_100%)]"
             >
               {leftColumnLabel}
             </div>
             <div
-              className="flex min-h-[52px] flex-1 items-center justify-center rounded-lg bg-brand-blue px-5 py-3 text-center font-body text-[11px] font-extrabold uppercase leading-snug tracking-[0.14em] text-white tablet-down:-ml-px tablet-down:min-h-[56px] tablet-down:rounded-none tablet-down:px-8 tablet-down:py-4 tablet-down:text-[12px] tablet-down:tracking-[0.16em] tablet-down:[clip-path:polygon(28px_0,100%_0,100%_100%,28px_100%,0_50%)]"
+              className="flex min-h-[52px] flex-1 items-center justify-center rounded-lg bg-brand-blue px-5 py-3 text-center font-body text-[11px] font-extrabold leading-snug tracking-[0.14em] text-white tablet-down:-ml-px tablet-down:min-h-[56px] tablet-down:rounded-none tablet-down:px-8 tablet-down:py-4 tablet-down:text-[12px] tablet-down:tracking-[0.16em] tablet-down:[clip-path:polygon(28px_0,100%_0,100%_100%,28px_100%,0_50%)]"
             >
               {rightColumnLabel}
             </div>

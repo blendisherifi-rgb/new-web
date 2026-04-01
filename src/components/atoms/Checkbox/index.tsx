@@ -24,7 +24,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     const isBrand = variant === "dark" || variant === "light";
     const textColor = variant === "dark" ? "text-white" : "text-brand-dark";
     const labelTag = isBrand
-      ? "font-body text-[11px] font-extrabold uppercase tracking-widest text-brand-orange"
+      ? "font-body text-[11px] font-extrabold tracking-widest text-brand-orange"
       : "";
 
     return (

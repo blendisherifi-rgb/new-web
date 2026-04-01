@@ -40,8 +40,8 @@ export function ArchiveGridBody({
   if (items.length === 0) return null;
 
   const imageBadgeClass = softImageTypeBadge
-    ? "pointer-events-none absolute right-3 top-3 z-[1] rounded-[4px] bg-[#E8F2FD] px-3 py-1.5 font-body text-[11px] font-extrabold uppercase leading-none tracking-[0.08em] text-brand-blue"
-    : "pointer-events-none absolute right-3 top-3 z-[1] rounded bg-brand-blue px-2.5 py-1 font-body text-[10px] font-extrabold uppercase leading-none tracking-wider text-white";
+    ? "pointer-events-none absolute right-3 top-3 z-[1] rounded-[4px] bg-[#E8F2FD] px-3 py-1.5 font-body text-[11px] font-extrabold leading-none tracking-[0.08em] text-brand-blue"
+    : "pointer-events-none absolute right-3 top-3 z-[1] rounded bg-brand-blue px-2.5 py-1 font-body text-[10px] font-extrabold leading-none tracking-wider text-white";
 
   const gridCols =
     columnCount === 2
@@ -117,7 +117,7 @@ export function ArchiveGridBody({
                     ))}
                   </div>
                   {item.readTimeLabel ? (
-                    <span className="shrink-0 font-body text-[12px] font-extrabold uppercase leading-none tracking-wide text-brand-orange">
+                    <span className="shrink-0 font-body text-[12px] font-extrabold leading-none tracking-wide text-brand-orange">
                       {item.readTimeLabel}
                     </span>
                   ) : null}

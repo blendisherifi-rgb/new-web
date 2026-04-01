@@ -50,11 +50,11 @@ export function GlossaryContent({ terms, byLetter, locale }: GlossaryContentProp
       {/* Left: sticky JUMP TO SECTION (~25%) */}
       <aside className="w-full shrink-0 tablet-down:w-1/4">
         <div className="sticky top-24 rounded-lg bg-brand-light-blue/30 p-6">
-          {/* Jump to section: Plus Jakarta Sans, 700, 12px, 12px line, 10% letter-spacing, uppercase, #060D2E */}
-          <span className="font-body text-[12px] font-bold leading-[12px] tracking-[0.1em] uppercase text-[#060D2E]">
+          {/* Jump to section: Plus Jakarta Sans, 700, 12px, 12px line, 10% letter-spacing, #060D2E */}
+          <span className="font-body text-[12px] font-bold leading-[12px] tracking-[0.1em] text-[#060D2E]">
             Jump to section
           </span>
-          {/* Letters: Plus Jakarta Sans, 700, 14px, 24px line, 5% letter-spacing, center, uppercase */}
+          {/* Letters: Plus Jakarta Sans, 700, 14px, 24px line, 5% letter-spacing, center */}
           <nav
             className="mt-4 grid grid-cols-6 gap-[8px]"
             aria-label="Jump to letter"
@@ -65,7 +65,7 @@ export function GlossaryContent({ terms, byLetter, locale }: GlossaryContentProp
                 <a
                   key={letter}
                   href={`#letter-${letter}`}
-                  className={`flex h-8 w-8 items-center justify-center rounded font-body text-[14px] font-bold leading-[24px] tracking-[0.05em] uppercase transition-colors ${
+                  className={`flex h-8 w-8 items-center justify-center rounded font-body text-[14px] font-bold leading-[24px] tracking-[0.05em] transition-colors ${
                     hasTerms
                       ? "text-[#047FE5] hover:bg-brand-light-blue"
                       : "cursor-default text-[#DADBE0]"
@@ -79,7 +79,7 @@ export function GlossaryContent({ terms, byLetter, locale }: GlossaryContentProp
             {(filteredByLetter["#"]?.length ?? 0) > 0 && (
               <a
                 href="#letter-num"
-                className="flex h-8 w-8 items-center justify-center rounded font-body text-[14px] font-bold leading-[24px] tracking-[0.05em] uppercase text-[#047FE5] hover:bg-brand-light-blue"
+                className="flex h-8 w-8 items-center justify-center rounded font-body text-[14px] font-bold leading-[24px] tracking-[0.05em] text-[#047FE5] hover:bg-brand-light-blue"
               >
                 #
               </a>

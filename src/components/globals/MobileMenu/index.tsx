@@ -298,7 +298,7 @@ function MobileDropdownContent({
         {item.platformLinks && item.platformLinks.length > 0 && (
           <>
             <li className="pt-2 pb-1">
-              <span className="font-body text-xs font-bold uppercase tracking-wider text-brand-dark/50">
+              <span className="font-body text-xs font-bold tracking-wider text-brand-dark/50">
                 Platform
               </span>
             </li>

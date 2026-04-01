@@ -5,6 +5,10 @@ import { CookieSettingsLink } from "@/components/globals/CookieConsent/CookieSet
 import type { FooterData } from "@/lib/globals";
 import type { Locale } from "@/lib/i18n";
 import { homePath } from "@/lib/i18n";
+import type { ReactNode } from "react";
+
+/** Matches `footer-plus-icon` column so link text lines up with heading text. */
+const FOOTER_ICON_COL = "mt-0.5 h-8 w-8 shrink-0 sm:h-9 sm:w-9";
 
 interface FooterProps {
   data: FooterData;
@@ -12,23 +16,53 @@ interface FooterProps {
   locale: Locale;
 }
 
-function FooterSectionHeading({
+/**
+ * Plus icon + heading share one row; links sit in the text column so they align
+ * with the heading (not under the icon).
+ */
+function FooterNavSection({
   as: Tag = "h3",
+  title,
   children,
 }: {
   as?: "h3" | "h4";
-  children: React.ReactNode;
+  title: ReactNode;
+  children: ReactNode;
 }) {
   return (
-    <div className="mb-3 flex items-start gap-2.5">
+    <div className="flex items-start gap-2.5">
       <Image
         src="/footer-plus-icon.svg"
         alt=""
         width={40}
         height={40}
-        className="mt-0.5 h-8 w-8 shrink-0 sm:h-9 sm:w-9"
+        className={FOOTER_ICON_COL}
       />
-      <Tag className="font-body text-[18px] font-bold leading-snug text-brand-dark sm:text-[20px]">{children}</Tag>
+      <div className="min-w-0 flex-1">
+        <Tag className="mb-3 font-body text-[18px] font-bold leading-snug text-brand-dark sm:text-[20px]">{title}</Tag>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+/** Bold featured links — spacer keeps text flush with headings in other blocks. */
+function FooterFeaturedLinks({ links }: { links: Array<{ href: string; label: string }> }) {
+  return (
+    <div className="flex items-start gap-2.5">
+      <span className={`inline-block ${FOOTER_ICON_COL}`} aria-hidden />
+      <ul className="min-w-0 flex-1 space-y-3">
+        {links.map((link, j) => (
+          <li key={j}>
+            <Link
+              href={link.href}
+              className="text-[17px] font-bold leading-snug text-brand-dark no-underline hover:text-brand-blue hover:no-underline sm:text-[20px]"
+            >
+              {link.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -89,50 +123,36 @@ export function Footer({ data, locale }: FooterProps) {
           <div className="grid grid-cols-1 gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-12">
             {navGroups.map((group, i) => (
               <div key={i} className="min-w-0">
-                <FooterSectionHeading as="h3">{group.heading}</FooterSectionHeading>
-                <ul className="space-y-1.5">
-                  {group.links.map((link, j) => (
-                    <li key={`${i}-l-${j}`}>
-                      <Link href={link.href} className="text-[15px] text-brand-dark no-underline hover:text-brand-blue hover:no-underline sm:text-[16px]">
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-                {group.extraHeading ? (
-                  <div className={blockGap}>
-                    <FooterSectionHeading as="h4">{group.extraHeading}</FooterSectionHeading>
-                    <ul className="space-y-1.5">
-                      {group.extraLinks?.map((link, j) => (
-                        <li key={`${i}-e-${j}`}>
-                          <Link href={link.href} className="text-[15px] text-brand-dark no-underline hover:text-brand-blue hover:no-underline sm:text-[16px]">
-                            {link.label}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ) : null}
-                {group.featuredLinks && group.featuredLinks.length > 0 ? (
-                  <ul className={`${blockGap} flex flex-col gap-3`}>
-                    {group.featuredLinks.map((link, j) => (
-                      <li key={`${i}-f-${j}`} className="flex items-start gap-2.5">
-                        <Image
-                          src="/footer-plus-icon.svg"
-                          alt=""
-                          width={40}
-                          height={40}
-                          className="mt-0.5 h-8 w-8 shrink-0 opacity-90 sm:h-9 sm:w-9"
-                        />
-                        <Link
-                          href={link.href}
-                          className="text-[17px] font-bold leading-snug text-brand-dark no-underline hover:text-brand-blue hover:no-underline sm:text-[20px]"
-                        >
+                <FooterNavSection as="h3" title={group.heading}>
+                  <ul className="space-y-1.5">
+                    {group.links.map((link, j) => (
+                      <li key={`${i}-l-${j}`}>
+                        <Link href={link.href} className="text-[15px] text-brand-dark no-underline hover:text-brand-blue hover:no-underline sm:text-[16px]">
                           {link.label}
                         </Link>
                       </li>
                     ))}
                   </ul>
+                </FooterNavSection>
+                {group.extraHeading ? (
+                  <div className={blockGap}>
+                    <FooterNavSection as="h4" title={group.extraHeading}>
+                      <ul className="space-y-1.5">
+                        {group.extraLinks?.map((link, j) => (
+                          <li key={`${i}-e-${j}`}>
+                            <Link href={link.href} className="text-[15px] text-brand-dark no-underline hover:text-brand-blue hover:no-underline sm:text-[16px]">
+                              {link.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </FooterNavSection>
+                  </div>
+                ) : null}
+                {group.featuredLinks && group.featuredLinks.length > 0 ? (
+                  <div className={blockGap}>
+                    <FooterFeaturedLinks links={group.featuredLinks} />
+                  </div>
                 ) : null}
               </div>
             ))}

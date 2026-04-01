@@ -27,7 +27,7 @@ const FEATURED_LATEST_SPLIT_BLUE = "#1583E1";
 const COMPACT_CARD_IMAGE_BLUE = "#007CE4";
 
 const TYPE_PILL_CLASS =
-  "inline-flex w-max items-center rounded-full bg-[#E8F2FD] px-4 py-2.5 font-body text-[11px] font-extrabold uppercase leading-none tracking-[0.08em] text-brand-dark tablet-down:px-5 tablet-down:py-3 tablet-down:text-[12px]";
+  "inline-flex w-max items-center rounded-full bg-[#E8F2FD] px-4 py-2.5 font-body text-[11px] font-extrabold leading-none tracking-[0.08em] text-brand-dark tablet-down:px-5 tablet-down:py-3 tablet-down:text-[12px]";
 
 export interface LatestResourceItem {
   id: string;
