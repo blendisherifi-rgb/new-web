@@ -81,6 +81,56 @@ export interface MenusData {
   primary: NavItem[];
 }
 
+/** "What we do" mega-menu — must match WordPress page slugs (injected for placeholder + WP PRIMARY menu). */
+const WHAT_WE_DO_MEGA_MENU: Pick<NavItem, "dropdownType" | "products" | "platformLinks"> = {
+  dropdownType: "what-we-do",
+  products: [
+    {
+      id: "1-p1",
+      eyebrow: "AP Automation",
+      productSuffix: "AP",
+      href: "/accounts-payable-automation",
+    },
+    {
+      id: "1-p2",
+      eyebrow: "P2P Automation",
+      productSuffix: "P2P",
+      href: "/solution-p2p-automation",
+    },
+    {
+      id: "1-p3",
+      eyebrow: "E-Invoicing",
+      productLabel: "e-invoicing",
+      href: "/solution-e-invoicing-software",
+    },
+  ],
+  platformLinks: [
+    { id: "1-pl1", label: "About", href: "/about" },
+    { id: "1-pl2", label: "AI capabilities", href: "/ai-accounts-payable-automation" },
+    { id: "1-pl3", label: "Analytics", href: "/platform-accounts-payable-analytics" },
+    {
+      id: "1-pl4",
+      label: "Multi-ERP integration",
+      href: "/platform/ap-automation-erp-integration",
+    },
+    {
+      id: "1-pl5",
+      label: "Supplier Management",
+      href: "/platform-supplier-portal-software",
+    },
+  ],
+};
+
+function mergeWhatWeDoMegaMenu(primary: NavItem[]): NavItem[] {
+  return primary.map((item) => {
+    const label = (item.label ?? "").trim().toLowerCase();
+    if (label === "what we do") {
+      return { ...item, ...WHAT_WE_DO_MEGA_MENU };
+    }
+    return item;
+  });
+}
+
 /**
  * Solutions mega-menu: only "By role" and "By Industry" (By goal + By ERP hidden until later).
  * Paths match WordPress page slugs (same as production URLs without host).
@@ -185,34 +235,7 @@ const PLACEHOLDER_MENU: NavItem[] = [
     id: "1",
     label: "What we do",
     href: "/what-we-do",
-    dropdownType: "what-we-do",
-    products: [
-      {
-        id: "1-p1",
-        eyebrow: "AP Automation",
-        productSuffix: "AP",
-        href: "/what-we-do/accounts-payable",
-      },
-      {
-        id: "1-p2",
-        eyebrow: "P2P automation",
-        productSuffix: "P2P",
-        href: "/what-we-do/procure-to-pay",
-      },
-      {
-        id: "1-p3",
-        eyebrow: "e-invoicing",
-        productLabel: "e-invoicing",
-        href: "/what-we-do/e-invoicing",
-      },
-    ],
-    platformLinks: [
-      { id: "1-pl1", label: "About", href: "/platform/about" },
-      { id: "1-pl2", label: "AI capabilities", href: "/platform/ai-capabilities" },
-      { id: "1-pl3", label: "Analytics", href: "/platform/analytics" },
-      { id: "1-pl4", label: "Multi-ERP integration", href: "/platform/multi-erp-integration" },
-      { id: "1-pl5", label: "Partners", href: "/platform/partners" },
-    ],
+    ...WHAT_WE_DO_MEGA_MENU,
   },
   {
     id: "2",
@@ -317,7 +340,7 @@ export async function fetchMenus(locale: Locale): Promise<MenusData> {
     });
 
     const primary = mergeWhoWeAreMegaMenu(
-      mergeSolutionsMegaMenu(data.menu.menuItems.nodes.map(mapItem)),
+      mergeWhatWeDoMegaMenu(mergeSolutionsMegaMenu(data.menu.menuItems.nodes.map(mapItem))),
     );
     return { primary: makeLocaleAware(primary, locale) };
   } catch {
