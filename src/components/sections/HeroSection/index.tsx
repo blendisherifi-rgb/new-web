@@ -8,6 +8,7 @@ import { LogoMarquee, type LogoItem } from "@/components/molecules/LogoMarquee";
 import { Image } from "@/components/atoms/Image";
 import { shouldReduceMotion } from "@/lib/animations";
 import { useHomeBannerEntrance } from "@/components/home/homeBannerEntranceContext";
+import { renderHeroTitleParts } from "./heroTitleParts";
 import Lottie from "lottie-react";
 
 interface HeroSectionProps {
@@ -160,7 +161,7 @@ export function HeroSection({
               }}
             >
               <Heading level={1} className={titleClass}>
-                {title}
+                {renderHeroTitleParts(title)}
               </Heading>
             </div>
           </div>
