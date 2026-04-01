@@ -1210,18 +1210,23 @@ function transformSection(node: Record<string, unknown>, index: number): Section
     delete normalized.image;
   }
 
-  // Invoice lifecycle: imageWithSoftCo.node, imageWithoutSoftCo.node -> flatten
+  // Invoice lifecycle: imageWithSoftCo.node, imageWithoutSoftCo.node -> URL strings (match InvoiceLifecycleSection props)
   if (acfGroupName === "invoice_lifecycle_section") {
     const ws = normalized.imageWithSoftCo as Record<string, unknown> | undefined;
     const wsN = ws?.node as Record<string, unknown> | undefined;
-    normalized.imageWithSoftCoSrc = wsN?.sourceUrl ?? ws?.sourceUrl ?? "";
-    normalized.imageWithSoftCoAlt = wsN?.altText ?? ws?.altText ?? "";
+    const withUrl = wsN?.sourceUrl ?? ws?.sourceUrl ?? "";
+    const withAlt = wsN?.altText ?? ws?.altText ?? "";
     delete normalized.imageWithSoftCo;
+    normalized.imageWithSoftCo = withUrl;
+    normalized.imageWithSoftCoAlt = withAlt;
+
     const wos = normalized.imageWithoutSoftCo as Record<string, unknown> | undefined;
     const wosN = wos?.node as Record<string, unknown> | undefined;
-    normalized.imageWithoutSoftCoSrc = wosN?.sourceUrl ?? wos?.sourceUrl ?? "";
-    normalized.imageWithoutSoftCoAlt = wosN?.altText ?? wos?.altText ?? "";
+    const withoutUrl = wosN?.sourceUrl ?? wos?.sourceUrl ?? "";
+    const withoutAlt = wosN?.altText ?? wos?.altText ?? "";
     delete normalized.imageWithoutSoftCo;
+    normalized.imageWithoutSoftCo = withoutUrl;
+    normalized.imageWithoutSoftCoAlt = withoutAlt;
   }
 
   // AP analytics: analyticsCards[].icon.node -> iconSrc/iconAlt; remap to cards
