@@ -40,7 +40,6 @@ export interface FooterNavGroup {
 export interface FooterData {
   columns?: FooterColumn[];
   brandName?: string;
-  contactEmail?: string;
   navGroups?: FooterNavGroup[];
   contactAddress?: string | null;
   socialLinks?: Array<{ platform: string; url: string; label?: string }>;
@@ -73,7 +72,6 @@ const PLACEHOLDER_GLOBALS: GlobalsData = {
   },
   footer: {
     brandName: "SoftCo",
-    contactEmail: "info@softco.com",
     navGroups: [
       {
         heading: "What we do",

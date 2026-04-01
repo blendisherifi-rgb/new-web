@@ -12,8 +12,29 @@ interface FooterProps {
   locale: Locale;
 }
 
+function FooterSectionHeading({
+  as: Tag = "h3",
+  children,
+}: {
+  as?: "h3" | "h4";
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="mb-3 flex items-start gap-2.5">
+      <Image
+        src="/footer-plus-icon.svg"
+        alt=""
+        width={40}
+        height={40}
+        className="mt-0.5 h-8 w-8 shrink-0 sm:h-9 sm:w-9"
+      />
+      <Tag className="font-body text-[18px] font-bold leading-snug text-brand-dark sm:text-[20px]">{children}</Tag>
+    </div>
+  );
+}
+
 /**
- * Footer — columns, contact, social, legal links.
+ * Footer — columns, social, legal links.
  */
 export function Footer({ data, locale }: FooterProps) {
   const navGroups = data.navGroups ?? [];
@@ -27,28 +48,23 @@ export function Footer({ data, locale }: FooterProps) {
     return (fallback ?? platform).slice(0, 2);
   };
 
+  /** Consistent gap between primary list, secondary heading, and featured links */
+  const blockGap = "mt-8";
+
   return (
     <footer className="bg-white">
       <div className="mx-auto max-w-[1440px] px-6 pb-8 pt-10">
         <div className="border-b border-[#E7E7EB] pb-8">
-          <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
+          <div className="flex w-full flex-row items-center justify-between gap-4">
             <Link
               href={homeHref}
-              className="inline-block w-[160px] font-heading text-[40px] font-semibold leading-none text-brand-blue no-underline hover:no-underline"
+              className="inline-block min-w-0 font-heading text-[36px] font-semibold leading-none text-brand-blue no-underline hover:no-underline sm:text-[40px]"
               aria-label="SoftCo — Home"
             >
               {data.brandName ?? "SoftCo"}
             </Link>
-            {data.contactEmail ? (
-              <a
-                href={`mailto:${data.contactEmail}`}
-                className="font-body text-[30px] font-extrabold text-brand-orange no-underline"
-              >
-                {data.contactEmail}
-              </a>
-            ) : null}
             {data.socialLinks && data.socialLinks.length > 0 ? (
-              <ul className="flex items-center gap-3">
+              <ul className="flex shrink-0 items-center gap-2.5 sm:gap-3">
                 {data.socialLinks.map((s, i) => (
                   <li key={i}>
                     <a
@@ -56,7 +72,7 @@ export function Footer({ data, locale }: FooterProps) {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={s.label ?? s.platform}
-                      className="inline-flex h-[60px] w-[60px] items-center justify-center rounded-[4px] bg-[#ECECF1] text-[16px] font-bold text-brand-dark no-underline"
+                      className="inline-flex h-12 w-12 items-center justify-center rounded-[4px] bg-[#ECECF1] text-[15px] font-bold text-brand-dark no-underline sm:h-[52px] sm:w-[52px] sm:text-[16px]"
                     >
                       <span className="inline-flex h-4 w-4 items-center justify-center leading-none">
                         {socialIconLabel(s.platform, s.label)}
@@ -69,80 +85,52 @@ export function Footer({ data, locale }: FooterProps) {
           </div>
         </div>
 
-        <div className="border-b border-[#E7E7EB] pb-8 pt-16">
-          <div className="grid gap-x-8 gap-y-8 md:grid-cols-2 xl:grid-cols-4">
+        <div className="border-b border-[#E7E7EB] pb-10 pt-12 md:pt-14">
+          <div className="grid grid-cols-1 gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-12">
             {navGroups.map((group, i) => (
-              <div key={i}>
-                <div className="relative mb-3">
-                  <Image
-                    src="/footer-plus-icon.svg"
-                    alt=""
-                    width={40}
-                    height={40}
-                    className="absolute -left-[30px] -top-[25px] h-[40px] w-[40px]"
-                  />
-                  <h3 className="font-body text-[20px] font-bold text-brand-dark">{group.heading}</h3>
-                </div>
+              <div key={i} className="min-w-0">
+                <FooterSectionHeading as="h3">{group.heading}</FooterSectionHeading>
                 <ul className="space-y-1.5">
                   {group.links.map((link, j) => (
                     <li key={`${i}-l-${j}`}>
-                      <Link href={link.href} className="text-[16px] text-brand-dark no-underline hover:text-brand-blue hover:no-underline">
+                      <Link href={link.href} className="text-[15px] text-brand-dark no-underline hover:text-brand-blue hover:no-underline sm:text-[16px]">
                         {link.label}
                       </Link>
                     </li>
                   ))}
                 </ul>
                 {group.extraHeading ? (
-                  <>
-                    <div className="relative mb-3 mt-[55px]">
-                      <Image
-                        src="/footer-plus-icon.svg"
-                        alt=""
-                        width={40}
-                        height={40}
-                        className="absolute -left-[30px] -top-[25px] h-[40px] w-[40px]"
-                      />
-                      <h4 className="font-body text-[20px] font-bold text-brand-dark">{group.extraHeading}</h4>
-                    </div>
+                  <div className={blockGap}>
+                    <FooterSectionHeading as="h4">{group.extraHeading}</FooterSectionHeading>
                     <ul className="space-y-1.5">
                       {group.extraLinks?.map((link, j) => (
                         <li key={`${i}-e-${j}`}>
-                          <Link href={link.href} className="text-[16px] text-brand-dark no-underline hover:text-brand-blue hover:no-underline">
+                          <Link href={link.href} className="text-[15px] text-brand-dark no-underline hover:text-brand-blue hover:no-underline sm:text-[16px]">
                             {link.label}
                           </Link>
                         </li>
                       ))}
                     </ul>
-                  </>
+                  </div>
                 ) : null}
                 {group.featuredLinks && group.featuredLinks.length > 0 ? (
-                  <ul className={`${group.extraHeading ? "mt-[55px]" : "mt-[55px]"} space-y-0`}>
+                  <ul className={`${blockGap} flex flex-col gap-3`}>
                     {group.featuredLinks.map((link, j) => (
-                      group.extraHeading && link.label.toLowerCase() !== "customer portal" ? (
-                        <li key={`${i}-f-${j}`}>
-                          <div className="relative">
-                            <Image
-                              src="/footer-plus-icon.svg"
-                              alt=""
-                              width={40}
-                              height={40}
-                              className="absolute -left-[30px] -top-[25px] h-[40px] w-[40px]"
-                            />
-                            <Link href={link.href} className="text-[20px] font-bold text-brand-dark no-underline hover:no-underline">
-                              {link.label}
-                            </Link>
-                          </div>
-                        </li>
-                      ) : (
-                        <li key={`${i}-f-${j}`}>
-                          <Link
-                            href={link.href}
-                            className="bg-transparent text-[20px] font-bold text-brand-dark no-underline hover:no-underline"
-                          >
-                            {link.label}
-                          </Link>
-                        </li>
-                      )
+                      <li key={`${i}-f-${j}`} className="flex items-start gap-2.5">
+                        <Image
+                          src="/footer-plus-icon.svg"
+                          alt=""
+                          width={40}
+                          height={40}
+                          className="mt-0.5 h-8 w-8 shrink-0 opacity-90 sm:h-9 sm:w-9"
+                        />
+                        <Link
+                          href={link.href}
+                          className="text-[17px] font-bold leading-snug text-brand-dark no-underline hover:text-brand-blue hover:no-underline sm:text-[20px]"
+                        >
+                          {link.label}
+                        </Link>
+                      </li>
                     ))}
                   </ul>
                 ) : null}
@@ -151,7 +139,7 @@ export function Footer({ data, locale }: FooterProps) {
           </div>
         </div>
 
-        <div className="flex flex-col gap-6 pb-6 pt-8 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-5 pb-6 pt-8 lg:flex-row lg:flex-wrap lg:items-center lg:justify-between lg:gap-x-6 lg:gap-y-4">
           <Paragraph size="caption" className="font-normal text-brand-dark-60 md:text-[15px]">
             {data.copyright ?? "© SoftCo Group Ltd. All rights reserved."}
           </Paragraph>
