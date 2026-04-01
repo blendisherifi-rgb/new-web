@@ -104,13 +104,14 @@ export function PartnerBenefitsSection({
           </Paragraph>
         </div>
 
-        <div className="mt-10 grid grid-cols-1 gap-10 divide-y divide-white/10 tablet-down:mt-[120px] tablet-down:grid-cols-4 tablet-down:gap-0 tablet-down:divide-x tablet-down:divide-y-0">
+        {/* Flex (not fixed grid-cols-4) so 3 steps fill the row in thirds, 4 in quarters — no dead fourth column. */}
+        <div className="mt-10 flex flex-col gap-10 divide-y divide-white/10 tablet-down:mt-[120px] tablet-down:flex-row tablet-down:divide-x tablet-down:divide-y-0 tablet-down:gap-0">
           {steps.map((step, i) => (
             <AnimateOnScroll
               key={`${step.stepNumberImageSrc}-${i}`}
               variant="fadeUp"
               staggerIndex={i}
-              className="flex w-full flex-col items-center px-4 py-10 text-center first:pt-0 tablet-down:px-8 tablet-down:py-0 tablet-down:first:pt-0"
+              className="flex w-full min-w-0 flex-1 flex-col items-center px-4 py-10 text-center first:pt-0 tablet-down:px-8 tablet-down:py-0 tablet-down:first:pt-0"
             >
               <div className="relative mx-auto h-[99px] w-[121px]">
                 <Image
