@@ -61,15 +61,15 @@ const PLACEHOLDER_GLOBALS: GlobalsData = {
     enabled: true,
     text: "Discover how SoftCo automates P2P & AP for complex environments.",
     ctaLabel: "Book a demo",
-    ctaHref: "/contact",
+    ctaHref: "/book-a-demo",
   },
   utilityBar: {
     portalLabel: "Customer portal",
-    portalHref: "#",
+    portalHref: "https://support.softco.com/en/support/login",
   },
   headerCta: {
     label: "Book a demo",
-    href: "/contact",
+    href: "/book-a-demo",
   },
   footer: {
     brandName: "SoftCo",
@@ -84,7 +84,7 @@ const PLACEHOLDER_GLOBALS: GlobalsData = {
         ],
         featuredLinks: [
           { label: "The Perfect Fit framework", href: "/perfect-fit-framework" },
-          { label: "Client success stories", href: "/client-success-stories" },
+          { label: "Client success stories", href: "/case-studies" },
         ],
       },
       {
@@ -109,31 +109,31 @@ const PLACEHOLDER_GLOBALS: GlobalsData = {
       {
         heading: "By industry",
         links: [
-          { label: "Retail", href: "/industry/retail" },
-          { label: "Aviation", href: "/industry/aviation" },
-          { label: "Renewable Energy", href: "/industry/renewable-energy" },
-          { label: "Manufacturing", href: "/industry/manufacturing" },
-          { label: "Food & Beverage", href: "/industry/food-beverage" },
-          { label: "Financial Service", href: "/industry/financial-service" },
-          { label: "Construction Supply Chain", href: "/industry/construction-supply-chain" },
-          { label: "Transport & Logistics", href: "/industry/transport-logistics" },
+          { label: "Retail", href: "/solution-by-retail" },
+          { label: "Aviation", href: "/solution-by-aviation" },
+          { label: "Renewable Energy", href: "/solution-by-renewables" },
+          { label: "Manufacturing", href: "/solution-by-manufacturing" },
+          { label: "Food & Beverage", href: "/solution-by-food-beverage" },
+          { label: "Financial Service", href: "/accounts-payable-automation-financial-services" },
+          { label: "Construction Supply Chain", href: "/solution-by-construction" },
+          { label: "Transport & Logistics", href: "/accounts-payable-automation-logistics" },
         ],
         extraHeading: "By role",
         extraLinks: [
-          { label: "CFO", href: "/by-role/cfo" },
-          { label: "Financial Controller", href: "/by-role/financial-controller" },
-          { label: "AP Manager", href: "/by-role/ap-manager" },
+          { label: "CFO", href: "/apautomation-by-cfo" },
+          { label: "Financial Controller", href: "/solution-by-financial-controller" },
+          { label: "AP Manager", href: "/by-ap-manager" },
         ],
       },
       {
         heading: "Who we are",
         links: [
-          { label: "About SoftCo", href: "/who-we-are/about" },
-          { label: "Leadership team", href: "/who-we-are/leadership" },
-          { label: "ESG", href: "/who-we-are/esg" },
-          { label: "Careers", href: "/who-we-are/careers" },
-          { label: "News", href: "/who-we-are/news" },
-          { label: "Events", href: "/who-we-are/events" },
+          { label: "About SoftCo", href: "/about" },
+          { label: "Leadership team", href: "/leadership-team" },
+          { label: "ESG", href: "/esg" },
+          { label: "Careers", href: "/careers" },
+          { label: "News", href: "/news" },
+          { label: "Events", href: "/events" },
         ],
         extraHeading: "Resources",
         extraLinks: [
@@ -143,7 +143,10 @@ const PLACEHOLDER_GLOBALS: GlobalsData = {
           { label: "Glossary", href: "/resources/glossary" },
         ],
         featuredLinks: [
-          { label: "Customer portal", href: "/portal" },
+          {
+            label: "Customer portal",
+            href: "https://support.softco.com/en/support/login",
+          },
         ],
       },
     ],
@@ -154,10 +157,22 @@ const PLACEHOLDER_GLOBALS: GlobalsData = {
       { platform: "youtube", url: "https://youtube.com", label: "YouTube" },
     ],
     partnerBadges: [
-      { label: "Microsoft Solutions Partner", href: "#" },
-      { label: "AWS Partner Network", href: "#" },
-      { label: "AICPA SOC", href: "#" },
-      { label: "Lloyd's Register", href: "#" },
+      {
+        label: "Microsoft Solutions Partner",
+        href: "https://partner.microsoft.com/en-us/partnership/solutions-partner",
+      },
+      {
+        label: "AWS Partner Network",
+        href: "https://aws.amazon.com/partners/",
+      },
+      {
+        label: "AICPA SOC",
+        href: "https://www.aicpa.org/interestareas/frc/assuranceadvisoryservices/socserviceorganizations.html",
+      },
+      {
+        label: "Lloyd's Register",
+        href: "https://www.lr.org/",
+      },
     ],
     legalLinks: [
       { label: "Privacy Policy", href: "/privacy" },
@@ -167,20 +182,24 @@ const PLACEHOLDER_GLOBALS: GlobalsData = {
   },
 };
 
+/** Leave absolute http(s) URLs unchanged; locale-prefix internal paths only. */
+function localeAwareHref(href: string | null | undefined, locale: Locale): string | null {
+  if (!href) return null;
+  const t = href.trim();
+  if (t.startsWith("http://") || t.startsWith("https://")) return t;
+  return localePath(t, locale);
+}
+
 function makeLocaleAware(globals: GlobalsData, locale: Locale): GlobalsData {
   return {
     ...globals,
     promoBar: {
       ...globals.promoBar,
-      ctaHref: globals.promoBar.ctaHref
-        ? localePath(globals.promoBar.ctaHref, locale)
-        : null,
+      ctaHref: localeAwareHref(globals.promoBar.ctaHref, locale),
     },
     headerCta: {
       ...globals.headerCta,
-      href: globals.headerCta.href
-        ? localePath(globals.headerCta.href, locale)
-        : null,
+      href: localeAwareHref(globals.headerCta.href, locale),
     },
     utilityBar: {
       ...globals.utilityBar,
@@ -192,27 +211,27 @@ function makeLocaleAware(globals: GlobalsData, locale: Locale): GlobalsData {
         ...group,
         links: group.links.map((l) => ({
           ...l,
-          href: localePath(l.href, locale),
+          href: localeAwareHref(l.href, locale) ?? l.href,
         })),
         extraLinks: group.extraLinks?.map((l) => ({
           ...l,
-          href: localePath(l.href, locale),
+          href: localeAwareHref(l.href, locale) ?? l.href,
         })),
         featuredLinks: group.featuredLinks?.map((l) => ({
           ...l,
-          href: localePath(l.href, locale),
+          href: localeAwareHref(l.href, locale) ?? l.href,
         })),
       })),
       columns: globals.footer.columns?.map((col) => ({
         ...col,
         links: col.links?.map((l) => ({
           ...l,
-          href: localePath(l.href, locale),
+          href: localeAwareHref(l.href, locale) ?? l.href,
         })),
       })),
       legalLinks: globals.footer.legalLinks?.map((l) => ({
         ...l,
-        href: localePath(l.href, locale),
+        href: localeAwareHref(l.href, locale) ?? l.href,
       })),
     },
   };

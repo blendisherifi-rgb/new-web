@@ -86,3 +86,8 @@ export function localePath(path: string, locale: Locale): string {
   }
   return `/${locale}${clean ? `/${clean}` : ""}`;
 }
+
+/** SoftCo logo in header/footer — always the locale homepage. */
+export function homePath(locale: Locale): string {
+  return localePath("/", locale);
+}

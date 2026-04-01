@@ -16,14 +16,14 @@ interface WhoWeAreDropdownProps {
  * ┌──────────────────────────────┬──────────────────────┐
  * │  Plain links (white bg)      │ Featured card        │
  * │                              │ (white bg)           │
- * │  About SoftCo                │ [image]              │
- * │  Leadership team             │ Title                │
+ * │  About us                    │ [image]              │
+ * │  Leadership Team             │ Title                │
  * │  ESG                         │ Description          │
- * │  Partner with us             │                      │
+ * │  Partner Programme           │                      │
  * │  Careers                     │                      │
  * │  News                        │                      │
  * │  Events                      │                      │
- * │  Contact                     │                      │
+ * │  Contact US                  │                      │
  * └──────────────────────────────┴──────────────────────┘
  */
 export function WhoWeAreDropdown({

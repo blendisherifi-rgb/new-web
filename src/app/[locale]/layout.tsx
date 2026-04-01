@@ -38,7 +38,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
       <main data-locale={locale} id="main-content">
         {children}
       </main>
-      <Footer data={globals.footer} />
+      <Footer data={globals.footer} locale={locale} />
       <ConsentAnalytics locale={locale} />
       <CookieConsent
         locale={locale}

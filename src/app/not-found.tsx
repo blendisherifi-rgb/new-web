@@ -6,7 +6,7 @@ import { ChevronRightIcon } from "@/components/atoms/Icon";
 import { Header, Footer } from "@/components/globals";
 import { fetchMenus } from "@/lib/menus";
 import { fetchGlobalFields } from "@/lib/globals";
-import { localePath } from "@/lib/i18n";
+import { homePath } from "@/lib/i18n";
 
 /**
  * 404 page — dark background, overline, h1, body, primary button.
@@ -20,7 +20,7 @@ export default async function NotFound() {
     fetchGlobalFields(locale),
   ]);
 
-  const homeHref = localePath("/", locale);
+  const homeHref = homePath(locale);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -74,7 +74,7 @@ export default async function NotFound() {
           </div>
         </div>
       </main>
-      <Footer data={globals.footer} />
+      <Footer data={globals.footer} locale={locale} />
     </div>
   );
 }

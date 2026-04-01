@@ -81,6 +81,105 @@ export interface MenusData {
   primary: NavItem[];
 }
 
+/**
+ * Solutions mega-menu: only "By role" and "By Industry" (By goal + By ERP hidden until later).
+ * Paths match WordPress page slugs (same as production URLs without host).
+ */
+const SOLUTIONS_MEGA_MENU: Pick<NavItem, "dropdownType" | "solutionsCategories"> = {
+  dropdownType: "solutions",
+  solutionsCategories: [
+    {
+      id: "2-c1",
+      label: "By role",
+      links: [
+        { id: "2-c1-l1", label: "CFO", href: "/apautomation-by-cfo" },
+        { id: "2-c1-l2", label: "AP Manager", href: "/by-ap-manager" },
+        { id: "2-c1-l3", label: "Financial Controller", href: "/solution-by-financial-controller" },
+      ],
+      featured: {
+        imageUrl: "/solutions-by-role.jpg",
+        imageAlt: "Solutions by role",
+        title: "Solutions by role",
+        description:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit sit amet enim, mattis ut massa sed.",
+        href: "/apautomation-by-cfo",
+      },
+    },
+    {
+      id: "2-c3",
+      label: "By Industry",
+      links: [
+        { id: "2-c3-l1", label: "Aviation", href: "/solution-by-aviation" },
+        { id: "2-c3-l2", label: "Retail", href: "/solution-by-retail" },
+        { id: "2-c3-l3", label: "Manufacturing", href: "/solution-by-manufacturing" },
+        { id: "2-c3-l4", label: "Construction", href: "/solution-by-construction" },
+        { id: "2-c3-l5", label: "Transport & Logistics", href: "/accounts-payable-automation-logistics" },
+        { id: "2-c3-l6", label: "Financial Services", href: "/accounts-payable-automation-financial-services" },
+        { id: "2-c3-l7", label: "Food & Beverage", href: "/solution-by-food-beverage" },
+        { id: "2-c3-l8", label: "Renewables", href: "/solution-by-renewables" },
+      ],
+      featured: {
+        imageUrl: "/solutions-by-industry.jpg",
+        imageAlt: "Solutions by industry",
+        title: "Solutions by industry",
+        description:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit sit amet enim, mattis ut massa sed.",
+        href: "/solution-by-aviation",
+      },
+    },
+  ],
+};
+
+/** When WordPress returns PRIMARY menu items, inject the Solutions mega-menu (WP menu alone has no category structure). */
+function mergeSolutionsMegaMenu(primary: NavItem[]): NavItem[] {
+  return primary.map((item) => {
+    const label = (item.label ?? "").trim().toLowerCase();
+    if (label === "solutions") {
+      return { ...item, ...SOLUTIONS_MEGA_MENU };
+    }
+    return item;
+  });
+}
+
+/**
+ * "Who we are" mega-menu — paths match WordPress page slugs (production URLs without host).
+ */
+const WHO_WE_ARE_MEGA_MENU: Pick<
+  NavItem,
+  "dropdownType" | "href" | "whoWeAreLinks" | "whoWeAreFeatured"
+> = {
+  dropdownType: "who-we-are",
+  href: "/about",
+  whoWeAreLinks: [
+    { id: "5-l1", label: "About us", href: "/about" },
+    { id: "5-l2", label: "Leadership Team", href: "/leadership-team" },
+    { id: "5-l3", label: "ESG", href: "/esg" },
+    { id: "5-l4", label: "Partner Programme", href: "/partner-programme" },
+    { id: "5-l5", label: "Careers", href: "/careers" },
+    { id: "5-l6", label: "News", href: "/news" },
+    { id: "5-l7", label: "Events", href: "/events" },
+    { id: "5-l8", label: "Contact US", href: "/contact-us" },
+  ],
+  whoWeAreFeatured: {
+    imageUrl: "/who-we-are-featured.jpg",
+    imageAlt: "SoftCo team",
+    title: "Lorem ipsum dolor sit amet, consectetur adipiscing",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit sit amet enim, mattis ut massa sed.",
+    href: "/about",
+  },
+};
+
+function mergeWhoWeAreMegaMenu(primary: NavItem[]): NavItem[] {
+  return primary.map((item) => {
+    const label = (item.label ?? "").trim().toLowerCase();
+    if (label === "who we are") {
+      return { ...item, ...WHO_WE_ARE_MEGA_MENU };
+    }
+    return item;
+  });
+}
+
 const PLACEHOLDER_MENU: NavItem[] = [
   {
     id: "1",
@@ -119,110 +218,14 @@ const PLACEHOLDER_MENU: NavItem[] = [
     id: "2",
     label: "Solutions",
     href: "/solutions",
-    dropdownType: "solutions",
-    solutionsCategories: [
-      {
-        id: "2-c1",
-        label: "By role",
-        links: [
-          { id: "2-c1-l1", label: "AP Manager", href: "/solutions/by-role/ap-manager" },
-          { id: "2-c1-l2", label: "CFO", href: "/solutions/by-role/cfo" },
-          { id: "2-c1-l3", label: "IT Director", href: "/solutions/by-role/it-director" },
-          { id: "2-c1-l4", label: "Procurement Manager", href: "/solutions/by-role/procurement-manager" },
-          { id: "2-c1-l5", label: "Shared Services", href: "/solutions/by-role/shared-services" },
-        ],
-        featured: {
-          imageUrl: "/solutions-by-role.jpg",
-          imageAlt: "Solutions by role",
-          title: "Lorem ipsum dolor sit amet, consectetur adipiscing",
-          description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit sit amet enim, mattis ut massa sed.",
-          href: "/solutions/by-role",
-        },
-      },
-      {
-        id: "2-c2",
-        label: "By goal",
-        links: [
-          { id: "2-c2-l1", label: "Automate invoice processing", href: "/solutions/by-goal/automate-invoice-processing" },
-          { id: "2-c2-l2", label: "Eliminate paper", href: "/solutions/by-goal/eliminate-paper" },
-          { id: "2-c2-l3", label: "Improve supplier relationships", href: "/solutions/by-goal/supplier-relationships" },
-          { id: "2-c2-l4", label: "Reduce costs", href: "/solutions/by-goal/reduce-costs" },
-          { id: "2-c2-l5", label: "Strengthen controls & compliance", href: "/solutions/by-goal/controls-compliance" },
-        ],
-        featured: {
-          imageUrl: "/solutions-by-goal.jpg",
-          imageAlt: "Solutions by goal",
-          title: "Lorem ipsum dolor sit amet, consectetur adipiscing",
-          description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit sit amet enim, mattis ut massa sed.",
-          href: "/solutions/by-goal",
-        },
-      },
-      {
-        id: "2-c3",
-        label: "By Industry",
-        links: [
-          { id: "2-c3-l1", label: "Aviation", href: "/solutions/by-industry/aviation" },
-          { id: "2-c3-l2", label: "Retail", href: "/solutions/by-industry/retail" },
-          { id: "2-c3-l3", label: "Renewable energy manufacturing", href: "/solutions/by-industry/renewable-energy" },
-          { id: "2-c3-l4", label: "Food & beverage", href: "/solutions/by-industry/food-beverage" },
-          { id: "2-c3-l5", label: "Financial services", href: "/solutions/by-industry/financial-services" },
-          { id: "2-c3-l6", label: "Construction supply chain", href: "/solutions/by-industry/construction" },
-          { id: "2-c3-l7", label: "Transport & logistics", href: "/solutions/by-industry/transport-logistics" },
-          { id: "2-c3-l8", label: "Hospitality", href: "/solutions/by-industry/hospitality" },
-        ],
-        featured: {
-          imageUrl: "/solutions-by-industry.jpg",
-          imageAlt: "Solutions by industry",
-          title: "Lorem ipsum dolor sit amet, consectetur adipiscing",
-          description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit sit amet enim, mattis ut massa sed.",
-          href: "/solutions/by-industry",
-        },
-      },
-      {
-        id: "2-c4",
-        label: "By ERP",
-        links: [
-          { id: "2-c4-l1", label: "SAP", href: "/solutions/by-erp/sap" },
-          { id: "2-c4-l2", label: "Oracle", href: "/solutions/by-erp/oracle" },
-          { id: "2-c4-l3", label: "Microsoft Dynamics", href: "/solutions/by-erp/microsoft-dynamics" },
-          { id: "2-c4-l4", label: "Workday", href: "/solutions/by-erp/workday" },
-          { id: "2-c4-l5", label: "Infor", href: "/solutions/by-erp/infor" },
-          { id: "2-c4-l6", label: "Other ERPs", href: "/solutions/by-erp/other" },
-        ],
-        featured: {
-          imageUrl: "/solutions-by-erp.jpg",
-          imageAlt: "Solutions by ERP",
-          title: "Lorem ipsum dolor sit amet, consectetur adipiscing",
-          description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit sit amet enim, mattis ut massa sed.",
-          href: "/solutions/by-erp",
-        },
-      },
-    ],
+    ...SOLUTIONS_MEGA_MENU,
   },
   { id: "3", label: "Why SoftCo", href: "/why-softco" },
-  { id: "4", label: "Client success", href: "/client-success" },
+  { id: "4", label: "Client Success", href: "/case-studies" },
   {
     id: "5",
     label: "Who we are",
-    href: "/who-we-are",
-    dropdownType: "who-we-are",
-    whoWeAreLinks: [
-      { id: "5-l1", label: "About SoftCo", href: "/who-we-are/about" },
-      { id: "5-l2", label: "Leadership team", href: "/who-we-are/leadership" },
-      { id: "5-l3", label: "ESG", href: "/who-we-are/esg" },
-      { id: "5-l4", label: "Partner with us", href: "/who-we-are/partners" },
-      { id: "5-l5", label: "Careers", href: "/who-we-are/careers" },
-      { id: "5-l6", label: "News", href: "/who-we-are/news" },
-      { id: "5-l7", label: "Events", href: "/who-we-are/events" },
-      { id: "5-l8", label: "Contact", href: "/who-we-are/contact" },
-    ],
-    whoWeAreFeatured: {
-      imageUrl: "/who-we-are-featured.jpg",
-      imageAlt: "SoftCo team",
-      title: "Lorem ipsum dolor sit amet, consectetur adipiscing",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit sit amet enim, mattis ut massa sed.",
-      href: "/who-we-are",
-    },
+    ...WHO_WE_ARE_MEGA_MENU,
   },
   { id: "6", label: "Resources", href: "/resources" },
 ];
@@ -237,6 +240,19 @@ function makeLocaleAware(items: NavItem[], locale: Locale): NavItem[] {
           href: localePath(c.href, locale),
         }))
       : undefined,
+    products: item.products?.map((p) => ({ ...p, href: localePath(p.href, locale) })),
+    platformLinks: item.platformLinks?.map((l) => ({ ...l, href: localePath(l.href, locale) })),
+    solutionsCategories: item.solutionsCategories?.map((cat) => ({
+      ...cat,
+      links: cat.links.map((l) => ({ ...l, href: localePath(l.href, locale) })),
+      featured: cat.featured?.href
+        ? { ...cat.featured, href: localePath(cat.featured.href, locale) }
+        : cat.featured,
+    })),
+    whoWeAreLinks: item.whoWeAreLinks?.map((l) => ({ ...l, href: localePath(l.href, locale) })),
+    whoWeAreFeatured: item.whoWeAreFeatured?.href
+      ? { ...item.whoWeAreFeatured, href: localePath(item.whoWeAreFeatured.href, locale) }
+      : item.whoWeAreFeatured,
   }));
 }
 
@@ -300,7 +316,9 @@ export async function fetchMenus(locale: Locale): Promise<MenusData> {
           : undefined,
     });
 
-    const primary = data.menu.menuItems.nodes.map(mapItem);
+    const primary = mergeWhoWeAreMegaMenu(
+      mergeSolutionsMegaMenu(data.menu.menuItems.nodes.map(mapItem)),
+    );
     return { primary: makeLocaleAware(primary, locale) };
   } catch {
     return { primary: makeLocaleAware(PLACEHOLDER_MENU, locale) };

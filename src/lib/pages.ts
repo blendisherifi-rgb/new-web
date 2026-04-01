@@ -1546,6 +1546,35 @@ export const fetchPageData = cache(async function fetchPageData(
     if (data?.page) { basePage = data.page; break; }
   }
 
+  // URI alone often fails in production (permalink structure, trailing slashes, WPML).
+  // WPGraphQL resolves pages reliably by post slug — same as in WP admin.
+  if (!basePage && !isHome) {
+    const slugCandidates = Array.from(
+      new Set(
+        [slug, slug.split("/").filter(Boolean).pop() ?? slug].filter(
+          (s): s is string => Boolean(s && s.length > 0),
+        ),
+      ),
+    );
+    for (const slugId of slugCandidates) {
+      data = await tryFetch(slugId, "SLUG", fullQuery, true);
+      if (data?.page) {
+        basePage = data.page;
+        break;
+      }
+      data = await tryFetch(slugId, "SLUG", resilientQuery, false);
+      if (data?.page) {
+        basePage = data.page;
+        break;
+      }
+      data = await tryFetch(slugId, "SLUG", minimalQuery, false);
+      if (data?.page) {
+        basePage = data.page;
+        break;
+      }
+    }
+  }
+
   if (!basePage) {
     page = null;
   } else if (language === "us") {

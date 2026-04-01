@@ -3,16 +3,21 @@ import { Image } from "@/components/atoms/Image";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { CookieSettingsLink } from "@/components/globals/CookieConsent/CookieSettingsLink";
 import type { FooterData } from "@/lib/globals";
+import type { Locale } from "@/lib/i18n";
+import { homePath } from "@/lib/i18n";
 
 interface FooterProps {
   data: FooterData;
+  /** Locale for homepage logo link (`/` vs `/ie`, `/uk`). */
+  locale: Locale;
 }
 
 /**
  * Footer — columns, contact, social, legal links.
  */
-export function Footer({ data }: FooterProps) {
+export function Footer({ data, locale }: FooterProps) {
   const navGroups = data.navGroups ?? [];
+  const homeHref = homePath(locale);
 
   const socialIconLabel = (platform: string, fallback?: string) => {
     const p = platform.toLowerCase();
@@ -27,7 +32,11 @@ export function Footer({ data }: FooterProps) {
       <div className="mx-auto max-w-[1440px] px-6 pb-8 pt-10">
         <div className="border-b border-[#E7E7EB] pb-8">
           <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
-            <Link href="/" className="inline-block w-[160px] font-heading text-[40px] font-semibold leading-none text-brand-blue no-underline hover:no-underline">
+            <Link
+              href={homeHref}
+              className="inline-block w-[160px] font-heading text-[40px] font-semibold leading-none text-brand-blue no-underline hover:no-underline"
+              aria-label="SoftCo — Home"
+            >
               {data.brandName ?? "SoftCo"}
             </Link>
             {data.contactEmail ? (

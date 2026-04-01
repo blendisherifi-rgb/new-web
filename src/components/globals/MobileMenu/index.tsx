@@ -5,7 +5,7 @@ import { Link } from "@/components/atoms/Link";
 import type { NavItem } from "@/lib/menus";
 import type { UtilityBarData } from "@/lib/globals";
 import type { Locale } from "@/lib/i18n";
-import { LOCALES, localePath } from "@/lib/i18n";
+import { homePath, LOCALES, localePath } from "@/lib/i18n";
 import { usePathname } from "next/navigation";
 import { acquireScrollLock } from "@/lib/scrollLock";
 
@@ -88,7 +88,7 @@ export function MobileMenu({
     >
       {/* Header row */}
       <div className="flex items-center justify-between px-6 py-5">
-        <Link href="/" onClick={onClose} aria-label="SoftCo — Home">
+        <Link href={homePath(locale)} onClick={onClose} aria-label="SoftCo — Home">
           <img src="/softco-logo.svg" alt="SoftCo" width={100} height={20} />
         </Link>
         <button

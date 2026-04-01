@@ -9,7 +9,7 @@ import { MobileMenu } from "../MobileMenu";
 import { HeaderSearch } from "./HeaderSearch";
 import type { NavItem } from "@/lib/menus";
 import type { HeaderCtaData, UtilityBarData } from "@/lib/globals";
-import { localePath, LOCALES } from "@/lib/i18n";
+import { homePath, localePath, LOCALES } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 import { useHomeBannerEntrance } from "@/components/home/homeBannerEntranceContext";
 
@@ -163,7 +163,7 @@ export function Header({ menus, cta, utilityBar, locale, variant = "transparent"
     return () => document.removeEventListener("mousedown", handleOutside);
   }, []);
 
-  const homeHref = localePath("/", locale);
+  const homeHref = homePath(locale);
 
   // Strip locale prefix for cross-locale switching
   const match = pathname.match(/^\/(us|ie|uk)(?:\/(.*))?$/);
