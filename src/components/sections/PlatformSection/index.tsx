@@ -30,10 +30,10 @@ interface PlatformSectionProps {
   intro: string;
   /** Two content rows (AP and P2P). */
   rows: [PlatformRow, PlatformRow];
-  /** First sticky image (shown initially). */
+  /** First row image. */
   image1Src: string;
   image1Alt: string;
-  /** Second sticky image (shown after 50% into second row). */
+  /** Second row image. */
   image2Src: string;
   image2Alt: string;
 }
@@ -41,8 +41,8 @@ interface PlatformSectionProps {
 /**
  * Platform section.
  *
- * Full-width header, then two-column layout: left has two content rows,
- * right shows both platform images immediately (no scroll-based swapping).
+ * Full-width header, then two row blocks.
+ * Each row aligns content (left) with its image (right).
  */
 export function PlatformSection({
   tag,
@@ -70,44 +70,34 @@ export function PlatformSection({
           </Paragraph>
         </AnimateOnScroll>
 
-        {/* Two-column content — 160px between intro and first row */}
-        <div className="mt-12 grid grid-cols-1 gap-10 tablet-down:mt-[160px] tablet-down:grid-cols-2 tablet-down:gap-16">
-          {/* Left column — two rows with 200px gap */}
-          <div className="flex flex-col">
-            <div>
-              <PlatformContentRow {...row1} />
-            </div>
-
-            {/* 200px gap then Row 2 */}
-            <div className="mt-12 tablet-down:mt-[200px]">
-              <PlatformContentRow {...row2} />
-            </div>
+        <div className="mt-12 flex flex-col gap-12 tablet-down:mt-[160px] tablet-down:gap-[200px]">
+          <div className="grid grid-cols-1 gap-10 tablet-down:grid-cols-2 tablet-down:items-start tablet-down:gap-16">
+            <PlatformContentRow {...row1} />
+            <PlatformRowImage src={image1Src} alt={image1Alt} />
           </div>
 
-          {/* Right column — static images (always visible, no scroll effect) */}
-          <div className="relative flex flex-col gap-12 tablet-down:gap-[200px]">
-            <div className="relative mx-auto aspect-video w-full max-w-[754px] overflow-hidden rounded-lg">
-              <Image
-                src={image1Src}
-                alt={image1Alt}
-                fill
-                className="object-contain object-center"
-                sizes="(max-width: 1024px) 100vw, 754px"
-              />
-            </div>
-            <div className="relative mx-auto -mt-[30px] aspect-video w-full max-w-[754px] overflow-hidden rounded-lg">
-              <Image
-                src={image2Src}
-                alt={image2Alt}
-                fill
-                className="object-contain object-center"
-                sizes="(max-width: 1024px) 100vw, 754px"
-              />
-            </div>
+          <div className="grid grid-cols-1 gap-10 tablet-down:grid-cols-2 tablet-down:items-start tablet-down:gap-16">
+            <PlatformContentRow {...row2} />
+            <PlatformRowImage src={image2Src} alt={image2Alt} />
           </div>
         </div>
       </div>
     </section>
+  );
+}
+
+function PlatformRowImage({ src, alt }: { src: string; alt: string }) {
+  return (
+    <div className="mx-auto w-full max-w-[754px] overflow-hidden rounded-lg">
+      <Image
+        src={src}
+        alt={alt}
+        width={754}
+        height={424}
+        className="h-auto w-full object-contain object-center"
+        sizes="(max-width: 1024px) 100vw, 754px"
+      />
+    </div>
   );
 }
 
