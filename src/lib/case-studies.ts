@@ -40,12 +40,21 @@ export interface CaseStudiesArchiveData {
   totalCount?: number;
 }
 
+/** WPGraphQL: `featuredImage` on `Page` often resolves only under `NodeWithFeaturedImage`. */
 const CASE_STUDY_ARCHIVE_NODE_FIELDS = `
   id
   slug
   title
   excerpt
-  featuredImage { node { sourceUrl altText } }
+  ... on NodeWithFeaturedImage {
+    featuredImage {
+      node {
+        sourceUrl
+        altText
+        mediaItemUrl
+      }
+    }
+  }
 `;
 
 /** WPGraphQL default max is often 100; larger `first` makes every archive query fail silently. */
@@ -315,14 +324,60 @@ function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
 }
 
+/** Decode common WordPress / HTML entities in titles (e.g. &#8211; → en dash). */
+function decodeHtmlEntities(text: string): string {
+  if (!text || !text.includes("&")) return text;
+  return text
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, hex) =>
+      String.fromCodePoint(parseInt(hex, 16)),
+    )
+    .replace(/&#(\d+);/g, (_, dec) => String.fromCodePoint(parseInt(dec, 10)))
+    .replace(/&nbsp;/g, " ")
+    .replace(/&ndash;/g, "\u2013")
+    .replace(/&mdash;/g, "\u2014")
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&");
+}
+
+/**
+ * Normalize WPGraphQL featured image (connection shape, edges, mediaItemUrl fallback).
+ */
+function mapFeaturedFromGraphql(
+  raw: unknown,
+): { sourceUrl: string; altText?: string } | null {
+  if (raw == null || typeof raw !== "object") return null;
+  const fi = raw as Record<string, unknown>;
+  let node = fi.node as Record<string, unknown> | undefined;
+  if (!node && Array.isArray(fi.edges) && fi.edges.length > 0) {
+    const e0 = fi.edges[0] as Record<string, unknown> | undefined;
+    node = e0?.node as Record<string, unknown> | undefined;
+  }
+  if (!node || typeof node !== "object") return null;
+  const url =
+    (typeof node.sourceUrl === "string" && node.sourceUrl) ||
+    (typeof node.mediaItemUrl === "string" && node.mediaItemUrl) ||
+    "";
+  if (!url) return null;
+  const alt = typeof node.altText === "string" ? node.altText : "";
+  return { sourceUrl: url, altText: alt || undefined };
+}
+
+function normalizeCaseStudyTitle(title: unknown): string {
+  const s = typeof title === "string" ? title : "";
+  return decodeHtmlEntities(s);
+}
+
 /** Maps REST page JSON into the same shape {@link mapCaseStudyArchiveNode} expects. */
 function mapWpRestPageToArchiveNode(p: WpRestPage): Record<string, unknown> {
   const media = p._embedded?.["wp:featuredmedia"]?.[0];
   return {
     id: `rest-page-${p.id}`,
     slug: p.slug,
-    title: stripHtml(p.title?.rendered ?? ""),
-    excerpt: p.excerpt?.rendered ? stripHtml(p.excerpt.rendered) : null,
+    title: decodeHtmlEntities(stripHtml(p.title?.rendered ?? "")),
+    excerpt: p.excerpt?.rendered ? decodeHtmlEntities(stripHtml(p.excerpt.rendered)) : null,
     featuredImage: media?.source_url
       ? {
           node: {
@@ -340,7 +395,7 @@ function wpRestPageToGraphqlDetailShape(p: WpRestPage): Record<string, unknown> 
   return {
     id: `rest-page-${p.id}`,
     slug: p.slug,
-    title: stripHtml(p.title?.rendered ?? ""),
+    title: decodeHtmlEntities(stripHtml(p.title?.rendered ?? "")),
     excerpt: p.excerpt?.rendered ?? null,
     content: p.content?.rendered ?? null,
     featuredImage: media?.source_url
@@ -412,25 +467,53 @@ async function fetchCaseStudyArchiveNodesFromWpRest(
   }
 }
 
+/**
+ * WPGraphQL often omits `featuredImage` on `Page` children even when REST `_embed` returns it.
+ * Merge by slug so archive cards show the same featured image as in WP admin.
+ */
+async function mergeArchiveFeaturedImagesFromRest(
+  nodes: Array<Record<string, unknown>>,
+  cacheTags: string[],
+  maxItems: number,
+): Promise<Array<Record<string, unknown>>> {
+  const anyMissing = nodes.some((n) => !mapFeaturedFromGraphql(n.featuredImage));
+  if (!anyMissing) return nodes;
+
+  const rest = await fetchCaseStudyArchiveNodesFromWpRest(cacheTags, maxItems);
+  if (!rest?.nodes.length) return nodes;
+
+  const bySlug = new Map<string, Record<string, unknown>>();
+  for (const r of rest.nodes) {
+    const slug = r.slug as string | undefined;
+    if (slug) bySlug.set(slug, r);
+  }
+
+  return nodes.map((n) => {
+    if (mapFeaturedFromGraphql(n.featuredImage)) return n;
+    const slug = n.slug as string | undefined;
+    if (!slug) return n;
+    const r = bySlug.get(slug);
+    const fi = r?.featuredImage;
+    if (fi == null) return n;
+    return { ...n, featuredImage: fi };
+  });
+}
+
 function mapPageNodeToDetail(p: Record<string, unknown>): CaseStudyDetail {
-  const fi = p.featuredImage as { node?: { sourceUrl?: string; altText?: string } } | undefined;
   const rawContent = p.content;
   const contentHtml =
     typeof rawContent === "string"
       ? rawContent
       : (rawContent as { rendered?: string } | undefined)?.rendered ?? null;
+  const featured = mapFeaturedFromGraphql(p.featuredImage);
   return {
     id: p.id as string,
     slug: (p.slug as string) ?? "",
-    title: (p.title as string) ?? "",
-    excerpt: (p.excerpt as string) ?? null,
+    title: normalizeCaseStudyTitle(p.title),
+    excerpt:
+      typeof p.excerpt === "string" ? decodeHtmlEntities(p.excerpt) : (p.excerpt as string | null) ?? null,
     content: contentHtml,
-    featuredImage: fi?.node?.sourceUrl
-      ? {
-          sourceUrl: fi.node.sourceUrl,
-          altText: fi.node.altText,
-        }
-      : null,
+    featuredImage: featured,
     seo: p.seo as CaseStudyDetail["seo"],
   };
 }
@@ -444,7 +527,7 @@ function mapCaseStudyArchiveNode(n: Record<string, unknown>): CaseStudyListItem 
     .map((x) => x.name)
     .filter(Boolean)
     .slice(0, 3)
-    .map((t) => String(t).toUpperCase());
+    .map((t) => String(t));
 
   const cl = n.clientLogo as { node?: { sourceUrl?: string; altText?: string } } | undefined;
   const clientLogoOverlay = cl?.node?.sourceUrl
@@ -454,19 +537,14 @@ function mapCaseStudyArchiveNode(n: Record<string, unknown>): CaseStudyListItem 
       }
     : null;
 
-  const fi = n.featuredImage as { node?: { sourceUrl?: string; altText?: string } } | undefined;
-  const featuredImage = fi?.node?.sourceUrl
-    ? {
-        sourceUrl: fi.node.sourceUrl,
-        altText: fi.node.altText,
-      }
-    : null;
+  const featuredImage = mapFeaturedFromGraphql(n.featuredImage);
 
   return {
     id: n.id as string,
     slug: (n.slug as string) ?? "",
-    title: (n.title as string) ?? "",
-    excerpt: (n.excerpt as string) ?? null,
+    title: normalizeCaseStudyTitle(n.title),
+    excerpt:
+      typeof n.excerpt === "string" ? decodeHtmlEntities(n.excerpt) : (n.excerpt as string | null) ?? null,
     featuredImage,
     tags: tagNames.length > 0 ? tagNames : undefined,
     clientLogoOverlay,
@@ -516,7 +594,12 @@ async function fetchCaseStudyArchiveNodes(
 
   const fromPages = await fetchCaseStudyArchiveNodesFromPages(cacheTags, maxItems);
   if (fromPages && fromPages.nodes.length > 0) {
-    return fromPages;
+    const nodes = await mergeArchiveFeaturedImagesFromRest(
+      fromPages.nodes,
+      cacheTags,
+      maxItems,
+    );
+    return { nodes, hasMore: fromPages.hasMore };
   }
 
   const fromRest = await fetchCaseStudyArchiveNodesFromWpRest(cacheTags, maxItems);
@@ -621,7 +704,9 @@ async function fetchCaseStudyArchiveNodes(
             slug
             title
             excerpt
-            featuredImage { node { sourceUrl altText } }
+            ... on NodeWithFeaturedImage {
+              featuredImage { node { sourceUrl altText mediaItemUrl } }
+            }
           }
         }
         pageInfo { hasNextPage endCursor }
@@ -691,7 +776,15 @@ const CASE_STUDY_PAGE_DETAIL_FIELDS = `
   title
   excerpt
   content(format: RENDERED)
-  featuredImage { node { sourceUrl altText } }
+  ... on NodeWithFeaturedImage {
+    featuredImage {
+      node {
+        sourceUrl
+        altText
+        mediaItemUrl
+      }
+    }
+  }
   seo { title metaDesc opengraphImage { sourceUrl } }
 `;
 
@@ -727,7 +820,9 @@ export async function fetchCaseStudyBySlug(
             title
             excerpt
             content
-            featuredImage { node { sourceUrl altText } }
+            ... on NodeWithFeaturedImage {
+              featuredImage { node { sourceUrl altText mediaItemUrl } }
+            }
           }
         }
       `,
@@ -743,15 +838,11 @@ export async function fetchCaseStudyBySlug(
   const mapCptPost = (post: Record<string, unknown>): CaseStudyDetail => ({
     id: post.id as string,
     slug: (post.slug as string) ?? "",
-    title: (post.title as string) ?? "",
-    excerpt: (post.excerpt as string) ?? null,
+    title: normalizeCaseStudyTitle(post.title),
+    excerpt:
+      typeof post.excerpt === "string" ? decodeHtmlEntities(post.excerpt) : (post.excerpt as string | null) ?? null,
     content: (post.content as string) ?? null,
-    featuredImage: (post.featuredImage as { node?: { sourceUrl?: string; altText?: string } })?.node
-      ? {
-          sourceUrl: (post.featuredImage as { node?: { sourceUrl?: string } }).node?.sourceUrl,
-          altText: (post.featuredImage as { node?: { altText?: string } }).node?.altText,
-        }
-      : null,
+    featuredImage: mapFeaturedFromGraphql(post.featuredImage),
     seo: post.seo as CaseStudyDetail["seo"],
   });
 
@@ -771,7 +862,9 @@ export async function fetchCaseStudyBySlug(
             title
             excerpt
             content
-            featuredImage { node { sourceUrl altText } }
+            ... on NodeWithFeaturedImage {
+              featuredImage { node { sourceUrl altText mediaItemUrl } }
+            }
             seo { title metaDesc opengraphImage { sourceUrl } }
             language { code }
             ${
@@ -784,7 +877,9 @@ export async function fetchCaseStudyBySlug(
               excerpt
               content
               language { code }
-              featuredImage { node { sourceUrl altText } }
+              ... on NodeWithFeaturedImage {
+                featuredImage { node { sourceUrl altText mediaItemUrl } }
+              }
               seo { title metaDesc opengraphImage { sourceUrl } }
             }`
                 : ""
@@ -849,7 +944,9 @@ export async function fetchCaseStudyBySlug(
                 title
                 excerpt
                 content
-                featuredImage { node { sourceUrl altText } }
+                ... on NodeWithFeaturedImage {
+                  featuredImage { node { sourceUrl altText mediaItemUrl } }
+                }
               }
             }
           `,
