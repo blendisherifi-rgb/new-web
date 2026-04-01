@@ -198,7 +198,7 @@ export function HeroSection({
             } ${useCoord ? "motion-reduce:transition-none" : ""}`}
             style={fadeStyle}
           >
-            <div className="overflow-hidden rounded-lg shadow-2xl">
+            <div className="overflow-hidden rounded-lg">
               <Image
                 src={imageSrc}
                 alt={imageAlt}

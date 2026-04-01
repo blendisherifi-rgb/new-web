@@ -112,14 +112,14 @@ export function PartnerBenefitsSection({
               staggerIndex={i}
               className="flex w-full flex-col items-center px-4 py-10 text-center first:pt-0 tablet-down:px-8 tablet-down:py-0 tablet-down:first:pt-0"
             >
-              <div className="relative mx-auto w-full max-w-[200px]">
+              <div className="relative mx-auto h-[99px] w-[121px]">
                 <Image
                   src={step.stepNumberImageSrc}
                   alt={step.stepNumberImageAlt}
-                  width={200}
-                  height={96}
-                  className="h-auto w-full object-contain"
-                  sizes="(max-width: 992px) 200px, 200px"
+                  width={121}
+                  height={99}
+                  className="h-[99px] w-[121px] object-contain"
+                  sizes="121px"
                   unoptimized={step.stepNumberImageSrc.toLowerCase().endsWith(".svg")}
                 />
               </div>

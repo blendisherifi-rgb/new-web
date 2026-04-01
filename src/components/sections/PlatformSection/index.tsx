@@ -1,6 +1,5 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
 import { Heading } from "@/components/atoms/Heading";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Overline } from "@/components/atoms/Overline";
@@ -43,7 +42,7 @@ interface PlatformSectionProps {
  * Platform section.
  *
  * Full-width header, then two-column layout: left has two content rows,
- * right has a sticky image that fades/swaps when you scroll 50% into the second row.
+ * right shows both platform images immediately (no scroll-based swapping).
  */
 export function PlatformSection({
   tag,
@@ -55,26 +54,6 @@ export function PlatformSection({
   image2Src,
   image2Alt,
 }: PlatformSectionProps) {
-  const firstRowRef = useRef<HTMLDivElement>(null);
-  const [imageSwapped, setImageSwapped] = useState(false);
-
-  useEffect(() => {
-    const row = firstRowRef.current;
-    if (!row) return;
-
-    const check = () => {
-      const rect = row.getBoundingClientRect();
-      const viewportCenter = window.innerHeight / 2;
-      const rowMidpoint = rect.top + rect.height / 2;
-      // Swap when 50% through first row (trigger ~50% higher than second row)
-      setImageSwapped(rowMidpoint <= viewportCenter);
-    };
-
-    check();
-    window.addEventListener("scroll", check, { passive: true });
-    return () => window.removeEventListener("scroll", check);
-  }, []);
-
   const [row1, row2] = rows;
 
   return (
@@ -95,8 +74,7 @@ export function PlatformSection({
         <div className="mt-12 grid grid-cols-1 gap-10 tablet-down:mt-[160px] tablet-down:grid-cols-2 tablet-down:gap-16">
           {/* Left column — two rows with 200px gap */}
           <div className="flex flex-col">
-            {/* Row 1 — swap triggers at 50% through this row */}
-            <div ref={firstRowRef}>
+            <div>
               <PlatformContentRow {...row1} />
             </div>
 
@@ -106,26 +84,24 @@ export function PlatformSection({
             </div>
           </div>
 
-          {/* Right column — sticky image with swap */}
-          <div className="relative tablet-down:sticky tablet-down:top-24 tablet-down:self-start">
-            <div className="relative aspect-video max-h-[50vh] w-full overflow-hidden rounded-lg">
+          {/* Right column — static images (always visible, no scroll effect) */}
+          <div className="relative flex flex-col gap-12 tablet-down:gap-[200px]">
+            <div className="relative aspect-video w-[93%] overflow-hidden rounded-lg">
               <Image
                 src={image1Src}
                 alt={image1Alt}
                 fill
-                className={`object-cover object-top transition-opacity duration-500 ${
-                  imageSwapped ? "opacity-0" : "opacity-100"
-                }`}
-                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-contain object-center"
+                sizes="(max-width: 1024px) 93vw, 43vw"
               />
+            </div>
+            <div className="relative aspect-video w-[93%] overflow-hidden rounded-lg">
               <Image
                 src={image2Src}
                 alt={image2Alt}
                 fill
-                className={`object-cover object-top transition-opacity duration-500 ${
-                  imageSwapped ? "opacity-100" : "opacity-0"
-                }`}
-                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-contain object-center"
+                sizes="(max-width: 1024px) 93vw, 43vw"
               />
             </div>
           </div>
