@@ -1071,7 +1071,6 @@ export const SECTIONS_SHOWCASE_GROUPS: SectionGroup[] = [
       overline: "Contact Us",
       title: "Talk to the team that makes complex P2P and AP automation fit the first time",
       socialLinks: [
-        { platform: "X", url: "https://x.com/softco", label: "X (Twitter)" },
         { platform: "LinkedIn", url: "https://linkedin.com/company/softco", label: "LinkedIn" },
         { platform: "YouTube", url: "https://youtube.com/@softco", label: "YouTube" },
       ],
@@ -1762,7 +1761,7 @@ export const SECTIONS_SHOWCASE_GROUPS: SectionGroup[] = [
           imageAlt: "Outcome led case study",
           shareUrl: "#",
           shareTitle: "Outcome led case study",
-          sharePlatforms: ["x", "linkedin", "youtube"],
+          sharePlatforms: ["linkedin", "youtube"],
         },
       },
       {
@@ -1987,7 +1986,6 @@ export const CONTACT_US_2_SECTIONS: SectionData[] = [
       title:
         "Talk to the team that makes complex P2P and AP automation fit the first time",
       socialLinks: [
-        { platform: "X", url: "https://x.com/softco", label: "X (Twitter)" },
         { platform: "LinkedIn", url: "https://linkedin.com/company/softco", label: "LinkedIn" },
         { platform: "YouTube", url: "https://youtube.com/@softco", label: "YouTube" },
       ],

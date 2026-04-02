@@ -102,9 +102,9 @@ export function Footer({ data, locale }: FooterProps) {
               <Image
                 src="/softco_logo_blue.png"
                 alt={data.brandName ?? "SoftCo"}
-                width={380}
-                height={76}
-                className="h-auto w-[220px] sm:w-[280px]"
+                width={160}
+                height={31}
+                className="h-[31.49px] w-[160px]"
               />
             </Link>
             {visibleSocialLinks.length > 0 ? (

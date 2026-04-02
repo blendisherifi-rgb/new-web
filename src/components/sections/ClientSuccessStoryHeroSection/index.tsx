@@ -41,7 +41,7 @@ function buildShareLinks({
   if (!shareUrl) return "#";
 
   const u = encodeURIComponent(shareUrl);
-  const t = encodeURIComponent(title ?? "");
+  void title;
 
   if (platform === "linkedin") {
     return `https://www.linkedin.com/sharing/share-offsite/?url=${u}`;
