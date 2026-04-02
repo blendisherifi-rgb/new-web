@@ -129,7 +129,6 @@ const PLACEHOLDER_GLOBALS: GlobalsData = {
     ],
     contactAddress: "SoftCo HQ, Dublin, Ireland",
     socialLinks: [
-      { platform: "x", url: "https://x.com", label: "X" },
       { platform: "linkedin", url: "https://linkedin.com", label: "LinkedIn" },
       { platform: "youtube", url: "https://youtube.com", label: "YouTube" },
     ],
@@ -190,6 +189,11 @@ function transformFooterLabel(label: string): string {
   return t;
 }
 
+function isTwitterOrXPlatform(platform: string | null | undefined): boolean {
+  const p = (platform ?? "").trim().toLowerCase();
+  return p === "x" || p.includes("twitter");
+}
+
 function makeLocaleAware(globals: GlobalsData, locale: Locale): GlobalsData {
   return {
     ...globals,
@@ -207,6 +211,9 @@ function makeLocaleAware(globals: GlobalsData, locale: Locale): GlobalsData {
     },
     footer: {
       ...globals.footer,
+      socialLinks: globals.footer.socialLinks?.filter(
+        (s) => !isTwitterOrXPlatform(s.platform),
+      ),
       navGroups: globals.footer.navGroups?.map((group) => ({
         ...group,
         links:
@@ -369,7 +376,7 @@ export async function fetchGlobalFields(locale: Locale): Promise<GlobalsData> {
             platform: s.platform ?? "",
             url: s.url ?? "#",
             label: s.label ?? undefined,
-          })) ?? [],
+          })).filter((s) => !isTwitterOrXPlatform(s.platform)) ?? [],
         legalLinks:
           opts.footer?.legalLinks?.map((l) => ({
             label: l.label ?? "",

@@ -73,12 +73,16 @@ function FooterFeaturedLinks({ links }: { links: Array<{ href: string; label: st
 export function Footer({ data, locale }: FooterProps) {
   const navGroups = data.navGroups ?? [];
   const homeHref = homePath(locale);
+  const visibleSocialLinks =
+    data.socialLinks?.filter((s) => {
+      const p = (s.platform ?? "").trim().toLowerCase();
+      return !(p === "x" || p.includes("twitter"));
+    }) ?? [];
 
   const socialIconLabel = (platform: string, fallback?: string) => {
     const p = platform.toLowerCase();
     if (p.includes("linkedin")) return "in";
     if (p.includes("youtube")) return "▶";
-    if (p === "x" || p.includes("twitter")) return "x";
     return (fallback ?? platform).slice(0, 2);
   };
 
@@ -103,9 +107,9 @@ export function Footer({ data, locale }: FooterProps) {
                 className="h-auto w-[220px] sm:w-[280px]"
               />
             </Link>
-            {data.socialLinks && data.socialLinks.length > 0 ? (
+            {visibleSocialLinks.length > 0 ? (
               <ul className="flex shrink-0 items-center gap-2.5 sm:gap-3">
-                {data.socialLinks.map((s, i) => (
+                {visibleSocialLinks.map((s, i) => (
                   <li key={i}>
                     <a
                       href={s.url}

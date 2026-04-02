@@ -5,10 +5,9 @@ import { Image } from "@/components/atoms/Image";
 import { Overline } from "@/components/atoms/Overline";
 import { type ReactNode } from "react";
 
-type SharePlatform = "x" | "linkedin" | "youtube";
+type SharePlatform = "linkedin" | "youtube";
 
 function getSharePlatformGlyph(platform: SharePlatform) {
-  if (platform === "x") return "X";
   if (platform === "linkedin") return "in";
   return "▶";
 }
@@ -44,9 +43,6 @@ function buildShareLinks({
   const u = encodeURIComponent(shareUrl);
   const t = encodeURIComponent(title ?? "");
 
-  if (platform === "x") {
-    return `https://twitter.com/intent/tweet?url=${u}${title ? `&text=${t}` : ""}`;
-  }
   if (platform === "linkedin") {
     return `https://www.linkedin.com/sharing/share-offsite/?url=${u}`;
   }
@@ -106,7 +102,7 @@ export function ClientSuccessStoryHeroSection({
   imageAlt,
   shareUrl = "",
   shareTitle = "",
-  sharePlatforms = ["x", "linkedin", "youtube"],
+  sharePlatforms = ["linkedin", "youtube"],
   footerSlot,
 }: ClientSuccessStoryHeroSectionProps) {
   const normalizedTags = Array.isArray(tags)
@@ -132,7 +128,7 @@ export function ClientSuccessStoryHeroSection({
     : [];
 
   const shareLinks = normalizedSharePlatforms.map((p) => {
-    const platform = (p === "x" || p === "linkedin" || p === "youtube" ? p : "x") as SharePlatform;
+    const platform = (p === "linkedin" || p === "youtube" ? p : "linkedin") as SharePlatform;
     return {
       platform,
       href: buildShareLinks({

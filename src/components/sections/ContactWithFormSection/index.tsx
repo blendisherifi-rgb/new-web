@@ -22,7 +22,6 @@ function socialIconLabel(platform: string, fallback?: string): string {
   const p = platform.toLowerCase();
   if (p.includes("linkedin")) return "in";
   if (p.includes("youtube")) return "▶";
-  if (p === "x" || p.includes("twitter")) return "x";
   return (fallback ?? platform).slice(0, 2);
 }
 
@@ -48,7 +47,12 @@ export function ContactWithFormSection({
   title = "Talk to the team that makes complex P2P and AP automation fit the first time",
   socialLinks = [],
 }: ContactWithFormSectionProps) {
-  const links = socialLinks?.filter((s) => s.url) ?? [];
+  const links =
+    socialLinks?.filter((s) => {
+      if (!s.url) return false;
+      const p = (s.platform ?? "").trim().toLowerCase();
+      return !(p === "x" || p.includes("twitter"));
+    }) ?? [];
   const targetId = "contact-with-form-hubspot-target";
   const createdRef = useRef(false);
 
