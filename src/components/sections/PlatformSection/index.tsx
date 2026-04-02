@@ -58,7 +58,7 @@ export function PlatformSection({
 
   return (
     <section className="w-full bg-brand-dark">
-      <div className="mx-auto w-full max-w-[1440px] px-4 pt-16 pb-20 tablet-down:px-6 tablet-down:pt-[96px] tablet-down:pb-[160px]">
+      <div className="mx-auto w-full max-w-[1440px] px-4 pt-8 pb-10 tablet-down:px-6 tablet-down:pt-[56px] tablet-down:pb-[72px]">
         {/* Header */}
         <AnimateOnScroll variant="fadeUp" className="max-w-3xl">
           <Overline className="text-white">{tag}</Overline>
@@ -70,13 +70,13 @@ export function PlatformSection({
           </Paragraph>
         </AnimateOnScroll>
 
-        <div className="mt-12 flex flex-col gap-12 tablet-down:mt-[160px] tablet-down:gap-[200px]">
-          <div className="grid grid-cols-1 gap-10 tablet-down:grid-cols-2 tablet-down:items-center tablet-down:gap-16">
+        <div className="mt-5 flex flex-col gap-4 tablet-down:mt-[48px] tablet-down:gap-[40px]">
+          <div className="grid grid-cols-1 gap-4 tablet-down:grid-cols-2 tablet-down:items-center tablet-down:gap-6">
             <PlatformContentRow {...row1} />
             <PlatformRowImage src={image1Src} alt={image1Alt} />
           </div>
 
-          <div className="grid grid-cols-1 gap-10 tablet-down:grid-cols-2 tablet-down:items-center tablet-down:gap-16">
+          <div className="grid grid-cols-1 gap-4 tablet-down:grid-cols-2 tablet-down:items-center tablet-down:gap-6">
             <PlatformContentRow {...row2} />
             <PlatformRowImage src={image2Src} alt={image2Alt} />
           </div>
@@ -88,7 +88,7 @@ export function PlatformSection({
 
 function PlatformRowImage({ src, alt }: { src: string; alt: string }) {
   return (
-    <div className="mx-auto w-full max-w-[754px] overflow-hidden rounded-lg">
+    <div className="mx-auto w-full max-w-[620px] overflow-hidden rounded-lg">
       <Image
         src={src}
         alt={alt}
@@ -117,12 +117,12 @@ function PlatformContentRow({
       <p className="mt-2 font-body text-[18px] font-bold leading-[1.45] text-white tablet-down:mt-3 tablet-down:text-[22px] tablet-down:leading-[1.35]">
         {subtitle}
       </p>
-      <Paragraph size="sm" className="mt-10 text-white/95 tablet-down:mt-12">
+      <Paragraph size="sm" className="mt-4 text-white/95 tablet-down:mt-5">
         {description}
       </Paragraph>
       <Link
         href={ctaHref}
-        className="mt-6 inline-flex items-center gap-2 font-body font-bold text-white no-underline transition-colors hover:text-brand-orange focus-visible:outline-brand-blue"
+        className="mt-3 inline-flex items-center gap-2 font-body font-bold text-white no-underline transition-colors hover:text-brand-orange focus-visible:outline-brand-blue"
       >
         {ctaLabel}
         <span className="text-brand-orange" aria-hidden>
