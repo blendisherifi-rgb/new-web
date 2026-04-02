@@ -75,7 +75,7 @@ export function ApAutomationForFinancialControllersSection({
           <div
             className={`mx-auto w-full max-w-[581px] tablet-down:mx-0 ${imageOrder}`}
           >
-            <div className="overflow-hidden rounded-2xl bg-white shadow-sm">
+            <div className="overflow-hidden rounded-2xl">
               {imageSrc ? (
                 <Image
                   src={imageSrc}
