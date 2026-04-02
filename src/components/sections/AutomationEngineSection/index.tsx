@@ -48,16 +48,19 @@ interface AutomationEngineSectionProps {
  * - Metric value: Plus Jakarta Sans 800, 48px / 48px, brand orange (#F7931E); label: 20px
  */
 export function AutomationEngineSection({
-  overline,
-  heading,
-  imageSrc,
-  imageAlt,
-  body,
-  ctaLabel,
-  ctaHref,
-  metrics,
+  overline = "",
+  heading = "",
+  imageSrc = "",
+  imageAlt = "",
+  body = "",
+  ctaLabel = "",
+  ctaHref = "#",
+  metrics = [],
   logos = [],
 }: AutomationEngineSectionProps) {
+  const safeMetrics = Array.isArray(metrics) ? metrics : [];
+  const safeLogos = Array.isArray(logos) ? logos : [];
+
   return (
     <section className="relative w-full overflow-hidden bg-brand-blue">
       {/* Subtle darker triangles / depth — low contrast on blue */}
@@ -113,10 +116,10 @@ export function AutomationEngineSection({
         </div>
 
         {/* Metrics row — top rule + dividers between cells (pale blue on brand blue) */}
-        {metrics.length > 0 && (
+        {safeMetrics.length > 0 && (
           <div className="mt-16 border-t border-brand-pale-blue/35 tablet-down:mt-[150px]">
             <div className="grid grid-cols-1 divide-y divide-brand-pale-blue/30 tablet-down:grid-cols-4 tablet-down:divide-x tablet-down:divide-y-0">
-              {metrics.map((metric, index) => (
+              {safeMetrics.map((metric, index) => (
                 <div
                   key={`${metric.value}-${index}`}
                   className="flex flex-col items-center justify-center px-4 py-8 tablet-down:py-10"
@@ -133,9 +136,9 @@ export function AutomationEngineSection({
           </div>
         )}
 
-        {logos.length > 0 && (
+        {safeLogos.length > 0 && (
           <div className="mt-16 tablet-down:mt-20">
-            <LogoMarquee logos={logos} duration={25} light />
+            <LogoMarquee logos={safeLogos} duration={25} light />
           </div>
         )}
       </div>
