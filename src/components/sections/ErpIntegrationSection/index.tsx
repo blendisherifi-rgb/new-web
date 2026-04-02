@@ -4,7 +4,7 @@ import { Overline } from "@/components/atoms/Overline";
 import { Heading } from "@/components/atoms/Heading";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Button } from "@/components/atoms/Button";
-import { ChevronRightIcon, ExternalLinkIcon } from "@/components/atoms/Icon";
+import { ChevronRightIcon } from "@/components/atoms/Icon";
 import { Image } from "@/components/atoms/Image";
 
 const RULE = "h-px w-full bg-brand-grey";
@@ -88,22 +88,41 @@ export function ErpIntegrationSection({
           {logos.map((item, i) => {
             const inner = (
               <>
-                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-brand-pale-blue text-brand-blue transition-colors group-hover:bg-brand-blue group-hover:text-white">
-                  <ExternalLinkIcon className="h-4 w-4" aria-hidden />
+                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-brand-pale-blue text-brand-dark transition-colors group-hover:bg-brand-blue group-hover:text-white">
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-5 w-5"
+                    fill="none"
+                    aria-hidden
+                  >
+                    <path
+                      d="M7 17L17 7"
+                      stroke="currentColor"
+                      strokeWidth="2.2"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d="M10 7H17V14"
+                      stroke="currentColor"
+                      strokeWidth="2.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
                 </div>
-                <div className="flex min-h-[48px] w-full items-center justify-center">
+                <div className="flex min-h-[64px] w-full items-center justify-center">
                   <Image
                     src={item.logoSrc}
                     alt={item.logoAlt}
-                    width={140}
-                    height={48}
-                    className="h-10 w-auto max-w-full object-contain"
+                    width={190}
+                    height={64}
+                    className="h-14 w-auto max-w-full object-contain"
                   />
                 </div>
               </>
             );
             const cardClass =
-              "group flex flex-col items-center rounded border border-brand-grey bg-white px-4 py-6 transition-colors hover:bg-brand-light-blue";
+              "group flex flex-col items-center rounded border border-brand-grey bg-white px-4 py-7 transition-colors hover:bg-brand-light-blue";
 
             if (item.href) {
               return (
