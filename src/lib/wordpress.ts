@@ -3,7 +3,7 @@
  * All page-level data fetching uses this client in server components.
  */
 
-const GRAPHQL_URL = process.env.WORDPRESS_GRAPHQL_URL;
+const GRAPHQL_URL = process.env.NEXT_PUBLIC_WORDPRESS_URL;
 
 /**
  * Base URL for the WordPress REST API (`…/wp-json`), no trailing slash.
@@ -14,7 +14,7 @@ export function getWordPressRestBaseUrl(): string | null {
   if (explicit) {
     return explicit.replace(/\/$/, "");
   }
-  const g = process.env.WORDPRESS_GRAPHQL_URL?.trim();
+  const g = process.env.NEXT_PUBLIC_WORDPRESS_URL?.trim();
   if (!g) return null;
   try {
     return new URL(g).origin + "/wp-json";
@@ -61,7 +61,7 @@ export async function fetchGraphQL<T = unknown>(
 
   if (!GRAPHQL_URL) {
     throw new Error(
-      "WORDPRESS_GRAPHQL_URL is not set. Add it to .env.local (see .env.example)."
+      "NEXT_PUBLIC_WORDPRESS_URL is not set. Add it to .env.local (your WPGraphQL endpoint URL)."
     );
   }
 

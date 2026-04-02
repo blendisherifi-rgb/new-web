@@ -142,13 +142,13 @@ The following plugins need to be installed/active on `kaosk10.sg-host.com`:
 In `[.env.local](.env.local)`:
 
 ```env
-WORDPRESS_GRAPHQL_URL=https://kaosk10.sg-host.com/graphql
+NEXT_PUBLIC_WORDPRESS_URL=https://kaosk10.sg-host.com/graphql
 WORDPRESS_REST_URL=https://kaosk10.sg-host.com/wp-json
 REVALIDATION_SECRET=<random-secret-token>
 NEXT_PUBLIC_SITE_URL=https://softco.com
 ```
 
-- `[src/lib/wordpress.ts](src/lib/wordpress.ts)` — shared GraphQL client, reads from `WORDPRESS_GRAPHQL_URL`, handles all content + SEO queries with cache tags
+- `[src/lib/wordpress.ts](src/lib/wordpress.ts)` — shared GraphQL client, reads from `NEXT_PUBLIC_WORDPRESS_URL`, handles all content + SEO queries with cache tags
 - `[src/lib/redirects.ts](src/lib/redirects.ts)` — fetches redirect rules from the Redirection plugin REST API at `WORDPRESS_REST_URL/redirection/v1/redirect`
 
 ---
@@ -398,7 +398,7 @@ On the WordPress side, a webhook fires `POST` to `https://your-domain.com/api/re
 `**[src/lib/wordpress.ts](src/lib/wordpress.ts)**`:
 
 - Exports a `fetchGraphQL(query, variables, tags)` function
-- Reads `WORDPRESS_GRAPHQL_URL` from env
+- Reads `NEXT_PUBLIC_WORDPRESS_URL` from env
 - Passes `next: { tags: [...] }` for cache tagging (used by on-demand ISR)
 - All page-level data fetching uses this client in `page.tsx` server components
 
