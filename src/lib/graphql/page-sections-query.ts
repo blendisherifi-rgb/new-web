@@ -9,6 +9,9 @@
  *
  * AP Automation background: default GraphQL field `bg` (matches ACF GraphQL Field Name). Override with
  * AP_AUTOMATION_BG_GRAPHQL_FIELD if you use a different name (e.g. `sectionbackground`).
+ *
+ * Analytics slides: query `slideheadingbefore` / `slideheadinghighlight` / `slidebody` (ACF) with aliases
+ * so JSON keys match `slideHeadingBefore` / `slideHeadingHighlight` / `slideBody`.
  */
 
 const SECTIONS_PATH =
@@ -792,7 +795,12 @@ function buildFragment(): string {
       headingBefore
       headingHighlight
       body
-      slides { image { node { sourceUrl altText } } }
+      slides {
+        image { node { sourceUrl altText } }
+        slideHeadingBefore: slideheadingbefore
+        slideHeadingHighlight: slideheadinghighlight
+        slideBody: slidebody
+      }
     }
     ... on ${SecurityComplianceLayout} {
       overline
@@ -1164,7 +1172,7 @@ function buildFragmentResilient(): string {
     ... on ${ApAutomationForCfoLayout} { overline headingHighlight headingLine1After headingLine2 headingLine3 body image { node { sourceUrl altText } } }
     ... on ${ArchitectureLayout} { overline headingLine1 headingLine2 body image { node { sourceUrl altText } } p2pImage { node { sourceUrl altText } } apImage { node { sourceUrl altText } } }
     ... on ${ErpIntegrationLayout} { overline headingLine1 headingLine2 body ctaLabel ctaHref moreCountHighlight moreCountRest erpLogos { logoImg { node { sourceUrl altText } } logoAlt href } }
-    ... on ${AnalyticsDashboardsLayout} { overline mainTitle introBody ctaLabel ctaHref headingBefore headingHighlight body slides { image { node { sourceUrl altText } } } }
+    ... on ${AnalyticsDashboardsLayout} { overline mainTitle introBody ctaLabel ctaHref headingBefore headingHighlight body slides { image { node { sourceUrl altText } } slideHeadingBefore: slideheadingbefore slideHeadingHighlight: slideheadinghighlight slideBody: slidebody } }
     ... on ${SecurityComplianceLayout} { overline headingLine1 headingLine2 body certifications { image { node { sourceUrl altText } } } }
     ... on ${PartnerEcosystemLayout} { overline headingBlue1 headingDark headingBlue2 body partnerLogos { image { node { sourceUrl altText } } imageAlt } }
     ... on ${EvidenceLayout} { overline headingBefore headingHighlight headingAfter body evidenceMetrics { image { node { sourceUrl altText } } label } }

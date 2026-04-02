@@ -863,14 +863,35 @@ export const SECTIONS_SHOWCASE_GROUPS: SectionGroup[] = [
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
       ctaLabel: "SEE ANALYTICS IN ACTION",
       ctaHref: "#",
-      headingBefore: "Outcome-driven",
+      headingBefore: "Explore our",
       headingHighlight: "dashboards",
       body:
-        "Move beyond reactive reporting. Track Straight-Through Processing (STP) rates, monitor Work-In-Progress (WIP), and gain 100% visibility over liabilities, commitments, and spend across multiple global entities in real-time.",
+        "Default section copy when a slide has no body. Move beyond reactive reporting when using one shared paragraph for every slide.",
       slides: [
-        { imageSrc: "/hero-platform-screenshot.png", imageAlt: "Analytics dashboard view 1" },
-        { imageSrc: "/platform-p2p.png", imageAlt: "Analytics dashboard view 2" },
-        { imageSrc: "/hero-platform-screenshot.png", imageAlt: "Analytics dashboard view 3" },
+        {
+          imageSrc: "/hero-platform-screenshot.png",
+          imageAlt: "Analytics dashboard view 1",
+          slideHeadingBefore: "Real-time",
+          slideHeadingHighlight: "visibility",
+          slideBody:
+            "Slide 1: Track Straight-Through Processing (STP) rates and monitor Work-In-Progress across entities.",
+        },
+        {
+          imageSrc: "/platform-p2p.png",
+          imageAlt: "Analytics dashboard view 2",
+          slideHeadingBefore: "Outcome-driven",
+          slideHeadingHighlight: "reporting",
+          slideBody:
+            "Slide 2: Configurable views for AP managers and controllers with export-ready metrics.",
+        },
+        {
+          imageSrc: "/hero-platform-screenshot.png",
+          imageAlt: "Analytics dashboard view 3",
+          slideHeadingBefore: "Defensible",
+          slideHeadingHighlight: "finance ops",
+          slideBody:
+            "Slide 3: Align dashboards to policy and audit trails without reworking your ERP.",
+        },
       ],
     },
   },

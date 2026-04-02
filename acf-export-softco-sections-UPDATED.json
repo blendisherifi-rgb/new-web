@@ -11452,6 +11452,75 @@
                                     "max_size": 0,
                                     "mime_types": "",
                                     "parent_repeater": "field_ad_slides"
+                                },
+                                {
+                                    "key": "field_ad_slide_heading_before",
+                                    "label": "Slide heading (dark)",
+                                    "name": "slideHeadingBefore",
+                                    "aria-label": "",
+                                    "type": "text",
+                                    "instructions": "Shown above the carousel for this slide. Leave empty to use the section default.",
+                                    "required": 0,
+                                    "conditional_logic": false,
+                                    "wrapper": {
+                                        "width": "34",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "show_in_graphql": 1,
+                                    "graphql_field_name": "slideHeadingBefore",
+                                    "maxlength": "",
+                                    "placeholder": "",
+                                    "prepend": "",
+                                    "append": "",
+                                    "parent_repeater": "field_ad_slides"
+                                },
+                                {
+                                    "key": "field_ad_slide_heading_highlight",
+                                    "label": "Slide heading (blue)",
+                                    "name": "slideHeadingHighlight",
+                                    "aria-label": "",
+                                    "type": "text",
+                                    "instructions": "Blue part of the heading for this slide. Leave empty to use the section default.",
+                                    "required": 0,
+                                    "conditional_logic": false,
+                                    "wrapper": {
+                                        "width": "33",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "show_in_graphql": 1,
+                                    "graphql_field_name": "slideHeadingHighlight",
+                                    "maxlength": "",
+                                    "placeholder": "",
+                                    "prepend": "",
+                                    "append": "",
+                                    "parent_repeater": "field_ad_slides"
+                                },
+                                {
+                                    "key": "field_ad_slide_body",
+                                    "label": "Slide body",
+                                    "name": "slideBody",
+                                    "aria-label": "",
+                                    "type": "textarea",
+                                    "instructions": "Text below the carousel for this slide. Leave empty to use the section default.",
+                                    "required": 0,
+                                    "conditional_logic": false,
+                                    "wrapper": {
+                                        "width": "33",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "show_in_graphql": 1,
+                                    "graphql_field_name": "slideBody",
+                                    "maxlength": "",
+                                    "placeholder": "",
+                                    "rows": 3,
+                                    "new_lines": "",
+                                    "parent_repeater": "field_ad_slides"
                                 }
                             ]
                         }

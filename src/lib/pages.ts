@@ -1222,6 +1222,17 @@ function transformSection(node: Record<string, unknown>, index: number): Section
         delete item.slideImage;
         delete item.dashboardImage;
         delete item.screenshot;
+
+        const str = (v: unknown) => (typeof v === "string" ? v : undefined);
+        item.slideHeadingBefore =
+          str(item.slideHeadingBefore) ?? str(item.slideheadingbefore);
+        item.slideHeadingHighlight =
+          str(item.slideHeadingHighlight) ?? str(item.slideheadinghighlight);
+        item.slideBody = str(item.slideBody) ?? str(item.slidebody);
+        delete item.slideheadingbefore;
+        delete item.slideheadinghighlight;
+        delete item.slidebody;
+
         return item;
       });
     } else {

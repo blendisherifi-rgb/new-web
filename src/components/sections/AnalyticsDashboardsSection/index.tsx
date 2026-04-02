@@ -11,6 +11,10 @@ import { ChevronRightIcon } from "@/components/atoms/Icon";
 export interface DashboardSlide {
   imageSrc: string;
   imageAlt: string;
+  /** Optional; fallback to section-level carousel heading/body when omitted. */
+  slideHeadingBefore?: string;
+  slideHeadingHighlight?: string;
+  slideBody?: string;
 }
 
 interface AnalyticsDashboardsSectionProps {
@@ -22,11 +26,11 @@ interface AnalyticsDashboardsSectionProps {
   introBody: string;
   ctaLabel: string;
   ctaHref: string;
-  /** Secondary line above carousel: dark part. */
+  /** Default carousel heading (dark) when a slide has no per-slide heading. */
   headingBefore: string;
-  /** Secondary line: blue part e.g. dashboards */
+  /** Default carousel heading (blue) when a slide has no per-slide highlight. */
   headingHighlight: string;
-  /** Bottom paragraph under carousel (18/28). */
+  /** Default bottom copy when a slide has no per-slide body. */
   body: string;
   slides: DashboardSlide[];
 }
@@ -106,6 +110,17 @@ export function AnalyticsDashboardsSection({
   const left = slides[prevIdx];
   const right = slides[nextIdx];
 
+  const slideHeadingBefore =
+    typeof center.slideHeadingBefore === "string" && center.slideHeadingBefore.trim() !== ""
+      ? center.slideHeadingBefore
+      : headingBefore;
+  const slideHeadingHighlight =
+    typeof center.slideHeadingHighlight === "string" && center.slideHeadingHighlight.trim() !== ""
+      ? center.slideHeadingHighlight
+      : headingHighlight;
+  const slideBodyText =
+    typeof center.slideBody === "string" && center.slideBody.trim() !== "" ? center.slideBody : body;
+
   return (
     <section className="w-full bg-brand-light-blue" aria-label={mainTitle}>
       <div className="mx-auto w-full max-w-[1440px] px-4 py-12 tablet-down:px-6 tablet-down:py-16">
@@ -139,13 +154,13 @@ export function AnalyticsDashboardsSection({
           </Button>
         </div>
 
-        {/* Secondary heading 44/48 */}
+        {/* Secondary heading 44/48 — updates with active slide when slides include per-slide copy */}
         <Heading
           level={2}
           className="mx-auto mt-12 max-w-[900px] text-center !text-brand-dark text-[32px] leading-[38px] tracking-normal tablet-down:mt-16 tablet-down:text-[44px] tablet-down:leading-[48px]"
         >
-          <span>{headingBefore}</span>
-          <span className="!text-brand-blue"> {headingHighlight}</span>
+          <span>{slideHeadingBefore}</span>
+          <span className="!text-brand-blue"> {slideHeadingHighlight}</span>
         </Heading>
 
         {/* Carousel — 3-up: center dominant + shadow; sides scaled ~0.82, ~40–50% visible, flush; no blur */}
@@ -253,12 +268,12 @@ export function AnalyticsDashboardsSection({
           </div>
         </div>
 
-        {/* Bottom 18/28 */}
+        {/* Bottom 18/28 — updates with active slide when slides include per-slide copy */}
         <Paragraph
           size="base"
           className="mx-auto mt-10 max-w-[900px] pb-[140px] text-center font-normal !text-[#4B5563] text-[18px] leading-[28px] tracking-normal tablet-down:mt-12"
         >
-          {body}
+          {slideBodyText}
         </Paragraph>
       </div>
     </section>
