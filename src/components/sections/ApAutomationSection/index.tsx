@@ -72,7 +72,7 @@ export function ApAutomationSection({
             {overline ? <Overline className="text-brand-orange">{overline}</Overline> : null}
             <Heading
               level={1}
-              className="mt-5 text-[38px] leading-[1.12] tablet-down:mt-4 tablet-down:text-[62px] tablet-down:leading-[1.06]"
+              className="mt-5 text-[38px] leading-[1.12] tablet-down:mt-4 tablet-down:text-[60px] tablet-down:leading-[60px]"
             >
               <span className="block text-[#047FE5]">{headingLine1}</span>
               <span className="block text-white">{headingLine2}</span>
@@ -101,9 +101,9 @@ export function ApAutomationSection({
               <Image
                 src={softcoApImageSrc}
                 alt={softcoApImageAlt}
-                width={220}
-                height={44}
-                className="h-[34px] w-auto object-contain tablet-down:h-[44px]"
+                width={139}
+                height={51}
+                className="h-[28px] w-auto object-contain tablet-down:h-[51px]"
               />
             </div>
           </div>
