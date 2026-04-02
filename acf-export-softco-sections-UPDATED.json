@@ -10242,7 +10242,7 @@
                         {
                             "key": "field_apa_section_background",
                             "label": "Section background",
-                            "name": "sectionBackground",
+                            "name": "sectionbackground",
                             "aria-label": "",
                             "type": "select",
                             "instructions": "Dark blue matches the original design. White and light blue use dark text for contrast.",
@@ -10260,7 +10260,7 @@
                             },
                             "default_value": "dark_blue",
                             "show_in_graphql": 1,
-                            "graphql_field_name": "sectionBackground",
+                            "graphql_field_name": "sectionbackground",
                             "return_format": "value",
                             "multiple": 0,
                             "allow_null": 0,

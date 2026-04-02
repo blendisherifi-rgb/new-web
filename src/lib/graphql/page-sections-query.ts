@@ -7,7 +7,8 @@
  *   ACF_LAYOUT_TYPE_PREFIX - e.g. "Page_Contentsections_" or "PageContentSectionsContentSections_"
  *   ACF_LAYOUT_SUFFIX - e.g. "" or "Layout" (so HeroSection vs HeroSectionLayout)
  *
- * AP Automation: `sectionBackground` must match ACF field name / WPGraphQL Field Name.
+ * AP Automation background: `sectionBackground: <schemaField>` — JSON key is always `sectionBackground`.
+ * Default schema field `sectionbackground` (ACF name). Override with env AP_AUTOMATION_BG_SCHEMA_FIELD.
  */
 
 const SECTIONS_PATH =
@@ -15,6 +16,12 @@ const SECTIONS_PATH =
 const LAYOUT_PREFIX =
   process.env.ACF_LAYOUT_TYPE_PREFIX ?? "PageContentSectionsSections";
 const LAYOUT_SUFFIX = process.env.ACF_LAYOUT_SUFFIX ?? "Layout";
+
+/** WPGraphQL field name for ACF “Section background” (default `sectionbackground`). Set `AP_AUTOMATION_BG_SCHEMA_FIELD=sectionBackground` if your schema uses camelCase only. */
+const AP_AUTOMATION_BG_SCHEMA_FIELD = (() => {
+  const raw = process.env.AP_AUTOMATION_BG_SCHEMA_FIELD ?? "sectionbackground";
+  return /^[a-zA-Z][a-zA-Z0-9_]*$/.test(raw) ? raw : "sectionbackground";
+})();
 
 const HeroLayout = `${LAYOUT_PREFIX}HeroSection${LAYOUT_SUFFIX}`;
 const WhereWeExcelLayout = `${LAYOUT_PREFIX}WhereWeExcelSection${LAYOUT_SUFFIX}`;
@@ -731,7 +738,7 @@ function buildFragment(): string {
     }
     ... on ${ApAutomationLayout} {
       overline
-      sectionBackground
+      sectionBackground: ${AP_AUTOMATION_BG_SCHEMA_FIELD}
       headingLine1
       headingLine2
       image { node { sourceUrl altText } }
@@ -1153,7 +1160,7 @@ function buildFragmentResilient(): string {
     ... on ${PeopleFirstProofLayout} { overline headingBefore headingHighlight headingAfter body benefits { label } }
     ... on ${OpenRolesLayout} { overline headingLine1 headingLine2 locationFilterLabel departmentFilterLabel hireHiveLive viewAllHref viewAllLabel openRolesJobs { title location department excerpt readMoreHref } }
     ... on ${FeatureModalLayout} { overline headingBefore headingHighlight headingAfter body ctaLabel ctaHref featureModalItems { title description modalLabel modalTitle modalDescription image { node { sourceUrl altText } } } }
-    ... on ${ApAutomationLayout} { overline sectionBackground headingLine1 headingLine2 image { node { sourceUrl altText } } softcoApImage { node { sourceUrl altText } } body ctaLabel ctaHref gartnerLogo { node { sourceUrl altText } } endorsementText metrics { value label } }
+    ... on ${ApAutomationLayout} { overline sectionBackground: ${AP_AUTOMATION_BG_SCHEMA_FIELD} headingLine1 headingLine2 image { node { sourceUrl altText } } softcoApImage { node { sourceUrl altText } } body ctaLabel ctaHref gartnerLogo { node { sourceUrl altText } } endorsementText metrics { value label } }
     ... on ${ApAutomationForCfoLayout} { overline headingHighlight headingLine1After headingLine2 headingLine3 body image { node { sourceUrl altText } } }
     ... on ${ArchitectureLayout} { overline headingLine1 headingLine2 body image { node { sourceUrl altText } } p2pImage { node { sourceUrl altText } } apImage { node { sourceUrl altText } } }
     ... on ${ErpIntegrationLayout} { overline headingLine1 headingLine2 body ctaLabel ctaHref moreCountHighlight moreCountRest erpLogos { logoImg { node { sourceUrl altText } } logoAlt href } }

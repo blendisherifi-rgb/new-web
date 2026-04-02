@@ -35,6 +35,20 @@ function typenameToGroupName(typename: string): string {
   return last.replace(/([A-Z])/g, (_, c) => `_${c.toLowerCase()}`).replace(/^_/, "");
 }
 
+/** ACF select values; GraphQL may alias to `sectionBackground`. */
+function pickApAutomationBackgroundRaw(n: Record<string, unknown>): unknown {
+  return n.sectionBackground ?? n.sectionbackground ?? n.section_background;
+}
+
+function normalizeApAutomationSectionBackground(raw: unknown): "dark_blue" | "white" | "light_blue" {
+  if (typeof raw !== "string") return "dark_blue";
+  const s = raw.trim().toLowerCase().replace(/[\s-]+/g, "_");
+  if (s === "darkblue") return "dark_blue";
+  if (s === "lightblue") return "light_blue";
+  if (s === "dark_blue" || s === "white" || s === "light_blue") return s;
+  return "dark_blue";
+}
+
 /**
  * Transform raw ACF flexible content item to SectionData.
  */
@@ -1116,16 +1130,12 @@ function transformSection(node: Record<string, unknown>, index: number): Section
     }
   }
 
-  // AP automation: sectionBackground; image.node, softcoApImage.node, gartnerLogo.node -> flatten
+  // AP automation: section background (ACF `sectionbackground` → GraphQL alias `sectionBackground`); images
   if (acfGroupName === "ap_automation_section") {
-    const bgRaw =
-      normalized.sectionBackground ?? normalized.sectionbackground;
-    const bg =
-      typeof bgRaw === "string" && ["dark_blue", "white", "light_blue"].includes(bgRaw)
-        ? bgRaw
-        : "dark_blue";
+    const bg = normalizeApAutomationSectionBackground(pickApAutomationBackgroundRaw(normalized));
     normalized.sectionBackground = bg;
     delete normalized.sectionbackground;
+    delete normalized.section_background;
 
     const img = normalized.image as Record<string, unknown> | undefined;
     const n = img?.node as Record<string, unknown> | undefined;
