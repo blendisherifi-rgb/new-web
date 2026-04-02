@@ -67,7 +67,7 @@ export function ApAutomationSection({
   return (
     <section className="w-full bg-brand-dark">
       <div className="mx-auto w-full max-w-[1440px] px-6 py-14 text-white tablet-down:py-[80px]">
-        <div className="grid grid-cols-1 items-start gap-8 tablet-down:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] tablet-down:gap-6">
+        <div className="grid grid-cols-1 items-start gap-8 tablet-down:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] tablet-down:gap-6">
           <div className="flex flex-col items-start text-left">
             {overline ? <Overline className="text-brand-orange">{overline}</Overline> : null}
             <Heading
@@ -87,14 +87,14 @@ export function ApAutomationSection({
             </div>
           </div>
 
-          <div className="w-full">
-            <div className="rounded-md">
+          <div className="w-full overflow-visible">
+            <div className="flex justify-end rounded-md">
               <Image
                 src={imageSrc}
                 alt={imageAlt}
                 width={980}
                 height={620}
-                className="h-auto w-full max-w-none object-contain"
+                className="h-auto w-full max-w-[820px] object-contain"
               />
             </div>
             <div className="mt-1 flex justify-end tablet-down:mt-2">
