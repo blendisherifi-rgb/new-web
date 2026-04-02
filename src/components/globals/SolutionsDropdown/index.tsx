@@ -37,7 +37,7 @@ export function SolutionsDropdown({
   return (
     <div className="flex" role="menu">
       {/* Left — category tabs */}
-      <div className="bg-[#f0f2f8] flex-1 py-6 flex flex-col">
+      <div className="bg-[#f0f2f8] w-[280px] py-6 flex flex-col">
         {categories.map((cat) => {
           const isActive = cat.id === activeId;
           return (
@@ -60,7 +60,7 @@ export function SolutionsDropdown({
       </div>
 
       {/* Middle — links for active category */}
-      <div className="bg-white flex-1 py-6 px-6 border-l border-[#e8eaf0]">
+      <div className="bg-white w-[520px] py-6 px-6 border-l border-[#e8eaf0]">
         {active && (
           <ul className="flex flex-col gap-1">
             {active.links.map((link) => {

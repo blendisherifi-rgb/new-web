@@ -146,9 +146,9 @@ function NavDropdown({
           item.dropdownType === "what-we-do"
             ? "min-w-[800px]"
             : item.dropdownType === "solutions"
-            ? "min-w-[1100px]"
-            : item.dropdownType === "who-we-are"
             ? "min-w-[800px]"
+            : item.dropdownType === "who-we-are"
+            ? "min-w-[340px]"
             : "min-w-[220px]",
           "transition-all duration-200 origin-top",
           open

@@ -32,9 +32,9 @@ export function WhoWeAreDropdown({
   onClose,
 }: WhoWeAreDropdownProps) {
   return (
-    <div className="flex" role="menu">
+    <div className="w-[340px]" role="menu">
       {/* Left — plain links */}
-      <div className="bg-white flex-1 py-6 px-8">
+      <div className="bg-white py-5 px-6">
         <ul className="flex flex-col gap-1">
           {links.map((link) => {
             const isCurrent =
