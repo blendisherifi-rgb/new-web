@@ -71,12 +71,12 @@ export function PlatformSection({
         </AnimateOnScroll>
 
         <div className="mt-12 flex flex-col gap-12 tablet-down:mt-[160px] tablet-down:gap-[200px]">
-          <div className="grid grid-cols-1 gap-10 tablet-down:grid-cols-2 tablet-down:items-start tablet-down:gap-16">
+          <div className="grid grid-cols-1 gap-10 tablet-down:grid-cols-2 tablet-down:items-center tablet-down:gap-16">
             <PlatformContentRow {...row1} />
             <PlatformRowImage src={image1Src} alt={image1Alt} />
           </div>
 
-          <div className="grid grid-cols-1 gap-10 tablet-down:grid-cols-2 tablet-down:items-start tablet-down:gap-16">
+          <div className="grid grid-cols-1 gap-10 tablet-down:grid-cols-2 tablet-down:items-center tablet-down:gap-16">
             <PlatformContentRow {...row2} />
             <PlatformRowImage src={image2Src} alt={image2Alt} />
           </div>
