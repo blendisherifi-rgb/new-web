@@ -46,7 +46,7 @@ export function PerfectFitFrameworkSection({
             headingHighlight={headingHighlight}
             headingAfter={headingAfter ?? ""}
             level={2}
-            className="text-[52px] font-semibold leading-[1.05] text-brand-dark md:text-[74px]"
+            className="text-[35px] font-semibold leading-[1.05] text-brand-dark md:text-[35px]"
           />
 
           <div className="pt-2">
