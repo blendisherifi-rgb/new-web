@@ -84,7 +84,7 @@ export function PerfectFitFrameworkSection({
                   <span className="inline-flex rounded-[4px] bg-brand-blue px-2 py-1 font-body text-[12px] font-bold text-white">
                     {card.step}
                   </span>
-                  <Heading level={3} className="text-[44px] leading-[1.1]">
+                  <Heading level={3} className="text-[38px] leading-[1.1]">
                     {card.title}
                   </Heading>
                 </div>
