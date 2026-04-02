@@ -4,7 +4,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import { shouldReduceMotion } from "@/lib/animations";
 import { acquireScrollLock } from "@/lib/scrollLock";
 
-const ANIMATION_SRC = "/animations/homepage.json";
+const ANIMATION_SRC = "/animations/homepage-x2.json";
 const PRELOADER_BG = "#047FE5";
 
 export interface HomePreloaderProps {
