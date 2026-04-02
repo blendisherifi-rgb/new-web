@@ -66,7 +66,7 @@ export function ApAutomationSection({
 
   return (
     <section className="w-full bg-brand-dark">
-      <div className="mx-auto w-full max-w-[1440px] px-6 py-14 text-white tablet-down:py-[80px]">
+      <div className="mx-auto w-full max-w-[1440px] px-6 pt-14 pb-6 text-white tablet-down:pt-[80px] tablet-down:pb-[28px]">
         <div className="grid grid-cols-1 items-start gap-8 tablet-down:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] tablet-down:gap-6">
           <div className="flex flex-col items-start text-left">
             {overline ? <Overline className="text-brand-orange">{overline}</Overline> : null}
@@ -147,7 +147,7 @@ export function ApAutomationSection({
           </div>
         )}
 
-        <div className="flex flex-col items-center pt-[48px] text-center tablet-down:pt-[54px]">
+        <div className="flex flex-col items-center pt-[30px] text-center tablet-down:pt-[34px]">
           <Image
             src={gartnerLogoSrc}
             alt={gartnerLogoAlt}
@@ -157,7 +157,7 @@ export function ApAutomationSection({
           />
           <Paragraph
             size="base"
-            className="mt-4 max-w-[400px] pb-[50px] text-[14px] leading-[22px] text-white/70 tablet-down:text-[16px] tablet-down:leading-[24px]"
+            className="mt-3 max-w-[400px] pb-[14px] text-[14px] leading-[22px] text-white/70 tablet-down:mt-4 tablet-down:pb-[18px] tablet-down:text-[16px] tablet-down:leading-[24px]"
           >
             {endorsementText}
           </Paragraph>

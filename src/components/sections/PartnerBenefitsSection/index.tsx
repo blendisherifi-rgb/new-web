@@ -10,7 +10,7 @@ import { ChevronRightIcon } from "@/components/atoms/Icon";
 import { AnimateOnScroll } from "@/components/molecules/AnimateOnScroll";
 
 const mainHeadingClass =
-  "mt-10 max-w-none font-heading font-semibold text-[46px] leading-[1.1] tracking-[0] text-balance text-center text-white tablet-down:mt-[50px] tablet-down:text-[80px] tablet-down:leading-[84px]";
+  "mt-10 max-w-none font-heading font-semibold text-[46px] leading-[1.1] tracking-[0] text-balance text-center text-brand-dark tablet-down:mt-[50px] tablet-down:text-[80px] tablet-down:leading-[84px]";
 
 export interface PartnerBenefitsStep {
   /** Step numeral artwork (PNG/SVG/WebP). */
@@ -57,7 +57,7 @@ function HighlightedLine({
 }
 
 /**
- * Dark variant of Innovation: `brand-dark`, Start Challenge–style tag, image step numerals,
+ * Light variant of Innovation: white background, Start Challenge–style tag, image step numerals,
  * two-line step titles, main heading Erode 80px / 84px (desktop).
  */
 export function PartnerBenefitsSection({
@@ -74,12 +74,12 @@ export function PartnerBenefitsSection({
   const hasCta = Boolean(ctaLabel && ctaHref);
 
   return (
-    <section className="w-full bg-brand-dark">
+    <section className="w-full bg-white">
       <div className="mx-auto w-full max-w-[1440px] px-4 py-16 tablet-down:px-6 tablet-down:py-32">
         <div className="text-left">
           <Overline className="text-brand-orange">{overline}</Overline>
           <div
-            className="relative mt-3 h-px w-full bg-white/[0.14] before:absolute before:left-0 before:top-1/2 before:z-10 before:block before:h-[10px] before:w-px before:-translate-y-1/2 before:bg-white/[0.14] before:content-['']"
+            className="relative mt-3 h-px w-full bg-brand-grey before:absolute before:left-0 before:top-1/2 before:z-10 before:block before:h-[10px] before:w-px before:-translate-y-1/2 before:bg-brand-grey before:content-['']"
             aria-hidden
           />
         </div>
@@ -99,13 +99,13 @@ export function PartnerBenefitsSection({
               className={mainHeadingClass}
             />
           )}
-          <Paragraph className="mt-6 text-white/90 leading-[1.7] tablet-down:mt-[50px]">
+          <Paragraph className="mt-6 text-brand-dark/90 leading-[1.7] tablet-down:mt-[50px]">
             {subheading}
           </Paragraph>
         </div>
 
         {/* Flex (not fixed grid-cols-4) so 3 steps fill the row in thirds, 4 in quarters — no dead fourth column. */}
-        <div className="mt-10 flex flex-col gap-10 divide-y divide-white/10 tablet-down:mt-[120px] tablet-down:flex-row tablet-down:divide-x tablet-down:divide-y-0 tablet-down:gap-0">
+        <div className="mt-10 flex flex-col gap-10 divide-y divide-brand-grey tablet-down:mt-[120px] tablet-down:flex-row tablet-down:divide-x tablet-down:divide-y-0 tablet-down:gap-0">
           {steps.map((step, i) => (
             <AnimateOnScroll
               key={`${step.stepNumberImageSrc}-${i}`}
@@ -126,7 +126,7 @@ export function PartnerBenefitsSection({
               </div>
               <Heading
                 level={4}
-                className="mt-6 !text-[32px] font-semibold !leading-[1.15] tracking-[-0.01em] text-white tablet-down:mt-[50px] tablet-down:!text-[44px] tablet-down:!leading-[1.2]"
+                className="mt-6 !text-[32px] font-semibold !leading-[1.15] tracking-[-0.01em] text-brand-dark tablet-down:mt-[50px] tablet-down:!text-[44px] tablet-down:!leading-[1.2]"
               >
                 <HighlightedLine
                   before={step.line1Before}
@@ -139,7 +139,7 @@ export function PartnerBenefitsSection({
                   after={step.line2After}
                 />
               </Heading>
-              <Paragraph size="sm" className="mt-4 text-white/90 leading-[1.7] tablet-down:mt-[30px]">
+              <Paragraph size="sm" className="mt-4 text-brand-dark/90 leading-[1.7] tablet-down:mt-[30px]">
                 {step.description}
               </Paragraph>
             </AnimateOnScroll>
