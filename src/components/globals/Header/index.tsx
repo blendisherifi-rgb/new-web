@@ -58,7 +58,6 @@ export function Header({ menus, cta, utilityBar, locale, variant = "transparent"
 
   useEffect(() => {
     if (variant !== "transparent") {
-      setForceSolidAtTop(false);
       return;
     }
 
@@ -354,24 +353,23 @@ export function Header({ menus, cta, utilityBar, locale, variant = "transparent"
   );
 }
 
-/** SoftCo wordmark — white in overlay mode, dark when scrolled, blue when mobile menu is open. */
+/** SoftCo wordmark — white in overlay mode, blue logo on solid header. */
 function SoftCoLogo({ isOverlay, mobileMenuOpen }: { isOverlay: boolean; mobileMenuOpen: boolean }) {
-  // mobile menu open → brand blue filter
-  // overlay (transparent header over hero) → no filter (SVG is white)
-  // scrolled/solid → black
-  const filter = mobileMenuOpen
-    ? "brightness(0) saturate(100%) invert(18%) sepia(96%) saturate(2000%) hue-rotate(204deg) brightness(95%)"
-    : isOverlay
-    ? "none"
-    : "brightness(0) saturate(100%)";
-
-  return (
+  const useBlueLogo = mobileMenuOpen || !isOverlay;
+  return useBlueLogo ? (
+    <img
+      src="/softco_logo_blue.png"
+      alt="SoftCo"
+      width={380}
+      height={76}
+      className="h-auto w-[112px]"
+    />
+  ) : (
     <img
       src="/softco-logo.svg"
       alt="SoftCo"
       width={112}
       height={22}
-      style={{ filter, transition: "filter 0.3s ease-in-out" }}
     />
   );
 }

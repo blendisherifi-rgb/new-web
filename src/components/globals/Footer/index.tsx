@@ -92,10 +92,16 @@ export function Footer({ data, locale }: FooterProps) {
           <div className="flex w-full flex-row items-center justify-between gap-4">
             <Link
               href={homeHref}
-              className="inline-block min-w-0 font-heading text-[36px] font-semibold leading-none text-brand-blue no-underline hover:no-underline sm:text-[40px]"
+              className="inline-block min-w-0 no-underline hover:no-underline"
               aria-label="SoftCo — Home"
             >
-              {data.brandName ?? "SoftCo"}
+              <Image
+                src="/softco_logo_blue.png"
+                alt={data.brandName ?? "SoftCo"}
+                width={380}
+                height={76}
+                className="h-auto w-[220px] sm:w-[280px]"
+              />
             </Link>
             {data.socialLinks && data.socialLinks.length > 0 ? (
               <ul className="flex shrink-0 items-center gap-2.5 sm:gap-3">
