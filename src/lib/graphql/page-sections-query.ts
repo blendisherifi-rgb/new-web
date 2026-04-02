@@ -7,8 +7,7 @@
  *   ACF_LAYOUT_TYPE_PREFIX - e.g. "Page_Contentsections_" or "PageContentSectionsContentSections_"
  *   ACF_LAYOUT_SUFFIX - e.g. "" or "Layout" (so HeroSection vs HeroSectionLayout)
  *
- * AP Automation `sectionBackground` must exist in WPGraphQL (ACF field on the layout)
- * before deploying; otherwise the page query can fail until the field is registered.
+ * AP Automation: `sectionBackground` must match ACF field name / WPGraphQL Field Name.
  */
 
 const SECTIONS_PATH =
@@ -732,6 +731,7 @@ function buildFragment(): string {
     }
     ... on ${ApAutomationLayout} {
       overline
+      sectionBackground
       headingLine1
       headingLine2
       image { node { sourceUrl altText } }
