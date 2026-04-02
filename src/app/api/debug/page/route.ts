@@ -58,6 +58,22 @@ export async function GET(req: NextRequest) {
               heading
               trustBarLogos { imageAlt image { node { sourceUrl } } }
             }
+            ... on PageContentSectionsSectionsAnalyticsDashboardsSectionLayout {
+              overline
+              mainTitle
+              introBody
+              headingBefore
+              headingHighlight
+              body
+              slides {
+                image {
+                  node {
+                    sourceUrl
+                    altText
+                  }
+                }
+              }
+            }
           }
         }
       }

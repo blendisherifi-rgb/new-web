@@ -1496,7 +1496,7 @@ export const fetchPageData = cache(async function fetchPageData(
 
   const tryFetch = async (
     id: string,
-    idType: "URI" | "SLUG",
+    idType: "URI",
     query: string,
     isFull: boolean
   ): Promise<PageResponse | null> => {
@@ -1591,8 +1591,9 @@ export const fetchPageData = cache(async function fetchPageData(
     if (data?.page) { basePage = data.page; break; }
   }
 
-  // URI alone often fails in production (permalink structure, trailing slashes, WPML).
-  // WPGraphQL resolves pages reliably by post slug — same as in WP admin.
+  // URI alone can fail in some WP setups (permalink structure / WPML URI differences).
+  // Do an expanded URI fallback instead of `idType: SLUG` because many WPGraphQL
+  // schemas do not expose `SLUG` in the `PageIdType` enum.
   if (!basePage && !isHome) {
     const slugCandidates = Array.from(
       new Set(
@@ -1602,19 +1603,34 @@ export const fetchPageData = cache(async function fetchPageData(
       ),
     );
     for (const slugId of slugCandidates) {
-      data = await tryFetch(slugId, "SLUG", fullQuery, true);
-      if (data?.page) {
-        basePage = data.page;
-        break;
+      const localeUriCandidates = Array.from(
+        new Set([
+          slugId,
+          `${slugId}/`,
+          `/${slugId}`,
+          `/${slugId}/`,
+          `/${locale}/${slugId}`,
+          `/${locale}/${slugId}/`,
+        ]),
+      );
+      for (const uri of localeUriCandidates) {
+        data = await tryFetch(uri, "URI", fullQuery, true);
+        if (data?.page) {
+          basePage = data.page;
+          break;
+        }
+        data = await tryFetch(uri, "URI", resilientQuery, false);
+        if (data?.page) {
+          basePage = data.page;
+          break;
+        }
+        data = await tryFetch(uri, "URI", minimalQuery, false);
+        if (data?.page) {
+          basePage = data.page;
+          break;
+        }
       }
-      data = await tryFetch(slugId, "SLUG", resilientQuery, false);
-      if (data?.page) {
-        basePage = data.page;
-        break;
-      }
-      data = await tryFetch(slugId, "SLUG", minimalQuery, false);
-      if (data?.page) {
-        basePage = data.page;
+      if (basePage) {
         break;
       }
     }

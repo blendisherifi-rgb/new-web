@@ -229,6 +229,30 @@ export function AnalyticsDashboardsSection({
           </div>
         </div>
 
+        <div className="mt-4 flex items-center justify-center gap-3">
+          <span className="font-body text-[13px] font-semibold text-brand-dark/70">
+            {index + 1} / {len}
+          </span>
+          <div className="flex items-center gap-2" aria-label="Slide indicators">
+            {slides.map((_, i) => {
+              const active = i === index;
+              return (
+                <button
+                  key={`analytics-dot-${i}`}
+                  type="button"
+                  onClick={() => setIndex(i)}
+                  aria-label={`Go to slide ${i + 1}`}
+                  aria-current={active ? "true" : undefined}
+                  className={[
+                    "h-2.5 rounded-full transition-all",
+                    active ? "w-6 bg-brand-blue" : "w-2.5 bg-brand-dark/25 hover:bg-brand-dark/45",
+                  ].join(" ")}
+                />
+              );
+            })}
+          </div>
+        </div>
+
         {/* Bottom 18/28 */}
         <Paragraph
           size="base"

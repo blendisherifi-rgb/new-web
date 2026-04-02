@@ -11,11 +11,15 @@ const STATIC_ASSET =
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Redirect typo'd CFO route to the correct slug.
-  // (Some menu links / cached URLs may still hit /apautomation-by-cfo.)
-  if (pathname === "/apautomation-by-cfo") {
+  // Legacy aliases -> canonical WordPress slugs.
+  if (pathname === "/automation-by-cfo") {
     const url = request.nextUrl.clone();
-    url.pathname = "/automation-by-cfo";
+    url.pathname = "/apautomation-by-cfo";
+    return NextResponse.redirect(url, 308);
+  }
+  if (pathname === "/by-ap-manager") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/solution-by-ap-manager";
     return NextResponse.redirect(url, 308);
   }
 
@@ -60,9 +64,14 @@ export async function middleware(request: NextRequest) {
   // 3. Already has valid locale prefix (/us, /ie, /uk)
   const segments = pathname.split("/").filter(Boolean);
   if (segments[0] && isLocale(segments[0])) {
-    if (segments[1] === "apautomation-by-cfo") {
+    if (segments[1] === "automation-by-cfo") {
       const url = request.nextUrl.clone();
-      url.pathname = `/${segments[0]}/automation-by-cfo`;
+      url.pathname = `/${segments[0]}/apautomation-by-cfo`;
+      return NextResponse.redirect(url, 308);
+    }
+    if (segments[1] === "by-ap-manager") {
+      const url = request.nextUrl.clone();
+      url.pathname = `/${segments[0]}/solution-by-ap-manager`;
       return NextResponse.redirect(url, 308);
     }
     if (segments[1] === "glossary") {

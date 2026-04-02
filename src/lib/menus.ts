@@ -142,8 +142,8 @@ const SOLUTIONS_MEGA_MENU: Pick<NavItem, "dropdownType" | "solutionsCategories">
       id: "2-c1",
       label: "By role",
       links: [
-        { id: "2-c1-l1", label: "CFO", href: "/automation-by-cfo" },
-        { id: "2-c1-l2", label: "AP Manager", href: "/by-ap-manager" },
+        { id: "2-c1-l1", label: "CFO", href: "/apautomation-by-cfo" },
+        { id: "2-c1-l2", label: "AP Manager", href: "/solution-by-ap-manager" },
         { id: "2-c1-l3", label: "Financial Controller", href: "/solution-by-financial-controller" },
       ],
       featured: {
@@ -152,7 +152,7 @@ const SOLUTIONS_MEGA_MENU: Pick<NavItem, "dropdownType" | "solutionsCategories">
         title: "Solutions by role",
         description:
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit sit amet enim, mattis ut massa sed.",
-        href: "/automation-by-cfo",
+        href: "/apautomation-by-cfo",
       },
     },
     {
