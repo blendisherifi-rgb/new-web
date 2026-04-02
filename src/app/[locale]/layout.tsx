@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Header, Footer, CookieConsent, ConsentAnalytics } from "@/components/globals";
+import { AppErrorBoundary } from "@/components/globals/ErrorBoundary/AppErrorBoundary";
 import { fetchMenus } from "@/lib/menus";
 import { fetchGlobalFields } from "@/lib/globals";
 import type { Locale } from "@/lib/i18n";
@@ -20,7 +21,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   ]);
 
   return (
-    <>
+    <AppErrorBoundary>
       {/* Header is fixed — utility bar + nav bar as one unit */}
       <Header
         menus={menus}
@@ -45,6 +46,6 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
         cookiePolicyUrl={localePath("/cookies", locale)}
         privacyPolicyUrl={localePath("/privacy", locale)}
       />
-    </>
+    </AppErrorBoundary>
   );
 }

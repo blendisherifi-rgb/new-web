@@ -11,6 +11,14 @@ const STATIC_ASSET =
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Redirect typo'd CFO route to the correct slug.
+  // (Some menu links / cached URLs may still hit /apautomation-by-cfo.)
+  if (pathname === "/apautomation-by-cfo") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/automation-by-cfo";
+    return NextResponse.redirect(url, 308);
+  }
+
   // Root-level public files (e.g. /animations/*.json) must not get a locale rewrite
   if (STATIC_ASSET.test(pathname)) {
     return NextResponse.next();
@@ -52,6 +60,11 @@ export async function middleware(request: NextRequest) {
   // 3. Already has valid locale prefix (/us, /ie, /uk)
   const segments = pathname.split("/").filter(Boolean);
   if (segments[0] && isLocale(segments[0])) {
+    if (segments[1] === "apautomation-by-cfo") {
+      const url = request.nextUrl.clone();
+      url.pathname = `/${segments[0]}/automation-by-cfo`;
+      return NextResponse.redirect(url, 308);
+    }
     if (segments[1] === "glossary") {
       const url = request.nextUrl.clone();
       const rest = segments.slice(2).join("/");

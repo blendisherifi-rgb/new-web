@@ -120,6 +120,12 @@ export function Button(props: ButtonProps) {
     disabled = false,
   } = props;
 
+  const href =
+    typeof (props as Partial<ButtonAsLink>).href === "string"
+      ? (props as Partial<ButtonAsLink>).href
+      : undefined;
+  const hrefTrimmed = href?.trim() ?? "";
+
   const hasIcon = icon ?? iconAfter;
   const paddingX = hasIcon ? "tablet-down:pl-[30px] tablet-down:pr-[15px]" : "tablet-down:px-[30px]";
 
@@ -200,14 +206,15 @@ export function Button(props: ButtonProps) {
       </>
     );
 
-  // Link mode
-  if (props.href != null) {
+  // Link mode (only when we have a non-empty href)
+  if (hrefTrimmed) {
+    const externalProp = (props as Partial<ButtonAsLink>).external;
     const isExternal =
-      props.external ?? props.href.startsWith("http");
+      externalProp ?? hrefTrimmed.startsWith("http");
     if (isExternal) {
       return (
         <a
-          href={props.href}
+          href={hrefTrimmed}
           target="_blank"
           rel="noopener noreferrer"
           className={classes}
@@ -219,7 +226,7 @@ export function Button(props: ButtonProps) {
     }
     return (
       <NextLink
-        href={props.href}
+        href={hrefTrimmed}
         className={classes}
         aria-disabled={disabled || undefined}
       >
@@ -229,12 +236,13 @@ export function Button(props: ButtonProps) {
   }
 
   // Button mode
+  const onClick = (props as Partial<ButtonAsButton>).onClick;
   return (
     <button
       type={props.type ?? "button"}
       className={classes}
       disabled={disabled}
-      onClick={props.onClick}
+      onClick={onClick}
     >
       {content}
     </button>

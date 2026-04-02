@@ -1,6 +1,7 @@
 "use client";
 
 import { SECTION_MAP, type SectionData } from "@/lib/sections";
+import { AppErrorBoundary } from "@/components/globals/ErrorBoundary/AppErrorBoundary";
 
 /** Converts "finance_hero_section" → "Finance Hero" for the showcase badge. */
 function toReadableLabel(acfGroupName: string): string {
@@ -80,7 +81,20 @@ export function SectionRenderer({ sections, showLabels = false }: SectionRendere
                 </span>
               </div>
             )}
-            <Component {...(section.fields as Record<string, unknown>)} />
+            <AppErrorBoundary
+              fallback={
+                <div className="mx-auto max-w-3xl px-6 py-10">
+                  <p className="font-body text-[14px] font-bold text-brand-dark">
+                    This section failed to load.
+                  </p>
+                  <p className="mt-2 font-mono text-[12px] text-brand-dark-60">
+                    {section.acfGroupName}
+                  </p>
+                </div>
+              }
+            >
+              <Component {...(section.fields as Record<string, unknown>)} />
+            </AppErrorBoundary>
           </div>
         );
       })}
