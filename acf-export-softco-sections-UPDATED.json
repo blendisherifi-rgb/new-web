@@ -10260,7 +10260,7 @@
                             },
                             "default_value": "dark_blue",
                             "show_in_graphql": 1,
-                            "graphql_field_name": "sectionbackground",
+                            "graphql_field_name": "bg",
                             "return_format": "value",
                             "multiple": 0,
                             "allow_null": 0,

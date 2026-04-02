@@ -35,14 +35,14 @@ function typenameToGroupName(typename: string): string {
   return last.replace(/([A-Z])/g, (_, c) => `_${c.toLowerCase()}`).replace(/^_/, "");
 }
 
-/** ACF select values; GraphQL may alias to `sectionBackground`. */
+/** ACF select values; WPGraphQL Field Name may be `bg`, `sectionbackground`, or camelCase. */
 function pickApAutomationBackgroundRaw(n: Record<string, unknown>): unknown {
-  return n.sectionBackground ?? n.sectionbackground ?? n.section_background;
+  return n.bg ?? n.sectionBackground ?? n.sectionbackground ?? n.section_background;
 }
 
 function normalizeApAutomationSectionBackground(raw: unknown): "dark_blue" | "white" | "light_blue" {
-  if (typeof raw !== "string") return "dark_blue";
-  const s = raw.trim().toLowerCase().replace(/[\s-]+/g, "_");
+  if (raw == null || raw === "") return "dark_blue";
+  const s = String(raw).trim().toLowerCase().replace(/[\s-]+/g, "_");
   if (s === "darkblue") return "dark_blue";
   if (s === "lightblue") return "light_blue";
   if (s === "dark_blue" || s === "white" || s === "light_blue") return s;
@@ -1130,10 +1130,11 @@ function transformSection(node: Record<string, unknown>, index: number): Section
     }
   }
 
-  // AP automation: section background (ACF `sectionbackground` → GraphQL alias `sectionBackground`); images
+  // AP automation: background (GraphQL field often `bg`); images
   if (acfGroupName === "ap_automation_section") {
     const bg = normalizeApAutomationSectionBackground(pickApAutomationBackgroundRaw(normalized));
     normalized.sectionBackground = bg;
+    delete normalized.bg;
     delete normalized.sectionbackground;
     delete normalized.section_background;
 
