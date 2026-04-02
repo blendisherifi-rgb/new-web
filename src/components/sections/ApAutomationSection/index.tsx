@@ -66,96 +66,71 @@ export function ApAutomationSection({
 
   return (
     <section className="w-full bg-brand-dark">
-      <div className="mx-auto w-full max-w-[1440px] px-6 py-16 text-white tablet-down:py-[100px]">
-        {/* Header: optional overline + split heading */}
-        <div className="flex flex-col items-center text-center">
-          {overline ? (
-            <>
-              <Overline className="text-brand-orange">{overline}</Overline>
-              <Heading
-                level={1}
-                className="mt-[60px] text-[40px] leading-[1.15] tablet-down:text-[80px] tablet-down:leading-[88px]"
-              >
-                <span className="block text-[#047FE5]">{headingLine1}</span>
-                <span className="mt-2 block text-white tablet-down:mt-3">{headingLine2}</span>
-              </Heading>
-            </>
-          ) : (
+      <div className="mx-auto w-full max-w-[1440px] px-6 py-14 text-white tablet-down:py-[80px]">
+        <div className="grid grid-cols-1 items-start gap-8 tablet-down:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] tablet-down:gap-8">
+          <div className="flex flex-col items-start text-left">
+            {overline ? <Overline className="text-brand-orange">{overline}</Overline> : null}
             <Heading
               level={1}
-              className="text-[40px] leading-[1.15] tablet-down:text-[80px] tablet-down:leading-[88px]"
+              className="mt-5 text-[38px] leading-[1.12] tablet-down:mt-4 tablet-down:text-[62px] tablet-down:leading-[1.06]"
             >
               <span className="block text-[#047FE5]">{headingLine1}</span>
-              <span className="mt-2 block text-white tablet-down:mt-3">{headingLine2}</span>
+              <span className="block text-white">{headingLine2}</span>
             </Heading>
-          )}
-        </div>
-
-        {/* 60px gap between heading and image/content row — match AutomationEngine */}
-        <div className="mt-[60px] grid grid-cols-1 items-center gap-10 md:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] md:gap-[110px]">
-          <div className="w-full">
-            <div className="overflow-hidden rounded-lg shadow-2xl">
-              <Image
-                src={imageSrc}
-                alt={imageAlt}
-                width={900}
-                height={600}
-                className="h-auto w-full"
-              />
+            <Paragraph size="base" className="mt-5 max-w-[520px] text-white/90 tablet-down:mt-6">
+              {body}
+            </Paragraph>
+            <div className="mt-7 tablet-down:mt-8">
+              <Button variant="orange" href={ctaHref} iconAfter={<ChevronRightIcon />}>
+                {ctaLabel}
+              </Button>
             </div>
           </div>
 
-          <div className="flex flex-col items-start text-left">
-            <div className="relative h-[44px] w-auto">
+          <div className="w-full">
+            <div className="overflow-hidden rounded-md">
+              <Image
+                src={imageSrc}
+                alt={imageAlt}
+                width={980}
+                height={620}
+                className="h-auto w-full object-contain"
+              />
+            </div>
+            <div className="mt-1 flex justify-end tablet-down:mt-2">
               <Image
                 src={softcoApImageSrc}
                 alt={softcoApImageAlt}
                 width={220}
                 height={44}
-                className="h-[44px] w-auto object-contain"
+                className="h-[34px] w-auto object-contain tablet-down:h-[44px]"
               />
-            </div>
-            <Paragraph
-              size="base"
-              className="mt-6 max-w-[460px] text-white/90"
-            >
-              {body}
-            </Paragraph>
-            <div className="mt-10">
-              <Button
-                variant="orange"
-                href={ctaHref}
-                iconAfter={<ChevronRightIcon />}
-              >
-                {ctaLabel}
-              </Button>
             </div>
           </div>
         </div>
 
-        {/* Stats grid: 64px below feature tier; full-height vertical dividers touch top/bottom borders */}
+        {/* Stats row */}
         {displayMetrics.some((m) => m.value || m.label) && (
-          <div className="relative mt-[64px] border-y border-white/20">
+          <div className="relative mt-[40px] border-y border-white/20 tablet-down:mt-[28px]">
             <div className="relative mx-auto max-w-[1440px] px-4 tablet-down:px-4">
-              <div className="grid grid-cols-2 gap-y-8 py-12 tablet-down:grid-cols-4 tablet-down:gap-x-0 tablet-down:gap-y-0 tablet-down:py-14">
+              <div className="grid grid-cols-2 gap-y-8 py-8 tablet-down:grid-cols-4 tablet-down:gap-x-0 tablet-down:gap-y-0 tablet-down:py-9">
                 {displayMetrics.map((m, i) => (
                   <div
                     key={i}
                     className="flex flex-col items-center text-center tablet-down:px-12 first:tablet-down:pl-0 last:tablet-down:pr-0"
                   >
-                  <span className="font-body text-[36px] font-extrabold leading-[40px] tracking-normal text-brand-orange tablet-down:text-[48px] tablet-down:leading-[48px]">
-                    {m.value}
-                  </span>
-                  <Paragraph
-                    size="base"
-                    className="mt-2 text-[18px] leading-[26px] text-white/90 tablet-down:text-[20px] tablet-down:leading-[28px]"
-                  >
-                    {m.label}
-                  </Paragraph>
-                </div>
-              ))}
+                    <span className="font-body text-[36px] font-extrabold leading-[40px] tracking-normal text-brand-orange tablet-down:text-[46px] tablet-down:leading-[48px]">
+                      {m.value}
+                    </span>
+                    <Paragraph
+                      size="base"
+                      className="mt-2 text-[18px] leading-[26px] text-white/90 tablet-down:text-[20px] tablet-down:leading-[28px]"
+                    >
+                      {m.label}
+                    </Paragraph>
+                  </div>
+                ))}
               </div>
-              {/* Full-height vertical dividers — span top to bottom border */}
               <div
                 className="pointer-events-none absolute top-0 bottom-0 left-1/4 hidden w-px bg-white/20 tablet-down:block"
                 aria-hidden
@@ -172,8 +147,7 @@ export function ApAutomationSection({
           </div>
         )}
 
-        {/* Gartner endorsement — 100px below stats */}
-        <div className="flex flex-col items-center pt-[100px] text-center">
+        <div className="flex flex-col items-center pt-[48px] text-center tablet-down:pt-[54px]">
           <Image
             src={gartnerLogoSrc}
             alt={gartnerLogoAlt}
