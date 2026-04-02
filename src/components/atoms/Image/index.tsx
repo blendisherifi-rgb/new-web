@@ -47,6 +47,33 @@ export function Image({
   const roundedClass = roundedMap[rounded];
   const ratioClass = aspectRatioMap[aspectRatio];
 
+  const srcValue = rest.src;
+  const hasValidSrc =
+    typeof srcValue === "string"
+      ? srcValue.trim().length > 0
+      : srcValue !== undefined && srcValue !== null;
+
+  // WP/ACF exports sometimes yield empty image URLs. `next/image` throws when `src`
+  // is missing/empty, which causes a client-side exception for the whole page.
+  // Render an empty placeholder wrapper instead.
+  if (!hasValidSrc) {
+    if (aspectRatio !== "auto") {
+      return (
+        <div
+          className={`relative overflow-hidden ${ratioClass} ${roundedClass} ${containerClassName}`}
+          aria-hidden
+        />
+      );
+    }
+
+    return (
+      <div
+        className={`${roundedClass} ${className} ${containerClassName}`}
+        aria-hidden
+      />
+    );
+  }
+
   if (aspectRatio !== "auto") {
     return (
       <div

@@ -99,7 +99,7 @@ const PLACEHOLDER_GLOBALS: GlobalsData = {
         ],
         extraHeading: "By role",
         extraLinks: [
-          { label: "CFO", href: "/apautomation-by-cfo" },
+          { label: "CFO", href: "/automation-by-cfo" },
           { label: "Financial Controller", href: "/solution-by-financial-controller" },
           { label: "AP Manager", href: "/by-ap-manager" },
         ],
