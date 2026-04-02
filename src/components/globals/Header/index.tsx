@@ -311,14 +311,14 @@ export function Header({ menus, cta, utilityBar, locale, variant = "transparent"
                     <Button
                       variant="orange"
                       href={cta.href}
-                      className="w-full h-full rounded-[5px] text-xs font-bold px-3 flex items-center justify-center"
+                      className="w-full h-full rounded-[5px] px-3 text-xs font-bold uppercase !text-white flex items-center justify-center"
                     >
                       {cta.label}
                     </Button>
                   </div>
                   {/* Desktop CTA */}
                   <div className="hidden md:block shrink-0">
-                    <Button variant="orange" href={cta.href}>
+                    <Button variant="orange" href={cta.href} className="uppercase !text-white">
                       {cta.label}
                     </Button>
                   </div>
