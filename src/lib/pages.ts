@@ -1118,13 +1118,6 @@ function transformSection(node: Record<string, unknown>, index: number): Section
 
   // AP automation: image.node, softcoApImage.node, gartnerLogo.node -> flatten
   if (acfGroupName === "ap_automation_section") {
-    const bgRaw = normalized.sectionBackground;
-    const bg =
-      typeof bgRaw === "string" && ["dark_blue", "white", "light_blue"].includes(bgRaw)
-        ? bgRaw
-        : "dark_blue";
-    normalized.sectionBackground = bg;
-
     const img = normalized.image as Record<string, unknown> | undefined;
     const n = img?.node as Record<string, unknown> | undefined;
     normalized.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
