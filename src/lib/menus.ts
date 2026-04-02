@@ -101,7 +101,7 @@ const WHAT_WE_DO_MEGA_MENU: Pick<NavItem, "dropdownType" | "products" | "platfor
       id: "1-p3",
       eyebrow: "E-Invoicing",
       productLabel: "e-invoicing",
-      href: "/solution-e-invoicing-software",
+      href: "/e-invoicing-software",
     },
   ],
   platformLinks: [

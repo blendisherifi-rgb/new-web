@@ -78,7 +78,7 @@ const PLACEHOLDER_GLOBALS: GlobalsData = {
         links: [
           { label: "Accounts payable", href: "/what-we-do/accounts-payable" },
           { label: "Procure-to-pay", href: "/what-we-do/procure-to-pay" },
-          { label: "e-invoicing", href: "/what-we-do/e-invoicing" },
+          { label: "e-invoicing", href: "/e-invoicing-software" },
         ],
         featuredLinks: [
           { label: "The Perfect Fit framework", href: "/perfect-fit-framework" },
