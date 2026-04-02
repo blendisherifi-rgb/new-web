@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { SectionRenderer } from "@/components/templates";
+import { SafeSectionRenderer } from "@/components/templates/SafeSectionRenderer";
 import { fetchPageData } from "@/lib/pages";
 import { buildMetadataFromYoast } from "@/lib/seo";
 import type { Locale } from "@/lib/i18n";
@@ -41,7 +41,7 @@ export default async function SlugPage({ params }: SlugPageProps) {
 
   return (
     <>
-      <SectionRenderer sections={pageData.sections} />
+      <SafeSectionRenderer sections={pageData.sections} />
     </>
   );
 }

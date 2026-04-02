@@ -53,7 +53,6 @@ export async function GET(req: NextRequest) {
             ... on PageContentSectionsSectionsAiEngineSectionLayout {
               overline
               aiEngineTabs { label title body }
-              tabs { label title body }
             }
             ... on PageContentSectionsSectionsTrustBarSectionLayout {
               heading

@@ -3,7 +3,7 @@ import { Heading } from "@/components/atoms/Heading";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Image } from "@/components/atoms/Image";
 import { Link } from "@/components/atoms/Link";
-import { SectionRenderer } from "@/components/templates";
+import { SafeSectionRenderer } from "@/components/templates/SafeSectionRenderer";
 import { fetchCaseStudyBySlug } from "@/lib/case-studies";
 import { fetchPageData } from "@/lib/pages";
 import { buildMetadataFromYoast } from "@/lib/seo";
@@ -63,7 +63,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
             ← Back to Case Studies
           </Link>
         </div>
-        <SectionRenderer sections={pageData.sections} />
+        <SafeSectionRenderer sections={pageData.sections} />
       </div>
     );
   }

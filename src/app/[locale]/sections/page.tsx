@@ -1,4 +1,4 @@
-import { SectionRenderer } from "@/components/templates";
+import { SafeSectionRenderer } from "@/components/templates/SafeSectionRenderer";
 import { SECTIONS_SHOWCASE_GROUPS } from "@/lib/sections-showcase";
 import type { Locale } from "@/lib/i18n";
 import { isLocale } from "@/lib/i18n";
@@ -39,7 +39,7 @@ export default async function SectionsPage({ params }: SectionsPageProps) {
                 </span>
               </div>
             ) : null}
-            <SectionRenderer sections={group.sections} showLabels />
+            <SafeSectionRenderer sections={group.sections} showLabels />
           </div>
         ))}
       </div>
