@@ -253,8 +253,6 @@ function buildFragment(): string {
       headingHighlight
       headingAfter
       description
-      ctaLabel
-      ctaHref
     }
     ... on ${PerfectFitFrameworkLayout} {
       overline
@@ -1104,8 +1102,6 @@ function buildFragmentResilient(): string {
       headingHighlight
       headingAfter
       description
-      ctaLabel
-      ctaHref
     }
     ... on ${PerfectFitFrameworkLayout} {
       overline

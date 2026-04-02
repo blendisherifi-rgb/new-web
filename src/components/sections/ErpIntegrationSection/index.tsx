@@ -87,39 +87,15 @@ export function ErpIntegrationSection({
         <div className="mt-8 grid grid-cols-2 gap-4 tablet-down:mt-10 tablet-down:grid-cols-5 tablet-down:gap-4">
           {logos.map((item, i) => {
             const inner = (
-              <>
-                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-brand-pale-blue text-brand-dark transition-colors group-hover:bg-brand-blue group-hover:text-white">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="h-5 w-5"
-                    fill="none"
-                    aria-hidden
-                  >
-                    <path
-                      d="M7 17L17 7"
-                      stroke="currentColor"
-                      strokeWidth="2.2"
-                      strokeLinecap="round"
-                    />
-                    <path
-                      d="M10 7H17V14"
-                      stroke="currentColor"
-                      strokeWidth="2.2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </div>
-                <div className="flex min-h-[64px] w-full items-center justify-center">
-                  <Image
-                    src={item.logoSrc}
-                    alt={item.logoAlt}
-                    width={190}
-                    height={64}
-                    className="h-14 w-auto max-w-full object-contain"
-                  />
-                </div>
-              </>
+              <div className="flex min-h-[120px] w-full flex-1 items-center justify-center">
+                <Image
+                  src={item.logoSrc}
+                  alt={item.logoAlt}
+                  width={190}
+                  height={64}
+                  className="h-14 w-auto max-w-full object-contain"
+                />
+              </div>
             );
             const cardClass =
               "group flex flex-col items-center rounded border border-brand-grey bg-white px-4 py-7 transition-colors hover:bg-brand-light-blue";
