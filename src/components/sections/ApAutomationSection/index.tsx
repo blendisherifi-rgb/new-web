@@ -177,9 +177,9 @@ export function ApAutomationSection({
           <Image
             src={gartnerLogoSrc}
             alt={gartnerLogoAlt}
-            width={140}
-            height={40}
-            className="h-10 w-auto object-contain"
+            width={334}
+            height={76}
+            className="h-[76px] w-auto object-contain"
           />
           <Paragraph
             size="base"

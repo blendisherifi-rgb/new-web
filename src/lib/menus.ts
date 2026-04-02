@@ -238,7 +238,8 @@ const WHO_WE_ARE_MEGA_MENU: Pick<
     { id: "5-l5", label: "Careers", href: "/careers" },
     { id: "5-l6", label: "News", href: "/news" },
     { id: "5-l7", label: "Events", href: "/resources?types=webinar" },
-    { id: "5-l8", label: "Contact US", href: "/contact-us" },
+    { id: "5-l8", label: "Glossary", href: "/resources/glossary" },
+    { id: "5-l9", label: "Contact US", href: "/contact-us" },
   ],
   whoWeAreFeatured: {
     imageUrl: "/who-we-are-featured.jpg",
