@@ -1158,17 +1158,54 @@ function transformSection(node: Record<string, unknown>, index: number): Section
 
   // Analytics dashboards: slides[].image.node -> imageSrc/imageAlt
   if (acfGroupName === "analytics_dashboards_section") {
-    const raw = normalized.slides ?? [];
-    if (Array.isArray(raw)) {
-      normalized.slides = (raw as unknown[]).map((s) => {
+    const source = normalized.slides;
+    const rawSlides = Array.isArray(source)
+      ? source
+      : (source as { nodes?: unknown[] } | undefined)?.nodes;
+
+    if (Array.isArray(rawSlides)) {
+      normalized.slides = (rawSlides as unknown[]).map((s) => {
         const item = { ...(s as Record<string, unknown>) };
-        const img = item.image as Record<string, unknown> | undefined;
-        const n = img?.node as Record<string, unknown> | undefined;
-        item.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
-        item.imageAlt = n?.altText ?? img?.altText ?? "";
+
+        const pickMedia = (
+          key: string,
+        ): { sourceUrl?: string; altText?: string } | undefined => {
+          const media = item[key] as Record<string, unknown> | undefined;
+          if (!media) return undefined;
+          const node = media.node as Record<string, unknown> | undefined;
+          return {
+            sourceUrl:
+              (node?.sourceUrl as string | undefined) ??
+              (media.sourceUrl as string | undefined),
+            altText:
+              (node?.altText as string | undefined) ??
+              (media.altText as string | undefined),
+          };
+        };
+
+        const media =
+          pickMedia("image") ??
+          pickMedia("slideImage") ??
+          pickMedia("dashboardImage") ??
+          pickMedia("screenshot");
+
+        item.imageSrc =
+          media?.sourceUrl ??
+          (item.imageSrc as string | undefined) ??
+          "";
+        item.imageAlt =
+          media?.altText ??
+          (item.imageAlt as string | undefined) ??
+          "";
+
         delete item.image;
+        delete item.slideImage;
+        delete item.dashboardImage;
+        delete item.screenshot;
         return item;
       });
+    } else {
+      normalized.slides = [];
     }
   }
 
