@@ -10240,6 +10240,37 @@
                             "append": ""
                         },
                         {
+                            "key": "field_apa_section_background",
+                            "label": "Section background",
+                            "name": "sectionBackground",
+                            "aria-label": "",
+                            "type": "select",
+                            "instructions": "Dark blue matches the original design. White and light blue use dark text for contrast.",
+                            "required": 0,
+                            "conditional_logic": false,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "dark_blue": "Dark blue (default)",
+                                "white": "White",
+                                "light_blue": "Light blue"
+                            },
+                            "default_value": "dark_blue",
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "sectionBackground",
+                            "return_format": "value",
+                            "multiple": 0,
+                            "allow_null": 0,
+                            "placeholder": "",
+                            "ui": 1,
+                            "ajax": 0,
+                            "create_options": 0,
+                            "save_options": 0
+                        },
+                        {
                             "key": "field_apa_image",
                             "label": "Product Screenshot",
                             "name": "image",
