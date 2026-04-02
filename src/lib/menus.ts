@@ -180,6 +180,36 @@ const SOLUTIONS_MEGA_MENU: Pick<NavItem, "dropdownType" | "solutionsCategories">
   ],
 };
 
+function normalizeHrefForCompare(href: string): string {
+  // href comes in as locale-agnostic (e.g. "/about") before makeLocaleAware,
+  // but after localePath it becomes "/us/about". Strip locale prefix and normalize slashes.
+  const t = href.trim();
+  const stripped = t.replace(/^\/(us|ie|uk)(?:\/|$)/i, "/");
+  return stripped.replace(/\/+$/, "") || "/";
+}
+
+function transformHeaderLabel(label: string): string {
+  const t = label.trim();
+  const lower = t.toLowerCase();
+
+  if (lower === "ai capabilities" || lower === "ai capabilities".toLowerCase()) {
+    return "AI Engine";
+  }
+  if (lower === "analytics") {
+    return "AI Analytics";
+  }
+  if (
+    lower === "multi-erp integration" ||
+    lower === "multi erp integration" ||
+    lower === "multi-erp" ||
+    lower === "multi erp"
+  ) {
+    return "ERP Integration";
+  }
+
+  return t;
+}
+
 /** When WordPress returns PRIMARY menu items, inject the Solutions mega-menu (WP menu alone has no category structure). */
 function mergeSolutionsMegaMenu(primary: NavItem[]): NavItem[] {
   return primary.map((item) => {
@@ -264,7 +294,13 @@ function makeLocaleAware(items: NavItem[], locale: Locale): NavItem[] {
         }))
       : undefined,
     products: item.products?.map((p) => ({ ...p, href: localePath(p.href, locale) })),
-    platformLinks: item.platformLinks?.map((l) => ({ ...l, href: localePath(l.href, locale) })),
+    platformLinks: item.platformLinks
+      ?.filter((l) => normalizeHrefForCompare(l.href) !== "/about")
+      .map((l) => ({
+        ...l,
+        href: localePath(l.href, locale),
+        label: transformHeaderLabel(l.label),
+      })),
     solutionsCategories: item.solutionsCategories?.map((cat) => ({
       ...cat,
       links: cat.links.map((l) => ({ ...l, href: localePath(l.href, locale) })),
@@ -272,7 +308,9 @@ function makeLocaleAware(items: NavItem[], locale: Locale): NavItem[] {
         ? { ...cat.featured, href: localePath(cat.featured.href, locale) }
         : cat.featured,
     })),
-    whoWeAreLinks: item.whoWeAreLinks?.map((l) => ({ ...l, href: localePath(l.href, locale) })),
+    whoWeAreLinks: item.whoWeAreLinks
+      ?.filter((l) => normalizeHrefForCompare(l.href) !== "/about")
+      .map((l) => ({ ...l, href: localePath(l.href, locale), label: l.label })),
     whoWeAreFeatured: item.whoWeAreFeatured?.href
       ? { ...item.whoWeAreFeatured, href: localePath(item.whoWeAreFeatured.href, locale) }
       : item.whoWeAreFeatured,

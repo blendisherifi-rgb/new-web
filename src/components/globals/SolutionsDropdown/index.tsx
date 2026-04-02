@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { Link } from "@/components/atoms/Link";
 import type { SolutionsCategory } from "@/lib/menus";
 
@@ -90,43 +89,7 @@ export function SolutionsDropdown({
         )}
       </div>
 
-      {/* Right — featured card */}
-      {active?.featured && (
-        <div className="bg-white flex-1 border-l border-[#e8eaf0] flex flex-col">
-          {/* Image */}
-          <div className="relative w-full h-[160px] overflow-hidden bg-brand-grey/30">
-            <Image
-              src={active.featured.imageUrl}
-              alt={active.featured.imageAlt ?? ""}
-              fill
-              className="object-cover"
-              sizes="320px"
-            />
-          </div>
-
-          {/* Text */}
-          <div className="p-5 flex flex-col gap-2">
-            {active.featured.href ? (
-              <Link
-                href={active.featured.href}
-                onClick={onClose}
-                className="font-body text-sm font-bold text-brand-dark leading-snug no-underline hover:text-brand-blue hover:no-underline transition-colors"
-              >
-                {active.featured.title}
-              </Link>
-            ) : (
-              <p className="font-body text-sm font-bold text-brand-dark leading-snug">
-                {active.featured.title}
-              </p>
-            )}
-            {active.featured.description && (
-              <p className="font-body text-xs text-brand-dark/70 leading-relaxed">
-                {active.featured.description}
-              </p>
-            )}
-          </div>
-        </div>
-      )}
+      {/* Right — featured card intentionally removed (requested). */}
     </div>
   );
 }

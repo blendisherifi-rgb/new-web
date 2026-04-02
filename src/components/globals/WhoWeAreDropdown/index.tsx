@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Link } from "@/components/atoms/Link";
 import type { WhatWeDoPlatformLink, SolutionsFeaturedCard } from "@/lib/menus";
 
@@ -62,40 +61,7 @@ export function WhoWeAreDropdown({
         </ul>
       </div>
 
-      {/* Right — featured card */}
-      {featured && (
-        <div className="flex-1 border-l border-[#e8eaf0] flex flex-col bg-white">
-          <div className="relative w-full h-[180px] overflow-hidden bg-brand-grey/30">
-            <Image
-              src={featured.imageUrl}
-              alt={featured.imageAlt ?? ""}
-              fill
-              className="object-cover"
-              sizes="50vw"
-            />
-          </div>
-          <div className="p-6 flex flex-col gap-2">
-            {featured.href ? (
-              <Link
-                href={featured.href}
-                onClick={onClose}
-                className="font-body text-sm font-bold text-brand-dark leading-snug no-underline hover:text-brand-blue hover:no-underline transition-colors"
-              >
-                {featured.title}
-              </Link>
-            ) : (
-              <p className="font-body text-sm font-bold text-brand-dark leading-snug">
-                {featured.title}
-              </p>
-            )}
-            {featured.description && (
-              <p className="font-body text-xs text-brand-dark/70 leading-relaxed">
-                {featured.description}
-              </p>
-            )}
-          </div>
-        </div>
-      )}
+      {/* Right — featured card intentionally removed (requested). */}
     </div>
   );
 }

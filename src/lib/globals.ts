@@ -167,6 +167,29 @@ function localeAwareHref(href: string | null | undefined, locale: Locale): strin
   return localePath(t, locale);
 }
 
+function normalizeHrefForCompare(href: string): string {
+  const t = href.trim();
+  const stripped = t.replace(/^\/(us|ie|uk)(?:\/|$)/i, "/");
+  return stripped.replace(/\/+$/, "") || "/";
+}
+
+function transformFooterLabel(label: string): string {
+  const t = label.trim();
+  const lower = t.toLowerCase();
+
+  if (lower === "ai capabilities") return "AI Engine";
+  if (lower === "analytics") return "AI Analytics";
+  if (
+    lower === "multi-erp integration" ||
+    lower === "multi erp integration" ||
+    lower === "multi-erp" ||
+    lower === "multi erp"
+  ) {
+    return "ERP Integration";
+  }
+  return t;
+}
+
 function makeLocaleAware(globals: GlobalsData, locale: Locale): GlobalsData {
   return {
     ...globals,
@@ -186,25 +209,56 @@ function makeLocaleAware(globals: GlobalsData, locale: Locale): GlobalsData {
       ...globals.footer,
       navGroups: globals.footer.navGroups?.map((group) => ({
         ...group,
-        links: group.links.map((l) => ({
-          ...l,
-          href: localeAwareHref(l.href, locale) ?? l.href,
-        })),
-        extraLinks: group.extraLinks?.map((l) => ({
-          ...l,
-          href: localeAwareHref(l.href, locale) ?? l.href,
-        })),
-        featuredLinks: group.featuredLinks?.map((l) => ({
-          ...l,
-          href: localeAwareHref(l.href, locale) ?? l.href,
-        })),
+        links:
+          group.links
+            .map((l) => {
+              const href = localeAwareHref(l.href, locale) ?? l.href;
+              return {
+                ...l,
+                href,
+                label: transformFooterLabel(l.label),
+              };
+            })
+            .filter((l) => normalizeHrefForCompare(l.href) !== "/about"),
+        extraLinks: group.extraLinks
+          ? group.extraLinks
+              .map((l) => {
+                const href = localeAwareHref(l.href, locale) ?? l.href;
+                return {
+                  ...l,
+                  href,
+                  label: transformFooterLabel(l.label),
+                };
+              })
+              .filter((l) => normalizeHrefForCompare(l.href) !== "/about")
+          : undefined,
+        featuredLinks: group.featuredLinks
+          ? group.featuredLinks
+              .map((l) => {
+                const href = localeAwareHref(l.href, locale) ?? l.href;
+                return {
+                  ...l,
+                  href,
+                  label: transformFooterLabel(l.label),
+                };
+              })
+              .filter((l) => normalizeHrefForCompare(l.href) !== "/about")
+          : undefined,
       })),
       columns: globals.footer.columns?.map((col) => ({
         ...col,
-        links: col.links?.map((l) => ({
-          ...l,
-          href: localeAwareHref(l.href, locale) ?? l.href,
-        })),
+        links: col.links
+          ? col.links
+              .map((l) => {
+                const href = localeAwareHref(l.href, locale) ?? l.href;
+                return {
+                  ...l,
+                  href,
+                  label: transformFooterLabel(l.label),
+                };
+              })
+              .filter((l) => normalizeHrefForCompare(l.href) !== "/about")
+          : undefined,
       })),
       legalLinks: globals.footer.legalLinks?.map((l) => ({
         ...l,
