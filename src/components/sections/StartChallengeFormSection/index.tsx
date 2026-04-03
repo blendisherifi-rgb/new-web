@@ -5,6 +5,8 @@ import Script from "next/script";
 
 import { Overline } from "@/components/atoms/Overline";
 import { Heading } from "@/components/atoms/Heading";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 type HubSpotWindow = Window & {
   hbspt?: {
@@ -26,6 +28,7 @@ export interface StartChallengeFormSectionProps {
   headingLine1: string;
   /** Second line — brand blue (e.g. "challenge"). */
   headingHighlight: string;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -36,6 +39,7 @@ export function StartChallengeFormSection({
   overline,
   headingLine1,
   headingHighlight,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: StartChallengeFormSectionProps) {
   const instanceId = useId().replace(/:/g, "");
   const targetId = `start-challenge-hubspot-target-${instanceId}`;
@@ -93,7 +97,7 @@ export function StartChallengeFormSection({
         </div>
 
         <Heading
-          level={2}
+          level={sectionTitleLevel}
           className="mx-auto mb-[50px] mt-10 max-w-[min(100%,75rem)] text-center font-heading font-semibold text-[46px] leading-[1.1] tracking-[0] tablet-down:mt-12 tablet-down:text-[80px] tablet-down:leading-[88px]"
         >
           <span className="block text-brand-dark">{headingLine1}</span>

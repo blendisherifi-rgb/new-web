@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { Heading } from "@/components/atoms/Heading";
 import { Image } from "@/components/atoms/Image";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 const SLIDE_KEYFRAMES = `
 @keyframes life-softco-slide-in-right {
@@ -46,6 +48,7 @@ export interface LifeAtSoftCoSectionProps {
   videoTitle?: string;
   /** Slider items (same shape as `TestimonialSliderSection`). */
   testimonials: LifeAtSoftCoTestimonial[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 function ArrowLeft({ size = 17 }: { size?: number }) {
@@ -171,6 +174,7 @@ export function LifeAtSoftCoSection({
   videoPosterSrc,
   videoTitle = "Video",
   testimonials,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: LifeAtSoftCoSectionProps) {
   const [current, setCurrent] = useState(0);
   const [animKey, setAnimKey] = useState(0);
@@ -204,7 +208,7 @@ export function LifeAtSoftCoSection({
 
       <div className="mx-auto w-full max-w-[1440px] px-4 py-16 text-center tablet-down:px-6 tablet-down:py-24">
         <Heading
-          level={2}
+          level={sectionTitleLevel}
           className="mx-auto max-w-[min(100%,48rem)] font-heading font-semibold !text-white text-[40px] leading-[1.1] tablet-down:text-[56px] tablet-down:leading-[1.08]"
         >
           {title}

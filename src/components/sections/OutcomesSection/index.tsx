@@ -5,6 +5,8 @@ import { Paragraph } from "@/components/atoms/Paragraph";
 import { Heading } from "@/components/atoms/Heading";
 import { Overline } from "@/components/atoms/Overline";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface OutcomesStat {
   /** Large number (e.g. "80%", "1M+"). */
@@ -26,6 +28,7 @@ interface OutcomesSectionProps {
   ctaHref: string;
   /** Stats for the right column. */
   stats: OutcomesStat[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -46,6 +49,7 @@ export function OutcomesSection({
   ctaLabel,
   ctaHref,
   stats,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: OutcomesSectionProps) {
   return (
     <section className="w-full bg-brand-dark">
@@ -54,7 +58,7 @@ export function OutcomesSection({
           {/* Left column — 50px gap between each item, aligned to start */}
           <div className="flex w-full flex-col items-start text-left">
             <Overline className="text-brand-orange">{overline}</Overline>
-            <Heading level={2} className="mt-6 text-white tablet-down:mt-[50px]">
+            <Heading level={sectionTitleLevel} className="mt-6 text-white tablet-down:mt-[50px]">
               {title}
             </Heading>
             <Paragraph className="mt-6 tablet-down:mt-[50px] leading-[1.6] text-white">

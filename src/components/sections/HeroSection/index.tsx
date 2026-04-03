@@ -10,6 +10,8 @@ import { shouldReduceMotion } from "@/lib/animations";
 import { useHomeBannerEntrance } from "@/components/home/homeBannerEntranceContext";
 import { renderHeroTitleParts } from "./heroTitleParts";
 import Lottie from "lottie-react";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 interface HeroSectionProps {
   title: string;
@@ -19,6 +21,8 @@ interface HeroSectionProps {
   imageSrc: string;
   imageAlt: string;
   lottieUrl?: string;
+  /** Set by SectionRenderer: first section on page = 1 (only one h1), rest = 2. */
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /** Gap between chained entrance steps (after title motion completes, between fades) */
@@ -40,6 +44,7 @@ export function HeroSection({
   imageSrc,
   imageAlt,
   lottieUrl,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: HeroSectionProps) {
   const { coordinatedEntrance: coordinated, preloaderComplete } = useHomeBannerEntrance();
   const reduceMotion = shouldReduceMotion();
@@ -160,7 +165,7 @@ export function HeroSection({
                 transitionDuration: titleMoved ? `${ENTRANCE_TITLE_MS}ms` : undefined,
               }}
             >
-              <Heading level={1} className={titleClass}>
+              <Heading level={sectionTitleLevel} className={titleClass}>
                 {renderHeroTitleParts(title)}
               </Heading>
             </div>

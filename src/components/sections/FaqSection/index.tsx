@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { Overline } from "@/components/atoms/Overline";
 import { Heading } from "@/components/atoms/Heading";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface FaqItem {
   question: string;
@@ -17,6 +19,7 @@ interface FaqSectionProps {
   headingLine2: string;
   /** FAQ items (question + answer). */
   items: FaqItem[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -29,6 +32,7 @@ export function FaqSection({
   headingLine1,
   headingLine2,
   items,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: FaqSectionProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(1);
 
@@ -51,7 +55,7 @@ export function FaqSection({
           {/* Left: heading */}
           <div>
             <Heading
-              level={2}
+              level={sectionTitleLevel}
               className="text-left text-[36px] leading-[1.2] text-brand-dark tablet-down:text-[48px] tablet-down:leading-[56px]"
             >
               <span className="block">{headingLine1}</span>

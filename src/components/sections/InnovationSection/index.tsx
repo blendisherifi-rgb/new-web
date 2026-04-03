@@ -7,6 +7,8 @@ import { Heading } from "@/components/atoms/Heading";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
 import { AnimateOnScroll } from "@/components/molecules/AnimateOnScroll";
 import { Image } from "@/components/atoms/Image";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface InnovationValue {
   /** Icon image URL (or icon identifier for preset icons). */
@@ -31,6 +33,7 @@ interface InnovationSectionProps {
   ctaLabel: string;
   /** CTA button href. */
   ctaHref: string;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -48,6 +51,7 @@ export function InnovationSection({
   values,
   ctaLabel,
   ctaHref,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: InnovationSectionProps) {
   return (
     <section className="w-full bg-white">
@@ -59,7 +63,7 @@ export function InnovationSection({
             headingHighlight={headingHighlight}
             headingAfter={headingAfter}
             headline={headline}
-            level={2}
+            level={sectionTitleLevel}
             className="font-semibold text-brand-dark"
           />
           <Paragraph className="mt-6 tablet-down:mt-[50px] leading-[1.7]">

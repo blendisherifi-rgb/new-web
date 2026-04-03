@@ -7,6 +7,8 @@ import { Overline } from "@/components/atoms/Overline";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Button } from "@/components/atoms/Button";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface CommunitySupportSlide {
   imageSrc: string;
@@ -29,6 +31,7 @@ interface CommunitySupportSectionProps {
   ctaLabel: string;
   /** CTA button href. */
   ctaHref: string;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -44,6 +47,7 @@ export function CommunitySupportSection({
   bodyBottom,
   ctaLabel,
   ctaHref,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: CommunitySupportSectionProps) {
   const [index, setIndex] = useState(0);
 
@@ -93,7 +97,7 @@ export function CommunitySupportSection({
         {/* Centered heading — one liner, wider container */}
         <div className="mt-8 flex flex-col items-center text-center tablet-down:mt-12">
           <Heading
-            level={1}
+            level={sectionTitleLevel}
             className="max-w-[1100px] font-heading font-semibold text-[40px] leading-[1.15] text-white tablet-down:max-w-[1300px] tablet-down:text-[80px] tablet-down:leading-[88px]"
           >
             {headingBefore}{" "}

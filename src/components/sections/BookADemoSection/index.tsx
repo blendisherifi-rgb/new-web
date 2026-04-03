@@ -7,6 +7,8 @@ import { Overline } from "@/components/atoms/Overline";
 import { Heading } from "@/components/atoms/Heading";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { LogoMarquee, type LogoItem } from "@/components/molecules/LogoMarquee";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 type HubSpotWindow = Window & {
   hbspt?: {
@@ -42,6 +44,7 @@ export interface BookADemoSectionProps {
   logos: LogoItem[];
   /** Marquee cycle duration in seconds (default matches `AutomationEngineSection`). */
   marqueeDuration?: number;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -58,6 +61,7 @@ export function BookADemoSection({
   marqueeHeading,
   logos,
   marqueeDuration = 25,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: BookADemoSectionProps) {
   const normalizedLogos = logos.filter((l) => l.src);
   const showMarquee = normalizedLogos.length > 0;
@@ -111,7 +115,7 @@ export function BookADemoSection({
         <Overline className="text-brand-orange">{overline}</Overline>
 
         <Heading
-          level={2}
+          level={sectionTitleLevel}
           className="mx-auto mt-6 max-w-[min(100%,56rem)] font-heading font-semibold text-[46px] leading-[1.1] tracking-[0] text-balance !text-white tablet-down:mt-8 tablet-down:text-[72px] tablet-down:leading-[1.08]"
         >
           <span className="block">{headingLine1}</span>

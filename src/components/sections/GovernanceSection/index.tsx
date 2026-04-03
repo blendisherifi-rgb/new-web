@@ -3,6 +3,8 @@ import { Heading } from "@/components/atoms/Heading";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Button } from "@/components/atoms/Button";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 interface GovernanceSectionProps {
   overline?: string;
@@ -20,6 +22,7 @@ interface GovernanceSectionProps {
   statLabel: string;
   /** Key initiatives (plain text list items). */
   initiatives: string[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /** Checkmark icon for initiatives list. */
@@ -57,6 +60,7 @@ export function GovernanceSection({
   statNumber,
   statLabel,
   initiatives,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: GovernanceSectionProps) {
   return (
     <section
@@ -82,7 +86,7 @@ export function GovernanceSection({
           {/* Left column — heading + CTA */}
           <div className="min-w-0">
             <Heading
-              level={1}
+              level={sectionTitleLevel}
               className="text-left font-heading font-semibold text-white text-[46px] leading-[52px] tablet-down:text-[80px] tablet-down:leading-[88px]"
             >
               {heading}

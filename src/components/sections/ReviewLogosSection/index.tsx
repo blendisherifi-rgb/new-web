@@ -3,6 +3,8 @@
 import { Image } from "@/components/atoms/Image";
 import { Heading } from "@/components/atoms/Heading";
 import { Paragraph } from "@/components/atoms/Paragraph";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface ReviewLogoCard {
   logoSrc?: string;
@@ -14,15 +16,20 @@ export interface ReviewLogoCard {
 interface ReviewLogosSectionProps {
   heading: string;
   cards: ReviewLogoCard[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
-export function ReviewLogosSection({ heading, cards }: ReviewLogosSectionProps) {
+export function ReviewLogosSection({
+  heading,
+  cards,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
+}: ReviewLogosSectionProps) {
   if (!cards.length) return null;
 
   return (
     <section className="w-full bg-white">
       <div className="mx-auto w-full max-w-[1440px] px-4 py-12 tablet-down:px-6 tablet-down:py-24">
-        <Heading level={2} className="text-center text-[34px] md:text-[48px]">
+        <Heading level={sectionTitleLevel} className="text-center text-[34px] md:text-[48px]">
           {heading}
         </Heading>
 

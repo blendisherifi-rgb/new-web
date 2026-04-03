@@ -5,6 +5,8 @@ import { HeadlineWithHighlight } from "@/components/molecules/HeadlineWithHighli
 import { Overline } from "@/components/atoms/Overline";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Heading } from "@/components/atoms/Heading";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface PerfectFitCard {
   step: string;
@@ -22,6 +24,7 @@ interface PerfectFitFrameworkSectionProps {
   description: string;
   emphasis?: string;
   cards: PerfectFitCard[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 export function PerfectFitFrameworkSection({
@@ -32,6 +35,7 @@ export function PerfectFitFrameworkSection({
   description,
   emphasis,
   cards,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: PerfectFitFrameworkSectionProps) {
   return (
     <section className="w-full bg-white">
@@ -45,7 +49,7 @@ export function PerfectFitFrameworkSection({
             headingBefore={headingBefore}
             headingHighlight={headingHighlight}
             headingAfter={headingAfter ?? ""}
-            level={2}
+            level={sectionTitleLevel}
             className="text-[35px] font-semibold leading-[1.05] text-brand-dark md:text-[35px]"
           />
 

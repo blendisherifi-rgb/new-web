@@ -9,6 +9,8 @@ import { Overline } from "@/components/atoms/Overline";
 import { Blockquote } from "@/components/atoms/Blockquote";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Heading } from "@/components/atoms/Heading";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface TabbedContentMetric {
   value: string;
@@ -41,6 +43,7 @@ interface TabbedContentSectionProps {
   headingHighlight?: string;
   headingAfter?: string;
   tabs: TabbedContentTab[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 function normalizeTabType(raw: unknown): string {
@@ -114,6 +117,7 @@ export function TabbedContentSection({
   headingHighlight,
   headingAfter,
   tabs,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: TabbedContentSectionProps) {
   const ctaTab = resolveCtaTab(tabs);
   const contentTabs = resolveContentTabs(tabs, ctaTab);
@@ -167,11 +171,11 @@ export function TabbedContentSection({
                 headingBefore={headingBefore ?? ""}
                 headingHighlight={headingHighlight}
                 headingAfter={headingAfter ?? ""}
-                level={2}
+                level={sectionTitleLevel}
                 className="font-heading font-semibold leading-[1.05] text-brand-dark"
               />
             ) : (
-              <Heading level={2} className="leading-[1.05]">
+              <Heading level={sectionTitleLevel} className="leading-[1.05]">
                 {titleText}
               </Heading>
             )}

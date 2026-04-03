@@ -8,6 +8,8 @@ import { Overline } from "@/components/atoms/Overline";
 import { ChevronRightIcon, XIcon } from "@/components/atoms/Icon";
 import type { TeamMember } from "@/components/sections/MeetTheTeamSection";
 import { acquireScrollLock } from "@/lib/scrollLock";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface TeamDepartment {
   /** Department taxonomy term name, e.g. "Executive Leadership". */
@@ -25,6 +27,7 @@ interface TeamArchiveSectionProps {
   body?: string;
   /** All departments, each with their members. */
   departments: TeamDepartment[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /* ─── Modal ──────────────────────────────────────────────────────────────── */
@@ -218,6 +221,7 @@ export function TeamArchiveSection({
   title,
   body,
   departments,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: TeamArchiveSectionProps) {
   // Flatten all members into one list so modal prev/next works across departments.
   const allMembers = departments.flatMap((d) => d.members);
@@ -261,7 +265,7 @@ export function TeamArchiveSection({
           {/* Header */}
           <div className="text-center">
             <Overline className="text-brand-orange">{overline}</Overline>
-            <Heading level={1} as={2} className="mt-6 text-white">
+            <Heading level={sectionTitleLevel} className="mt-6 text-white">
               {title}
             </Heading>
             {body && (

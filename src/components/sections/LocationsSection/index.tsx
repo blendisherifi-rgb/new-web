@@ -5,6 +5,8 @@ import { HeadlineWithHighlight } from "@/components/molecules/HeadlineWithHighli
 import { Overline } from "@/components/atoms/Overline";
 import { Heading } from "@/components/atoms/Heading";
 import { Image } from "@/components/atoms/Image";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface LocationItem {
   tabTitle: string;
@@ -23,6 +25,7 @@ interface LocationsSectionProps {
   headingHighlight?: string;
   headingAfter?: string;
   items: LocationItem[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 export function LocationsSection({
@@ -30,6 +33,7 @@ export function LocationsSection({
   headingHighlight = "locations",
   headingAfter = "",
   items,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: LocationsSectionProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const safeIndex = activeIndex >= 0 && activeIndex < items.length ? activeIndex : 0;
@@ -47,7 +51,7 @@ export function LocationsSection({
               headingBefore={headingBefore}
               headingHighlight={headingHighlight}
               headingAfter={headingAfter}
-              level={2}
+              level={sectionTitleLevel}
               className="text-[48px] font-semibold leading-[1.05] text-brand-dark md:text-[74px]"
             />
           </div>

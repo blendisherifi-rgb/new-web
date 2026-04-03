@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { Heading } from "@/components/atoms/Heading";
 import { Paragraph } from "@/components/atoms/Paragraph";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface FinanceHeroCard {
   number: string;
@@ -18,6 +20,7 @@ interface FinanceHeroSectionProps {
   body: string;
   /** Four cards: number + title. */
   cards: FinanceHeroCard[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -35,6 +38,7 @@ export function FinanceHeroSection({
   headlineLine2,
   body,
   cards,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: FinanceHeroSectionProps) {
   return (
     <section className="relative w-full overflow-hidden">
@@ -50,11 +54,12 @@ export function FinanceHeroSection({
         <div className="relative flex flex-col items-center text-center">
           {/* 230px gap from top */}
           <div className="pt-24 tablet-down:pt-[230px]">
-            <Heading level={2} className="text-brand-orange">
+            {/* Orange line: not a heading so document order stays h1 (white) then subordinate content. */}
+            <p className="font-heading font-semibold text-[40px] leading-[1.1] tracking-[0em] text-brand-orange tablet-down:text-[60px] tablet-down:leading-[64px]">
               {headlineLine1}
-            </Heading>
+            </p>
 
-            <Heading level={1} className="mt-[16px] text-white">
+            <Heading level={sectionTitleLevel} className="mt-[16px] text-white">
               {headlineLine2}
             </Heading>
           </div>

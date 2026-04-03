@@ -6,6 +6,8 @@ import { Paragraph } from "@/components/atoms/Paragraph";
 import { Button } from "@/components/atoms/Button";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
 import { Image } from "@/components/atoms/Image";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 const RULE = "h-px w-full bg-brand-grey";
 
@@ -31,6 +33,7 @@ interface ErpIntegrationSectionProps {
   moreCountHighlight: string;
   /** Remaining footer phrase, e.g. "more" (dark). */
   moreCountRest: string;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -47,6 +50,7 @@ export function ErpIntegrationSection({
   logos,
   moreCountHighlight,
   moreCountRest,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: ErpIntegrationSectionProps) {
   if (!logos.length) return null;
 
@@ -60,7 +64,7 @@ export function ErpIntegrationSection({
         {/* Hero copy */}
         <div className="mx-auto mt-8 max-w-[1100px] text-center tablet-down:mt-10">
           {/* Erode semibold: 46px / 1.1 mobile, 80px / 84px desktop; line 1 blue, line 2 dark */}
-          <Heading level={1} className="text-center !text-brand-dark">
+          <Heading level={sectionTitleLevel} className="text-center !text-brand-dark">
             <span className="block !text-brand-blue">{headingLine1}</span>
             <span className="mt-2 block !text-brand-dark tablet-down:mt-3">
               {headingLine2}

@@ -3,6 +3,8 @@
 import { Overline } from "@/components/atoms/Overline";
 import { Heading } from "@/components/atoms/Heading";
 import { Image } from "@/components/atoms/Image";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface MatchingChallengeFormSectionProps {
   /** Top-left eyebrow, e.g. "MATCHING CHALLENGE". */
@@ -18,6 +20,7 @@ export interface MatchingChallengeFormSectionProps {
    */
   formPlaceholderImageSrc: string;
   formPlaceholderImageAlt: string;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /** Full-width light rule on `brand-blue` with vertical ticks at left, centre, and right. */
@@ -49,6 +52,7 @@ export function MatchingChallengeFormSection({
   headingAfter,
   formPlaceholderImageSrc,
   formPlaceholderImageAlt,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: MatchingChallengeFormSectionProps) {
   return (
     <section className="w-full bg-brand-blue">
@@ -62,7 +66,7 @@ export function MatchingChallengeFormSection({
         <div className="mt-10 flex flex-col gap-12 tablet-down:mt-12 tablet-down:flex-row tablet-down:items-stretch tablet-down:gap-0">
           <div className="shrink-0 border-b border-white/20 pb-12 text-left tablet-down:flex-1 tablet-down:border-b-0 tablet-down:border-r tablet-down:border-white/30 tablet-down:pb-0 tablet-down:pr-12">
             <Heading
-              level={2}
+              level={sectionTitleLevel}
               className="max-w-[min(100%,42rem)] font-heading font-semibold text-[46px] leading-[1.1] tracking-[0] text-balance text-white tablet-down:text-[80px] tablet-down:leading-[84px]"
             >
               {headingBefore}

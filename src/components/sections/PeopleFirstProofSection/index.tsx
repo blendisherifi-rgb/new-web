@@ -3,6 +3,8 @@
 import { Overline } from "@/components/atoms/Overline";
 import { Heading } from "@/components/atoms/Heading";
 import { Paragraph } from "@/components/atoms/Paragraph";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface PeopleFirstProofSectionProps {
   /** Eyebrow, e.g. `THE "PEOPLE FIRST" PROOF`. */
@@ -17,6 +19,7 @@ export interface PeopleFirstProofSectionProps {
   body: string;
   /** Benefit lines — orange check + bold label (order preserved). */
   benefits: string[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 const ruleGrey = "bg-brand-grey";
@@ -84,6 +87,7 @@ export function PeopleFirstProofSection({
   headingAfter,
   body,
   benefits,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: PeopleFirstProofSectionProps) {
   const items = benefits.filter(Boolean);
 
@@ -99,7 +103,7 @@ export function PeopleFirstProofSection({
           {/* Left — sticky on desktop */}
           <div className="tablet-down:sticky tablet-down:top-28 tablet-down:max-w-[min(100%,32rem)] tablet-down:self-start">
             <Heading
-              level={2}
+              level={sectionTitleLevel}
               className="text-left font-heading font-semibold text-[34px] leading-[1.12] tracking-[-0.02em] !text-brand-dark tablet-down:text-[48px] tablet-down:leading-[1.1] tablet-down:tracking-[0]"
             >
               <span className="text-brand-dark">{headingBefore}</span>

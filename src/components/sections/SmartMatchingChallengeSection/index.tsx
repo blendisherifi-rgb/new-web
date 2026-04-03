@@ -6,6 +6,8 @@ import { Paragraph } from "@/components/atoms/Paragraph";
 import { Button } from "@/components/atoms/Button";
 import { ChevronDownIcon } from "@/components/atoms/Icon";
 import { Image } from "@/components/atoms/Image";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface SmartMatchingChallengeSectionProps {
   /** Centered eyebrow, e.g. "AI SMART MATCHING CHALLENGE". */
@@ -21,6 +23,7 @@ export interface SmartMatchingChallengeSectionProps {
   body: string;
   ctaLabel: string;
   ctaHref: string;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -38,6 +41,7 @@ export function SmartMatchingChallengeSection({
   body,
   ctaLabel,
   ctaHref,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: SmartMatchingChallengeSectionProps) {
   return (
     <section className="w-full bg-brand-dark">
@@ -49,7 +53,7 @@ export function SmartMatchingChallengeSection({
 
         {/* Headline — Erode 600, 80px / 88px / 0 tracking on large; 50px margin below */}
         <Heading
-          level={2}
+          level={sectionTitleLevel}
           className="mx-auto mb-[50px] mt-8 max-w-[min(100%,75rem)] text-center font-heading font-semibold text-[46px] leading-[1.1] tracking-[0] text-white tablet-down:mt-10 tablet-down:text-[80px] tablet-down:leading-[88px]"
         >
           <span className="block">{headingLine1}</span>

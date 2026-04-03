@@ -5,6 +5,8 @@ import { Heading } from "@/components/atoms/Heading";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Button } from "@/components/atoms/Button";
 import { ChevronDownIcon } from "@/components/atoms/Icon";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface PartnerProgrammeNavCard {
   /** Step index, e.g. "01". */
@@ -26,6 +28,7 @@ export interface PartnerProgrammeHeroSectionProps {
   ctaHref: string;
   /** Four bottom “tags” — darker blue strip, number + label. */
   navCards: PartnerProgrammeNavCard[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -41,6 +44,7 @@ export function PartnerProgrammeHeroSection({
   ctaLabel,
   ctaHref,
   navCards,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: PartnerProgrammeHeroSectionProps) {
   const cards = navCards.slice(0, 4);
 
@@ -52,7 +56,7 @@ export function PartnerProgrammeHeroSection({
         </div>
 
         <Heading
-          level={2}
+          level={sectionTitleLevel}
           className="mx-auto mt-8 max-w-[min(100%,56rem)] font-heading font-semibold text-[46px] leading-[1.1] tracking-[0] text-balance text-white tablet-down:mt-10 tablet-down:text-[80px] tablet-down:leading-[84px]"
         >
           <span className="block">{headingLine1}</span>

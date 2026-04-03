@@ -2,6 +2,8 @@ import { Overline } from "@/components/atoms/Overline";
 import { Heading } from "@/components/atoms/Heading";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Image } from "@/components/atoms/Image";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface PartnerLogo {
   imageSrc: string;
@@ -19,6 +21,7 @@ interface PartnerEcosystemSectionProps {
   body: string;
   /** Eight partner logos (2×4 grid). */
   logos: PartnerLogo[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -32,6 +35,7 @@ export function PartnerEcosystemSection({
   headingBlue2,
   body,
   logos,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: PartnerEcosystemSectionProps) {
   const slots = [...logos.slice(0, 8)];
   while (slots.length < 8) {
@@ -56,7 +60,7 @@ export function PartnerEcosystemSection({
 
         {/* Erode 600, 80px / 88px desktop — same as Security heading */}
         <Heading
-          level={1}
+          level={sectionTitleLevel}
           className="mx-auto mt-[60px] max-w-[1100px] text-center !text-brand-dark text-[46px] leading-[52px] tablet-down:text-[80px] tablet-down:leading-[88px]"
         >
           <span className="!text-brand-blue">{headingBlue1}</span>{" "}

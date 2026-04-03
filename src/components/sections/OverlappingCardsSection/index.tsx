@@ -7,6 +7,8 @@ import { Overline } from "@/components/atoms/Overline";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Button } from "@/components/atoms/Button";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface OverlappingCard {
   step: string;
@@ -24,6 +26,7 @@ interface OverlappingCardsSectionProps {
   title: string;
   description: string;
   cards: OverlappingCard[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -39,6 +42,7 @@ export function OverlappingCardsSection({
   title,
   description,
   cards,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: OverlappingCardsSectionProps) {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(
     cards.length > 0 ? cards.length - 1 : null
@@ -49,7 +53,7 @@ export function OverlappingCardsSection({
       <div className="mx-auto w-full max-w-[1440px] px-4 py-12 tablet-down:px-6 tablet-down:py-32">
         <Overline className="text-brand-orange">{overline}</Overline>
 
-        <Heading level={1} className="mt-6 tablet-down:mt-[50px]">
+        <Heading level={sectionTitleLevel} className="mt-6 tablet-down:mt-[50px]">
           {title}
         </Heading>
         <Paragraph className="mt-6 tablet-down:mt-[50px] max-w-2xl leading-[1.6] text-brand-dark">

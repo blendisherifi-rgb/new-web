@@ -2,6 +2,8 @@
 
 import { HeadlineWithHighlight } from "@/components/molecules/HeadlineWithHighlight";
 import { Overline } from "@/components/atoms/Overline";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface ClientSuccessStoryChallengeSectionProps {
   /** Overline label, e.g. "THE CLIENT'S CHALLENGE". */
@@ -18,6 +20,7 @@ export interface ClientSuccessStoryChallengeSectionProps {
    * Bullet list items (right column under the paragraphs).
    */
   bullets: string[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /** Right column: paragraphs + bullets — Plus Jakarta Sans 400, 20px / 32px. */
@@ -31,6 +34,7 @@ export function ClientSuccessStoryChallengeSection({
   headingAfter = "",
   body,
   bullets,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: ClientSuccessStoryChallengeSectionProps) {
   const paragraphs = body
     .split(/\n{2,}/)
@@ -60,7 +64,7 @@ export function ClientSuccessStoryChallengeSection({
               headingBefore={headingBefore}
               headingHighlight={headingHighlight}
               headingAfter={headingAfter}
-              level={2}
+              level={sectionTitleLevel}
               className="max-w-[520px] !font-heading !font-semibold !text-[60px] !leading-[64px] !tracking-normal text-brand-dark tablet-down:!text-[36px] tablet-down:!leading-[1.12]"
             />
           </div>

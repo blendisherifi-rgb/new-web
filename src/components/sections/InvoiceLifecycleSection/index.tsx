@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Overline } from "@/components/atoms/Overline";
 import { Heading } from "@/components/atoms/Heading";
 import { Image } from "@/components/atoms/Image";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 interface InvoiceLifecycleSectionProps {
   /** Top label (e.g. "INVOICE LIFECYCLE"). */
@@ -20,6 +22,7 @@ interface InvoiceLifecycleSectionProps {
   /** Image for "Without SoftCo" tab. */
   imageWithoutSoftCo: string;
   imageWithoutSoftCoAlt: string;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -35,6 +38,7 @@ export function InvoiceLifecycleSection({
   imageWithSoftCoAlt,
   imageWithoutSoftCo,
   imageWithoutSoftCoAlt,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: InvoiceLifecycleSectionProps) {
   const [activeTab, setActiveTab] = useState<"with" | "without">("with");
 
@@ -70,7 +74,7 @@ export function InvoiceLifecycleSection({
 
         {/* Heading — Erode 600, 80px / 88px, center */}
         <Heading
-          level={1}
+          level={sectionTitleLevel}
           className="mx-auto mt-[60px] max-w-[1100px] text-center font-heading font-semibold text-[40px] leading-[1.2] text-[#001A33] tablet-down:text-[80px] tablet-down:leading-[88px]"
         >
           <span>

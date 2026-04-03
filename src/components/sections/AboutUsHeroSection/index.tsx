@@ -4,6 +4,8 @@ import { Heading } from "@/components/atoms/Heading";
 import { Overline } from "@/components/atoms/Overline";
 import { Image } from "@/components/atoms/Image";
 import { GalleryMarquee, type GalleryImage } from "@/components/molecules/GalleryMarquee";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 interface AboutUsHeroSectionProps {
   /** Overline text (e.g. "ABOUT US"). */
@@ -22,6 +24,7 @@ interface AboutUsHeroSectionProps {
     authorName?: string;
     authorTitle?: string;
   };
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -45,6 +48,7 @@ export function AboutUsHeroSection({
   galleryImages,
   body,
   ceoQuote: ceoQuoteProp,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: AboutUsHeroSectionProps) {
   const images = (galleryImages ?? []).filter((img) => Boolean(img?.src?.trim()));
   const ceoQuote = { ...emptyCeoQuote, ...ceoQuoteProp };
@@ -69,7 +73,7 @@ export function AboutUsHeroSection({
           <Overline className="text-brand-orange">{overline}</Overline>
 
           {/* 60px title — 50px gap */}
-          <Heading level={2} className="mt-6 max-w-4xl tracking-[-0.01em] text-white tablet-down:mt-[50px]">
+          <Heading level={sectionTitleLevel} className="mt-6 max-w-4xl tracking-[-0.01em] text-white tablet-down:mt-[50px]">
             {title}
           </Heading>
         </div>

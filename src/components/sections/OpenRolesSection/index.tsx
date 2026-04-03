@@ -5,6 +5,8 @@ import { Overline } from "@/components/atoms/Overline";
 import { Heading } from "@/components/atoms/Heading";
 import { Button } from "@/components/atoms/Button";
 import { ChevronDownIcon, ChevronRightIcon } from "@/components/atoms/Icon";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 /** Default careers board — jobs are managed in HireHive; link listings here from CMS. */
 export const HIREHIVE_CAREERS_URL = "https://softco.hirehive.com/";
@@ -47,6 +49,7 @@ export interface OpenRolesSectionProps {
   viewAllHref?: string;
   /** CTA button label. */
   viewAllLabel?: string;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /** HireHive / CMS use this when location or category is missing. */
@@ -85,6 +88,7 @@ export function OpenRolesSection({
   hireHiveLive = false,
   viewAllHref = HIREHIVE_CAREERS_URL,
   viewAllLabel = "VIEW ALL OPEN ROLES",
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: OpenRolesSectionProps) {
   const [locationKey, setLocationKey] = useState<string>("all");
   const [departmentKey, setDepartmentKey] = useState<string>("all");
@@ -167,7 +171,7 @@ export function OpenRolesSection({
         </div>
 
         <Heading
-          level={2}
+          level={sectionTitleLevel}
           className="mx-auto mt-10 max-w-[min(100%,48rem)] text-center font-heading font-semibold text-[40px] leading-[1.1] tracking-[0] text-balance tablet-down:mt-12 tablet-down:text-[56px] tablet-down:leading-[1.08]"
         >
           <span className="block !text-brand-dark">{headingLine1}</span>

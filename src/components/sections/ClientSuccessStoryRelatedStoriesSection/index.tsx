@@ -3,6 +3,8 @@
 import { Heading } from "@/components/atoms/Heading";
 import { Image } from "@/components/atoms/Image";
 import { ArrowRightIcon } from "@/components/atoms/Icon";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface ClientSuccessStoryRelatedStoryCard {
   imageSrc?: string;
@@ -19,6 +21,7 @@ export interface ClientSuccessStoryRelatedStoriesSectionProps {
   titleLine2?: string | null;
   /** Story cards (layout uses the first two). */
   stories?: ClientSuccessStoryRelatedStoryCard[] | Record<string, unknown>[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 function normalizeTags(tags: unknown): string[] {
@@ -61,6 +64,7 @@ export function ClientSuccessStoryRelatedStoriesSection({
   titleLine1,
   titleLine2,
   stories = [],
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: ClientSuccessStoryRelatedStoriesSectionProps) {
   const cards = normalizeStories(stories).slice(0, 2);
   const t1 = (titleLine1 ?? "").trim();
@@ -72,7 +76,7 @@ export function ClientSuccessStoryRelatedStoriesSection({
         {(t1 || t2) && (
           <div className="mx-auto max-w-[980px] text-center">
             <Heading
-              level={2}
+              level={sectionTitleLevel}
               className="text-center !font-heading !font-semibold !text-[60px] !leading-[64px] !tracking-normal text-brand-dark tablet-down:!text-[36px] tablet-down:!leading-[1.12]"
             >
               {t1 ? (

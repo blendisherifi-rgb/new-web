@@ -6,6 +6,8 @@ import { Paragraph } from "@/components/atoms/Paragraph";
 import { Button } from "@/components/atoms/Button";
 import { Image } from "@/components/atoms/Image";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface CfoSeriesSectionProps {
   /** Orange eyebrow, e.g. "THE CFO SERIES". */
@@ -23,6 +25,7 @@ export interface CfoSeriesSectionProps {
   body: string;
   ctaLabel: string;
   ctaHref: string;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /** Decorative rails — thin vertical line + mid tick (slider / print reference). */
@@ -54,6 +57,7 @@ export function CfoSeriesSection({
   body,
   ctaLabel,
   ctaHref,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: CfoSeriesSectionProps) {
   return (
     <section className="relative w-full overflow-hidden bg-[#1D80D1]">
@@ -70,7 +74,7 @@ export function CfoSeriesSection({
         </div>
 
         <Heading
-          level={2}
+          level={sectionTitleLevel}
           className="mx-auto mt-8 max-w-[min(100%,88rem)] font-heading font-semibold text-[46px] leading-[1.08] tracking-[0] text-balance text-white tablet-down:mt-10 tablet-down:text-[80px] tablet-down:leading-[88px]"
         >
           <span className="block">{headingLine1}</span>

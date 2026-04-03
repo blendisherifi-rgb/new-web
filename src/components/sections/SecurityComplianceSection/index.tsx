@@ -2,6 +2,8 @@ import { Overline } from "@/components/atoms/Overline";
 import { Heading } from "@/components/atoms/Heading";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Image } from "@/components/atoms/Image";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface SecurityComplianceBadge {
   imageSrc?: string;
@@ -17,6 +19,7 @@ interface SecurityComplianceSectionProps {
   body: string;
   /** Up to 6 badges in a 2×3 grid; omit imageSrc for an empty cell. */
   certifications: SecurityComplianceBadge[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -29,6 +32,7 @@ export function SecurityComplianceSection({
   headingLine2,
   body,
   certifications,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: SecurityComplianceSectionProps) {
   const slots = certifications.slice(0, 6);
   while (slots.length < 6) {
@@ -56,7 +60,7 @@ export function SecurityComplianceSection({
           <div className="min-w-0">
             {/* Erode 600, 80px / 88px desktop */}
             <Heading
-              level={1}
+              level={sectionTitleLevel}
               className="text-left !text-brand-dark text-[46px] leading-[52px] tablet-down:text-[80px] tablet-down:leading-[88px]"
             >
               <span className="block !text-brand-blue">{headingLine1}</span>

@@ -3,6 +3,8 @@
 import { Overline } from "@/components/atoms/Overline";
 import { Heading } from "@/components/atoms/Heading";
 import { Image } from "@/components/atoms/Image";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface EventRegisterSectionProps {
   /** Eyebrow, e.g. "REGISTER". */
@@ -19,6 +21,7 @@ export interface EventRegisterSectionProps {
    */
   formPlaceholderImageSrc: string;
   formPlaceholderImageAlt: string;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /** Full-width faint rule on `brand-dark` with vertical ticks at left and right only. */
@@ -47,6 +50,7 @@ export function EventRegisterSection({
   headingLine2Highlight,
   formPlaceholderImageSrc,
   formPlaceholderImageAlt,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: EventRegisterSectionProps) {
   return (
     <section className="w-full bg-brand-dark">
@@ -59,7 +63,7 @@ export function EventRegisterSection({
         <div className="mt-10 flex flex-col gap-12 tablet-down:mt-14 tablet-down:flex-row tablet-down:items-center tablet-down:gap-0">
           <div className="shrink-0 border-b border-white/15 pb-12 text-left tablet-down:flex-1 tablet-down:border-b-0 tablet-down:border-r tablet-down:border-white/15 tablet-down:pb-0 tablet-down:pr-10">
             <Heading
-              level={2}
+              level={sectionTitleLevel}
               className="max-w-[min(100%,36rem)] font-heading font-semibold text-[46px] leading-[1.1] tracking-[0] text-balance tablet-down:text-[72px] tablet-down:leading-[1.05]"
             >
               <span className="block text-brand-pale-blue">{headingLine1}</span>

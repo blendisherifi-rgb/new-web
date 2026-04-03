@@ -1,5 +1,7 @@
 import { Heading } from "@/components/atoms/Heading";
 import { Image } from "@/components/atoms/Image";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface TrustBarLogo {
   imageSrc: string;
@@ -11,6 +13,7 @@ interface TrustBarSectionProps {
   heading: string;
   /** Certification logos (5 shown in single row). */
   logos: TrustBarLogo[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /** Rule line with tick ends — light on gradient background. */
@@ -32,6 +35,7 @@ function ruleLine() {
 export function TrustBarSection({
   heading = "Built on integrity. Guided by accountability.",
   logos,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: TrustBarSectionProps) {
   const displayLogos = logos.slice(0, 5);
   while (displayLogos.length < 5) {
@@ -52,7 +56,7 @@ export function TrustBarSection({
 
         {/* Centered heading */}
         <Heading
-          level={1}
+          level={sectionTitleLevel}
           className="mx-auto mt-12 max-w-[900px] text-center font-heading font-medium text-white text-[40px] leading-[1.2] tablet-down:mt-16 tablet-down:text-[60px] tablet-down:leading-[1.15]"
         >
           {heading}

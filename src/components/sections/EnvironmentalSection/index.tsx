@@ -3,6 +3,8 @@ import { Heading } from "@/components/atoms/Heading";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Button } from "@/components/atoms/Button";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface EnvironmentalInitiative {
   /** Bold lead text (e.g. "Carbon footprint"). */
@@ -31,6 +33,7 @@ interface EnvironmentalSectionProps {
   statLabel: string;
   /** Key initiatives list. */
   initiatives: EnvironmentalInitiative[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /** Checkmark icon for initiatives list. */
@@ -73,6 +76,7 @@ export function EnvironmentalSection({
   statNumber,
   statLabel,
   initiatives,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: EnvironmentalSectionProps) {
   return (
     <section className="w-full bg-white" aria-label={overline}>
@@ -94,7 +98,7 @@ export function EnvironmentalSection({
           {/* Left column — heading + CTA */}
           <div className="min-w-0">
             <Heading
-              level={1}
+              level={sectionTitleLevel}
               className="text-left font-heading font-semibold text-brand-dark! text-[46px] leading-[52px] tablet-down:text-[80px] tablet-down:leading-[88px]"
             >
               {headingBefore}

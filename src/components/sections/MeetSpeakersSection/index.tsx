@@ -4,6 +4,8 @@ import { Overline } from "@/components/atoms/Overline";
 import { Heading } from "@/components/atoms/Heading";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Image } from "@/components/atoms/Image";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface MeetSpeaker {
   imageSrc: string;
@@ -27,6 +29,7 @@ export interface MeetSpeakersSectionProps {
   intro: string;
   /** Up to four speaker cards (portrait image, no overlay controls). */
   speakers: MeetSpeaker[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -40,6 +43,7 @@ export function MeetSpeakersSection({
   headingHighlight,
   intro,
   speakers,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: MeetSpeakersSectionProps) {
   const items = speakers.slice(0, 4);
 
@@ -55,7 +59,7 @@ export function MeetSpeakersSection({
         </div>
 
         <Heading
-          level={2}
+          level={sectionTitleLevel}
           className="mx-auto mt-10 max-w-[min(100%,75rem)] text-center font-heading font-semibold text-[46px] leading-[1.1] tracking-[0] text-balance tablet-down:mt-12 tablet-down:text-[80px] tablet-down:leading-[88px]"
         >
           <span className="text-brand-dark">{headingBefore}</span>{" "}

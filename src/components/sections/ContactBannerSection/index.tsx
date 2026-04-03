@@ -1,6 +1,8 @@
 import { Overline } from "@/components/atoms/Overline";
 import { Heading } from "@/components/atoms/Heading";
 import Image from "next/image";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 interface SocialLink {
   platform?: string;
@@ -12,6 +14,7 @@ interface ContactBannerSectionProps {
   overline?: string | null;
   title?: string | null;
   socialLinks?: SocialLink[] | null;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 function socialIconLabel(platform: string, fallback?: string): string {
@@ -29,6 +32,7 @@ export function ContactBannerSection({
   overline = "Contact Us",
   title = "Talk to the team that makes complex P2P and AP automation fit the first time",
   socialLinks = [],
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: ContactBannerSectionProps) {
   const links =
     socialLinks?.filter((s) => {
@@ -52,7 +56,7 @@ export function ContactBannerSection({
           <Overline className="text-brand-orange">{overline}</Overline>
         ) : null}
         <Heading
-          level={1}
+          level={sectionTitleLevel}
           className="mt-6 max-w-[900px] text-white tablet-down:mt-[40px]"
         >
           {title ?? ""}

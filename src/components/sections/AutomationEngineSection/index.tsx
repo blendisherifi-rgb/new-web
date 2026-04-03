@@ -7,6 +7,8 @@ import { Button } from "@/components/atoms/Button";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
 import { Image } from "@/components/atoms/Image";
 import { LogoMarquee, type LogoItem } from "@/components/molecules/LogoMarquee";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface AutomationMetric {
   /** Metric value, e.g. "-84%" or "9.9/10". */
@@ -32,6 +34,7 @@ interface AutomationEngineSectionProps {
   metrics: AutomationMetric[];
   /** Optional logo strip below the stats. */
   logos?: LogoItem[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -57,6 +60,7 @@ export function AutomationEngineSection({
   ctaHref = "#",
   metrics = [],
   logos = [],
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: AutomationEngineSectionProps) {
   const safeMetrics = Array.isArray(metrics) ? metrics : [];
   const safeLogos = Array.isArray(logos) ? logos : [];
@@ -77,7 +81,7 @@ export function AutomationEngineSection({
         <Overline className="text-brand-orange">{overline}</Overline>
 
         <Heading
-          level={1}
+          level={sectionTitleLevel}
           className="mx-auto mt-6 max-w-[920px] text-white tablet-down:mt-8"
         >
           {heading}

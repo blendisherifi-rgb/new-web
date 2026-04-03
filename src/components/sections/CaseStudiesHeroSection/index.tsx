@@ -2,6 +2,8 @@ import { Overline } from "@/components/atoms/Overline";
 import { Heading } from "@/components/atoms/Heading";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { LogoMarquee, type LogoItem } from "@/components/molecules/LogoMarquee";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface CaseStudiesHeroSectionProps {
   /** Small caps line above the headline (orange). */
@@ -14,6 +16,7 @@ export interface CaseStudiesHeroSectionProps {
   logos: LogoItem[];
   /** Marquee cycle duration in seconds. */
   marqueeDuration?: number;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -25,6 +28,7 @@ export function CaseStudiesHeroSection({
   body,
   logos,
   marqueeDuration = 25,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: CaseStudiesHeroSectionProps) {
   const normalizedLogos = logos.filter((l) => l.src);
 
@@ -37,7 +41,7 @@ export function CaseStudiesHeroSection({
         <Overline className="text-brand-orange">{overline}</Overline>
 
         <Heading
-          level={1}
+          level={sectionTitleLevel}
           className="mx-auto mt-6 max-w-[min(100%,48rem)] font-heading font-semibold text-[40px] leading-[1.12] tracking-normal text-balance !text-white tablet-down:mt-8 tablet-down:text-[min(4.5vw,72px)] tablet-down:leading-[1.08]"
         >
           {headline}

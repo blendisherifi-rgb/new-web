@@ -2,6 +2,8 @@ import { Overline } from "@/components/atoms/Overline";
 import { Heading } from "@/components/atoms/Heading";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Image } from "@/components/atoms/Image";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface EvidenceMetric {
   imageSrc: string;
@@ -21,6 +23,7 @@ interface EvidenceSectionProps {
   body: string;
   /** Four metric columns: image + label each. */
   metrics: EvidenceMetric[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -34,6 +37,7 @@ export function EvidenceSection({
   headingAfter,
   body,
   metrics,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: EvidenceSectionProps) {
   const slots = [...metrics.slice(0, 4)];
   while (slots.length < 4) {
@@ -61,7 +65,7 @@ export function EvidenceSection({
 
         {/* Two lines: line 1 dark; line 2 blue + dark — same H1 scale as Partner */}
         <Heading
-          level={1}
+          level={sectionTitleLevel}
           className="mx-auto mt-[60px] max-w-[1100px] text-center !text-brand-dark text-[46px] leading-[52px] tablet-down:text-[80px] tablet-down:leading-[88px]"
         >
           <span className="block !text-brand-dark">{headingBefore}</span>

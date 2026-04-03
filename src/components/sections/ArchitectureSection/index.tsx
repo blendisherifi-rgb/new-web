@@ -5,6 +5,8 @@ import { Heading } from "@/components/atoms/Heading";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Overline } from "@/components/atoms/Overline";
 import { Image } from "@/components/atoms/Image";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 interface ArchitectureSectionProps {
   /** Eyebrow label (e.g. "ARCHITECTURE") — left-aligned; grey rule runs below it. */
@@ -26,6 +28,7 @@ interface ArchitectureSectionProps {
   /** Optional tab-specific AP architecture image. */
   apImageSrc?: string;
   apImageAlt?: string;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -44,6 +47,7 @@ export function ArchitectureSection({
   p2pImageAlt,
   apImageSrc,
   apImageAlt,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: ArchitectureSectionProps) {
   const useSplit =
     Boolean(headingLine1?.trim()) && Boolean(headingLine2?.trim());
@@ -84,14 +88,14 @@ export function ArchitectureSection({
           className={`mx-auto max-w-[900px] text-center ${overline ? "mt-8 tablet-down:mt-10" : ""}`}
         >
           {useSplit ? (
-            <Heading level={1} className="text-center !text-white">
+            <Heading level={sectionTitleLevel} className="text-center !text-white">
               <span className="block !text-brand-orange">{headingLine1}</span>
               <span className="mt-1 block !text-white tablet-down:mt-2">
                 {headingLine2}
               </span>
             </Heading>
           ) : (
-            <Heading level={1} className="text-center !text-white">
+            <Heading level={sectionTitleLevel} className="text-center !text-white">
               {heading ?? ""}
             </Heading>
           )}

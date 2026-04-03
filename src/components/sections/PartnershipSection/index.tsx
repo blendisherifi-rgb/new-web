@@ -6,6 +6,8 @@ import { Paragraph } from "@/components/atoms/Paragraph";
 import { Overline } from "@/components/atoms/Overline";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
 import { Image } from "@/components/atoms/Image";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 interface PartnershipSectionProps {
   /** Overline text (e.g. "HUMAN PARTNERSHIP"). */
@@ -30,6 +32,7 @@ interface PartnershipSectionProps {
     logoSrc?: string;
     logoAlt?: string;
   };
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -51,6 +54,7 @@ export function PartnershipSection({
   ctaLabel,
   ctaHref,
   testimonial,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: PartnershipSectionProps) {
   return (
     <section className="w-full overflow-x-hidden bg-white">
@@ -62,7 +66,7 @@ export function PartnershipSection({
             headingBefore={headingBefore}
             headingHighlight={headingHighlight}
             headingAfter={headingAfter}
-            level={2}
+            level={sectionTitleLevel}
             className="text-center text-brand-dark"
           />
           <Paragraph className="mt-6 tablet-down:mt-[50px] leading-[1.6] text-brand-dark">

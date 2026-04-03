@@ -7,6 +7,8 @@ import { Button } from "@/components/atoms/Button";
 import { Overline } from "@/components/atoms/Overline";
 import { Heading } from "@/components/atoms/Heading";
 import { Image } from "@/components/atoms/Image";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface RoleAccordionItem {
   tabTitle: string;
@@ -24,6 +26,7 @@ interface RoleAccordionSectionProps {
   headingHighlight: string;
   headingAfter?: string;
   items: RoleAccordionItem[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 export function RoleAccordionSection({
@@ -32,6 +35,7 @@ export function RoleAccordionSection({
   headingHighlight,
   headingAfter,
   items,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: RoleAccordionSectionProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const safeIndex = activeIndex >= 0 && activeIndex < items.length ? activeIndex : 0;
@@ -49,7 +53,7 @@ export function RoleAccordionSection({
               headingBefore={headingBefore}
               headingHighlight={headingHighlight}
               headingAfter={headingAfter ?? ""}
-              level={1}
+              level={sectionTitleLevel}
               className="mt-4 text-[48px] font-semibold leading-[1.05] text-brand-dark md:text-[74px]"
             />
 

@@ -4,6 +4,8 @@ import { Heading, Highlight } from "@/components/atoms/Heading";
 import { Image } from "@/components/atoms/Image";
 import { Overline } from "@/components/atoms/Overline";
 import { type ReactNode } from "react";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 type SharePlatform = "linkedin" | "youtube";
 
@@ -79,6 +81,7 @@ export interface ClientSuccessStoryHeroSectionProps {
   sharePlatforms?: Array<SharePlatform | { label?: string; platform?: string }>;
   /** Optional extra content for the left column (if you want to extend the layout). */
   footerSlot?: ReactNode;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -104,6 +107,7 @@ export function ClientSuccessStoryHeroSection({
   shareTitle = "",
   sharePlatforms = ["linkedin", "youtube"],
   footerSlot,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: ClientSuccessStoryHeroSectionProps) {
   const normalizedTags = Array.isArray(tags)
     ? tags
@@ -173,7 +177,7 @@ export function ClientSuccessStoryHeroSection({
           {/* Left column */}
           <div className="min-w-0">
             <Heading
-              level={1}
+              level={sectionTitleLevel}
               className="max-w-[640px] font-semibold leading-[1.02] tracking-[-0.01em]"
             >
               {titleBefore}{" "}

@@ -5,6 +5,8 @@ import { Heading } from "@/components/atoms/Heading";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Button } from "@/components/atoms/Button";
 import { ChevronDownIcon } from "@/components/atoms/Icon";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface SmartMatchingChallengeBannerSectionProps {
   /** Centered orange eyebrow, e.g. "AI SMART MATCHING CHALLENGE". */
@@ -16,6 +18,7 @@ export interface SmartMatchingChallengeBannerSectionProps {
   body: string;
   ctaLabel: string;
   ctaHref: string;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /** Vertical line with horizontal tick at vertical center — decorative rail. */
@@ -43,6 +46,7 @@ export function SmartMatchingChallengeBannerSection({
   body,
   ctaLabel,
   ctaHref,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: SmartMatchingChallengeBannerSectionProps) {
   return (
     <section className="w-full bg-brand-blue">
@@ -56,7 +60,7 @@ export function SmartMatchingChallengeBannerSection({
           </div>
 
           <Heading
-            level={2}
+            level={sectionTitleLevel}
             className="mx-auto mt-8 max-w-[min(100%,75rem)] text-center font-heading font-semibold text-[46px] leading-[1.1] tracking-[0] text-white tablet-down:mt-10 tablet-down:text-[80px] tablet-down:leading-[88px]"
           >
             <span className="block">{headingLine1}</span>

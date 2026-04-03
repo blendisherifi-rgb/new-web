@@ -4,6 +4,8 @@ import { Overline } from "@/components/atoms/Overline";
 import { Heading } from "@/components/atoms/Heading";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Image } from "@/components/atoms/Image";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface WhyAttendColumn {
   /** Check-in-circle artwork (replace with CMS uploads). */
@@ -29,6 +31,7 @@ export interface WhyAttendSectionProps {
   intro: string;
   /** Four feature columns (icon image + split title + body). */
   columns: WhyAttendColumn[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -42,6 +45,7 @@ export function WhyAttendSection({
   headingLine2,
   intro,
   columns,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: WhyAttendSectionProps) {
   const cols = columns.slice(0, 4);
 
@@ -57,7 +61,7 @@ export function WhyAttendSection({
         </div>
 
         <Heading
-          level={2}
+          level={sectionTitleLevel}
           className="mx-auto mt-10 max-w-[min(100%,75rem)] text-center font-heading font-semibold text-[46px] leading-[1.1] tracking-[0] text-balance tablet-down:mt-12 tablet-down:text-[80px] tablet-down:leading-[88px]"
         >
           <span className="block text-brand-blue">{headingLine1}</span>

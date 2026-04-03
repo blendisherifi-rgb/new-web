@@ -5,6 +5,8 @@ import { Overline } from "@/components/atoms/Overline";
 import { HeadlineWithHighlight } from "@/components/molecules/HeadlineWithHighlight";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Image } from "@/components/atoms/Image";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface TimelineEvent {
   /** Year/tear (e.g. "1990"). */
@@ -29,6 +31,7 @@ interface OurStorySectionProps {
   backgroundImageAlt?: string;
   /** Timeline events for the slider. */
   events: TimelineEvent[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -47,6 +50,7 @@ export function OurStorySection({
   backgroundImageSrc,
   backgroundImageAlt = "",
   events,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: OurStorySectionProps) {
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -64,7 +68,7 @@ export function OurStorySection({
               headingBefore={headingBefore}
               headingHighlight={headingHighlight}
               headingAfter={headingAfter}
-              level={1}
+              level={sectionTitleLevel}
               className="font-body text-[40px] font-normal leading-[1.1] tracking-[0] text-brand-dark tablet-down:text-[80px] tablet-down:leading-[88px]"
             />
             <Paragraph

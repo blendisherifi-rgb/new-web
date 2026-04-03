@@ -6,6 +6,8 @@ import { Paragraph } from "@/components/atoms/Paragraph";
 import { Overline } from "@/components/atoms/Overline";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
 import { Image } from "@/components/atoms/Image";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface EngineCard {
   /** Icon image URL (or icon identifier for preset icons). */
@@ -31,6 +33,7 @@ interface EngineSectionProps {
   ctaLabel: string;
   /** CTA button href. */
   ctaHref: string;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -56,6 +59,7 @@ export function EngineSection({
   cards,
   ctaLabel,
   ctaHref,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: EngineSectionProps) {
   return (
     <section className="w-full bg-white">
@@ -67,7 +71,7 @@ export function EngineSection({
             headingBefore={headingBefore}
             headingHighlight={headingHighlight}
             headingAfter={headingAfter}
-            level={2}
+            level={sectionTitleLevel}
             className="text-center text-brand-dark"
           />
 

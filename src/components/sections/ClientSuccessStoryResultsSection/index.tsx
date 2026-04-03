@@ -2,6 +2,8 @@
 
 import { HeadlineWithHighlight } from "@/components/molecules/HeadlineWithHighlight";
 import { Overline } from "@/components/atoms/Overline";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export type ClientSuccessStoryResultRow = {
   title: string;
@@ -17,6 +19,7 @@ export interface ClientSuccessStoryResultsSectionProps {
   body: string;
   /** Right column: bold title + regular description per row. */
   results?: Array<ClientSuccessStoryResultRow | Record<string, unknown>>;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /** Left body + result descriptions: Plus Jakarta Sans 400, 20px / 32px. */
@@ -88,6 +91,7 @@ export function ClientSuccessStoryResultsSection({
   headingAfter = "",
   body = "",
   results = [],
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: ClientSuccessStoryResultsSectionProps) {
   const rows = normalizeResults(results);
 
@@ -112,7 +116,7 @@ export function ClientSuccessStoryResultsSection({
               headingBefore={headingBefore}
               headingHighlight={headingHighlight}
               headingAfter={headingAfter}
-              level={2}
+              level={sectionTitleLevel}
               className="max-w-[520px] !font-heading !font-semibold !text-[60px] !leading-[64px] !tracking-normal text-brand-dark"
             />
             {body.trim() ? (

@@ -7,6 +7,8 @@ import { ChevronRightIcon } from "@/components/atoms/Icon";
 import { Image } from "@/components/atoms/Image";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Heading } from "@/components/atoms/Heading";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface AiEngineTab {
   /** Tab label (left column). */
@@ -31,6 +33,7 @@ interface AiEngineSectionProps {
   ctaLabel: string;
   ctaHref: string;
   tabs: AiEngineTab[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 const PANEL_BG = "#E8F2FD";
@@ -48,6 +51,7 @@ export function AiEngineSection({
   ctaLabel,
   ctaHref,
   tabs,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: AiEngineSectionProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const useSplit =
@@ -71,12 +75,12 @@ export function AiEngineSection({
         {/* Hero headline */}
         <div className={overline ? "mt-6 tablet-down:mt-10" : ""}>
           {useSplit ? (
-            <Heading level={2} className="text-center !text-brand-dark">
+            <Heading level={sectionTitleLevel} className="text-center !text-brand-dark">
               <span className="!text-brand-blue">{headingLine1}</span>{" "}
               <span className="!text-brand-dark">{headingLine2}</span>
             </Heading>
           ) : (
-            <Heading level={2} className="text-center !text-brand-dark">
+            <Heading level={sectionTitleLevel} className="text-center !text-brand-dark">
               {heading ?? ""}
             </Heading>
           )}

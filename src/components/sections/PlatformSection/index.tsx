@@ -7,6 +7,8 @@ import { Image } from "@/components/atoms/Image";
 import { Link } from "@/components/atoms/Link";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
 import { AnimateOnScroll } from "@/components/molecules/AnimateOnScroll";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface PlatformRow {
   /** Title (e.g. "Accounts payable automation"). */
@@ -36,6 +38,7 @@ interface PlatformSectionProps {
   /** Second row image. */
   image2Src: string;
   image2Alt: string;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -53,6 +56,7 @@ export function PlatformSection({
   image1Alt,
   image2Src,
   image2Alt,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: PlatformSectionProps) {
   const [row1, row2] = rows;
 
@@ -62,7 +66,7 @@ export function PlatformSection({
         {/* Header */}
         <AnimateOnScroll variant="fadeUp" className="max-w-3xl">
           <Overline className="text-white">{tag}</Overline>
-          <Heading level={1} className="mt-3 text-white">
+          <Heading level={sectionTitleLevel} className="mt-3 text-white">
             {headline}
           </Heading>
           <Paragraph size="lg" className="mt-6 text-white">

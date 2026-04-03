@@ -3,6 +3,8 @@ import { Heading } from "@/components/atoms/Heading";
 import { Overline } from "@/components/atoms/Overline";
 import { Button } from "@/components/atoms/Button";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 interface ESGSectionProps {
   /** Overline text (orange, top-left). */
@@ -22,6 +24,7 @@ interface ESGSectionProps {
   ctaLabel?: string;
   /** CTA button href. */
   ctaHref?: string;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -41,6 +44,7 @@ export function ESGSection({
   body,
   ctaLabel,
   ctaHref,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: ESGSectionProps) {
   return (
     <section
@@ -52,7 +56,7 @@ export function ESGSection({
         <Overline>{overline}</Overline>
 
         {/* 80px centered title — highlight in orange for dark bg */}
-        <Heading level={1} className="mt-8 text-center tracking-[-0.02em] text-white tablet-down:mt-[60px]">
+        <Heading level={sectionTitleLevel} className="mt-8 text-center tracking-[-0.02em] text-white tablet-down:mt-[60px]">
           {headingBefore && <>{headingBefore} </>}
           {headingHighlight && (
             <span className="text-brand-orange">{headingHighlight}</span>

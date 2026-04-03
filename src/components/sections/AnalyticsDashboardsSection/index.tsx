@@ -7,6 +7,8 @@ import { Heading } from "@/components/atoms/Heading";
 import { Overline } from "@/components/atoms/Overline";
 import { Button } from "@/components/atoms/Button";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL, sectionSubheadingLevel } from "@/lib/sectionTitleLevel";
 
 export interface DashboardSlide {
   imageSrc: string;
@@ -33,6 +35,7 @@ interface AnalyticsDashboardsSectionProps {
   /** Default bottom copy when a slide has no per-slide body. */
   body: string;
   slides: DashboardSlide[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 const RULE = "h-px w-full bg-brand-grey";
@@ -93,6 +96,7 @@ export function AnalyticsDashboardsSection({
   headingHighlight,
   body,
   slides,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: AnalyticsDashboardsSectionProps) {
   const [index, setIndex] = useState(0);
 
@@ -134,7 +138,7 @@ export function AnalyticsDashboardsSection({
 
         {/* Main title — Erode 80/84 desktop */}
         <Heading
-          level={1}
+          level={sectionTitleLevel}
           className={`mx-auto max-w-[1100px] text-center !text-brand-dark ${overline ? "mt-8 tablet-down:mt-10" : "mt-0 tablet-down:mt-0"}`}
         >
           {mainTitle}
@@ -156,7 +160,7 @@ export function AnalyticsDashboardsSection({
 
         {/* Secondary heading 44/48 — updates with active slide when slides include per-slide copy */}
         <Heading
-          level={2}
+          level={sectionSubheadingLevel(sectionTitleLevel)}
           className="mx-auto mt-12 max-w-[900px] text-center !text-brand-dark text-[32px] leading-[38px] tracking-normal tablet-down:mt-16 tablet-down:text-[44px] tablet-down:leading-[48px]"
         >
           <span>{slideHeadingBefore}</span>

@@ -6,6 +6,8 @@ import { Overline } from "@/components/atoms/Overline";
 import { Heading } from "@/components/atoms/Heading";
 import { Button } from "@/components/atoms/Button";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 interface SimpleCtaSectionProps {
   overline: string;
@@ -16,6 +18,7 @@ interface SimpleCtaSectionProps {
   description: string;
   ctaLabel?: string | null;
   ctaHref?: string | null;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 export function SimpleCtaSection({
@@ -27,6 +30,7 @@ export function SimpleCtaSection({
   description,
   ctaLabel,
   ctaHref,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: SimpleCtaSectionProps) {
   const hasHighlight = !!headingHighlight;
   const showCta =
@@ -44,11 +48,11 @@ export function SimpleCtaSection({
                 headingBefore={headingBefore ?? ""}
                 headingHighlight={headingHighlight}
                 headingAfter={headingAfter ?? ""}
-                level={2}
+                level={sectionTitleLevel}
                 className="font-semibold leading-[1.05] text-brand-dark"
               />
             ) : (
-              <Heading level={2} className="leading-[1.05]">
+              <Heading level={sectionTitleLevel} className="leading-[1.05]">
                 {title}
               </Heading>
             )}

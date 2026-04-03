@@ -4,10 +4,13 @@ import Image from "next/image";
 import { Button } from "@/components/atoms/Button";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
 import { Heading } from "@/components/atoms/Heading";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 interface NewsletterFormSectionProps {
   heading?: string | null;
   ctaLabel?: string | null;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -18,6 +21,7 @@ interface NewsletterFormSectionProps {
 export function NewsletterFormSection({
   heading = "Sign up for finance automation updates",
   ctaLabel = "SIGN UP",
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: NewsletterFormSectionProps) {
   return (
     <section className="relative flex min-h-[600px] w-full flex-col items-center justify-center overflow-hidden py-12 tablet-down:min-h-[800px] tablet-down:py-24">
@@ -31,7 +35,7 @@ export function NewsletterFormSection({
       />
       <div className="relative z-10 mx-auto flex w-full flex-col items-center px-4 tablet-down:w-[70%] tablet-down:min-w-[280px] tablet-down:max-w-[800px] tablet-down:px-6">
         <Heading
-          level={2}
+          level={sectionTitleLevel}
           className="mb-8 text-center text-white tablet-down:mb-[60px]"
         >
           {heading}

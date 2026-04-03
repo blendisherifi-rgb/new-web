@@ -2,11 +2,14 @@
 
 import { Heading } from "@/components/atoms/Heading";
 import { LogoMarquee, type LogoItem } from "@/components/molecules/LogoMarquee";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 interface ClientLogosMarqueeSectionProps {
   heading?: string | null;
   logos?: Array<LogoItem | { src?: string; alt?: string; logoSrc?: string; logoAlt?: string }>;
   duration?: number;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 function toLogoItem(
@@ -26,6 +29,7 @@ export function ClientLogosMarqueeSection({
   heading = "Trusted by enterprises who can't afford 'good enough'",
   logos = [],
   duration = 40,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: ClientLogosMarqueeSectionProps) {
   const normalized = logos.map(toLogoItem).filter((l) => l.src);
   const mid = Math.ceil(normalized.length / 2);
@@ -38,7 +42,7 @@ export function ClientLogosMarqueeSection({
     <section className="w-full bg-white py-12 tablet-down:py-20">
       {heading ? (
         <div className="mx-auto max-w-[1440px] px-4 tablet-down:px-6">
-          <Heading level={2} className="mb-8 text-center tablet-down:mb-16">
+          <Heading level={sectionTitleLevel} className="mb-8 text-center tablet-down:mb-16">
             {heading}
           </Heading>
         </div>

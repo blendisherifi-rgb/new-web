@@ -7,6 +7,8 @@ import { Overline } from "@/components/atoms/Overline";
 import { Button } from "@/components/atoms/Button";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
 import { AnimateOnScroll } from "@/components/molecules/AnimateOnScroll";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface WhatMakesUsDifferentItem {
   /** Step number (e.g. "01", "02"). */
@@ -32,6 +34,7 @@ interface WhatMakesUsDifferentSectionProps {
   ctaHref: string;
   /** Right-side items with step number, title, and description. */
   items: WhatMakesUsDifferentItem[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -48,6 +51,7 @@ export function WhatMakesUsDifferentSection({
   ctaLabel,
   ctaHref,
   items,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: WhatMakesUsDifferentSectionProps) {
   return (
     <section className="w-full bg-white">
@@ -60,7 +64,7 @@ export function WhatMakesUsDifferentSection({
               headingBefore={headingBefore}
               headingHighlight={headingHighlight}
               headingAfter=""
-              level={1}
+              level={sectionTitleLevel}
               className="mt-3 text-brand-dark"
             />
             <Paragraph size="lg" className="mt-6">

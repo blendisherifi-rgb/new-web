@@ -8,6 +8,8 @@ import { Heading } from "@/components/atoms/Heading";
 import { Image } from "@/components/atoms/Image";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
 import { AnimateOnScroll } from "@/components/molecules/AnimateOnScroll";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 const mainHeadingClass =
   "mt-10 max-w-none font-heading font-semibold text-[46px] leading-[1.1] tracking-[0] text-balance text-center text-brand-dark tablet-down:mt-[50px] tablet-down:text-[80px] tablet-down:leading-[84px]";
@@ -36,6 +38,7 @@ interface PartnerBenefitsSectionProps {
   steps: PartnerBenefitsStep[];
   ctaLabel?: string;
   ctaHref?: string;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 function HighlightedLine({
@@ -70,6 +73,7 @@ export function PartnerBenefitsSection({
   steps,
   ctaLabel,
   ctaHref,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: PartnerBenefitsSectionProps) {
   const hasCta = Boolean(ctaLabel && ctaHref);
 
@@ -87,7 +91,7 @@ export function PartnerBenefitsSection({
         {/* Wider than max-w-3xl so the H2 fits on two lines at 80px (matches banner-style heroes). */}
         <div className="mx-auto max-w-[min(100%,75rem)] px-2 text-center tablet-down:px-4">
           {headingHighlight != null && headingHighlight !== "" ? (
-            <Heading level={2} className={mainHeadingClass}>
+            <Heading level={sectionTitleLevel} className={mainHeadingClass}>
               {headingBefore ?? ""}
               <span className="text-brand-orange">{headingHighlight}</span>
               {headingAfter ?? ""}
@@ -95,7 +99,7 @@ export function PartnerBenefitsSection({
           ) : (
             <HeadlineWithHighlight
               headline={headline}
-              level={2}
+              level={sectionTitleLevel}
               className={mainHeadingClass}
             />
           )}

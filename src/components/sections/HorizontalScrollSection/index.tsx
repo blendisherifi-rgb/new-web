@@ -5,6 +5,8 @@ import { Heading } from "@/components/atoms/Heading";
 import { Overline } from "@/components/atoms/Overline";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { shouldReduceMotion, registerGSAPPlugins } from "@/lib/animations";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface HorizontalScrollCard {
   id: string;
@@ -24,6 +26,7 @@ interface HorizontalScrollSectionProps {
   headline: string;
   /** Cards that scroll horizontally while viewport is pinned. */
   cards: HorizontalScrollCard[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -66,6 +69,7 @@ export function HorizontalScrollSection({
   tag,
   headline,
   cards,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: HorizontalScrollSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -115,7 +119,7 @@ export function HorizontalScrollSection({
       <section className="w-full bg-white">
         <div className="mx-auto max-w-[1440px] px-4 py-16 tablet-down:px-6 tablet-down:py-24">
           <Overline>{tag}</Overline>
-          <Heading level={2} className="mt-3 text-brand-dark">
+          <Heading level={sectionTitleLevel} className="mt-3 text-brand-dark">
             {headline}
           </Heading>
           <div className="mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 scrollbar-hide tablet-down:mt-12 tablet-down:grid tablet-down:grid-cols-3 tablet-down:gap-6 tablet-down:overflow-visible">
@@ -136,7 +140,7 @@ export function HorizontalScrollSection({
         {/* Header */}
         <div className="px-6 pt-12">
           <Overline>{tag}</Overline>
-          <Heading level={2} className="mt-3 text-brand-dark">
+          <Heading level={sectionTitleLevel} className="mt-3 text-brand-dark">
             {headline}
           </Heading>
         </div>

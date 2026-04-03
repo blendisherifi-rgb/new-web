@@ -9,6 +9,8 @@ import {
   ChallengeIllustration,
   type ChallengeIconId,
 } from "./illustrations";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface ChallengeColumn {
   /** Matches illustration set in `illustrations.tsx`. */
@@ -36,6 +38,7 @@ interface ChallengeSectionProps {
   intro: string;
   /** Three columns with icons and optional CTA (exactly three). */
   columns: ChallengeColumn[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -48,6 +51,7 @@ export function ChallengeSection({
   headingAfter,
   intro,
   columns,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: ChallengeSectionProps) {
   return (
     <section className="w-full bg-white">
@@ -67,7 +71,7 @@ export function ChallengeSection({
             headingBefore=""
             headingHighlight={headingHighlight}
             headingAfter={headingAfter}
-            level={2}
+            level={sectionTitleLevel}
             className="text-brand-dark"
           />
           <Paragraph

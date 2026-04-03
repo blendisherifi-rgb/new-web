@@ -7,6 +7,8 @@ import { Paragraph } from "@/components/atoms/Paragraph";
 import { Button } from "@/components/atoms/Button";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
 import { AnimateOnScroll } from "@/components/molecules/AnimateOnScroll";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface CultureItem {
   /** Image shown to the left of the stat row. */
@@ -37,6 +39,7 @@ interface CultureSectionProps {
   ctaHref?: string;
   /** Right-side stat/image items. */
   items: CultureItem[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -55,6 +58,7 @@ export function CultureSection({
   ctaLabel,
   ctaHref,
   items,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: CultureSectionProps) {
   return (
     <section className="w-full" style={{ backgroundColor: "#060D2E" }}>
@@ -64,7 +68,7 @@ export function CultureSection({
           {/* Left column — sticky */}
           <div className="tablet-down:sticky tablet-down:top-24 tablet-down:self-start">
             <Overline>{overline}</Overline>
-            <Heading level={2} className="mt-3 text-white">
+            <Heading level={sectionTitleLevel} className="mt-3 text-white">
               {headingBefore}
               {headingHighlight && (
                 <span className="text-brand-orange"> {headingHighlight}</span>

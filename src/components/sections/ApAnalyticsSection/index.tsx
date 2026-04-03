@@ -4,6 +4,8 @@ import { Paragraph } from "@/components/atoms/Paragraph";
 import { Button } from "@/components/atoms/Button";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
 import { Image } from "@/components/atoms/Image";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface ApAnalyticsCard {
   iconSrc: string;
@@ -26,6 +28,7 @@ interface ApAnalyticsSectionProps {
   cards: ApAnalyticsCard[];
   ctaLabel: string;
   ctaHref: string;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -41,6 +44,7 @@ export function ApAnalyticsSection({
   cards,
   ctaLabel,
   ctaHref,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: ApAnalyticsSectionProps) {
   const displayCards = cards.slice(0, 6);
   while (displayCards.length < 6) {
@@ -71,7 +75,7 @@ export function ApAnalyticsSection({
         <div className="mt-3 w-full tablet-down:mt-4">{ruleLine}</div>
 
         <Heading
-          level={1}
+          level={sectionTitleLevel}
           className="mx-auto mt-10 w-full max-w-[1300px] text-center font-heading font-semibold text-[40px] leading-[1.1] text-white tablet-down:mt-12 tablet-down:text-[80px] tablet-down:leading-[88px]"
         >
           <span className="block">{headingLine1}</span>

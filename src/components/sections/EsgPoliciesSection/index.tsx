@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Image } from "@/components/atoms/Image";
 import { Heading } from "@/components/atoms/Heading";
 import { Overline } from "@/components/atoms/Overline";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface EsgPoliciesSlide {
   imageSrc: string;
@@ -31,6 +33,7 @@ interface EsgPoliciesSectionProps {
   body: string;
   /** Bottom category cards (01, 02, 03, 04). */
   cards: EsgPoliciesCard[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -46,6 +49,7 @@ export function EsgPoliciesSection({
   slides,
   body,
   cards,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: EsgPoliciesSectionProps) {
   const [index, setIndex] = useState(0);
 
@@ -95,7 +99,7 @@ export function EsgPoliciesSection({
           <Overline className="text-brand-orange">{overline}</Overline>
 
           <Heading
-            level={1}
+            level={sectionTitleLevel}
             className="mt-8 max-w-[1000px] font-heading font-semibold text-[40px] leading-[1.15] text-white tablet-down:mt-[60px] tablet-down:text-[80px] tablet-down:leading-[88px]"
           >
             <span className="block">

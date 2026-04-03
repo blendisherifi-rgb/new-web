@@ -3,6 +3,8 @@
 import { Overline } from "@/components/atoms/Overline";
 import { Heading } from "@/components/atoms/Heading";
 import { Paragraph } from "@/components/atoms/Paragraph";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface StrategicPriorityRow {
   /** Left column — business priority (serif, white). */
@@ -30,6 +32,7 @@ interface StrategicPrioritiesSectionProps {
   rightColumnLabel: string;
   /** Comparison rows. */
   rows: StrategicPriorityRow[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -83,6 +86,7 @@ export function StrategicPrioritiesSection({
   leftColumnLabel,
   rightColumnLabel,
   rows,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: StrategicPrioritiesSectionProps) {
   return (
     <section className="w-full bg-brand-dark">
@@ -100,7 +104,7 @@ export function StrategicPrioritiesSection({
 
         {/* Title — wider max-width so first line stays one row (two lines total); 50px below rule */}
         <Heading
-          level={2}
+          level={sectionTitleLevel}
           className="mx-auto mt-[50px] max-w-[min(100%,75rem)] text-center font-heading font-semibold text-[46px] leading-[1.1] tracking-[0] text-white tablet-down:text-[80px] tablet-down:leading-[88px]"
         >
           <span className="block">

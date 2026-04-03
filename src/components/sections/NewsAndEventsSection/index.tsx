@@ -6,6 +6,8 @@ import { Paragraph } from "@/components/atoms/Paragraph";
 import { Link } from "@/components/atoms/Link";
 import { Image } from "@/components/atoms/Image";
 import { NewsLowerSplitBackdrop } from "./NewsLowerSplitBackdrop";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 const HERO_BLUE = "#1D76E2";
 const LEFT_FILL = "#E8F2FD";
@@ -26,6 +28,7 @@ export interface NewsAndEventsSectionProps {
   cardBody: string;
   cardCtaLabel: string;
   cardCtaHref: string;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 function HeroCtaLink({ href, label }: { href: string; label: string }) {
@@ -204,6 +207,7 @@ export function NewsAndEventsSection({
   cardBody,
   cardCtaLabel,
   cardCtaHref,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: NewsAndEventsSectionProps) {
   return (
     <section className="relative w-full overflow-hidden">
@@ -215,7 +219,7 @@ export function NewsAndEventsSection({
             <Overline className="!text-[#F58220]">{heroOverline}</Overline>
 
             <Heading
-              level={2}
+              level={sectionTitleLevel}
               className="mt-8 w-full text-balance text-center !font-heading !font-semibold !text-[36px] !leading-[1.12] !tracking-tight !text-white tablet-down:mt-10 tablet-down:!text-[52px] tablet-down:!leading-[1.06]"
             >
               {heroHeading}

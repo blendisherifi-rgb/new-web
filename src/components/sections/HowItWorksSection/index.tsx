@@ -4,6 +4,8 @@ import { Overline } from "@/components/atoms/Overline";
 import { Heading } from "@/components/atoms/Heading";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Image } from "@/components/atoms/Image";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface HowItWorksStep {
   /** Outlined numeral asset — design size 121×99px. */
@@ -25,6 +27,7 @@ export interface HowItWorksSectionProps {
   intro: string;
   /** Typically three rows — step image + title + body. */
   steps: HowItWorksStep[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -32,7 +35,13 @@ export interface HowItWorksSectionProps {
  * then intro + three stepped rows with vertical divider, horizontal dividers between steps,
  * outlined numeral images and orange/white split titles.
  */
-export function HowItWorksSection({ overline, heading, intro, steps }: HowItWorksSectionProps) {
+export function HowItWorksSection({
+  overline,
+  heading,
+  intro,
+  steps,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
+}: HowItWorksSectionProps) {
   const rows = steps.slice(0, 3);
 
   return (
@@ -51,7 +60,7 @@ export function HowItWorksSection({ overline, heading, intro, steps }: HowItWork
           {/* Left — intro copy */}
           <div className="border-b border-white/10 pb-12 tablet-down:border-b-0 tablet-down:pr-10 tablet-down:pb-0 tablet-down:pt-2">
             <Heading
-              level={2}
+              level={sectionTitleLevel}
               className="max-w-[min(100%,36rem)] text-left font-heading font-semibold text-[46px] leading-[1.1] tracking-[0] text-white tablet-down:text-[80px] tablet-down:leading-[88px]"
             >
               {heading}

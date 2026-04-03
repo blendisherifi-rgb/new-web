@@ -9,6 +9,8 @@ import { Image } from "@/components/atoms/Image";
 import { ArrowRightIcon, ChevronRightIcon, XIcon } from "@/components/atoms/Icon";
 import { HeadlineWithHighlight } from "@/components/molecules/HeadlineWithHighlight";
 import { acquireScrollLock } from "@/lib/scrollLock";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface FeatureModalItem {
   title: string;
@@ -29,6 +31,7 @@ export interface FeatureModalSectionProps {
   ctaLabel: string;
   ctaHref: string;
   items: FeatureModalItem[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /* ─── Right-aligned full-height modal panel ────────────────────────────── */
@@ -218,6 +221,7 @@ export function FeatureModalSection({
   ctaLabel,
   ctaHref,
   items,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: FeatureModalSectionProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
@@ -241,7 +245,7 @@ export function FeatureModalSection({
                 headingBefore={headingBefore}
                 headingHighlight={headingHighlight}
                 headingAfter={headingAfter}
-                level={1}
+                level={sectionTitleLevel}
                 className="mt-5 max-w-[min(100%,34rem)] text-brand-dark"
               />
               <Paragraph size="lg" className="mt-7 max-w-[min(100%,28rem)] text-brand-dark-80">

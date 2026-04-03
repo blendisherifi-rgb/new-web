@@ -4,6 +4,8 @@ import { Paragraph } from "@/components/atoms/Paragraph";
 import { Button } from "@/components/atoms/Button";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
 import { Image } from "@/components/atoms/Image";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 interface SocialSectionProps {
   overline?: string;
@@ -26,6 +28,7 @@ interface SocialSectionProps {
   statLabel: string;
   /** Key initiatives (plain text list items). */
   initiatives: string[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /** Checkmark icon for initiatives list. */
@@ -65,6 +68,7 @@ export function SocialSection({
   statNumber,
   statLabel,
   initiatives,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: SocialSectionProps) {
   return (
     <section className="w-full bg-brand-light-blue" aria-label={overline}>
@@ -85,7 +89,7 @@ export function SocialSection({
         {/* Top — centered heading, body, CTA */}
         <div className="mx-auto mt-10 max-w-[800px] text-center tablet-down:mt-12">
           <Heading
-            level={1}
+            level={sectionTitleLevel}
             className="font-heading font-semibold text-[46px] leading-[52px] tablet-down:text-[80px] tablet-down:leading-[88px]"
           >
             <span className="text-brand-blue!">{headingHighlight}</span>

@@ -8,6 +8,8 @@ import { Overline } from "@/components/atoms/Overline";
 import { Button } from "@/components/atoms/Button";
 import { ChevronRightIcon, XIcon } from "@/components/atoms/Icon";
 import { acquireScrollLock } from "@/lib/scrollLock";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface TeamMember {
   /** Member name. */
@@ -34,6 +36,7 @@ interface MeetTheTeamSectionProps {
   ctaLabel?: string;
   /** CTA button href. */
   ctaHref?: string;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 function TeamModal({
@@ -197,6 +200,7 @@ export function MeetTheTeamSection({
   members,
   ctaLabel,
   ctaHref,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: MeetTheTeamSectionProps) {
   const [modalIndex, setModalIndex] = useState<number | null>(null);
   const visibleMembers = members.slice(0, 8);
@@ -227,7 +231,7 @@ export function MeetTheTeamSection({
           <Overline className="text-brand-orange">{overline}</Overline>
 
           {/* Centered title */}
-          <Heading level={2} className="mt-6 text-center text-white">
+          <Heading level={sectionTitleLevel} className="mt-6 text-center text-white">
             {title}
           </Heading>
 

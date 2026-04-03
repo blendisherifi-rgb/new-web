@@ -20,6 +20,8 @@ import {
 import { DEFAULT_RESOURCES_HUB_HERO_PROPS } from "@/lib/resources-hub-defaults";
 import type { ResourceHubKind } from "@/lib/resources-hub";
 import { formatResourceHubFeaturedMetaLineClient } from "@/lib/resources-hub-view";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 /** Featured latest-resource split backdrop (replaces pale/grey `#E8F2FD` on homepage only). */
 const FEATURED_LATEST_SPLIT_BLUE = "#1583E1";
@@ -178,12 +180,14 @@ function LatestResourcesContent({
   heading,
   viewAllLabel,
   viewAllHref,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: {
   locale: Locale;
   items: LatestResourceItem[];
   heading?: string;
   viewAllLabel?: string;
   viewAllHref?: string;
+  sectionTitleLevel?: SectionTitleLevel;
 }) {
   const [featured, ...rest] = items;
   const rowItems = rest.slice(0, 3);
@@ -204,7 +208,7 @@ function LatestResourcesContent({
       {heading ? (
         <div className="relative z-[2] mx-auto max-w-[1440px] px-4 pb-6 pt-14 text-center tablet-down:px-8 tablet-down:pt-16">
           <Heading
-            level={2}
+            level={sectionTitleLevel}
             className="!font-heading !font-semibold !text-[32px] !leading-[36px] !tracking-normal !text-brand-dark tablet-down:!text-[40px] tablet-down:!leading-[44px]"
           >
             {heading}
@@ -241,6 +245,10 @@ export function LatestResourcesSection(props: Record<string, unknown>) {
   const heading = typeof props.heading === "string" ? props.heading : undefined;
   const viewAllLabel = typeof props.viewAllLabel === "string" ? props.viewAllLabel : undefined;
   const viewAllHref = typeof props.viewAllHref === "string" ? props.viewAllHref : undefined;
+  const sectionTitleLevel: SectionTitleLevel =
+    props.sectionTitleLevel === 1 || props.sectionTitleLevel === 2
+      ? (props.sectionTitleLevel as SectionTitleLevel)
+      : DEFAULT_SECTION_TITLE_LEVEL;
 
   const [items, setItems] = useState<LatestResourceItem[] | null>(null);
   const [ready, setReady] = useState(false);
@@ -293,6 +301,7 @@ export function LatestResourcesSection(props: Record<string, unknown>) {
       heading={heading}
       viewAllLabel={viewAllLabel}
       viewAllHref={viewAllHref}
+      sectionTitleLevel={sectionTitleLevel}
     />
   );
 }

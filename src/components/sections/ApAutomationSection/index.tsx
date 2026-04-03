@@ -6,6 +6,8 @@ import { Overline } from "@/components/atoms/Overline";
 import { Button } from "@/components/atoms/Button";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
 import { Image } from "@/components/atoms/Image";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface ApAutomationMetric {
   value: string;
@@ -39,6 +41,7 @@ interface ApAutomationSectionProps {
   gartnerLogoAlt: string;
   /** Subtext under Gartner logo (e.g. "Featured in the 2025 Magic Quadrant..."). */
   endorsementText: string;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 const BG_STYLES: Record<
@@ -106,6 +109,7 @@ export function ApAutomationSection({
   gartnerLogoSrc,
   gartnerLogoAlt,
   endorsementText,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: ApAutomationSectionProps) {
   const bg = BG_STYLES[sectionBackground] ?? BG_STYLES.dark_blue;
   const displayMetrics = metrics.slice(0, 4);
@@ -122,7 +126,7 @@ export function ApAutomationSection({
           <div className="flex flex-col items-start text-left">
             {overline ? <Overline className="text-brand-orange">{overline}</Overline> : null}
             <Heading
-              level={1}
+              level={sectionTitleLevel}
               className="mt-5 !font-heading !font-semibold !text-[60px] !leading-[60px] !tracking-[0em]"
             >
               <span className="block text-[#047FE5]">{headingLine1}</span>

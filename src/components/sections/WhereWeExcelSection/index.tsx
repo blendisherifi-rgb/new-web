@@ -7,6 +7,8 @@ import { Heading } from "@/components/atoms/Heading";
 import { Button } from "@/components/atoms/Button";
 import { ChevronRightIcon } from "@/components/atoms/Icon";
 import { AnimateOnScroll } from "@/components/molecules/AnimateOnScroll";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 export interface WhereWeExcelItem {
   /** Uppercase category label (e.g. "ERP COMPLEXITY"). */
@@ -30,6 +32,7 @@ interface WhereWeExcelSectionProps {
   ctaHref: string;
   /** Right-side capability/challenge items. */
   items: WhereWeExcelItem[];
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -46,6 +49,7 @@ export function WhereWeExcelSection({
   ctaLabel,
   ctaHref,
   items,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: WhereWeExcelSectionProps) {
   return (
     <section className="w-full bg-white">
@@ -58,7 +62,7 @@ export function WhereWeExcelSection({
               headingBefore={headingBefore}
               headingHighlight={headingHighlight}
               headingAfter=""
-              level={1}
+              level={sectionTitleLevel}
               className="mt-3 text-brand-dark"
             />
             <Paragraph size="lg" className="mt-6">

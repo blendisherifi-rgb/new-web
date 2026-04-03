@@ -1,6 +1,8 @@
 import { Heading } from "@/components/atoms/Heading";
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Image } from "@/components/atoms/Image";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
+import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 interface StpComparisonSectionProps {
   /** First line text before the blue highlight (e.g. "Why settle for "). */
@@ -14,6 +16,7 @@ interface StpComparisonSectionProps {
   imageAlt: string;
   /** Supporting paragraph below the graphic. */
   body: string;
+  sectionTitleLevel?: SectionTitleLevel;
 }
 
 /**
@@ -27,6 +30,7 @@ export function StpComparisonSection({
   imageSrc,
   imageAlt,
   body,
+  sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: StpComparisonSectionProps) {
   const ruleLine = (
     <div className="flex w-full items-center py-4" aria-hidden>
@@ -47,7 +51,7 @@ export function StpComparisonSection({
 
         <div className="py-12 tablet-down:py-16">
         <Heading
-          level={2}
+          level={sectionTitleLevel}
           className="mx-auto max-w-[800px] text-[32px] leading-[1.2] text-[#001A33] tablet-down:text-[60px] tablet-down:leading-[64px]"
         >
           <span className="block">

@@ -1,6 +1,7 @@
 "use client";
 
 import { SECTION_MAP, type SectionData } from "@/lib/sections";
+import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
 import { AppErrorBoundary } from "@/components/globals/ErrorBoundary/AppErrorBoundary";
 
 /** Converts "finance_hero_section" → "Finance Hero" for the showcase badge. */
@@ -93,7 +94,12 @@ export function SectionRenderer({ sections, showLabels = false }: SectionRendere
                 </div>
               }
             >
-              <Component {...(section.fields as Record<string, unknown>)} />
+              <Component
+                {...(section.fields as Record<string, unknown>)}
+                sectionTitleLevel={
+                  (index === 0 ? 1 : 2) as SectionTitleLevel
+                }
+              />
             </AppErrorBoundary>
           </div>
         );
