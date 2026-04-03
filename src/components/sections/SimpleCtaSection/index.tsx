@@ -60,7 +60,7 @@ export function SimpleCtaSection({
 
           {showCta ? (
             <div className="mt-8 flex justify-center tablet-down:mt-10">
-              <Button variant="orange" href={ctaHref!.trim()} iconAfter={<ChevronRightIcon />} className="uppercase !text-white">
+              <Button variant="orange" href={ctaHref!.trim()} iconAfter={<ChevronRightIcon />} className="uppercase text-brand-dark">
                 {ctaLabel!.trim()}
               </Button>
             </div>
