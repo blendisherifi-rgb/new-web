@@ -4,6 +4,8 @@ import { HeadlineWithHighlight } from "@/components/molecules/HeadlineWithHighli
 import { Paragraph } from "@/components/atoms/Paragraph";
 import { Overline } from "@/components/atoms/Overline";
 import { Heading } from "@/components/atoms/Heading";
+import { Button } from "@/components/atoms/Button";
+import { ChevronRightIcon } from "@/components/atoms/Icon";
 
 interface SimpleCtaSectionProps {
   overline: string;
@@ -12,6 +14,8 @@ interface SimpleCtaSectionProps {
   headingHighlight?: string;
   headingAfter?: string;
   description: string;
+  ctaLabel?: string | null;
+  ctaHref?: string | null;
 }
 
 export function SimpleCtaSection({
@@ -21,8 +25,12 @@ export function SimpleCtaSection({
   headingHighlight,
   headingAfter,
   description,
+  ctaLabel,
+  ctaHref,
 }: SimpleCtaSectionProps) {
   const hasHighlight = !!headingHighlight;
+  const showCta =
+    typeof ctaLabel === "string" && ctaLabel.trim().length > 0 && typeof ctaHref === "string" && ctaHref.trim().length > 0;
 
   return (
     <section className="w-full bg-white">
@@ -49,6 +57,14 @@ export function SimpleCtaSection({
           <Paragraph size="base" className="mt-6 tablet-down:mt-[40px] leading-[1.6]">
             {description}
           </Paragraph>
+
+          {showCta ? (
+            <div className="mt-8 flex justify-center tablet-down:mt-10">
+              <Button variant="orange" href={ctaHref!.trim()} iconAfter={<ChevronRightIcon />} className="uppercase !text-white">
+                {ctaLabel!.trim()}
+              </Button>
+            </div>
+          ) : null}
         </div>
       </div>
     </section>

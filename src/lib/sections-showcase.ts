@@ -1677,6 +1677,8 @@ export const SECTIONS_SHOWCASE_GROUPS: SectionGroup[] = [
       headingHighlight: "perfect fit",
       headingAfter: " looks like for you.",
       description: "Talk to us about your ERP, your process, and what perfect fit automation needs to look like for your finance team.",
+      ctaLabel: "Book a demo",
+      ctaHref: "/request-demo/",
     },
   },
   {
