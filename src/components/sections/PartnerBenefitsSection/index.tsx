@@ -103,7 +103,7 @@ export function PartnerBenefitsSection({
               className={mainHeadingClass}
             />
           )}
-          <Paragraph className="mt-6 text-brand-dark/90 leading-[1.7] tablet-down:mt-[50px]">
+          <Paragraph className="mt-6 whitespace-pre-wrap text-brand-dark/90 leading-[1.7] tablet-down:mt-[50px]">
             {subheading}
           </Paragraph>
         </div>
@@ -130,7 +130,7 @@ export function PartnerBenefitsSection({
               </div>
               <Heading
                 level={4}
-                className="mt-6 !text-[32px] font-semibold !leading-[1.15] tracking-[-0.01em] text-brand-dark tablet-down:mt-[50px] tablet-down:!text-[44px] tablet-down:!leading-[1.2]"
+                className="mt-6 whitespace-pre-wrap !text-[32px] font-semibold !leading-[1.15] tracking-[-0.01em] text-brand-dark tablet-down:mt-[50px] tablet-down:!text-[44px] tablet-down:!leading-[1.2]"
               >
                 <HighlightedLine
                   before={step.line1Before}
@@ -143,7 +143,10 @@ export function PartnerBenefitsSection({
                   after={step.line2After}
                 />
               </Heading>
-              <Paragraph size="sm" className="mt-4 text-brand-dark/90 leading-[1.7] tablet-down:mt-[30px]">
+              <Paragraph
+                size="sm"
+                className="mt-4 whitespace-pre-wrap text-brand-dark/90 leading-[1.7] tablet-down:mt-[30px]"
+              >
                 {step.description}
               </Paragraph>
             </AnimateOnScroll>
