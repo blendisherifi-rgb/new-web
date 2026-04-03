@@ -128,21 +128,24 @@ export function PartnerBenefitsSection({
                   unoptimized={step.stepNumberImageSrc.toLowerCase().endsWith(".svg")}
                 />
               </div>
-              <Heading
-                level={4}
-                className="mt-6 flex w-full flex-col items-center gap-0 !text-[32px] font-semibold !leading-[1.15] tracking-[-0.01em] text-brand-dark tablet-down:mt-[50px] tablet-down:!text-[44px] tablet-down:!leading-[1.2]"
-              >
-                <HighlightedLine
-                  before={step.line1Before}
-                  highlight={step.line1Highlight}
-                  after={step.line1After}
-                />
-                <HighlightedLine
-                  before={step.line2Before}
-                  highlight={step.line2Highlight}
-                  after={step.line2After}
-                />
-              </Heading>
+              {/* Min-height reserves space for ~3 lines so body copy lines up across columns when titles differ in length. */}
+              <div className="mt-6 flex w-full min-h-[112px] flex-col items-center justify-start tablet-down:mt-[50px] tablet-down:min-h-[160px]">
+                <Heading
+                  level={4}
+                  className="flex w-full flex-col items-center gap-0 !text-[32px] font-semibold !leading-[1.15] tracking-[-0.01em] text-brand-dark tablet-down:!text-[44px] tablet-down:!leading-[1.2]"
+                >
+                  <HighlightedLine
+                    before={step.line1Before}
+                    highlight={step.line1Highlight}
+                    after={step.line1After}
+                  />
+                  <HighlightedLine
+                    before={step.line2Before}
+                    highlight={step.line2Highlight}
+                    after={step.line2After}
+                  />
+                </Heading>
+              </div>
               <Paragraph
                 size="sm"
                 className="mt-4 whitespace-pre-wrap text-brand-dark/90 leading-[1.7] tablet-down:mt-[30px]"
