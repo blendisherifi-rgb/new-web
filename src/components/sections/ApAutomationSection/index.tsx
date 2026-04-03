@@ -112,10 +112,16 @@ export function ApAutomationSection({
   sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: ApAutomationSectionProps) {
   const bg = BG_STYLES[sectionBackground] ?? BG_STYLES.dark_blue;
-  const displayMetrics = metrics.slice(0, 4);
-  while (displayMetrics.length < 4) {
-    displayMetrics.push({ value: "", label: "" });
-  }
+  const displayMetrics = metrics
+    .slice(0, 4)
+    .filter((m) => String(m.value ?? "").trim() || String(m.label ?? "").trim());
+  const metricCount = displayMetrics.length;
+  const mobileMetricsLayoutClass =
+    metricCount === 4
+      ? "grid grid-cols-2 gap-x-0 gap-y-8"
+      : metricCount === 2
+        ? "grid grid-cols-2 gap-y-8"
+        : "flex flex-col gap-y-8";
 
   return (
     <section className={`w-full ${bg.section}`}>
@@ -164,14 +170,16 @@ export function ApAutomationSection({
           </div>
         </div>
 
-        {displayMetrics.some((m) => m.value || m.label) && (
+        {metricCount > 0 && (
           <div className={`relative mt-[40px] border-y ${bg.border} tablet-down:mt-[28px]`}>
             <div className="relative mx-auto max-w-[1440px] px-4 tablet-down:px-4">
-              <div className="grid grid-cols-2 gap-y-8 py-8 tablet-down:grid-cols-4 tablet-down:gap-x-0 tablet-down:gap-y-0 tablet-down:py-9">
+              <div
+                className={`py-8 tablet-down:!flex tablet-down:flex-row tablet-down:items-stretch tablet-down:gap-0 tablet-down:py-9 ${mobileMetricsLayoutClass}`}
+              >
                 {displayMetrics.map((m, i) => (
                   <div
-                    key={i}
-                    className="flex flex-col items-center text-center tablet-down:px-12 first:tablet-down:pl-0 last:tablet-down:pr-0"
+                    key={`${m.value}-${m.label}-${i}`}
+                    className="flex min-w-0 flex-1 flex-col items-center text-center tablet-down:px-12 first:tablet-down:pl-0 last:tablet-down:pr-0"
                   >
                     <span className="font-body text-[36px] font-extrabold leading-[40px] tracking-normal text-brand-orange tablet-down:text-[46px] tablet-down:leading-[48px]">
                       {m.value}
@@ -185,18 +193,16 @@ export function ApAutomationSection({
                   </div>
                 ))}
               </div>
-              <div
-                className={`pointer-events-none absolute top-0 bottom-0 left-1/4 hidden w-px tablet-down:block ${bg.divider}`}
-                aria-hidden
-              />
-              <div
-                className={`pointer-events-none absolute top-0 bottom-0 left-2/4 hidden w-px tablet-down:block ${bg.divider}`}
-                aria-hidden
-              />
-              <div
-                className={`pointer-events-none absolute top-0 bottom-0 left-3/4 hidden w-px tablet-down:block ${bg.divider}`}
-                aria-hidden
-              />
+              {metricCount > 1
+                ? Array.from({ length: metricCount - 1 }, (_, i) => (
+                    <div
+                      key={i}
+                      className={`pointer-events-none absolute top-0 bottom-0 hidden w-px -translate-x-1/2 tablet-down:block ${bg.divider}`}
+                      style={{ left: `${((i + 1) / metricCount) * 100}%` }}
+                      aria-hidden
+                    />
+                  ))
+                : null}
             </div>
           </div>
         )}
