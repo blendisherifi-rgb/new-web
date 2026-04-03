@@ -317,10 +317,14 @@ function transformSection(node: Record<string, unknown>, index: number): Section
       tab.logoAlt = logoNode?.altText ?? logo?.altText ?? "";
       delete tab.logo;
       tab.metrics = Array.isArray(tab.metrics) ? tab.metrics : [];
-      // Bottom CTA row: ACF uses ctaText; some exports may expose ctaLabel
+      // Bottom CTA row: ACF uses ctaText / ctaLink; GraphQL may use aliases or snake_case
       if (tab.ctaText == null || tab.ctaText === "") {
         const alt = tab.ctaLabel ?? tab.cta_label;
         if (typeof alt === "string" && alt.trim()) tab.ctaText = alt;
+      }
+      if (tab.ctaLink == null || tab.ctaLink === "") {
+        const link = tab.cta_link ?? tab.ctaUrl ?? tab.cta_url;
+        if (typeof link === "string" && link.trim()) tab.ctaLink = link;
       }
       return tab;
     });

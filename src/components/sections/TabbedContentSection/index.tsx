@@ -139,12 +139,18 @@ export function TabbedContentSection({
     Math.max(0, contentTabs.length - 1),
   );
   const activeTab = contentTabs[safeIdx];
-  const ctaHref = (ctaTab?.ctaLink ?? "").toString().trim();
+
+  /** Matches menus / globals: archive of client stories. Used when WP has no Tab CTA row or empty link. */
+  const DEFAULT_BOTTOM_CTA_HREF = "/case-studies";
+  const DEFAULT_BOTTOM_CTA_LABEL = "All success stories";
+
+  const ctaHrefFromWp = (ctaTab?.ctaLink ?? "").toString().trim();
   const ctaLabelResolved =
-    bottomCtaLabel(ctaTab) || "All success stories";
-  const showBottomCta = Boolean(
-    ctaTab && (bottomCtaLabel(ctaTab) || ctaHref),
-  );
+    bottomCtaLabel(ctaTab) || DEFAULT_BOTTOM_CTA_LABEL;
+  const effectiveCtaHref = ctaHrefFromWp || DEFAULT_BOTTOM_CTA_HREF;
+
+  // Show whenever there are logo tabs — homepage often has no separate “Tab CTA” repeater row in WP
+  const showBottomCta = contentTabs.length > 0;
 
   const hasHighlight = !!headingHighlight;
   const titleText = mainTitle || headingBefore || headingHighlight || headingAfter;
@@ -283,7 +289,7 @@ export function TabbedContentSection({
               <div className="w-full tablet-down:rounded-br-2xl tablet-down:overflow-hidden">
                 <Button
                   variant="orange"
-                  href={ctaHref || "#"}
+                  href={effectiveCtaHref}
                   iconAfter={<ChevronRightIcon />}
                   className="w-full !rounded-none uppercase text-brand-dark tablet-down:rounded-none"
                 >
