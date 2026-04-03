@@ -18,7 +18,7 @@ export interface TabbedContentMetric {
 export type TabType = "content" | "cta";
 
 export interface TabbedContentTab {
-  tabType: TabType;
+  tabType?: TabType | string | null;
   logoSrc?: string;
   logoAlt?: string;
   review?: string;
@@ -27,7 +27,10 @@ export interface TabbedContentTab {
   ctaButtonText?: string;
   ctaButtonLink?: string;
   metrics?: TabbedContentMetric[];
+  /** Bottom orange CTA (Tab CTA row) — ACF field */
   ctaText?: string;
+  /** Alias for ctaText if ever mapped from WP */
+  ctaLabel?: string;
   ctaLink?: string;
 }
 
@@ -40,14 +43,68 @@ interface TabbedContentSectionProps {
   tabs: TabbedContentTab[];
 }
 
+function normalizeTabType(raw: unknown): string {
+  return String(raw ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/[\s-]+/g, "_");
+}
+
+/**
+ * "Tab CTA" row in the repeater. WPGraphQL may return tabType as cta, CTA, TAB_CTA, etc.
+ */
 function isCta(tab: TabbedContentTab): boolean {
-  if (!tab.tabType) return false;
-  const t = String(tab.tabType).toLowerCase().trim();
-  return t === "cta" || t === "tab cta" || t === "tab_cta";
+  const raw = tab.tabType;
+  const t = normalizeTabType(raw).replace(/_/g, "");
+  if (t === "cta" || t === "tabcta") return true;
+  const upper = String(raw ?? "").trim().toUpperCase();
+  if (upper === "CTA" || upper.endsWith("_CTA")) return true;
+
+  const text = (tab.ctaText ?? tab.ctaLabel ?? "").toString().trim();
+  const link = (tab.ctaLink ?? "").toString().trim();
+  const hasLogo = !!(tab.logoSrc ?? "").toString().trim();
+  const hasReview = !!(tab.review ?? "").toString().trim();
+  // Orphan row: no tabType but only bottom-CTA fields filled (no logo/review)
+  if ((text || link) && !hasLogo && !hasReview && raw == null) return true;
+
+  return false;
 }
 
 function isContentTab(tab: TabbedContentTab): boolean {
   return !isCta(tab);
+}
+
+function bottomCtaLabel(tab: TabbedContentTab | undefined): string {
+  if (!tab) return "";
+  const s = (tab.ctaText ?? tab.ctaLabel ?? "").toString().trim();
+  return s;
+}
+
+/** Last row is often the orange CTA; some WP setups send tabType as content or omit it. */
+function isLikelyBottomCtaOnlyRow(tab: TabbedContentTab): boolean {
+  const text = (tab.ctaText ?? tab.ctaLabel ?? "").toString().trim();
+  const link = (tab.ctaLink ?? "").toString().trim();
+  const hasLogo = !!(tab.logoSrc ?? "").toString().trim();
+  const hasReview = !!(tab.review ?? "").toString().trim();
+  return Boolean((text || link) && !hasLogo && !hasReview);
+}
+
+function resolveCtaTab(tabs: TabbedContentTab[]): TabbedContentTab | undefined {
+  const byType = tabs.find((t) => isCta(t));
+  if (byType) return byType;
+  const last = tabs[tabs.length - 1];
+  if (last && isLikelyBottomCtaOnlyRow(last)) return last;
+  return undefined;
+}
+
+function resolveContentTabs(
+  tabs: TabbedContentTab[],
+  ctaTab: TabbedContentTab | undefined,
+): TabbedContentTab[] {
+  if (!ctaTab) return tabs.filter((t) => isContentTab(t));
+  const idx = tabs.indexOf(ctaTab);
+  if (idx >= 0) return tabs.filter((_, i) => i !== idx);
+  return tabs.filter((t) => isContentTab(t));
 }
 
 export function TabbedContentSection({
@@ -58,10 +115,9 @@ export function TabbedContentSection({
   headingAfter,
   tabs,
 }: TabbedContentSectionProps) {
-  const contentTabIndices = tabs
-    .map((t, i) => (isContentTab(t) ? i : -1))
-    .filter((i) => i >= 0);
-  const [activeIndex, setActiveIndex] = useState(contentTabIndices[0] ?? 0);
+  const ctaTab = resolveCtaTab(tabs);
+  const contentTabs = resolveContentTabs(tabs, ctaTab);
+  const [activeContentIdx, setActiveContentIdx] = useState(0);
 
   if (process.env.NODE_ENV === "development") {
     console.log("[TabbedContentSection] tabs:", tabs.map((t, i) => ({
@@ -69,25 +125,35 @@ export function TabbedContentSection({
       tabType: t.tabType,
       hasLogo: !!t.logoSrc,
       hasReview: !!t.review,
-      hasCta: !!t.ctaText,
+      hasBottomCta: !!(t.ctaText || t.ctaLink),
       isCta: isCta(t),
+      resolvedCta: ctaTab === t,
     })));
     console.log("[TabbedContentSection] title fields:", { mainTitle, headingBefore, headingHighlight, headingAfter, overline });
   }
 
   if (!tabs.length) return null;
 
+  const safeIdx = Math.min(
+    activeContentIdx,
+    Math.max(0, contentTabs.length - 1),
+  );
+  const activeTab = contentTabs[safeIdx];
+  const ctaHref = (ctaTab?.ctaLink ?? "").toString().trim();
+  const ctaLabelResolved =
+    bottomCtaLabel(ctaTab) || "All success stories";
+  const showBottomCta = Boolean(
+    ctaTab && (bottomCtaLabel(ctaTab) || ctaHref),
+  );
+
   const hasHighlight = !!headingHighlight;
   const titleText = mainTitle || headingBefore || headingHighlight || headingAfter;
-  const activeTab = tabs[activeIndex];
 
   return (
     <section className="w-full bg-white" aria-label={mainTitle || "Client success stories"}>
       <div className="mx-auto w-full max-w-[1440px] px-4 pt-12 tablet-down:px-6 tablet-down:pt-24">
-        {/* Overline — top left */}
         {overline && <Overline>{overline}</Overline>}
 
-        {/* Title — centered, large */}
         {(hasHighlight || titleText) && (
           <div className="mt-6 text-center">
             {hasHighlight ? (
@@ -107,17 +173,15 @@ export function TabbedContentSection({
         )}
       </div>
 
-      {/* Two-column area: content LEFT + logo tabs RIGHT */}
       <div className="mx-auto w-full max-w-[1440px] px-4 py-8 tablet-down:px-6 tablet-down:py-16">
-        <div className="flex flex-col tablet-down:flex-row tablet-down:items-stretch tablet-down:gap-0">
-          {/* LEFT — active content panel (light blue bg) */}
+        {/* items-start so the right column is only as tall as tabs + CTA (CTA sits under last tab, not bottom of section) */}
+        <div className="flex flex-col tablet-down:flex-row tablet-down:items-start tablet-down:gap-0">
           <div
             className="min-w-0 flex-1 rounded-2xl p-6 tablet-down:rounded-none tablet-down:rounded-l-2xl tablet-down:p-12"
             style={{ backgroundColor: "#E8F2FD" }}
           >
-            {activeTab && isContentTab(activeTab) && (
+            {activeTab && (
               <div>
-                {/* Review quote */}
                 {activeTab.review && (
                   <Blockquote
                     quote={`\u201C${activeTab.review}\u201D`}
@@ -127,9 +191,7 @@ export function TabbedContentSection({
                   />
                 )}
 
-                {/* Metrics + READ MORE row */}
                 <div className="mt-10 flex flex-wrap items-end gap-x-12 gap-y-6 tablet-down:justify-between">
-                  {/* READ MORE link */}
                   {activeTab.ctaButtonText && activeTab.ctaButtonLink && (
                     <div className="shrink-0">
                       <Button variant="read-more" href={activeTab.ctaButtonLink}>
@@ -138,7 +200,6 @@ export function TabbedContentSection({
                     </div>
                   )}
 
-                  {/* Metrics — right-aligned on desktop */}
                   {activeTab.metrics && activeTab.metrics.length > 0 && (
                     <div className="flex flex-wrap gap-x-12 gap-y-4">
                       {activeTab.metrics.map((m, j) => (
@@ -158,78 +219,78 @@ export function TabbedContentSection({
             )}
           </div>
 
-          {/* RIGHT — vertical logo tabs + CTA button */}
           <div
-            role="tablist"
-            aria-label="Client logos"
-            className="mt-8 flex flex-row flex-wrap justify-center gap-3 tablet-down:mt-0 tablet-down:ml-0 tablet-down:w-52 tablet-down:shrink-0 tablet-down:flex-col tablet-down:justify-start tablet-down:gap-0"
+            className="mt-8 flex w-full flex-col tablet-down:mt-0 tablet-down:ml-0 tablet-down:w-52 tablet-down:shrink-0"
             onKeyDown={(e) => {
-              if (contentTabIndices.length === 0) return;
-              const idx = contentTabIndices.indexOf(activeIndex);
-              let next = activeIndex;
+              if (contentTabs.length === 0) return;
+              let next = safeIdx;
               if (e.key === "ArrowUp" || e.key === "ArrowLeft")
-                next = contentTabIndices[Math.max(0, idx - 1)];
+                next = Math.max(0, safeIdx - 1);
               else if (e.key === "ArrowDown" || e.key === "ArrowRight")
-                next = contentTabIndices[Math.min(contentTabIndices.length - 1, idx + 1)];
-              else if (e.key === "Home") next = contentTabIndices[0];
-              else if (e.key === "End") next = contentTabIndices[contentTabIndices.length - 1];
+                next = Math.min(contentTabs.length - 1, safeIdx + 1);
+              else if (e.key === "Home") next = 0;
+              else if (e.key === "End") next = contentTabs.length - 1;
               else return;
               e.preventDefault();
-              setActiveIndex(next);
+              setActiveContentIdx(next);
             }}
           >
-            {tabs.map((tab, i) => {
-              const isFirstContentTab = i === contentTabIndices[0];
-              if (isCta(tab)) {
+            <div
+              role="tablist"
+              aria-label="Client logos"
+              className="flex flex-row flex-wrap justify-center gap-3 tablet-down:flex-col tablet-down:justify-start tablet-down:gap-0"
+            >
+              {contentTabs.map((tab, i) => {
+                const isActive = i === safeIdx;
                 return (
-                  <div key={i} className="w-full tablet-down:mt-auto tablet-down:rounded-br-2xl tablet-down:overflow-hidden">
-                    <Button
-                      variant="orange"
-                      href={tab.ctaLink ?? "#"}
-                      iconAfter={<ChevronRightIcon />}
-                      className="tablet-down:rounded-none!"
-                    >
-                      {tab.ctaText ?? "All success stories"}
-                    </Button>
-                  </div>
+                  <button
+                    key={`tab-${i}`}
+                    role="tab"
+                    id={`tabbed-content-tab-${i}`}
+                    aria-selected={isActive}
+                    aria-controls="tabbed-content-panel"
+                    tabIndex={isActive ? 0 : -1}
+                    onClick={() => setActiveContentIdx(i)}
+                    className={`flex h-14 w-full items-center justify-center rounded-xl px-4 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2 tablet-down:h-20 tablet-down:rounded-none ${
+                      i === 0 ? "tablet-down:rounded-tr-2xl" : ""
+                    } ${
+                      isActive
+                        ? "bg-[#E8F2FD]"
+                        : "bg-brand-grey/30 hover:bg-brand-grey/50"
+                    }`}
+                  >
+                    {tab.logoSrc ? (
+                      <Image
+                        src={tab.logoSrc}
+                        alt={tab.logoAlt ?? ""}
+                        width={120}
+                        height={48}
+                        className={`max-h-10 w-auto object-contain tablet-down:max-h-12 ${
+                          !isActive ? "grayscale opacity-60" : ""
+                        }`}
+                      />
+                    ) : (
+                      <span className="font-body text-sm text-brand-dark-60">
+                        Tab {i + 1}
+                      </span>
+                    )}
+                  </button>
                 );
-              }
-              const isActive = i === activeIndex;
-              return (
-                <button
-                  key={i}
-                  role="tab"
-                  id={`tab-${i}`}
-                  aria-selected={isActive}
-                  aria-controls={`panel-${i}`}
-                  tabIndex={isActive ? 0 : -1}
-                  onClick={() => setActiveIndex(i)}
-                  className={`flex h-14 w-full items-center justify-center rounded-xl px-4 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2 tablet-down:h-20 tablet-down:rounded-none ${
-                    isFirstContentTab ? "tablet-down:rounded-tr-2xl" : ""
-                  } ${
-                    isActive
-                      ? "bg-[#E8F2FD]"
-                      : "bg-brand-grey/30 hover:bg-brand-grey/50"
-                  }`}
+              })}
+            </div>
+
+            {showBottomCta ? (
+              <div className="w-full tablet-down:rounded-br-2xl tablet-down:overflow-hidden">
+                <Button
+                  variant="orange"
+                  href={ctaHref || "#"}
+                  iconAfter={<ChevronRightIcon />}
+                  className="w-full !rounded-none uppercase text-brand-dark tablet-down:rounded-none"
                 >
-                  {tab.logoSrc ? (
-                    <Image
-                      src={tab.logoSrc}
-                      alt={tab.logoAlt ?? ""}
-                      width={120}
-                      height={48}
-                      className={`max-h-10 w-auto object-contain tablet-down:max-h-12 ${
-                        !isActive ? "grayscale opacity-60" : ""
-                      }`}
-                    />
-                  ) : (
-                    <span className="font-body text-sm text-brand-dark-60">
-                      Tab {i + 1}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
+                  {ctaLabelResolved}
+                </Button>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
