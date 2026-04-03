@@ -51,7 +51,7 @@ function HighlightedLine({
   after: string;
 }) {
   return (
-    <span className="block">
+    <span className="block text-center">
       {before}
       {highlight ? <span className="text-brand-orange">{highlight}</span> : null}
       {after}
@@ -130,7 +130,7 @@ export function PartnerBenefitsSection({
               </div>
               <Heading
                 level={4}
-                className="mt-6 whitespace-pre-wrap !text-[32px] font-semibold !leading-[1.15] tracking-[-0.01em] text-brand-dark tablet-down:mt-[50px] tablet-down:!text-[44px] tablet-down:!leading-[1.2]"
+                className="mt-6 w-full text-center whitespace-pre-wrap !text-[32px] font-semibold !leading-[1.15] tracking-[-0.01em] text-brand-dark tablet-down:mt-[50px] tablet-down:!text-[44px] tablet-down:!leading-[1.2]"
               >
                 <HighlightedLine
                   before={step.line1Before}
