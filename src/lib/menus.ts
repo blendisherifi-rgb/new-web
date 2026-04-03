@@ -231,7 +231,7 @@ const WHO_WE_ARE_MEGA_MENU: Pick<
   dropdownType: "who-we-are",
   href: "/about",
   whoWeAreLinks: [
-    { id: "5-l1", label: "About us", href: "/about" },
+    { id: "5-l1", label: "About Us", href: "/about" },
     { id: "5-l2", label: "Leadership Team", href: "/leadership-team" },
     { id: "5-l3", label: "ESG", href: "/esg" },
     { id: "5-l4", label: "Partner Programme", href: "/partner-programme" },
@@ -309,9 +309,11 @@ function makeLocaleAware(items: NavItem[], locale: Locale): NavItem[] {
         ? { ...cat.featured, href: localePath(cat.featured.href, locale) }
         : cat.featured,
     })),
-    whoWeAreLinks: item.whoWeAreLinks
-      ?.filter((l) => normalizeHrefForCompare(l.href) !== "/about")
-      .map((l) => ({ ...l, href: localePath(l.href, locale), label: l.label })),
+    whoWeAreLinks: item.whoWeAreLinks?.map((l) => ({
+      ...l,
+      href: localePath(l.href, locale),
+      label: l.label,
+    })),
     whoWeAreFeatured: item.whoWeAreFeatured?.href
       ? { ...item.whoWeAreFeatured, href: localePath(item.whoWeAreFeatured.href, locale) }
       : item.whoWeAreFeatured,
