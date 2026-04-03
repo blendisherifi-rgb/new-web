@@ -20,7 +20,6 @@ function wordpressMediaHostnames(): string[] {
       /* ignore invalid URLs */
     }
   }
-  hostnames.add("kaosk10.sg-host.com");
   return [...hostnames];
 }
 
