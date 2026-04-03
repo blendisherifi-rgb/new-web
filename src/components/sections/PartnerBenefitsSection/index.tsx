@@ -12,7 +12,7 @@ import type { SectionTitleLevel } from "@/lib/sectionTitleLevel";
 import { DEFAULT_SECTION_TITLE_LEVEL } from "@/lib/sectionTitleLevel";
 
 const mainHeadingClass =
-  "mt-10 max-w-none font-heading font-semibold text-[46px] leading-[1.1] tracking-[0] text-balance text-center text-brand-dark tablet-down:mt-[50px] tablet-down:text-[80px] tablet-down:leading-[84px]";
+  "mt-10 max-w-none text-balance text-center text-brand-dark tablet-down:mt-[50px]";
 
 export interface PartnerBenefitsStep {
   /** Step numeral artwork (PNG/SVG/WebP). */
@@ -88,7 +88,7 @@ export function PartnerBenefitsSection({
           />
         </div>
 
-        {/* Wider than max-w-3xl so the H2 fits on two lines at 80px (matches banner-style heroes). */}
+        {/* Wider than max-w-3xl so the title fits on two lines. */}
         <div className="mx-auto max-w-[min(100%,75rem)] px-2 text-center tablet-down:px-4">
           {headingHighlight != null && headingHighlight !== "" ? (
             <Heading level={sectionTitleLevel} className={mainHeadingClass}>

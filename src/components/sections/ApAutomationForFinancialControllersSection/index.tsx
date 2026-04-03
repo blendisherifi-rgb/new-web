@@ -38,7 +38,7 @@ function splitParagraphs(text: string) {
  * two columns — 581×506 image + two-tone Erode headline + body (`imagePosition` swaps sides).
  */
 const headlineClass =
-  "font-heading font-semibold tracking-normal text-[40px] leading-[1.15] text-brand-dark tablet-down:text-[80px] tablet-down:leading-[82px]";
+  "font-heading font-semibold tracking-normal text-[60px] leading-[64px] text-brand-dark";
 
 export function ApAutomationForFinancialControllersSection({
   overline = "AP AUTOMATION FOR FINANCIAL CONTROLLERS",

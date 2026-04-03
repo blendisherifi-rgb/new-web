@@ -13,7 +13,7 @@ interface HeadingProps {
 
 const levelStyles: Record<HeadingLevel, string> = {
   1: "font-heading font-semibold text-[46px] leading-[1.1] tracking-[0em] tablet-down:text-[80px] tablet-down:leading-[84px]",
-  2: "font-heading font-semibold text-[40px] leading-[1.1] tracking-[0em] tablet-down:text-[60px] tablet-down:leading-[64px]",
+  2: "font-heading font-semibold !text-[60px] !leading-[64px] tracking-[0em]",
   3: "font-heading font-semibold text-[32px] leading-[1.1] tracking-[0em] tablet-down:text-[40px] tablet-down:leading-[44px]",
   4: "font-heading font-semibold text-[29px] leading-[1.2] tracking-[-0.01em] tablet-down:text-[36px] tablet-down:leading-[48px]",
   5: "font-heading font-semibold text-[24px] leading-[1.2] tracking-[-0.01em] tablet-down:text-[32px] tablet-down:leading-[36px]",
@@ -23,7 +23,7 @@ const levelStyles: Record<HeadingLevel, string> = {
 /**
  * Heading atom.
  *
- * - H1–H3 use Erode (serif heading font).
+ * - H1–H3 use Erode (serif heading font). H2 defaults to 60px / 64px line-height.
  * - H4–H6 use Plus Jakarta Sans (body font).
  * - All headings default to brand-dark color.
  * - Use the `as` prop to decouple visual style from semantic level.
