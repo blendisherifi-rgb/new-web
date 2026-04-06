@@ -1157,16 +1157,16 @@ export interface CaseStudiesArchiveDiagnostic {
 
 export async function diagnoseCaseStudiesData(): Promise<CaseStudiesArchiveDiagnostic> {
   const hints: string[] = [];
-  const graphqlUrlSet = Boolean(process.env.NEXT_PUBLIC_WORDPRESS_URL);
+  const graphqlUrlSet = Boolean(process.env.WORDPRESS_URL);
 
   if (!graphqlUrlSet) {
-    hints.push("Set NEXT_PUBLIC_WORDPRESS_URL in .env.local (your WPGraphQL endpoint URL).");
+    hints.push("Set WORDPRESS_URL in .env.local (your WPGraphQL endpoint URL).");
   }
 
   const restBase = getWordPressRestBaseUrl();
   if (!restBase) {
     hints.push(
-      "Set WORDPRESS_REST_URL (e.g. https://yoursite.com/wp-json) or NEXT_PUBLIC_WORDPRESS_URL so the REST base can be derived from the same origin.",
+      "Set WORDPRESS_REST_URL (e.g. https://yoursite.com/wp-json) or WORDPRESS_URL so the REST base can be derived from the same origin.",
     );
   }
 

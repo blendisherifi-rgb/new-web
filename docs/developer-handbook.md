@@ -96,7 +96,7 @@ This gives a fast path to recovery.
 
 ### **4.2 Required Env Variables**
 
-1. `NEXT_PUBLIC_WORDPRESS_URL`
+1. `WORDPRESS_URL`
 2. `WORDPRESS_REST_URL`
 3. `REVALIDATION_SECRET`
 4. `NEXT_PUBLIC_SITE_URL`
@@ -107,7 +107,7 @@ This gives a fast path to recovery.
 
 ### **4.3 .env Example**
 
-`NEXT_PUBLIC_WORDPRESS_URL=https://your-wordpress-domain/graphql`
+`WORDPRESS_URL=https://your-wordpress-domain/graphql`
 
 `WORDPRESS_REST_URL=https://your-wordpress-domain/wp-json`
 

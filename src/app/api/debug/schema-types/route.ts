@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
     const typenames = [...new Set(sections.map((s) => s.__typename).filter(Boolean))] as string[];
 
     // Extract common prefix (everything before HeroSection, WhereWeExcelSection, etc.)
-    const layoutSuffixPattern = /(HeroSection|WhereWeExcelSection|PlatformSection|InnovationSection|HorizontalScrollSection|TabbedContentSection|RoleAccordionSection|ReviewLogosSection|SimpleCtaSection|PerfectFitFrameworkSection|RichTextSection|ContactBannerSection|ContactWithFormSection|LocationsSection|ClientLogosMarqueeSection|NewsletterFormSection)(Layout)?$/;
+    const layoutSuffixPattern = /(HeroSection|WhereWeExcelSection|WhereWeExcelHighlightPointsSection|PlatformSection|InnovationSection|HorizontalScrollSection|TabbedContentSection|RoleAccordionSection|ReviewLogosSection|SimpleCtaSection|PerfectFitFrameworkSection|RichTextSection|ContactBannerSection|ContactWithFormSection|LocationsSection|ClientLogosMarqueeSection|NewsletterFormSection)(Layout)?$/;
     const prefix = typenames.length > 0 && typenames[0]
       ? typenames[0].replace(layoutSuffixPattern, "")
       : "";

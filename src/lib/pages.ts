@@ -179,6 +179,9 @@ function transformSection(node: Record<string, unknown>, index: number): Section
       ? "community_support_section"
     : low.includes("hero")
       ? "hero_section"
+    : low.includes("where_we_excel_highlight_points") ||
+        low.includes("whereweexcelhighlightpoints")
+      ? "where_we_excel_highlight_points_section"
     : low.includes("whereweexcel") || low.includes("where_we_excel")
       ? "where_we_excel_section"
     : low.includes("roleaccordion") || low.includes("role_accordion")
@@ -391,6 +394,13 @@ function transformSection(node: Record<string, unknown>, index: number): Section
   if (acfGroupName === "where_we_excel_section") {
     normalized.items = Array.isArray(normalized.excelItems) ? normalized.excelItems : [];
     delete normalized.excelItems;
+  }
+  if (acfGroupName === "where_we_excel_highlight_points_section") {
+    normalized.items = Array.isArray(normalized.excelHighlightPoints)
+      ? normalized.excelHighlightPoints
+      : [];
+    delete normalized.excelHighlightPoints;
+    normalized.headingAfter = normalized.headingAfter ?? "";
   }
   if (acfGroupName === "tabbed_content_section") {
     normalized.tabs = Array.isArray(normalized.tabs) ? normalized.tabs : [];

@@ -28,6 +28,7 @@ const AP_AUTOMATION_BG_GRAPHQL_FIELD = (() => {
 
 const HeroLayout = `${LAYOUT_PREFIX}HeroSection${LAYOUT_SUFFIX}`;
 const WhereWeExcelLayout = `${LAYOUT_PREFIX}WhereWeExcelSection${LAYOUT_SUFFIX}`;
+const WhereWeExcelHighlightPointsLayout = `${LAYOUT_PREFIX}WhereWeExcelHighlightPointsSection${LAYOUT_SUFFIX}`;
 const PlatformLayout = `${LAYOUT_PREFIX}PlatformSection${LAYOUT_SUFFIX}`;
 const InnovationLayout = `${LAYOUT_PREFIX}InnovationSection${LAYOUT_SUFFIX}`;
 const HorizontalScrollLayout = `${LAYOUT_PREFIX}HorizontalScrollSection${LAYOUT_SUFFIX}`;
@@ -140,6 +141,21 @@ function buildFragment(): string {
       excelItems {
         category
         description
+      }
+    }
+    ... on ${WhereWeExcelHighlightPointsLayout} {
+      tag
+      headingBefore
+      headingHighlight
+      headingAfter
+      body
+      ctaLabel
+      ctaHref
+      excelHighlightPoints {
+        headingBefore
+        headingHighlight
+        headingAfter
+        body
       }
     }
     ... on ${PlatformLayout} {
@@ -1073,6 +1089,16 @@ function buildFragmentResilient(): string {
       ctaLabel
       ctaHref
       excelItems { category description }
+    }
+    ... on ${WhereWeExcelHighlightPointsLayout} {
+      tag
+      headingBefore
+      headingHighlight
+      headingAfter
+      body
+      ctaLabel
+      ctaHref
+      excelHighlightPoints { headingBefore headingHighlight headingAfter body }
     }
     ... on ${PlatformLayout} {
       tag

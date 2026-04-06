@@ -7,7 +7,7 @@ import type { NextConfig } from "next";
  */
 function wordpressMediaHostnames(): string[] {
   const fromEnv = [
-    process.env.NEXT_PUBLIC_WORDPRESS_URL,
+    process.env.WORDPRESS_URL,
     process.env.WORDPRESS_REST_URL,
   ];
   const hostnames = new Set<string>();

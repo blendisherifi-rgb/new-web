@@ -38,6 +38,10 @@ export {
   type WhereWeExcelItem,
 } from "./WhereWeExcelSection";
 export {
+  WhereWeExcelHighlightPointsSection,
+  type WhereWeExcelHighlightPoint,
+} from "./WhereWeExcelHighlightPointsSection";
+export {
   WhatMakesUsDifferentSection,
   type WhatMakesUsDifferentItem,
 } from "./WhatMakesUsDifferentSection";

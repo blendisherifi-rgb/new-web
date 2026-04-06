@@ -1206,6 +1206,40 @@ export const SECTIONS_SHOWCASE_GROUPS: SectionGroup[] = [
     },
   },
   {
+    id: "excel-highlight-points-1",
+    acfGroupName: "where_we_excel_highlight_points_section",
+    order: 2.05,
+    fields: {
+      tag: "HOW SOFTCO ADDRESSES IT",
+      headingBefore: "Absolute ",
+      headingHighlight: "financial control",
+      headingAfter: ", across every entity",
+      body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      ctaLabel: "SEE CUSTOMER PROOF",
+      ctaHref: "#",
+      items: [
+        {
+          headingBefore: "",
+          headingHighlight: "Operations",
+          headingAfter: " intelligence",
+          body: "Make decisions on real data. Live, outcome-driven dashboards provide 100% real-time visibility over liabilities, commitments, and working capital across all your global entities.",
+        },
+        {
+          headingBefore: "",
+          headingHighlight: "Scale",
+          headingAfter: " without headcount",
+          body: "Future-proof your growth. Handle massive organic volume growth or integrate newly acquired companies without needing to expand your AP back-office team.",
+        },
+        {
+          headingBefore: "",
+          headingHighlight: "Optimised",
+          headingAfter: " cash flow",
+          body: "Turn AP into a profit centre. Consolidate payments through SoftCoPay to effortlessly capture early payment discounts, avoid late fees, and earn valuable rebates on virtual card payments.",
+        },
+      ],
+    },
+  },
+  {
     id: "what-makes-us-different-1",
     acfGroupName: "what_makes_us_different_section",
     order: 3,

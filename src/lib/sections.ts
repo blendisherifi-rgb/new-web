@@ -15,6 +15,7 @@ import { FinanceHeroSection } from "@/components/sections/FinanceHeroSection";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { PlatformSection } from "@/components/sections/PlatformSection";
 import { WhereWeExcelSection } from "@/components/sections/WhereWeExcelSection";
+import { WhereWeExcelHighlightPointsSection } from "@/components/sections/WhereWeExcelHighlightPointsSection";
 import { WhatMakesUsDifferentSection } from "@/components/sections/WhatMakesUsDifferentSection";
 import { InnovationSection } from "@/components/sections/InnovationSection";
 import { HorizontalScrollSection } from "@/components/sections/HorizontalScrollSection";
@@ -121,6 +122,8 @@ export const SECTION_MAP: Record<string, React.ComponentType<Record<string, unkn
   finance_hero_section: FinanceHeroSection as unknown as React.ComponentType<Record<string, unknown>>,
   hero_section: HeroSection as unknown as React.ComponentType<Record<string, unknown>>,
   where_we_excel_section: WhereWeExcelSection as unknown as React.ComponentType<Record<string, unknown>>,
+  where_we_excel_highlight_points_section:
+    WhereWeExcelHighlightPointsSection as unknown as React.ComponentType<Record<string, unknown>>,
   what_makes_us_different_section: WhatMakesUsDifferentSection as unknown as React.ComponentType<Record<string, unknown>>,
   platform_section: PlatformSection as unknown as React.ComponentType<Record<string, unknown>>,
   innovation_section: InnovationSection as unknown as React.ComponentType<Record<string, unknown>>,
