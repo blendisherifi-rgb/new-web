@@ -43,9 +43,11 @@ function isExternalHref(href: string): boolean {
     return false;
   }
 
-  // Non-http(s) schemes should not force new tab behavior.
-  if (/^(mailto:|tel:|sms:|javascript:)/i.test(trimmed)) {
-    return false;
+  // Any explicit URI scheme should use native <a>.
+  // This avoids Next.js trying to route mailto:, tel:, javascript:, etc.
+  if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(trimmed)) {
+    // For http(s), we optionally classify same-host URLs as internal.
+    if (!/^https?:\/\//i.test(trimmed)) return true;
   }
 
   if (/^https?:\/\//i.test(trimmed)) {
@@ -60,6 +62,12 @@ function isExternalHref(href: string): boolean {
     }
     return true;
   }
+
+  // Protocol-relative URLs should be treated as external.
+  if (trimmed.startsWith("//")) return true;
+
+  // Bare domains (e.g. "example.com/path") are external.
+  if (/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\/.*)?$/.test(trimmed)) return true;
 
   return false;
 }
@@ -78,18 +86,19 @@ export function Link({
   className = "",
   ...rest
 }: LinkProps) {
-  if (!href) {
+  const trimmedHref = (href ?? "").trim();
+  if (!trimmedHref) {
     return (
       <span className={`${baseStyles} ${className}`}>{children}</span>
     );
   }
 
-  const isExternal = external ?? isExternalHref(href);
+  const isExternal = external ?? isExternalHref(trimmedHref);
 
   if (isExternal) {
     return (
       <a
-        href={href}
+        href={trimmedHref}
         target="_blank"
         rel="noopener noreferrer"
         className={`${baseStyles} ${className}`}
@@ -102,7 +111,7 @@ export function Link({
 
   return (
     <NextLink
-      href={href}
+      href={trimmedHref}
       className={`${baseStyles} ${className}`}
       {...rest}
     >
