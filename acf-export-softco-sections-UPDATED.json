@@ -15763,7 +15763,7 @@
                                 {
                                     "key": "field_css_res_r_title",
                                     "label": "Title",
-                                    "name": "title",
+                                    "name": "label",
                                     "aria-label": "",
                                     "type": "text",
                                     "instructions": "",
@@ -15776,7 +15776,7 @@
                                     },
                                     "default_value": "",
                                     "show_in_graphql": 1,
-                                    "graphql_field_name": "title",
+                                    "graphql_field_name": "label",
                                     "maxlength": "",
                                     "placeholder": "",
                                     "prepend": "",
@@ -15786,7 +15786,7 @@
                                 {
                                     "key": "field_css_res_r_desc",
                                     "label": "Description",
-                                    "name": "description",
+                                    "name": "text",
                                     "aria-label": "",
                                     "type": "textarea",
                                     "instructions": "",
@@ -15799,7 +15799,7 @@
                                     },
                                     "rows": 3,
                                     "show_in_graphql": 1,
-                                    "graphql_field_name": "description",
+                                    "graphql_field_name": "text",
                                     "default_value": "",
                                     "new_lines": "",
                                     "maxlength": "",
@@ -16719,6 +16719,6 @@
     "graphql_field_name": "pageContentSections",
     "map_graphql_types_from_location_rules": 0,
     "graphql_types": "",
-    "modified": 1775650000
+    "modified": 1775740000
 }
 ]
