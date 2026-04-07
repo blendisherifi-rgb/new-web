@@ -153,14 +153,14 @@ function FeatureModal({
             {item.modalDescription}
           </Paragraph>
 
-          <div className="mt-8 overflow-hidden rounded-sm border border-brand-grey tablet-down:w-[545px]">
+          <div className="mt-8 w-full max-w-[680px] overflow-hidden rounded-sm">
             <Image
               src={item.imageSrc}
               alt={item.imageAlt ?? item.modalTitle ?? item.title}
-              width={545}
-              height={398}
-              className="h-auto w-full object-cover tablet-down:h-[398px] tablet-down:w-[545px]"
-              sizes="(max-width: 992px) 100vw, 545px"
+              width={680}
+              height={460}
+              className="h-auto w-full object-contain"
+              sizes="(max-width: 992px) 100vw, 680px"
             />
           </div>
         </div>
