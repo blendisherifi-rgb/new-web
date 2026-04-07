@@ -23,6 +23,12 @@ export interface PlatformRow {
   ctaHref: string;
 }
 
+export interface PlatformContentBlock {
+  row: PlatformRow;
+  imageSrc: string;
+  imageAlt: string;
+}
+
 interface PlatformSectionProps {
   /** Tag above heading (e.g. "PLATFORM"). */
   tag: string;
@@ -30,14 +36,16 @@ interface PlatformSectionProps {
   headline: string;
   /** Supporting paragraph below headline. */
   intro: string;
-  /** Two content rows (AP and P2P). */
-  rows: [PlatformRow, PlatformRow];
+  /** Content rows (first two are from WordPress by default). */
+  rows: PlatformRow[];
   /** First row image. */
   image1Src: string;
   image1Alt: string;
   /** Second row image. */
   image2Src: string;
   image2Alt: string;
+  /** Optional extra content blocks injected from code/env. */
+  extraBlocks?: PlatformContentBlock[];
   sectionTitleLevel?: SectionTitleLevel;
 }
 
@@ -56,9 +64,18 @@ export function PlatformSection({
   image1Alt,
   image2Src,
   image2Alt,
+  extraBlocks = [],
   sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: PlatformSectionProps) {
-  const [row1, row2] = rows;
+  const row1 = rows[0];
+  const row2 = rows[1];
+  if (!row1 || !row2) return null;
+
+  const blocks: PlatformContentBlock[] = [
+    { row: row1, imageSrc: image1Src, imageAlt: image1Alt },
+    { row: row2, imageSrc: image2Src, imageAlt: image2Alt },
+    ...extraBlocks.filter((block) => block?.row && block?.imageSrc),
+  ];
 
   return (
     <section className="w-full bg-brand-dark">
@@ -75,15 +92,15 @@ export function PlatformSection({
         </AnimateOnScroll>
 
         <div className="mt-5 flex flex-col gap-4 tablet-down:mt-[48px] tablet-down:gap-[40px]">
-          <div className="grid grid-cols-1 gap-4 tablet-down:grid-cols-2 tablet-down:items-center tablet-down:gap-6">
-            <PlatformContentRow {...row1} />
-            <PlatformRowImage src={image1Src} alt={image1Alt} />
-          </div>
-
-          <div className="grid grid-cols-1 gap-4 tablet-down:grid-cols-2 tablet-down:items-center tablet-down:gap-6">
-            <PlatformContentRow {...row2} />
-            <PlatformRowImage src={image2Src} alt={image2Alt} />
-          </div>
+          {blocks.map((block) => (
+            <div
+              key={`${block.row.title}-${block.imageSrc}`}
+              className="grid grid-cols-1 gap-4 tablet-down:grid-cols-2 tablet-down:items-center tablet-down:gap-6"
+            >
+              <PlatformContentRow {...block.row} />
+              <PlatformRowImage src={block.imageSrc} alt={block.imageAlt} />
+            </div>
+          ))}
         </div>
       </div>
     </section>

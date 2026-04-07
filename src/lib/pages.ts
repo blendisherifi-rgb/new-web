@@ -49,6 +49,42 @@ function normalizeApAutomationSectionBackground(raw: unknown): "dark_blue" | "wh
   return "dark_blue";
 }
 
+function isTruthyEnv(value: string | undefined): boolean {
+  if (!value) return false;
+  return ["1", "true", "yes", "on"].includes(value.trim().toLowerCase());
+}
+
+function getPlatformExtraBlockFromEnv():
+  | {
+      row: {
+        title: string;
+        subtitle: string;
+        description: string;
+        ctaLabel: string;
+        ctaHref: string;
+      };
+      imageSrc: string;
+      imageAlt: string;
+    }
+  | null {
+  if (!isTruthyEnv(process.env.PLATFORM_EXTRA_BLOCK_ENABLED)) return null;
+
+  const imageSrc = (process.env.PLATFORM_EXTRA_BLOCK_IMAGE_SRC ?? "").trim();
+  if (!imageSrc) return null;
+
+  return {
+    row: {
+      title: (process.env.PLATFORM_EXTRA_BLOCK_TITLE ?? "").trim(),
+      subtitle: (process.env.PLATFORM_EXTRA_BLOCK_SUBTITLE ?? "").trim(),
+      description: (process.env.PLATFORM_EXTRA_BLOCK_DESCRIPTION ?? "").trim(),
+      ctaLabel: (process.env.PLATFORM_EXTRA_BLOCK_CTA_LABEL ?? "Learn more").trim(),
+      ctaHref: (process.env.PLATFORM_EXTRA_BLOCK_CTA_HREF ?? "#").trim(),
+    },
+    imageSrc,
+    imageAlt: (process.env.PLATFORM_EXTRA_BLOCK_IMAGE_ALT ?? "").trim(),
+  };
+}
+
 /**
  * Transform raw ACF flexible content item to SectionData.
  */
@@ -277,6 +313,11 @@ function transformSection(node: Record<string, unknown>, index: number): Section
     normalized.image2Alt = n2?.altText ?? img2?.altText ?? "";
     delete normalized.image1;
     delete normalized.image2;
+
+    const extraBlock = getPlatformExtraBlockFromEnv();
+    if (extraBlock) {
+      normalized.extraBlocks = [extraBlock];
+    }
   }
 
   // Innovation: values[].icon.node (AcfMediaItemConnectionEdge) -> icon (URL string)
