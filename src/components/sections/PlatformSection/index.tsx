@@ -21,6 +21,9 @@ export interface PlatformRow {
   ctaLabel: string;
   /** CTA href. */
   ctaHref: string;
+  /** Optional per-row image (from ACF repeater). */
+  rowImageSrc?: string;
+  rowImageAlt?: string;
 }
 
 export interface PlatformContentBlock {
@@ -71,9 +74,22 @@ export function PlatformSection({
   const row2 = rows[1];
   if (!row1 || !row2) return null;
 
+  const fallbackImages = [
+    { imageSrc: image1Src, imageAlt: image1Alt },
+    { imageSrc: image2Src, imageAlt: image2Alt },
+  ];
+
+  const rowBlocks: PlatformContentBlock[] = rows
+    .map((row, index) => {
+      const fallback = fallbackImages[index];
+      const imageSrc = row.rowImageSrc || fallback?.imageSrc || "";
+      const imageAlt = row.rowImageAlt || fallback?.imageAlt || "";
+      return imageSrc ? { row, imageSrc, imageAlt } : null;
+    })
+    .filter((block): block is PlatformContentBlock => Boolean(block));
+
   const blocks: PlatformContentBlock[] = [
-    { row: row1, imageSrc: image1Src, imageAlt: image1Alt },
-    { row: row2, imageSrc: image2Src, imageAlt: image2Alt },
+    ...rowBlocks,
     ...extraBlocks.filter((block) => block?.row && block?.imageSrc),
   ];
 

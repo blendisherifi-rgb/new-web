@@ -314,6 +314,18 @@ function transformSection(node: Record<string, unknown>, index: number): Section
     delete normalized.image1;
     delete normalized.image2;
 
+    if (Array.isArray(normalized.rows)) {
+      normalized.rows = (normalized.rows as unknown[]).map((r) => {
+        const row = { ...(r as Record<string, unknown>) };
+        const rowImage = row.rowImage as Record<string, unknown> | undefined;
+        const rowImageNode = rowImage?.node as Record<string, unknown> | undefined;
+        row.rowImageSrc = rowImageNode?.sourceUrl ?? rowImage?.sourceUrl ?? "";
+        row.rowImageAlt = rowImageNode?.altText ?? rowImage?.altText ?? "";
+        delete row.rowImage;
+        return row;
+      });
+    }
+
     const extraBlock = getPlatformExtraBlockFromEnv();
     if (extraBlock) {
       normalized.extraBlocks = [extraBlock];
