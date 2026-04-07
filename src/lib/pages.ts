@@ -1169,8 +1169,14 @@ function transformSection(node: Record<string, unknown>, index: number): Section
     normalized.imageAlt = n?.altText ?? img?.altText ?? "";
     delete normalized.image;
 
-    // AP automation for CFO: optional section background toggle (default light_blue)
-    if (acfGroupName === "ap_automation_for_cfo_section") {
+    // AP automation for CFO/financial controllers variants: optional section background toggle (default light_blue)
+    if (
+      acfGroupName === "ap_automation_for_cfo_section" ||
+      acfGroupName === "ap_automation_for_financial_controllers_section" ||
+      acfGroupName === "ap_softco_experience_section" ||
+      acfGroupName === "your_softco_experience_section" ||
+      acfGroupName === "ap_softco_experiance_section"
+    ) {
       const rawBg =
         normalized.sectionBackground ??
         normalized.sectionbackground ??
