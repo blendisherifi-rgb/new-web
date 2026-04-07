@@ -100,6 +100,15 @@ export async function fetchGraphQL<T = unknown>(
   const json = await response.json();
 
   if (json.errors?.length) {
+    if (json.data) {
+      if (process.env.NODE_ENV === "development") {
+        console.warn(
+          `[GraphQL] Partial errors (returning data anyway):`,
+          json.errors.map((e: { message?: string }) => e.message).join(", "),
+        );
+      }
+      return json.data as T;
+    }
     throw new Error(
       `GraphQL errors: ${json.errors.map((e: { message?: string }) => e.message).join(", ")}`
     );

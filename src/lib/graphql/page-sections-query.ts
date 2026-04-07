@@ -983,7 +983,7 @@ function buildFragment(): string {
       headingHighlight
       headingAfter
       body
-      results { title description }
+      results { label text }
     }
     ... on ${ClientSuccessStoryTestimonialCardLayout} {
       portrait { node { sourceUrl altText } }
@@ -1242,7 +1242,7 @@ function buildFragmentResilient(): string {
     ... on ${ClientSuccessStoryVideoLayout} { youtubeVideoId videoPoster { node { sourceUrl altText } } videoTitle }
     ... on ${ClientSuccessStoryChallengeLayout} { overline headingBefore headingHighlight headingAfter body bullets { label text } }
     ... on ${ClientSuccessStoryPerfectFitAutomationLayout} { overline headingBefore headingHighlight headingAfter bodyTop quote attributionName attributionRole bodyBottom }
-    ... on ${ClientSuccessStoryResultsLayout} { overline headingBefore headingHighlight headingAfter body results { title description } }
+    ... on ${ClientSuccessStoryResultsLayout} { overline headingBefore headingHighlight headingAfter body results { label text } }
     ... on ${ClientSuccessStoryTestimonialCardLayout} { portrait { node { sourceUrl altText } } quote authorName authorTitle clientLogo { node { sourceUrl altText } } }
     ... on ${ClientSuccessStoryRelatedStoriesLayout} { titleLine1 titleLine2 stories { image { node { sourceUrl altText } } tags { label } cardTitle ctaHref } }
     ... on ${ContactFormLayout} { __typename }
