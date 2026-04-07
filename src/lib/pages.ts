@@ -901,8 +901,9 @@ function transformSection(node: Record<string, unknown>, index: number): Section
     );
   }
 
-  // Testimonial card: clientLogo media edge (quote/name/title are scalars)
+  // Testimonial card: clientLogo media edge; portrait still queried for WP schema compatibility but not shown in UI
   if (acfGroupName === "client_success_story_testimonial_card_section") {
+    delete normalized.portrait;
     const cl = normalized.clientLogo as Record<string, unknown> | undefined;
     const clNode = cl?.node as Record<string, unknown> | undefined;
     normalized.clientLogoSrc =
