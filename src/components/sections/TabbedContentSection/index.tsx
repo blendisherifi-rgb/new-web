@@ -148,10 +148,9 @@ export function TabbedContentSection({
   const DEFAULT_BOTTOM_CTA_HREF = "/case-studies";
   const DEFAULT_BOTTOM_CTA_LABEL = "All success stories";
 
-  const ctaHrefFromWp = (ctaTab?.ctaLink ?? "").toString().trim();
   const ctaLabelResolved =
     bottomCtaLabel(ctaTab) || DEFAULT_BOTTOM_CTA_LABEL;
-  const effectiveCtaHref = ctaHrefFromWp || DEFAULT_BOTTOM_CTA_HREF;
+  const effectiveCtaHref = DEFAULT_BOTTOM_CTA_HREF;
 
   // Show whenever there are logo tabs — homepage often has no separate “Tab CTA” repeater row in WP
   const showBottomCta = contentTabs.length > 0;
