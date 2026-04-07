@@ -49,6 +49,13 @@ function normalizeApAutomationSectionBackground(raw: unknown): "dark_blue" | "wh
   return "dark_blue";
 }
 
+function normalizeCfoSectionBackground(raw: unknown): "white" | "light_blue" {
+  if (raw == null || raw === "") return "light_blue";
+  const s = String(raw).trim().toLowerCase().replace(/[\s-]+/g, "_");
+  if (s === "white") return "white";
+  return "light_blue";
+}
+
 function isTruthyEnv(value: string | undefined): boolean {
   if (!value) return false;
   return ["1", "true", "yes", "on"].includes(value.trim().toLowerCase());
@@ -1161,6 +1168,17 @@ function transformSection(node: Record<string, unknown>, index: number): Section
     normalized.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
     normalized.imageAlt = n?.altText ?? img?.altText ?? "";
     delete normalized.image;
+
+    // AP automation for CFO: optional section background toggle (default light_blue)
+    if (acfGroupName === "ap_automation_for_cfo_section") {
+      const rawBg =
+        normalized.sectionBackground ??
+        normalized.sectionbackground ??
+        normalized.section_background;
+      normalized.sectionBackground = normalizeCfoSectionBackground(rawBg);
+      delete normalized.sectionbackground;
+      delete normalized.section_background;
+    }
 
     // ACF `ap_automation_for_cfo_section`: headingHighlight + lines → component headingBlue + headingDark
     if (

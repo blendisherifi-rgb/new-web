@@ -21,6 +21,8 @@ export interface ApAutomationForFinancialControllersSectionProps {
   body: string;
   /** `left` = image first column (default). `right` = text first column, image second. */
   imagePosition?: "left" | "right";
+  /** Section background for CFO variant; defaults to light blue. */
+  sectionBackground?: "white" | "light_blue";
 }
 
 const bodyParagraphClass =
@@ -52,6 +54,7 @@ export function ApAutomationForFinancialControllersSection({
   imageAlt,
   body,
   imagePosition = "left",
+  sectionBackground = "light_blue",
 }: ApAutomationForFinancialControllersSectionProps) {
   const paragraphs = splitParagraphs(body);
   const imageOrder = imagePosition === "left" ? "order-1" : "order-2";
@@ -60,8 +63,11 @@ export function ApAutomationForFinancialControllersSection({
   const useCfoHeadline =
     Boolean(headingHighlight || headingLine1After || headingLine2 || headingLine3);
 
+  const sectionBgClass =
+    sectionBackground === "white" ? "bg-white" : "bg-[#E8F2FD]";
+
   return (
-    <section className="w-full bg-[#E8F2FD]" aria-label={overline}>
+    <section className={`w-full ${sectionBgClass}`} aria-label={overline}>
       <div className="mx-auto w-full max-w-[1440px] px-4 py-14 tablet-down:px-6 tablet-down:py-20">
         <div className="w-full pb-2">
           <Overline className="block text-left text-brand-orange">{overline}</Overline>
