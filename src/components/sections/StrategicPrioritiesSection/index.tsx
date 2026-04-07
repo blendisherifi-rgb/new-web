@@ -147,10 +147,10 @@ export function StrategicPrioritiesSection({
                 <p className="text-center font-heading text-[22px] font-semibold leading-[1.25] tracking-[-0.01em] text-white tablet-down:text-left tablet-down:text-[24px] tablet-down:leading-[1.3]">
                   {row.priority}
                 </p>
-                <div className="mx-auto w-full max-w-[200px] tablet-down:mx-0 tablet-down:max-w-none">
+                <div className="mx-auto flex w-full max-w-[200px] justify-center tablet-down:max-w-none">
                   <RowConnector />
                 </div>
-                <p className="text-center font-body text-[16px] font-normal leading-[1.65] text-white/75 tablet-down:text-left tablet-down:text-[17px] tablet-down:leading-[1.7]">
+                <p className="text-center font-body text-[16px] font-normal leading-[1.65] text-white/75 tablet-down:text-right tablet-down:text-[17px] tablet-down:leading-[1.7]">
                   {row.deliverable}
                 </p>
               </div>
