@@ -14,6 +14,56 @@ interface LinkProps
 const baseStyles =
   "font-body text-brand-blue underline-offset-4 transition-colors duration-200 hover:underline focus-visible:outline-brand-blue";
 
+function normalizeHost(host: string): string {
+  return host.replace(/^www\./, "").toLowerCase();
+}
+
+function getConfiguredSiteHost(): string | null {
+  const raw = process.env.NEXT_PUBLIC_SITE_URL;
+  if (!raw) return null;
+  try {
+    return normalizeHost(new URL(raw).hostname);
+  } catch {
+    return null;
+  }
+}
+
+function isExternalHref(href: string): boolean {
+  const trimmed = href.trim();
+  if (!trimmed) return false;
+
+  // Common in-page or relative links should stay in the same tab.
+  if (
+    trimmed.startsWith("/") ||
+    trimmed.startsWith("#") ||
+    trimmed.startsWith("?") ||
+    trimmed.startsWith("./") ||
+    trimmed.startsWith("../")
+  ) {
+    return false;
+  }
+
+  // Non-http(s) schemes should not force new tab behavior.
+  if (/^(mailto:|tel:|sms:|javascript:)/i.test(trimmed)) {
+    return false;
+  }
+
+  if (/^https?:\/\//i.test(trimmed)) {
+    try {
+      const linkHost = normalizeHost(new URL(trimmed).hostname);
+      const siteHost = getConfiguredSiteHost();
+      if (siteHost && linkHost === siteHost) {
+        return false;
+      }
+    } catch {
+      // Fall through to conservative external behavior.
+    }
+    return true;
+  }
+
+  return false;
+}
+
 /**
  * Link atom.
  *
@@ -34,7 +84,7 @@ export function Link({
     );
   }
 
-  const isExternal = external ?? href.startsWith("http");
+  const isExternal = external ?? isExternalHref(href);
 
   if (isExternal) {
     return (
