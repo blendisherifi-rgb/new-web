@@ -1943,14 +1943,12 @@ export const SECTIONS_SHOWCASE_GROUPS: SectionGroup[] = [
         acfGroupName: "client_success_story_testimonial_card_section",
         order: 16,
         fields: {
-          portraitSrc: "/hero-platform-screenshot.png",
-          portraitAlt: "Joe Smyth",
           quote:
-            "Client quote....Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut commodo sagittis, sapien dui mattis dui, non pulvinar lorem felis nec erat. Aliquam egestas, velit at condimentum placerat, sem sapien laoreet mauris",
-          authorName: "Joe Smyth",
-          authorTitle: "AP Manager, Superdry",
+            "With SoftCo, I don't see why we couldn't process two, three, or four times the number of invoices without adding staff.",
+          authorName: "Daniel Schoenknecht",
+          authorTitle: "Director of Accounting, Ortho Molecular Products",
           clientLogoSrc: "/vercel.svg",
-          clientLogoAlt: "Superdry",
+          clientLogoAlt: "Ortho Molecular Products",
         },
       },
       {

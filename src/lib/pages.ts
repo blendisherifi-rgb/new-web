@@ -901,19 +901,8 @@ function transformSection(node: Record<string, unknown>, index: number): Section
     );
   }
 
-  // Testimonial card: portrait + clientLogo media edges
+  // Testimonial card: clientLogo media edge (quote/name/title are scalars)
   if (acfGroupName === "client_success_story_testimonial_card_section") {
-    const portrait = normalized.portrait as Record<string, unknown> | undefined;
-    const pNode = portrait?.node as Record<string, unknown> | undefined;
-    normalized.portraitSrc =
-      (pNode?.sourceUrl as string | undefined) ??
-      (portrait as { sourceUrl?: string } | undefined)?.sourceUrl ??
-      "";
-    normalized.portraitAlt =
-      (pNode?.altText as string | undefined) ??
-      (portrait as { altText?: string } | undefined)?.altText ??
-      "";
-    delete normalized.portrait;
     const cl = normalized.clientLogo as Record<string, unknown> | undefined;
     const clNode = cl?.node as Record<string, unknown> | undefined;
     normalized.clientLogoSrc =
