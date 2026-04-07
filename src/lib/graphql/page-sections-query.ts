@@ -1041,6 +1041,7 @@ function buildFragment(): string {
     }
     ... on ${ApSoftcoExperienceLayout} {
       overline
+      sectionBackground
       headingHighlight
       headingLine1After
       headingLine2
@@ -1248,7 +1249,7 @@ function buildFragmentResilient(): string {
     ... on ${WhereWeExcelHighlightPointsLayout} { tag headingBefore headingHighlight headingAfter body ctaLabel ctaHref excelHighlightPoints { headingBefore headingHighlight headingAfter body } }
     ... on ${NewsAndEventsLayout} { heroOverline heroHeading heroBody heroCtaLabel heroCtaHref cardOverline cardTitle cardMeta cardImage { node { sourceUrl altText } } cardBody cardCtaLabel cardCtaHref }
     ... on ${LatestResourcesLayout} { heading viewAllLabel viewAllHref }
-    ... on ${ApSoftcoExperienceLayout} { overline headingHighlight headingLine1After headingLine2 headingLine3 image { node { sourceUrl altText } } body }
+    ... on ${ApSoftcoExperienceLayout} { overline sectionBackground headingHighlight headingLine1After headingLine2 headingLine3 image { node { sourceUrl altText } } body }
   `;
 
   if (SECTIONS_PATH === "pageContentSections.contentSections") {
