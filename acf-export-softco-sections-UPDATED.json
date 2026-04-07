@@ -4227,7 +4227,7 @@
                         },
                         {
                             "key": "field_mtt_members",
-                            "label": "Team Members (max 8 on this page)",
+                            "label": "Team Members",
                             "name": "members",
                             "aria-label": "",
                             "type": "relationship",
@@ -4249,7 +4249,7 @@
                             ],
                             "return_format": "object",
                             "min": "",
-                            "max": 8,
+                            "max": "",
                             "elements": [
                                 "featured_image"
                             ],
@@ -16719,6 +16719,6 @@
     "graphql_field_name": "pageContentSections",
     "map_graphql_types_from_location_rules": 0,
     "graphql_types": "",
-    "modified": 1775563200
+    "modified": 1775650000
 }
 ]

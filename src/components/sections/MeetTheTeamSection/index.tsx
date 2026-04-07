@@ -30,7 +30,7 @@ interface MeetTheTeamSectionProps {
   overline: string;
   /** Section title. */
   title: string;
-  /** Team members (up to 8 shown). */
+  /** Team members shown in the grid (any number; wraps in rows of 4 on large screens). */
   members: TeamMember[];
   /** CTA button label. */
   ctaLabel?: string;
@@ -191,7 +191,7 @@ function TeamModal({
 /**
  * Meet the team section.
  *
- * Blue background, overline, centered title, 4-col grid of team cards (max 8),
+ * Blue background, overline, centered title, responsive grid of team cards,
  * each with a "+" button that opens a modal with full bio and navigation.
  */
 export function MeetTheTeamSection({
@@ -203,13 +203,12 @@ export function MeetTheTeamSection({
   sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: MeetTheTeamSectionProps) {
   const [modalIndex, setModalIndex] = useState<number | null>(null);
-  const visibleMembers = members.slice(0, 8);
 
   const openModal = (i: number) => setModalIndex(i);
   const closeModal = useCallback(() => setModalIndex(null), []);
   const nextMember = useCallback(() => {
-    setModalIndex((i) => (i !== null && i < visibleMembers.length - 1 ? i + 1 : i));
-  }, [visibleMembers.length]);
+    setModalIndex((i) => (i !== null && i < members.length - 1 ? i + 1 : i));
+  }, [members.length]);
   const prevMember = useCallback(() => {
     setModalIndex((i) => (i !== null && i > 0 ? i - 1 : i));
   }, []);
@@ -237,7 +236,7 @@ export function MeetTheTeamSection({
 
           {/* 4-column grid — 60px column gap, 100px row gap */}
           <div className="mt-10 grid grid-cols-1 gap-y-8 tablet-down:mt-16 tablet-down:grid-cols-4 tablet-down:gap-x-[60px] tablet-down:gap-y-[100px]">
-            {visibleMembers.map((member, i) => (
+            {members.map((member, i) => (
               <div key={i} className="flex flex-col">
                 {/* Card image with "+" button — 332×515 */}
                 <div className="relative overflow-hidden rounded-sm">
@@ -290,7 +289,7 @@ export function MeetTheTeamSection({
       {/* Modal */}
       {modalIndex !== null && (
         <TeamModal
-          members={visibleMembers}
+          members={members}
           activeIndex={modalIndex}
           onClose={closeModal}
           onNext={nextMember}
