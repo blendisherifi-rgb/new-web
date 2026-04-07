@@ -152,12 +152,6 @@ function buildFragment(): string {
         description
         ctaLabel
         ctaHref
-        rowImage {
-          node {
-            sourceUrl
-            altText
-          }
-        }
       }
       image1 {
         node {
@@ -1084,14 +1078,7 @@ function buildFragmentResilient(): string {
       tag
       headline
       intro
-      rows {
-        title
-        subtitle
-        description
-        ctaLabel
-        ctaHref
-        rowImage { node { sourceUrl altText } }
-      }
+      rows { title subtitle description ctaLabel ctaHref }
       image1 { node { sourceUrl altText } }
       image2 { node { sourceUrl altText } }
     }
