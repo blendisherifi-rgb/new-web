@@ -142,7 +142,7 @@ export function StrategicPrioritiesSection({
             {rows.map((row, i) => (
               <div
                 key={`${row.priority}-${i}`}
-                className="grid grid-cols-1 gap-6 border-b border-white/10 py-8 tablet-down:grid-cols-[minmax(0,0.88fr)_100px_minmax(0,1.12fr)] tablet-down:items-center tablet-down:gap-x-4 tablet-down:gap-y-0 tablet-down:py-9"
+                className="grid grid-cols-1 gap-6 border-b border-white/10 py-8 tablet-down:grid-cols-[minmax(0,1fr)_100px_minmax(0,1fr)] tablet-down:items-center tablet-down:gap-x-4 tablet-down:gap-y-0 tablet-down:py-9"
               >
                 <p className="text-center font-heading text-[22px] font-semibold leading-[1.25] tracking-[-0.01em] text-white tablet-down:text-left tablet-down:text-[24px] tablet-down:leading-[1.3]">
                   {row.priority}
