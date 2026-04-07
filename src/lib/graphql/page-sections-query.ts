@@ -10,8 +10,8 @@
  * AP Automation background: default GraphQL field `bg` (matches ACF GraphQL Field Name). Override with
  * AP_AUTOMATION_BG_GRAPHQL_FIELD if you use a different name (e.g. `sectionbackground`).
  *
- * Analytics slides: query `slideheadingbefore` / `slideheadinghighlight` / `slidebody` (ACF) with aliases
- * so JSON keys match `slideHeadingBefore` / `slideHeadingHighlight` / `slideBody`.
+ * Analytics slides: ACF field names `slideHeadingBefore` / `slideHeadingHighlight` / `slideBody` (camelCase)
+ * are queried directly (no aliases needed since graphql_field_name matches).
  */
 
 const SECTIONS_PATH =
@@ -97,6 +97,10 @@ const SocialLayout = `${LAYOUT_PREFIX}SocialSection${LAYOUT_SUFFIX}`;
 const GovernanceLayout = `${LAYOUT_PREFIX}GovernanceSection${LAYOUT_SUFFIX}`;
 const CommunitySupportLayout = `${LAYOUT_PREFIX}CommunitySupportSection${LAYOUT_SUFFIX}`;
 const ContactFormLayout = `${LAYOUT_PREFIX}ContactFormSection${LAYOUT_SUFFIX}`;
+const WhereWeExcelHighlightPointsLayout = `${LAYOUT_PREFIX}WhereWeExcelHighlightPointsSection${LAYOUT_SUFFIX}`;
+const NewsAndEventsLayout = `${LAYOUT_PREFIX}NewsAndEventsSection${LAYOUT_SUFFIX}`;
+const LatestResourcesLayout = `${LAYOUT_PREFIX}LatestResourcesSection${LAYOUT_SUFFIX}`;
+const ApSoftcoExperienceLayout = `${LAYOUT_PREFIX}ApSoftcoExperienceSection${LAYOUT_SUFFIX}`;
 /** Client success story (case study) page sections — must match WPGraphQL ACF layout types */
 const ClientSuccessStoryHeroLayout = `${LAYOUT_PREFIX}ClientSuccessStoryHeroSection${LAYOUT_SUFFIX}`;
 const ClientSuccessStoryProjectAtAGlanceLayout = `${LAYOUT_PREFIX}ClientSuccessStoryProjectAtAGlanceSection${LAYOUT_SUFFIX}`;
@@ -757,7 +761,6 @@ function buildFragment(): string {
     }
     ... on ${ApAutomationForCfoLayout} {
       overline
-      sectionBackground
       headingHighlight
       headingLine1After
       headingLine2
@@ -800,9 +803,9 @@ function buildFragment(): string {
       body
       slides {
         image { node { sourceUrl altText } }
-        slideHeadingBefore: slideheadingbefore
-        slideHeadingHighlight: slideheadinghighlight
-        slideBody: slidebody
+        slideHeadingBefore
+        slideHeadingHighlight
+        slideBody
       }
     }
     ... on ${SecurityComplianceLayout} {
@@ -1002,6 +1005,49 @@ function buildFragment(): string {
     ... on ${ContactFormLayout} {
       __typename
     }
+    ... on ${WhereWeExcelHighlightPointsLayout} {
+      tag
+      headingBefore
+      headingHighlight
+      headingAfter
+      body
+      ctaLabel
+      ctaHref
+      excelHighlightPoints {
+        headingBefore
+        headingHighlight
+        headingAfter
+        body
+      }
+    }
+    ... on ${NewsAndEventsLayout} {
+      heroOverline
+      heroHeading
+      heroBody
+      heroCtaLabel
+      heroCtaHref
+      cardOverline
+      cardTitle
+      cardMeta
+      cardImage { node { sourceUrl altText } }
+      cardBody
+      cardCtaLabel
+      cardCtaHref
+    }
+    ... on ${LatestResourcesLayout} {
+      heading
+      viewAllLabel
+      viewAllHref
+    }
+    ... on ${ApSoftcoExperienceLayout} {
+      overline
+      headingHighlight
+      headingLine1After
+      headingLine2
+      headingLine3
+      image { node { sourceUrl altText } }
+      body
+    }
   `;
 
   if (SECTIONS_PATH === "pageContentSections.contentSections") {
@@ -1174,10 +1220,10 @@ function buildFragmentResilient(): string {
     ... on ${OpenRolesLayout} { overline headingLine1 headingLine2 locationFilterLabel departmentFilterLabel hireHiveLive viewAllHref viewAllLabel openRolesJobs { title location department excerpt readMoreHref } }
     ... on ${FeatureModalLayout} { overline headingBefore headingHighlight headingAfter body ctaLabel ctaHref featureModalItems { title description modalLabel modalTitle modalDescription image { node { sourceUrl altText } } } }
     ... on ${ApAutomationLayout} { overline ${AP_AUTOMATION_BG_GRAPHQL_FIELD} headingLine1 headingLine2 image { node { sourceUrl altText } } softcoApImage { node { sourceUrl altText } } body ctaLabel ctaHref gartnerLogo { node { sourceUrl altText } } endorsementText metrics { value label } }
-    ... on ${ApAutomationForCfoLayout} { overline sectionBackground headingHighlight headingLine1After headingLine2 headingLine3 body image { node { sourceUrl altText } } }
+    ... on ${ApAutomationForCfoLayout} { overline headingHighlight headingLine1After headingLine2 headingLine3 body image { node { sourceUrl altText } } }
     ... on ${ArchitectureLayout} { overline headingLine1 headingLine2 body image { node { sourceUrl altText } } p2pImage { node { sourceUrl altText } } apImage { node { sourceUrl altText } } }
     ... on ${ErpIntegrationLayout} { overline headingLine1 headingLine2 body ctaLabel ctaHref moreCountHighlight moreCountRest erpLogos { logoImg { node { sourceUrl altText } } logoAlt href } }
-    ... on ${AnalyticsDashboardsLayout} { overline mainTitle introBody ctaLabel ctaHref headingBefore headingHighlight body slides { image { node { sourceUrl altText } } slideHeadingBefore: slideheadingbefore slideHeadingHighlight: slideheadinghighlight slideBody: slidebody } }
+    ... on ${AnalyticsDashboardsLayout} { overline mainTitle introBody ctaLabel ctaHref headingBefore headingHighlight body slides { image { node { sourceUrl altText } } slideHeadingBefore slideHeadingHighlight slideBody } }
     ... on ${SecurityComplianceLayout} { overline headingLine1 headingLine2 body certifications { image { node { sourceUrl altText } } } }
     ... on ${PartnerEcosystemLayout} { overline headingBlue1 headingDark headingBlue2 body partnerLogos { image { node { sourceUrl altText } } imageAlt } }
     ... on ${EvidenceLayout} { overline headingBefore headingHighlight headingAfter body evidenceMetrics { image { node { sourceUrl altText } } label } }
@@ -1199,6 +1245,10 @@ function buildFragmentResilient(): string {
     ... on ${ClientSuccessStoryTestimonialCardLayout} { portrait { node { sourceUrl altText } } quote authorName authorTitle clientLogo { node { sourceUrl altText } } }
     ... on ${ClientSuccessStoryRelatedStoriesLayout} { titleLine1 titleLine2 stories { image { node { sourceUrl altText } } tags { label } cardTitle ctaHref } }
     ... on ${ContactFormLayout} { __typename }
+    ... on ${WhereWeExcelHighlightPointsLayout} { tag headingBefore headingHighlight headingAfter body ctaLabel ctaHref excelHighlightPoints { headingBefore headingHighlight headingAfter body } }
+    ... on ${NewsAndEventsLayout} { heroOverline heroHeading heroBody heroCtaLabel heroCtaHref cardOverline cardTitle cardMeta cardImage { node { sourceUrl altText } } cardBody cardCtaLabel cardCtaHref }
+    ... on ${LatestResourcesLayout} { heading viewAllLabel viewAllHref }
+    ... on ${ApSoftcoExperienceLayout} { overline headingHighlight headingLine1After headingLine2 headingLine3 image { node { sourceUrl altText } } body }
   `;
 
   if (SECTIONS_PATH === "pageContentSections.contentSections") {

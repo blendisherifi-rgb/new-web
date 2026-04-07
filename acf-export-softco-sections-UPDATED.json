@@ -12454,6 +12454,31 @@
                             "append": ""
                         },
                         {
+                            "key": "field_aafc_section_background",
+                            "label": "Section Background",
+                            "name": "sectionBackground",
+                            "aria-label": "",
+                            "type": "select",
+                            "instructions": "Choose the section background colour.",
+                            "required": 0,
+                            "conditional_logic": false,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "light_blue": "Light Blue",
+                                "white": "White"
+                            },
+                            "default_value": "light_blue",
+                            "return_format": "value",
+                            "multiple": 0,
+                            "allow_null": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "sectionBackground"
+                        },
+                        {
                             "key": "field_aafc_heading_highlight",
                             "label": "Heading highlight (blue)",
                             "name": "headingHighlight",
@@ -16489,6 +16514,31 @@
                             "placeholder": "",
                             "prepend": "",
                             "append": ""
+                        },
+                        {
+                            "key": "field_ase_section_background",
+                            "label": "Section Background",
+                            "name": "sectionBackground",
+                            "aria-label": "",
+                            "type": "select",
+                            "instructions": "Choose the section background colour.",
+                            "required": 0,
+                            "conditional_logic": false,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "light_blue": "Light Blue",
+                                "white": "White"
+                            },
+                            "default_value": "light_blue",
+                            "return_format": "value",
+                            "multiple": 0,
+                            "allow_null": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "sectionBackground"
                         },
                         {
                             "key": "field_ase_heading_highlight",
