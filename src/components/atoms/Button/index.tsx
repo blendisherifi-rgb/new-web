@@ -1,6 +1,5 @@
 import { type ReactNode, type ButtonHTMLAttributes } from "react";
 import NextLink from "next/link";
-import { isExternalHref, toInternalPath } from "@/lib/isExternalHref";
 
 type ButtonVariant =
   | "primary"
@@ -35,7 +34,7 @@ interface ButtonAsButton
 interface ButtonAsLink extends ButtonBaseProps {
   /** When href is provided, renders a link styled as a button. */
   href: string;
-  /** If true, opens in a new tab (defaults to true for external URLs). */
+  /** If true, opens in a new tab. Defaults to false (same tab). */
   external?: boolean;
   type?: undefined;
 }
@@ -109,7 +108,7 @@ const baseStyles = [
  *
  * - Renders a `<button>` when no `href` is provided.
  * - Renders a Next.js `<Link>` (internal) or `<a>` (external) when `href` is set.
- * - Variants: primary (filled blue), secondary (outlined blue), dark, dark-outline, orange, orange-outline, text (link style).
+ * - CTAs always open in the same tab unless `external={true}` is explicitly set.
  */
 export function Button(props: ButtonProps) {
   const {
@@ -210,8 +209,9 @@ export function Button(props: ButtonProps) {
   // Link mode (only when we have a non-empty href)
   if (hrefTrimmed) {
     const externalProp = (props as Partial<ButtonAsLink>).external;
-    const isExternal = externalProp ?? isExternalHref(hrefTrimmed);
-    if (isExternal) {
+
+    // Only open in a new tab when explicitly requested
+    if (externalProp === true) {
       return (
         <a
           href={hrefTrimmed}
@@ -224,9 +224,24 @@ export function Button(props: ButtonProps) {
         </a>
       );
     }
+
+    // Absolute URLs: plain <a> in same tab (avoids NextLink issues with full URLs)
+    if (hrefTrimmed.startsWith("http")) {
+      return (
+        <a
+          href={hrefTrimmed}
+          className={classes}
+          aria-disabled={disabled || undefined}
+        >
+          {content}
+        </a>
+      );
+    }
+
+    // Relative paths: NextLink for fast SPA navigation
     return (
       <NextLink
-        href={toInternalPath(hrefTrimmed)}
+        href={hrefTrimmed}
         className={classes}
         aria-disabled={disabled || undefined}
       >
