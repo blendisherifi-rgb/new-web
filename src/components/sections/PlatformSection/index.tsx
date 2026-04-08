@@ -36,7 +36,7 @@ interface PlatformSectionProps {
   headline: string;
   /** Supporting paragraph below headline. */
   intro: string;
-  /** Content rows (first two are from WordPress by default). */
+  /** Content rows (first three are from WordPress by default). */
   rows: PlatformRow[];
   /** First row image. */
   image1Src: string;
@@ -44,6 +44,9 @@ interface PlatformSectionProps {
   /** Second row image. */
   image2Src: string;
   image2Alt: string;
+  /** Third row image. */
+  image3Src?: string;
+  image3Alt?: string;
   /** Optional extra content blocks injected from code/env. */
   extraBlocks?: PlatformContentBlock[];
   sectionTitleLevel?: SectionTitleLevel;
@@ -64,6 +67,8 @@ export function PlatformSection({
   image1Alt,
   image2Src,
   image2Alt,
+  image3Src,
+  image3Alt,
   extraBlocks = [],
   sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: PlatformSectionProps) {
@@ -75,7 +80,7 @@ export function PlatformSection({
   const fallbackImages = [
     { imageSrc: image1Src, imageAlt: image1Alt },
     { imageSrc: image2Src, imageAlt: image2Alt },
-    { imageSrc: image2Src, imageAlt: image2Alt },
+    { imageSrc: image3Src || image2Src, imageAlt: image3Alt || image2Alt },
   ];
 
   const rowBlocks: PlatformContentBlock[] = limitedRows

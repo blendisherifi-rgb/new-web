@@ -169,6 +169,12 @@ function buildFragment(): string {
           altText
         }
       }
+      image3 {
+        node {
+          sourceUrl
+          altText
+        }
+      }
     }
     ... on ${InnovationLayout} {
       headingBefore
@@ -1129,6 +1135,7 @@ function buildFragmentResilient(): string {
       rows { title subtitle description ctaLabel ctaHref }
       image1 { node { sourceUrl altText } }
       image2 { node { sourceUrl altText } }
+      image3 { node { sourceUrl altText } }
     }
     ... on ${InnovationLayout} {
       headingBefore
