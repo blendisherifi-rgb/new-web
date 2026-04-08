@@ -314,14 +314,19 @@ function transformSection(node: Record<string, unknown>, index: number): Section
   if (acfGroupName === "platform_section") {
     const img1 = normalized.image1 as Record<string, unknown> | undefined;
     const img2 = normalized.image2 as Record<string, unknown> | undefined;
+    const img2Copy = normalized.image2Copy as Record<string, unknown> | undefined;
     const n1 = img1?.node as Record<string, unknown> | undefined;
     const n2 = img2?.node as Record<string, unknown> | undefined;
+    const n2c = img2Copy?.node as Record<string, unknown> | undefined;
     normalized.image1Src = n1?.sourceUrl ?? img1?.sourceUrl ?? "";
     normalized.image1Alt = n1?.altText ?? img1?.altText ?? "";
     normalized.image2Src = n2?.sourceUrl ?? img2?.sourceUrl ?? "";
     normalized.image2Alt = n2?.altText ?? img2?.altText ?? "";
+    normalized.image3Src = n2c?.sourceUrl ?? img2Copy?.sourceUrl ?? "";
+    normalized.image3Alt = n2c?.altText ?? img2Copy?.altText ?? "";
     delete normalized.image1;
     delete normalized.image2;
+    delete normalized.image2Copy;
 
     const extraBlock = getPlatformExtraBlockFromEnv();
     if (extraBlock) {
