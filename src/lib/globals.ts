@@ -76,12 +76,18 @@ const PLACEHOLDER_GLOBALS: GlobalsData = {
       {
         heading: "What we do",
         links: [
-          { label: "Accounts payable", href: "/what-we-do/accounts-payable" },
-          { label: "Procure-to-pay", href: "/what-we-do/procure-to-pay" },
+          { label: "Accounts payable", href: "/accounts-payable-automation" },
+          { label: "Procure-to-pay", href: "/solution-p2p-automation" },
           { label: "e-invoicing", href: "/e-invoicing-software" },
         ],
+        extraHeading: "Platform",
+        extraLinks: [
+          { label: "AI Engine", href: "/ai-accounts-payable-automation" },
+          { label: "AI Analytics", href: "/platform-accounts-payable-analytics" },
+          { label: "ERP Integration", href: "/platform-ap-automation-erp-integration" },
+          { label: "Supplier Management", href: "/platform-supplier-portal-software" },
+        ],
         featuredLinks: [
-          { label: "The Perfect Fit framework", href: "/perfect-fit-framework" },
           { label: "Client success stories", href: "/case-studies" },
         ],
       },
@@ -107,7 +113,7 @@ const PLACEHOLDER_GLOBALS: GlobalsData = {
       {
         heading: "Who we are",
         links: [
-          { label: "About SoftCo", href: "/about" },
+          { label: "About Us", href: "/about" },
           { label: "Leadership team", href: "/leadership-team" },
           { label: "ESG", href: "/esg" },
           { label: "Careers", href: "/careers" },
@@ -152,7 +158,6 @@ const PLACEHOLDER_GLOBALS: GlobalsData = {
     ],
     legalLinks: [
       { label: "Privacy Policy", href: "/privacy" },
-      { label: "Cookie Policy", href: "/cookies" },
     ],
     copyright: "© 2026 SoftCo Group Ltd. All rights reserved.",
   },

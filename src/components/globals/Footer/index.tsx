@@ -1,7 +1,7 @@
 import { Link } from "@/components/atoms/Link";
 import { Image } from "@/components/atoms/Image";
 import { Paragraph } from "@/components/atoms/Paragraph";
-import { CookieSettingsLink } from "@/components/globals/CookieConsent/CookieSettingsLink";
+
 import type { FooterData } from "@/lib/globals";
 import type { Locale } from "@/lib/i18n";
 import { homePath } from "@/lib/i18n";
@@ -201,14 +201,7 @@ export function Footer({ data, locale }: FooterProps) {
                 </Link>
               </li>
             ))}
-            <li className="flex items-center gap-3">
-              {(data.legalLinks?.length ?? 0) > 0 ? (
-                <span className="text-brand-dark-40" aria-hidden>
-                  /
-                </span>
-              ) : null}
-              <CookieSettingsLink />
-            </li>
+            
           </ul>
         </div>
       </div>
