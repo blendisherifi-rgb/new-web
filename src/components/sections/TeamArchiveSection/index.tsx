@@ -220,15 +220,15 @@ export function TeamArchiveSection({
   overline,
   title,
   body,
-  departments,
+  departments = [],
   sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: TeamArchiveSectionProps) {
-  // Flatten all members into one list so modal prev/next works across departments.
-  const allMembers = departments.flatMap((d) => d.members);
+  const safeDepartments = Array.isArray(departments) ? departments : [];
+  const allMembers = safeDepartments.flatMap((d) => d.members ?? []);
 
   // Track each member's global index: dept index → member index → global index.
   let globalCounter = 0;
-  const deptGlobalOffsets: number[][] = departments.map((dept) => {
+  const deptGlobalOffsets: number[][] = safeDepartments.map((dept) => {
     const offsets = dept.members.map(() => globalCounter++);
     return offsets;
   });
@@ -276,7 +276,7 @@ export function TeamArchiveSection({
           </div>
 
           {/* Department groups */}
-          {departments.map((dept, di) => (
+          {safeDepartments.map((dept, di) => (
             <div key={di} className="mt-10 tablet-down:mt-24">
               {/* Department overline + divider */}
               <Overline className="text-brand-orange">{dept.name}</Overline>

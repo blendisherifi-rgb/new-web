@@ -75,7 +75,7 @@ export function CfoSeriesSection({
 
         <Heading
           level={sectionTitleLevel}
-          className="mx-auto mt-8 max-w-[min(100%,88rem)] font-heading font-semibold text-[46px] leading-[1.08] tracking-[0] text-balance text-white tablet-down:mt-10 tablet-down:text-[80px] tablet-down:leading-[88px]"
+          className="mx-auto mt-8 max-w-[min(100%,88rem)] font-heading font-semibold text-[46px] leading-[1.08] tracking-[0] text-white tablet-down:mt-10 tablet-down:text-[80px] tablet-down:leading-[88px]"
         >
           <span className="block">{headingLine1}</span>
           <span className="mt-2 block tablet-down:mt-3">{headingLine2}</span>
