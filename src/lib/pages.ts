@@ -952,23 +952,33 @@ function transformSection(node: Record<string, unknown>, index: number): Section
 
   // Team archive: departments[].members[].image.node -> imageSrc/imageAlt
   if (acfGroupName === "team_archive_section") {
-    const raw = normalized.departments ?? [];
+    const raw = normalized.departments;
     if (Array.isArray(raw)) {
-      normalized.departments = (raw as unknown[]).map((d) => {
-        const dept = { ...(d as Record<string, unknown>) };
-        if (Array.isArray(dept.members)) {
-          dept.members = (dept.members as unknown[]).map((m) => {
-            const member = { ...(m as Record<string, unknown>) };
-            const img = member.image as Record<string, unknown> | undefined;
-            const n = img?.node as Record<string, unknown> | undefined;
-            member.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
-            member.imageAlt = n?.altText ?? img?.altText ?? "";
-            delete member.image;
-            return member;
-          });
-        }
-        return dept;
-      });
+      normalized.departments = (raw as unknown[])
+        .filter((d) => d && typeof d === "object")
+        .map((d) => {
+          const dept = { ...(d as Record<string, unknown>) };
+          const rawMembers = dept.members;
+          dept.members = Array.isArray(rawMembers)
+            ? (rawMembers as unknown[])
+                .filter((m) => m && typeof m === "object")
+                .map((m) => {
+                  const member = { ...(m as Record<string, unknown>) };
+                  const img = member.image as Record<string, unknown> | undefined;
+                  const n = img?.node as Record<string, unknown> | undefined;
+                  member.imageSrc = n?.sourceUrl ?? img?.sourceUrl ?? "";
+                  member.imageAlt = n?.altText ?? img?.altText ?? "";
+                  member.name = member.name ?? "";
+                  member.title = member.title ?? "";
+                  delete member.image;
+                  return member;
+                })
+            : [];
+          dept.name = dept.name ?? "";
+          return dept;
+        });
+    } else {
+      normalized.departments = [];
     }
   }
 

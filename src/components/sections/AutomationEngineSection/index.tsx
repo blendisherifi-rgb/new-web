@@ -77,7 +77,7 @@ export function AutomationEngineSection({
         />
       </div>
 
-      <div className="relative mx-auto w-full max-w-[1440px] px-4 py-16 text-center text-white tablet-down:px-6 tablet-down:py-24">
+      <div className="relative mx-auto w-full max-w-[1440px] px-2 py-16 text-center text-white tablet-down:px-4 tablet-down:py-24">
         <Overline className="text-brand-orange">{overline}</Overline>
 
         <Heading

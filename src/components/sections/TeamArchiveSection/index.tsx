@@ -30,6 +30,11 @@ interface TeamArchiveSectionProps {
   sectionTitleLevel?: SectionTitleLevel;
 }
 
+function safeMembers(dept: Record<string, unknown> | TeamDepartment): TeamMember[] {
+  const raw = (dept as TeamDepartment).members;
+  return Array.isArray(raw) ? raw : [];
+}
+
 /* ─── Modal ──────────────────────────────────────────────────────────────── */
 
 function TeamModal({
@@ -45,13 +50,6 @@ function TeamModal({
   onNext: () => void;
   onPrev: () => void;
 }) {
-  const member = members[activeIndex];
-  if (!member) return null;
-
-  const nameParts = member.name.trim().split(" ");
-  const firstName = nameParts[0];
-  const restName = nameParts.slice(1).join(" ");
-
   useEffect(() => {
     return acquireScrollLock();
   }, []);
@@ -65,6 +63,13 @@ function TeamModal({
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose, onNext, onPrev]);
+
+  const member = members[activeIndex];
+  if (!member) return null;
+
+  const nameParts = (member.name ?? "").trim().split(" ");
+  const firstName = nameParts[0];
+  const restName = nameParts.slice(1).join(" ");
 
   const ctrlBtnBase = "flex h-10 w-10 items-center justify-center rounded-md text-brand-dark transition-colors";
 
@@ -144,7 +149,7 @@ function TeamModal({
           <div className="flex flex-col gap-6 md:flex-row md:gap-8">
             <div className="relative shrink-0 overflow-hidden bg-brand-grey" style={{ width: 332, height: 515 }}>
               <Image
-                src={member.imageSrc}
+                src={member.imageSrc || "/placeholder-team.png"}
                 alt={member.imageAlt ?? member.name}
                 fill
                 className="object-cover object-top"
@@ -183,8 +188,8 @@ function MemberCard({
       <div className="relative overflow-hidden rounded-sm">
         <div className="relative w-full aspect-square bg-brand-blue-40 tablet-down:aspect-[332/515]">
           <Image
-            src={member.imageSrc}
-            alt={member.imageAlt ?? member.name}
+            src={member.imageSrc || "/placeholder-team.png"}
+            alt={member.imageAlt ?? member.name ?? ""}
             fill
             className="object-cover object-top"
             sizes="(max-width: 768px) 50vw, 25vw"
@@ -194,7 +199,7 @@ function MemberCard({
           type="button"
           onClick={() => onOpen(globalIndex)}
           className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-sm bg-brand-orange text-[20px] font-bold leading-none text-white transition-opacity hover:opacity-80"
-          aria-label={`View ${member.name} profile`}
+          aria-label={`View ${member.name ?? "team member"} profile`}
         >
           +
         </button>
@@ -223,13 +228,15 @@ export function TeamArchiveSection({
   departments = [],
   sectionTitleLevel = DEFAULT_SECTION_TITLE_LEVEL,
 }: TeamArchiveSectionProps) {
-  const safeDepartments = Array.isArray(departments) ? departments : [];
-  const allMembers = safeDepartments.flatMap((d) => d.members ?? []);
+  const safeDepartments = (Array.isArray(departments) ? departments : []).filter(
+    (d) => d && typeof d === "object",
+  );
+  const allMembers = safeDepartments.flatMap((d) => safeMembers(d));
 
-  // Track each member's global index: dept index → member index → global index.
   let globalCounter = 0;
   const deptGlobalOffsets: number[][] = safeDepartments.map((dept) => {
-    const offsets = dept.members.map(() => globalCounter++);
+    const members = safeMembers(dept);
+    const offsets = members.map(() => globalCounter++);
     return offsets;
   });
 
@@ -276,25 +283,29 @@ export function TeamArchiveSection({
           </div>
 
           {/* Department groups */}
-          {safeDepartments.map((dept, di) => (
-            <div key={di} className="mt-10 tablet-down:mt-24">
-              {/* Department overline + divider */}
-              <Overline className="text-brand-orange">{dept.name}</Overline>
-              <hr className="mt-3 border-0 border-t border-white/30" />
+          {safeDepartments.map((dept, di) => {
+            const members = safeMembers(dept);
+            if (members.length === 0) return null;
+            return (
+              <div key={di} className="mt-10 tablet-down:mt-24">
+                {/* Department overline + divider */}
+                <Overline className="text-brand-orange">{dept.name}</Overline>
+                <hr className="mt-3 border-0 border-t border-white/30" />
 
-              {/* Members grid */}
-              <div className="mt-8 grid grid-cols-1 gap-y-8 tablet-down:mt-10 tablet-down:grid-cols-4 tablet-down:gap-x-[60px] tablet-down:gap-y-[100px]">
-                {dept.members.map((member, mi) => (
-                  <MemberCard
-                    key={mi}
-                    member={member}
-                    globalIndex={deptGlobalOffsets[di][mi]}
-                    onOpen={setModalIndex}
-                  />
-                ))}
+                {/* Members grid */}
+                <div className="mt-8 grid grid-cols-1 gap-y-8 tablet-down:mt-10 tablet-down:grid-cols-4 tablet-down:gap-x-[60px] tablet-down:gap-y-[100px]">
+                  {members.map((member, mi) => (
+                    <MemberCard
+                      key={mi}
+                      member={member}
+                      globalIndex={deptGlobalOffsets[di]?.[mi] ?? 0}
+                      onOpen={setModalIndex}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
