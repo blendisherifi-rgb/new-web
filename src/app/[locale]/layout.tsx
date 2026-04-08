@@ -16,8 +16,19 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   const locale = isLocale(localeParam) ? localeParam : "us";
 
   const [menus, globals] = await Promise.all([
-    fetchMenus(locale),
-    fetchGlobalFields(locale),
+    fetchMenus(locale).catch((err) => {
+      console.error("[layout] fetchMenus failed:", err instanceof Error ? err.message : err);
+      return { primary: [] } as Awaited<ReturnType<typeof fetchMenus>>;
+    }),
+    fetchGlobalFields(locale).catch((err) => {
+      console.error("[layout] fetchGlobalFields failed:", err instanceof Error ? err.message : err);
+      return {
+        promoBar: { enabled: false },
+        utilityBar: {},
+        headerCta: {},
+        footer: {},
+      } as Awaited<ReturnType<typeof fetchGlobalFields>>;
+    }),
   ]);
 
   return (

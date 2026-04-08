@@ -1830,7 +1830,19 @@ export const fetchPageData = cache(async function fetchPageData(
   let sections: SectionData[];
   if (Array.isArray(rawSections) && rawSections.length > 0) {
     sections = rawSections
-      .map((node, i) => transformSection(node as Record<string, unknown>, i))
+      .map((node, i) => {
+        try {
+          return transformSection(node as Record<string, unknown>, i);
+        } catch (err) {
+          const typename = (node as Record<string, unknown>)?.__typename ??
+            (node as Record<string, unknown>)?.fieldGroupName ?? "unknown";
+          console.error(
+            `[pages] transformSection crashed for section #${i} (${String(typename)}):`,
+            err instanceof Error ? err.message : err,
+          );
+          return null;
+        }
+      })
       .filter((s): s is SectionData => s !== null);
   } else {
     sections = [];
