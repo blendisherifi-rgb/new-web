@@ -12,6 +12,17 @@ function getConfiguredSiteHost(): string | null {
   }
 }
 
+function isSameHost(href: string): boolean {
+  if (!/^https?:\/\//i.test(href)) return false;
+  try {
+    const linkHost = normalizeHost(new URL(href).hostname);
+    const siteHost = getConfiguredSiteHost();
+    return !!(siteHost && linkHost === siteHost);
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Determine whether a URL should be treated as external.
  *
@@ -44,16 +55,7 @@ export function isExternalHref(href: string): boolean {
   }
 
   if (/^https?:\/\//i.test(trimmed)) {
-    try {
-      const linkHost = normalizeHost(new URL(trimmed).hostname);
-      const siteHost = getConfiguredSiteHost();
-      if (siteHost && linkHost === siteHost) {
-        return false;
-      }
-    } catch {
-      // Fall through to conservative external behavior.
-    }
-    return true;
+    return !isSameHost(trimmed);
   }
 
   if (trimmed.startsWith("//")) return true;
@@ -61,4 +63,24 @@ export function isExternalHref(href: string): boolean {
   if (/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\/.*)?$/.test(trimmed)) return true;
 
   return false;
+}
+
+/**
+ * Convert same-host absolute URLs to relative paths so NextLink
+ * navigates correctly regardless of deployment domain (e.g. Vercel
+ * preview vs production).
+ *
+ * `https://softco.com/book-a-demo?x=1#top` → `/book-a-demo?x=1#top`
+ *
+ * Non-matching URLs are returned unchanged.
+ */
+export function toInternalPath(href: string): string {
+  const trimmed = href.trim();
+  if (!isSameHost(trimmed)) return trimmed;
+  try {
+    const url = new URL(trimmed);
+    return (url.pathname + url.search + url.hash) || "/";
+  } catch {
+    return trimmed;
+  }
 }

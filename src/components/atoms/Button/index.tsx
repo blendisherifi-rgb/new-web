@@ -1,6 +1,6 @@
 import { type ReactNode, type ButtonHTMLAttributes } from "react";
 import NextLink from "next/link";
-import { isExternalHref } from "@/lib/isExternalHref";
+import { isExternalHref, toInternalPath } from "@/lib/isExternalHref";
 
 type ButtonVariant =
   | "primary"
@@ -226,7 +226,7 @@ export function Button(props: ButtonProps) {
     }
     return (
       <NextLink
-        href={hrefTrimmed}
+        href={toInternalPath(hrefTrimmed)}
         className={classes}
         aria-disabled={disabled || undefined}
       >

@@ -1,6 +1,6 @@
 import { type ReactNode, type AnchorHTMLAttributes } from "react";
 import NextLink from "next/link";
-import { isExternalHref } from "@/lib/isExternalHref";
+import { isExternalHref, toInternalPath } from "@/lib/isExternalHref";
 
 interface LinkProps
   extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> {
@@ -54,7 +54,7 @@ export function Link({
 
   return (
     <NextLink
-      href={trimmedHref}
+      href={toInternalPath(trimmedHref)}
       className={`${baseStyles} ${className}`}
       {...rest}
     >
