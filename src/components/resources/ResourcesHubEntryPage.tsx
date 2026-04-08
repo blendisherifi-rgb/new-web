@@ -73,8 +73,6 @@ function WebcastBody({
             <Link
               href={gtw}
               className="font-body text-sm font-semibold text-brand-blue hover:underline"
-              target="_blank"
-              rel="noopener noreferrer"
             >
               Register / join webinar
             </Link>
@@ -83,8 +81,6 @@ function WebcastBody({
             <Link
               href={ade}
               className="font-body text-sm font-semibold text-brand-blue hover:underline"
-              target="_blank"
-              rel="noopener noreferrer"
             >
               Add to calendar
             </Link>
@@ -109,8 +105,6 @@ function WebcastBody({
               <Link
                 href={yt}
                 className="text-brand-blue hover:underline"
-                target="_blank"
-                rel="noopener noreferrer"
               >
                 Watch on YouTube
               </Link>

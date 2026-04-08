@@ -1,5 +1,6 @@
 import { type ReactNode, type ButtonHTMLAttributes } from "react";
 import NextLink from "next/link";
+import { isExternalHref } from "@/lib/isExternalHref";
 
 type ButtonVariant =
   | "primary"
@@ -209,8 +210,7 @@ export function Button(props: ButtonProps) {
   // Link mode (only when we have a non-empty href)
   if (hrefTrimmed) {
     const externalProp = (props as Partial<ButtonAsLink>).external;
-    const isExternal =
-      externalProp ?? hrefTrimmed.startsWith("http");
+    const isExternal = externalProp ?? isExternalHref(hrefTrimmed);
     if (isExternal) {
       return (
         <a

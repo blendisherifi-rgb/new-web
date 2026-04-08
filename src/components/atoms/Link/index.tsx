@@ -1,5 +1,6 @@
 import { type ReactNode, type AnchorHTMLAttributes } from "react";
 import NextLink from "next/link";
+import { isExternalHref } from "@/lib/isExternalHref";
 
 interface LinkProps
   extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> {
@@ -13,64 +14,6 @@ interface LinkProps
 
 const baseStyles =
   "font-body text-brand-blue underline-offset-4 transition-colors duration-200 hover:underline focus-visible:outline-brand-blue";
-
-function normalizeHost(host: string): string {
-  return host.replace(/^www\./, "").toLowerCase();
-}
-
-function getConfiguredSiteHost(): string | null {
-  const raw = process.env.NEXT_PUBLIC_SITE_URL;
-  if (!raw) return null;
-  try {
-    return normalizeHost(new URL(raw).hostname);
-  } catch {
-    return null;
-  }
-}
-
-function isExternalHref(href: string): boolean {
-  const trimmed = href.trim();
-  if (!trimmed) return false;
-
-  // Common in-page or relative links should stay in the same tab.
-  if (
-    trimmed.startsWith("/") ||
-    trimmed.startsWith("#") ||
-    trimmed.startsWith("?") ||
-    trimmed.startsWith("./") ||
-    trimmed.startsWith("../")
-  ) {
-    return false;
-  }
-
-  // Any explicit URI scheme should use native <a>.
-  // This avoids Next.js trying to route mailto:, tel:, javascript:, etc.
-  if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(trimmed)) {
-    // For http(s), we optionally classify same-host URLs as internal.
-    if (!/^https?:\/\//i.test(trimmed)) return true;
-  }
-
-  if (/^https?:\/\//i.test(trimmed)) {
-    try {
-      const linkHost = normalizeHost(new URL(trimmed).hostname);
-      const siteHost = getConfiguredSiteHost();
-      if (siteHost && linkHost === siteHost) {
-        return false;
-      }
-    } catch {
-      // Fall through to conservative external behavior.
-    }
-    return true;
-  }
-
-  // Protocol-relative URLs should be treated as external.
-  if (trimmed.startsWith("//")) return true;
-
-  // Bare domains (e.g. "example.com/path") are external.
-  if (/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\/.*)?$/.test(trimmed)) return true;
-
-  return false;
-}
 
 /**
  * Link atom.
