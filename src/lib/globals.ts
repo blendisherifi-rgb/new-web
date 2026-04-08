@@ -113,7 +113,7 @@ const PLACEHOLDER_GLOBALS: GlobalsData = {
       {
         heading: "Who we are",
         links: [
-          { label: "About Us", href: "/about" },
+          { label: "About us", href: "/about" },
           { label: "Leadership team", href: "/leadership-team" },
           { label: "ESG", href: "/esg" },
           { label: "Careers", href: "/careers" },

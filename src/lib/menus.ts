@@ -231,7 +231,7 @@ const WHO_WE_ARE_MEGA_MENU: Pick<
   dropdownType: "who-we-are",
   href: "/about",
   whoWeAreLinks: [
-    { id: "5-l1", label: "About Us", href: "/about" },
+    { id: "5-l1", label: "About us", href: "/about" },
     { id: "5-l2", label: "Leadership Team", href: "/leadership-team" },
     { id: "5-l3", label: "ESG", href: "/esg" },
     { id: "5-l4", label: "Partner Programme", href: "/partner-programme" },
@@ -239,7 +239,7 @@ const WHO_WE_ARE_MEGA_MENU: Pick<
     { id: "5-l6", label: "News", href: "/news" },
     { id: "5-l7", label: "Events", href: "/resources?types=webinar" },
     { id: "5-l8", label: "Glossary", href: "/resources/glossary" },
-    { id: "5-l9", label: "Contact Us", href: "/contact-us" },
+    { id: "5-l9", label: "Contact us", href: "/contact-us" },
   ],
   whoWeAreFeatured: {
     imageUrl: "/who-we-are-featured.jpg",
